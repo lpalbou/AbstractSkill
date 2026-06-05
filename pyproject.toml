@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abstractskill"
+version = "0.1.0"
+description = "Agent Skills (SKILL.md) parsing, discovery, and evolution tracking for AbstractFramework"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Laurent-Philippe Albou", email = "contact@abstractcore.ai" },
+]
+keywords = [
+    "abstractframework",
+    "abstractcore",
+    "abstractgateway",
+    "agent-skills",
+    "skill-md",
+    "skills",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+apple = []
+all-apple = []
+gpu = []
+all-gpu = []
+dev = ["pytest>=7.0.0"]
+test = ["pytest>=7.0.0"]
+
+[project.urls]
+Homepage = "https://github.com/lpalbou/AbstractSkill"
+Repository = "https://github.com/lpalbou/AbstractSkill"
+Documentation = "https://github.com/lpalbou/AbstractSkill#readme"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["abstractskill*"]
+exclude = ["tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: tests that require external services or large fixtures",
+]
