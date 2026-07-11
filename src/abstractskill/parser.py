@@ -10,23 +10,33 @@ import yaml
 from abstractskill.errors import SkillParseError, SkillValidationError
 from abstractskill.hash import content_hash
 from abstractskill.models import SkillDocument, SkillMetadata
-from abstractskill.validation import validate_skill_name
+from abstractskill.validation import (
+    validate_compatibility,
+    validate_description,
+    validate_skill_name,
+)
 
 _FRONTMATTER_DELIM = "---"
 
 
 def _split_frontmatter(text: str) -> tuple[Mapping[str, Any], str]:
     stripped = text.lstrip("\ufeff")
-    if not stripped.startswith(f"{_FRONTMATTER_DELIM}\n"):
+    # Normalize exactly the YAML line breaks (\r\n, \r) so CRLF/CR-authored
+    # files parse identically to LF files. Deliberately NOT splitlines():
+    # it also splits on \v \f \x1c \x1d \x1e \x85 \u2028 \u2029, which YAML
+    # treats as in-line content — a "---" after such a character would close
+    # the frontmatter here while a spec-faithful parser keeps reading
+    # (parser differential + silent truncation). Delimiters must sit at
+    # column 0 (rstrip only): an INDENTED "---" can be legitimate YAML
+    # content inside a block scalar and must not open/close the frontmatter.
+    normalized = stripped.replace("\r\n", "\n").replace("\r", "\n")
+    lines = normalized.split("\n")
+    if not lines or lines[0].rstrip() != _FRONTMATTER_DELIM:
         raise SkillParseError("SKILL.md must start with YAML frontmatter")
-
-    lines = stripped.splitlines()
-    if not lines or lines[0].strip() != _FRONTMATTER_DELIM:
-        raise SkillParseError("SKILL.md frontmatter opening delimiter is missing")
 
     closing_idx = None
     for idx in range(1, len(lines)):
-        if lines[idx].strip() == _FRONTMATTER_DELIM:
+        if lines[idx].rstrip() == _FRONTMATTER_DELIM:
             closing_idx = idx
             break
     if closing_idx is None:
@@ -70,9 +80,7 @@ def _metadata_from_frontmatter(
         raise SkillValidationError("SKILL.md frontmatter requires 'description'")
 
     name = validate_skill_name(str(frontmatter["name"]))
-    description = str(frontmatter["description"]).strip()
-    if not description:
-        raise SkillValidationError("SKILL.md frontmatter requires a non-empty description")
+    description = validate_description(str(frontmatter["description"]))
 
     license_value = frontmatter.get("license")
     compatibility = frontmatter.get("compatibility")
@@ -87,7 +95,9 @@ def _metadata_from_frontmatter(
         name=name,
         description=description,
         license=str(license_value).strip() if license_value is not None else None,
-        compatibility=str(compatibility).strip() if compatibility is not None else None,
+        compatibility=(
+            validate_compatibility(str(compatibility)) if compatibility is not None else None
+        ),
         allowed_tools=allowed_tools,
         metadata=dict(extra or {}),
         source_path=source_path,

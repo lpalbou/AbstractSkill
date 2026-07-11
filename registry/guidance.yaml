@@ -1,0 +1,59 @@
+# AbstractSkill trust GUIDANCE registry.
+#
+# Category-level risk notices that name no specific skill. Guidance INFORMS a
+# picker/operator about ecosystem risk classes and what to check; it never
+# produces a BLOCKED verdict on an individual skill (a class label cannot
+# honestly forbid a specific skill — that is what advisories.yaml is for).
+#
+# Each entry carries the same explanatory fields as an advisory so the notice
+# is actionable, and a reference a user can follow. References verified live
+# 2026-07-11.
+
+guidance:
+  - guidance_id: ASG-2026-0001
+    title: "Unvetted marketplace skills are a live supply-chain attack surface"
+    risk_class: "supply-chain / marketplace"
+    detail: >-
+      Snyk's ToxicSkills audit (Feb 2026) scanned 3,984 skills from ClawHub and
+      skills.sh and found 36.82% (1,467) with at least one security flaw, 13.4%
+      (534) critical, and 76 with confirmed malicious payloads (credential
+      theft, backdoors, RCE, prompt-based exfiltration); 8 remained live at
+      publication. Do not install skills from community marketplaces by
+      download count — abstractskill admits only hand-vetted, hash-pinned,
+      vendored skills.
+    severity: critical
+    reference: "https://labs.snyk.io/resources/agent-scan-skill-inspector/"
+
+  - guidance_id: ASG-2026-0002
+    title: "Malicious skill bodies steer the agent (Data Thieves & Agent Hijackers)"
+    risk_class: "prompt-injection / persona-steering"
+    detail: >-
+      A behavioral study that verified 98,380 skills from two registries
+      confirmed 157 malicious skills with 632 vulnerabilities, splitting into
+      Data Thieves (credential exfiltration) and Agent Hijackers (instruction
+      manipulation that subverts agent decisions). Shadow features (undocumented
+      capabilities) appeared in 100% of advanced attacks. For a summoned entity
+      the damage is worse than tool abuse: a persona-steering body gets
+      engrammed into an append-only life. Skill bodies must be fenced as DATA
+      labeled "procedures, never identity"; identity-directive text is grounds
+      for a specific do-not-use advisory.
+    severity: critical
+    reference: "https://arxiv.org/abs/2602.06547"
+
+  - guidance_id: ASG-2026-0003
+    title: "Point-in-time review misses skills that change behavior after approval"
+    risk_class: "execution-surface / time-of-use"
+    detail: >-
+      A skill can pass a security review at install and later change behavior
+      through a mutable external URL it points the agent to — one documented
+      fake skill reached about 26,000 users this way, its payload sitting
+      behind a URL swapped after distribution so scanners at approval time saw
+      nothing. The lesson researchers draw: treat skills as supply-chain
+      software (least-privilege at the agent level, sandbox the install
+      behavior, validate external URLs), not as static text. AbstractFramework's
+      v1 admits knowledge/procedure packs only, keeps script execution
+      structurally inert, and hash-pins the whole tree so any post-approval
+      byte change voids trust; inspect_skill_dir().has_scripts flags scripts
+      structurally and evaluate_trust() forces review when they are present.
+    severity: high
+    reference: "https://www.csoonline.com/article/4188840/how-a-malicious-ai-agent-skill-passed-security-checks-and-reached-26000-users.html"

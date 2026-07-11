@@ -1,0 +1,36 @@
+# AbstractSkill
+
+> The Agent Skills (`SKILL.md`) contract library for AbstractFramework: parse
+> and validate skills, discover them on disk with progressive disclosure, hash
+> them for evolution and tamper detection, compose their tool declarations with
+> an operator grant, and classify their trust. Dependency-light (PyYAML only);
+> executes nothing and imposes no runtime limits — hosts consume its contracts.
+
+"Flows run; skills are activated." AbstractSkill owns the portable skill
+contract so `abstractruntime`, `abstractgateway`, and thin clients share
+identical semantics without duplicating parsers.
+
+## Documentation
+
+- [README](README.md): overview, package scope, hashing contract, install.
+- [Getting started](docs/getting-started.md): parse, discover, hash, compose, evaluate trust.
+- [Architecture](docs/architecture.md): components, data flow, verdict precedence (Mermaid diagrams).
+- [API reference](docs/api.md): all public functions and types.
+- [FAQ](docs/faq.md): common questions and limitations.
+- [Troubleshooting](docs/troubleshooting.md): symptoms, diagnostics, and fixes.
+- [Trust model](docs/trust.md): validated skills, do-not-use advisories, guidance, fail-closed verdict.
+- [Trust-network position](docs/trust-network-position.md): join / leverage / build.
+- [Security policy](SECURITY.md): what the library does and does not guarantee.
+- [Changelog](CHANGELOG.md): release history.
+
+## Key APIs
+
+- `parse_skill_md(text)` → `SkillDocument` (spec-validated; LF/CRLF/CR).
+- `FilesystemSkillLoader(roots).discover()/.load(name)` (progressive; loud on broken skills).
+- `hash_skill_tree(dir)`, `inspect_skill_dir(dir)` (tamper hash + `has_scripts`).
+- `effective_tools(grant, skills)` (grant ∩ declared; never widens).
+- `evaluate_trust(registry, tree_hash=..., has_scripts=...)` → `TrustVerdict` (blocked / requires_review / attachable).
+
+## Planning
+
+- [Backlog overview](docs/backlog/overview.md) and the skill-trust track (`docs/backlog/planned/trust/`).
