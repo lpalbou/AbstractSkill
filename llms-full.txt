@@ -1,0 +1,100 @@
+# AbstractSkill
+
+> The Agent Skills (`SKILL.md`) contract library for AbstractFramework: parse
+> and validate skills, discover them on disk with progressive disclosure, hash
+> them for evolution and tamper detection, compose their tool declarations with
+> an operator grant, and classify their trust. Dependency-light (PyYAML only);
+> executes nothing and imposes no runtime limits — hosts consume its contracts.
+
+## Document index
+
+- README.md — overview, package scope, hashing contract
+- docs/getting-started.md — parse, discover, hash, compose, evaluate trust
+- docs/architecture.md — components, data flow, verdict precedence
+- docs/api.md — public functions and types
+- docs/faq.md — common questions and limitations
+- docs/troubleshooting.md — symptoms, diagnostics, and fixes
+- docs/trust.md — trust model
+- docs/trust-network-position.md — join / leverage / build
+- SECURITY.md — guarantees and non-guarantees
+
+---
+
+## Overview
+
+"Flows run; skills are activated." AbstractSkill owns the portable skill
+contract so `abstractruntime`, `abstractgateway`, and thin clients share
+identical semantics without duplicating parsers.
+
+Install with `pip install abstractskill`. Python ≥3.10, PyYAML only.
+
+Package surface:
+
+- `parse_skill_md` — YAML frontmatter + markdown body (LF/CRLF/CR;
+  spec-validated name/description/compatibility).
+- `FilesystemSkillLoader` — metadata-only discovery and full-document loading;
+  `discover()` and `load()` resolve identically (a broken copy never shadows a
+  valid one) and degrade loudly (`#FALLBACK`).
+- `content_hash` — SHA-256 of one document.
+- `hash_skill_tree` / `inspect_skill_dir` / `read_skill_resource` — whole-tree
+  tamper hash (injective manifest), structural inventory (`has_scripts` is a
+  structural fact), bounded in-tree resource reads.
+- `effective_tools` / `effective_tools_for_skill` — grant ∩ allowed-tools
+  composition (narrows below the grant, never widens; absence implies nothing).
+- `format_available_skills_xml` — deterministic `<available_skills>` block.
+- `evaluate_trust` + `TrustRegistry` / `ValidationRecord` / `AdvisoryEntry` /
+  `GuidanceEntry` / `TrustVerdict` — trust classification.
+
+### Hashing contract: hash = bytes, parse = meaning
+
+`content_hash` and `hash_skill_tree` are byte-exact deliberately — tamper
+detection must never call two byte-different trees "the same". A CRLF-authored
+skill and its LF twin parse identically but hash differently: vendor skills
+from archives or byte-copies, never through EOL-rewriting checkouts.
+
+---
+
+## Trust model (summary)
+
+Trust binds to the tree hash, never the name — any byte change voids a
+validation. Levels: unverified < community < adopted (reviewed) < audited <
+first_party; `blocked` is a verdict an advisory forces. A validation method
+caps the level it can grant, so "reviewed" cannot masquerade as "audited".
+
+A do-not-use `AdvisoryEntry` names a SPECIFIC skill with four mandated fields
+(official_intent, hidden_issue, severity, reference). Severity is graded:
+critical/high hard-block, hash-matched always blocks, low/medium force review.
+`registry/advisories.yaml` is empty at v1 — AbstractSkill does not self-assert
+a specific malicious skill before its own audit or a leveraged feed names one.
+
+A `GuidanceEntry` is a CATEGORY-level risk notice; it informs but never blocks
+a specific skill. `registry/guidance.yaml` ships three notices grounded in
+published 2026 research.
+
+`evaluate_trust(...)` returns a fail-closed `TrustVerdict` with three
+orthogonal signals: `blocked` (never attach), `requires_review` (operator
+decides — unverified, scripts present, or low/medium advisory), and
+`attachable` (green path only: validated, advisory-free, script-free). Every
+verdict lists the reasons it rests on.
+
+Trust classification raises the bar; it does not certify safety. Curation,
+behavioral audit (backlog 0003), and the fail-closed default remain the real
+gate.
+
+---
+
+## Trust-network position (summary)
+
+A skill trust network is forming but immature (the agentskills.io signature
+RFC, AgentGuard's attest/revoke registry, OWASP's Agentic Skills Top 10).
+Position: BUILD now (the curated hash-pinned registry is the framework's trust
+root), LEVERAGE next (consume external findings as advisory inputs with
+provenance, human-merge), JOIN signing when the RFC stabilizes (the whole-tree
+hash already gives integrity; a verified signature becomes evidence for a
+validation). Federated signing proves authenticity, not safety, so it
+corroborates the audit; it does not replace it.
+
+---
+
+For the full text of each document, read the linked files in the repository.
+These indexes are discoverability aids, not canonical documentation.

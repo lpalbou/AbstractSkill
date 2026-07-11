@@ -9,6 +9,9 @@ It provides a small, dependency-light foundation for:
 - discovering skills on disk (progressive disclosure: metadata first)
 - computing stable content hashes for skill evolution and replay safety
 - formatting compact `<available_skills>` prompt blocks for hosts and agents
+- composing a skill's tool declarations with an operator grant (never widening)
+- classifying skill trust: validated skills, do-not-use advisories, and a
+  fail-closed verdict ([trust model](docs/trust.md))
 
 Flows run; skills are activated. AbstractSkill owns the portable skill contract so `abstractruntime`,
 `abstractgateway`, and thin clients can share identical semantics without duplicating parsers.
@@ -40,15 +43,45 @@ loaded = loader.load("my-skill")
 print(loaded.document.content_hash)
 ```
 
-## Package scope (v0.1.0)
+## Package scope
 
-- `parse_skill_md` — YAML frontmatter + markdown body
-- `FilesystemSkillLoader` — list metadata and load full documents
-- `content_hash` — SHA-256 digest for evolution tracking
+- `parse_skill_md` — YAML frontmatter + markdown body (LF/CRLF/CR; spec-validated
+  name/description/compatibility)
+- `FilesystemSkillLoader` — list metadata and load full documents; `discover()` and
+  `load()` resolve identically (a broken copy never shadows a valid one) and degrade
+  loudly (`#FALLBACK` warnings via logging and optional `on_warning`)
+- `content_hash` — SHA-256 digest of one document for evolution tracking
+- `hash_skill_tree` / `inspect_skill_dir` / `read_skill_resource` — whole-tree
+  tamper hash (injective manifest), structural inventory (`has_scripts` is a
+  structural fact), bounded in-tree resource reads
+- `effective_tools` / `effective_tools_for_skill` — grant ∩ allowed-tools
+  composition (skills can narrow below the grant, never widen beyond it;
+  absence of `allowed-tools` implies nothing)
 - `format_available_skills_xml` — deterministic discovery prompt block
+- `evaluate_trust` + `TrustRegistry` / `ValidationRecord` / `AdvisoryEntry` /
+  `GuidanceEntry` — validated-skill attestations bound to tree hashes, a
+  do-not-use advisory registry (four mandated fields, graded severity), and a
+  fail-closed `TrustVerdict` (blocked / requires_review / attachable). The
+  curated first-party shelf lives under `registry/`. See the
+  [trust model](docs/trust.md).
+
+### Hashing contract: hash = bytes, parse = meaning
+
+`content_hash` and `hash_skill_tree` are byte-exact deliberately — tamper detection
+must never call two byte-different trees "the same". A CRLF-authored skill and its
+LF twin parse identically but hash differently: vendor skills from archives or
+byte-copies, never through EOL-rewriting checkouts (e.g. git `autocrlf`), or hash
+verification will honestly report the rewrite as a mismatch.
 
 Out of scope for this release: gateway registry APIs, zip `.skill` packaging, and runtime activation handlers.
 Those layers live in `abstractgateway` and `abstractruntime` and consume this library.
+
+## Documentation
+
+Full documentation is in [`docs/`](docs/README.md): getting started,
+architecture (with diagrams), the API reference, the trust model, and the
+trust-network position. See also [SECURITY.md](SECURITY.md) for the trust
+guarantees this library does and does not make.
 
 ## Development
 

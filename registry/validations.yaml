@@ -1,0 +1,54 @@
+# AbstractSkill validation registry (maintainer directive 2026-07-11).
+#
+# Each record attests that a specific skill TREE (by tree_hash) earned a trust
+# level. Trust binds to bytes: any change to a skill voids its record and
+# demands re-validation. Regenerate with scripts/refresh_shelf.py after any
+# shelf change, then review the diff.
+#
+validations:
+- name: adversarial-iteration
+  source: first-party
+  tree_hash: d4f6acce64a3591cb8fcffd9fd2782de60f61f3d5f901d1a3a0ddf516ebfa33b
+  level: first_party
+  method: first-party
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: Authored first-party.
+- name: backlog
+  source: codex-skills (maintainer)
+  tree_hash: 8c3aa23e8ee5a2b589f250f94aa61b4c77c1d5a1697fa7d0652ecb46f0c8550e
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 4
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: Create, audit, normalize, and maintain a file-backed engineering
+    backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states,
+    implementation history, and hygiene. Use when an agent must plan or execute long-running
+    work with a durable, evidence-backed backlog methodology.
+- name: coredoc
+  source: codex-skills (maintainer)
+  tree_hash: 1be6061cfabd4d9f9689c0ab1d4f322875f58ea5f5205c15fc21bb46f3fcb6bb
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 5
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: Create, audit, and maintain a professional external-facing
+    documentation set (README, docs/*, architecture with diagrams, llms.txt/llms-full.txt)
+    kept faithful to the code. Use when an agent must bootstrap or repair project
+    documentation.
