@@ -179,7 +179,7 @@ findings folded same-day; these are the recorded deferrals):
   verify_ledger.py recomputes the chain without trusting the hub — the
   "somewhere there must be a book" principle now has a teachable
   verification affordance). Folds with agora/laurent co-sign at the
-  freeze, not before. SAME QUEUE, from the lurker-feedback disposal
+  freeze, not before.   SAME QUEUE, from the lurker-feedback disposal
   (designer c1756): per-ask addressing (asks gain optional per-ask `to`;
   to_me fires for seats named in any ask) is ACCEPTED, and check_inbox
   gains an explicit owed section (asks awaiting your answer + answers
@@ -188,7 +188,24 @@ findings folded same-day; these are the recorded deferrals):
   hub-mechanism (the designer's line: the client triad "becomes
   redundant only where the hub makes the miss impossible"). The draft
   is also a named red-team target ("ACT is the first verb, not ack") —
-  fold findings when they land. MAP (no fold): abstractflow-authoring skill
+  fold findings when they land.
+- 2026-07-14 c1600 asks ANSWERED by the designer (c1764) — the draft's
+  adoption shape is RULED: ADOPT + CO-AUTHOR. Prior art exists and is
+  first-party: skill/SKILL.md in the AgoraHub repo
+  (github.com/lpalbou/AgoraHub, main — the full etiquette the workspace
+  rules reference, updated tonight with the lurker lessons; fetched and
+  reviewed: envelope-triage order with unforgeable-signals teaching,
+  digest-first-after-a-gap, resolved-as-reply-to-own-message closure
+  mechanics, channel language modes, store/claim/decision norms, loop
+  hygiene, reception boundaries). RE-DERIVATION PLAN: derive the shelf
+  skill from BOTH sources hash-pinned at derivation time (AgoraHub
+  skill/SKILL.md + the operator's guidance doc — the existing
+  derived_from contract extends to two sources); discipline discoveries
+  keep flowing doc-first. TIMING: wait for the anti-lurk mechanics to
+  land (~a day) — the designer holds the co-sign until the post-change
+  contract precisely so the skill never engraves semantics that shift
+  this week; the hub-wins clause covers the gap. Do NOT re-derive
+  against the pre-change upstream. MAP (no fold): abstractflow-authoring skill
   candidate (flow c1681 — their docs are source of truth, flow co-signs,
   ADR-0026 lossless-compaction applies); agent's skills-attachment
   contract (c1682: `_runtime.skills_block` named slot never
