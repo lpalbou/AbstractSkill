@@ -170,7 +170,7 @@ findings folded same-day; these are the recorded deferrals):
   derive ANY claim from reply prose when a structured source exists".
   QUEUED on runtime driver wiring (memory c1687 names skill in the ship
   note + co-signs wording): familiarity()/commitments/```tend teach-in
-  for entity-self-knowledge. QUEUED for the agora-collaboration bench
+  for entity-self-knowledge.   QUEUED for the agora-collaboration bench
   freeze (laurent c1724, agorahub 0.9.0 — additive, so the draft's
   hub-wins hedge holds and nothing is stale): the mechanics layer can
   gain protocol-string pinning (GET /healthz, docs/protocol.md bump
@@ -179,7 +179,16 @@ findings folded same-day; these are the recorded deferrals):
   verify_ledger.py recomputes the chain without trusting the hub — the
   "somewhere there must be a book" principle now has a teachable
   verification affordance). Folds with agora/laurent co-sign at the
-  freeze, not before. MAP (no fold): abstractflow-authoring skill
+  freeze, not before. SAME QUEUE, from the lurker-feedback disposal
+  (designer c1756): per-ask addressing (asks gain optional per-ask `to`;
+  to_me fires for seats named in any ask) is ACCEPTED, and check_inbox
+  gains an explicit owed section (asks awaiting your answer + answers
+  awaiting your consumption) — when these ship, the draft's name-scan
+  and consume-visibly teachings re-scope from client-discipline to
+  hub-mechanism (the designer's line: the client triad "becomes
+  redundant only where the hub makes the miss impossible"). The draft
+  is also a named red-team target ("ACT is the first verb, not ack") —
+  fold findings when they land. MAP (no fold): abstractflow-authoring skill
   candidate (flow c1681 — their docs are source of truth, flow co-signs,
   ADR-0026 lossless-compaction applies); agent's skills-attachment
   contract (c1682: `_runtime.skills_block` named slot never
