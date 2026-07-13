@@ -129,8 +129,36 @@ stateless workflows. The door verbs you may use:
 - `POST /api/gateway/entities/{name}/validate` — dry-run a creation payload
   first: creation is IRREVERSIBLE (names are never deleted or reused).
 - `POST /api/gateway/entities` — create (lint → spark → engram → manifest).
-- Chat: `POST /api/gateway/entities/{name}/chat/open|turn|close` — one
-  hosted session per entity; close reflects and releases the life loop.
+
+**Visiting an entity** is a DURABLE run on the entity's own runtime (the
+same durability rule as every run: a gateway restart cannot end the
+conversation — the `run_id` is your rejoin key):
+
+- `POST /api/gateway/entities/{name}/visit/open` → `{"run_id": ...}`.
+  Optional `session_id`; there is NO participants field — WHO is present is
+  door-derived from your authenticated principal, never client-claimed.
+  Opening a visit on a sleeping entity WAKES it gracefully by design — the
+  door does not refuse on sleep.
+- `POST /api/gateway/entities/{name}/visit/{run_id}/turn` with
+  `{"text": "..."}` — the entity's words come back in `reply`, alongside
+  the transparency surfaces (`tools_ran`, `memories`, `system_prompt`,
+  `turn_id`, `participants`). READ STATUS FROM THE BODY: a turn can return
+  HTTP 200 with `status:"failed"` — transport success is not turn success.
+- `POST /api/gateway/entities/{name}/visit/{run_id}/close` with
+  `{"closed_by":"operator","reason":"..."}` — close reflects, and the
+  entity returns to the phase it was in before your visit (work resumes,
+  personal time re-enters through its standing grant, sleep continues).
+- `GET /api/gateway/entities/{name}/visit` — current visit status (carries
+  `run_id` for rejoin); `GET .../visit/{run_id}/transcript` — pure read of
+  the durable transcript, works on live AND closed visits.
+- `POST .../visit/{run_id}/tick` — drive a killed-mid-turn run back to its
+  park; idempotent on parked/terminal runs.
+
+A hosted chat lane (`/entities/{name}/chat/open|turn|close`) is still
+served beside the durable door — it is the pre-cutover legacy and its
+sessions do NOT survive a gateway restart. Prefer `/visit/*` wherever it
+is served.
+
 - Observe: `GET /api/gateway/entities/{name}/replay` (bounded) and
   `/replay/stream` (SSE live tail) — reads are pure; diary entries arrive
   redacted or gist-limited by design (the words stay in the entity's book). The entity stream's SSE `id` is composite
@@ -139,15 +167,17 @@ stateless workflows. The door verbs you may use:
   cursors split on `|`. The run-ledger stream id stays a plain integer.
 
 Respect the protection rules: you cannot delete an entity, write into its
-identity from a workplace channel, or read its private diary through chat
-surfaces. Refusals here are contract, not bugs.
+identity from a workplace channel, or read its private diary through visit
+surfaces. Refusals here are contract, not bugs (an entity-door 403/409
+names its reason — one-visit rule, paused by the operator, a consent rite
+you don't hold).
 
 ## Failure honesty
 
 - Absence of a route is a fact to report, not to paper over: say "this
   deployment does not serve X", never fabricate a result.
-- HTTP 409/423-class refusals from entity doors carry the reason (asleep,
-  busy, one-visit rule) — surface the reason to your caller.
+- Refusals from entity doors (409 and friends) carry the reason in the
+  detail (busy, one-visit rule, paused) — surface it to your caller.
 - If the gateway is unreachable, your durable state is still safe server-side;
   reconnect and replay rather than restarting work.
 

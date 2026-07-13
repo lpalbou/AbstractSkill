@@ -49,6 +49,10 @@ Package surface:
   names-only calls derive provenance from the registry
   (`TrustRegistry.source_candidates_for`; advisories checked against EVERY
   candidate source so a losing record or wrong caller string cannot evade).
+  Operator `enabled` entries may be hash-pinned (`name@tree_hash`, full
+  sha256) so a standing enable attests bytes, not a claimable name; the
+  parsed SKILL.md is byte-cross-checked against the hashed tree (TOCTOU);
+  `resolved_paths`/`resolved_tree_hashes` name the winning copy per name.
 - `load_catalog`/`CatalogEntry`/`lint_catalog` — the curated vendoring
   catalog contract (registry/catalog.yaml: reviewed entries pinned to 40-hex
   upstream commits + whole-tree hashes; owner/repo slugs only). The install

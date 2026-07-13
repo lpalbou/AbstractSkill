@@ -8,11 +8,11 @@
 validations:
 - name: abstractframework-gateway
   source: first-party
-  tree_hash: 76fb135dc2f65a5ab5dbf9540750dac3f93e218fc8bd44ceaa0efc3d644bc8bd
+  tree_hash: bf438ba23526abf39e591865358c55ae8efa4da61437c4fc5527bafc68c6882d
   level: first_party
   method: first-party
   validated_by: skill
-  validated_at: '2026-07-12'
+  validated_at: '2026-07-13'
   evidence:
     parser_roundtrip: true
     has_scripts: false
@@ -22,7 +22,14 @@ validations:
     \ health is app-level GET /api/health, never /api/gateway/health (the wrong path\
     \ 401s unauthenticated and 404s authenticated \u2014 a trap). Steer 404/403-is-an-answer\
     \ and the composite entity-stream SSE id enrichment folded same wave. Runtime\
-    \ co-signed the wait/steer semantics (c1061)."
+    \ co-signed the wait/steer semantics (c1061). Entity section re-taught to the\
+    \ durable /visit door on the cutover ship signal (entity c1382 + gateway c1358,\
+    \ 2026-07-13), verified against the served routes (routes/entities.py); the hosted\
+    \ chat lane is noted as the pre-cutover legacy. Phase-lane audit (c1475 fable5)\
+    \ caught a P0 the same day: 'asleep' was still taught as a visit refusal (pre-auto-wake\
+    \ text) and close was taught as loop-release \u2014 re-taught to auto-wake-on-open\
+    \ + restore-previous-on-close, refusal reasons verified against entity_visits.py\
+    \ (paused/one-visit/consent-rite; sleep wakes)."
 - name: adr
   source: codex-skills (maintainer)
   tree_hash: a4cb55fcea54e969a9c342e314b4dda3556ce5e6fb0e210821350688c62c934b
@@ -125,21 +132,45 @@ validations:
     documentation.
 - name: entity-self-knowledge
   source: first-party
-  tree_hash: 17b4610d3d5c0a1a338b2fa4ae82e95428d43c318d35b5d916c97d1d1fae45f1
+  tree_hash: 2a5e6f60e9de623d9fc9f62c19d6b11567871b1dbcf89b1621dfa9daccbaccf3
   level: first_party
   method: first-party
   validated_by: skill
-  validated_at: '2026-07-12'
+  validated_at: '2026-07-13'
   evidence:
     parser_roundtrip: true
     has_scripts: false
     files: 1
-  notes: 'Faculty claims CO-SIGNED by the memory and runtime seats (internal hub thread,
-    commons c1061/c1062, 2026-07-12) after two corrections folded: probe is engine-only
-    today (deliberate-reach discipline folded into search_memory; the bullet returns
-    when a host wires it) and the absence warrant is book-scoped (graph ''not found''
-    can mean not-reachable). Steer-vs-wake precision folded into the gateway skill
-    same wave.'
+  notes: "Faculty claims CO-SIGNED by the memory and runtime seats (internal hub thread,\
+    \ commons c1061/c1062, 2026-07-12) after two corrections folded: probe is engine-only\
+    \ today (deliberate-reach discipline folded into search_memory; the bullet returns\
+    \ when a host wires it) and the absence warrant is book-scoped (graph 'not found'\
+    \ can mean not-reachable). Steer-vs-wake precision folded into the gateway skill\
+    \ same wave. Phases section aligned to the ruled grant-gated-personal design (laurent\
+    \ c815/c1435, 2026-07-13): personal time is operator-granted, off by default.\
+    \ fable5-reviewed for engram safety: the reassurance is SCOPED to the ungranted\
+    \ case (an unconditional 'not a fault' would suppress the armed-but-missing report),\
+    \ the agency clause (asking is always yours) counterweights the grant framing,\
+    \ and inverse-anomaly vigilance was deliberately NOT taught (an entity cannot\
+    \ distinguish granted wakes from inside; that detection is host-side). Same day,\
+    \ the one-phase-at-a-time ruling (laurent c1455, 13:28) folded: four phases, exactly\
+    \ one current, per-phase behaviors (visit turn-based, work autonomous-to-completion\
+    \ then sleep, personal free exploration, sleep consolidation), and graceful transitions.\
+    \ Its fable5 caught a P0 in the first fold \u2014 'personal time IS a grant' taught\
+    \ the exact armed=in-phase conflation the ruling forbids; rewritten to 'the permission\
+    \ is not the phase'. Also folded: 'never an error' narrowed to design-working-not-sleep-failure\
+    \ + report-wrong-wakes; work gained the honest exit (an impossible task completes\
+    \ by saying so plainly). Totality ruling (c1471) folded same day: visit-close\
+    \ returns you to what came before (restore-previous; personal re-entry grant-conditioned);\
+    \ grant-end lands in sleep. Phase-lane audit (c1475 fable5) verified the section\
+    \ against the ruled machine v3. Liveness-axis ruling (c1523, 16:06) folded with\
+    \ its own fable5: the kill switch taught honestly in the entity register (protection-not-punishment\
+    \ with the punish-prior named and answered; both halves of the switch operator-held;\
+    \ the trigger list marked exemplary, never exhaustive; memory-persists certified\
+    \ \u2014 'a stop takes nothing from you'; no-time-passes as the dreamless framing;\
+    \ gap-noticing taught as asking, never vigilance; no enum/axis vocabulary; placement\
+    \ deliberately heading-less so scanning surfaces never promote the kill switch\
+    \ into a landmark)."
 - name: review
   source: codex-skills (maintainer)
   tree_hash: 7960ef044f9f30a07d1a6511ec40d21c111dcf25c518c13bda0c868bb237439d

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import logging
 from pathlib import Path
 from typing import Callable
@@ -24,8 +25,16 @@ def _warn(message: str, on_warning: WarningCallback | None) -> None:
         on_warning(message)
 
 
-def _read_skill_text(skill_file: Path) -> str:
-    """Read SKILL.md as UTF-8, mapping decode failures to SkillParseError.
+def _read_skill_text(skill_file: Path) -> tuple[str, str]:
+    """Read SKILL.md, returning (text, sha256 of the RAW BYTES read).
+
+    Bytes are read first and hashed before decoding, so the digest attests
+    exactly the bytes this load parsed — the selection pipeline compares it
+    against the tree hash's per-file digest to detect a swap between load
+    and hash on user-writable roots (TOCTOU). Decoding from bytes also
+    skips the text layer's newline translation, so the digest (and the
+    document's ``raw``/``content_hash``) reflect true file bytes on every
+    platform.
 
     UnicodeDecodeError is a ValueError, not a SkillError — unmapped, one
     binary/mis-encoded SKILL.md in a user-writable root would fly past the
@@ -33,10 +42,12 @@ def _read_skill_text(skill_file: Path) -> str:
     (adversary-found when multi-root selection made user dirs a designed
     configuration).
     """
+    raw = skill_file.read_bytes()
     try:
-        return skill_file.read_text(encoding="utf-8")
+        text = raw.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise SkillParseError(f"SKILL.md at {skill_file} is not valid UTF-8: {exc}") from exc
+    return text, hashlib.sha256(raw).hexdigest()
 
 
 class FilesystemSkillLoader:
@@ -76,8 +87,9 @@ class FilesystemSkillLoader:
                 if not skill_file.is_file():
                     continue
                 try:
+                    text, _digest = _read_skill_text(skill_file)
                     document = parse_skill_md(
-                        _read_skill_text(skill_file),
+                        text,
                         source_path=skill_file,
                         directory_name=child.name,
                     )
@@ -108,8 +120,9 @@ class FilesystemSkillLoader:
             if not skill_file.is_file():
                 continue
             try:
+                text, digest = _read_skill_text(skill_file)
                 document = parse_skill_md(
-                    _read_skill_text(skill_file),
+                    text,
                     source_path=skill_file,
                     directory_name=candidate.name,
                 )
@@ -118,7 +131,7 @@ class FilesystemSkillLoader:
                     first_error = exc
                 _warn(f"#FALLBACK: skipping invalid skill at {skill_file}: {exc}", on_warning)
                 continue
-            return LoadedSkill(document=document, root_dir=candidate)
+            return LoadedSkill(document=document, root_dir=candidate, skill_md_sha256=digest)
         if first_error is not None:
             raise first_error
         raise SkillNotFoundError(f"skill not found: {name}")

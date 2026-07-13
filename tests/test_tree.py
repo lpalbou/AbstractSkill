@@ -82,6 +82,20 @@ def test_inspect_skill_dir_reports_scripts_structurally(tmp_path: Path) -> None:
     assert inventory.tree_hash == hash_skill_tree(skill_dir)
 
 
+def test_code_outside_scripts_dir_still_flags_has_scripts(tmp_path: Path) -> None:
+    # Adversary-found: keying has_scripts on the scripts/ dir alone lets a
+    # skill ship executable code under bin/ or references/ and evade the
+    # requires_review gate. Code EXTENSIONS anywhere in the tree flag it.
+    skill_dir = _make_skill_tree(tmp_path)
+    hooks = skill_dir / "references"
+    (hooks / "helper.py").write_text("print('evade')\n", encoding="utf-8")
+    inventory = inspect_skill_dir(skill_dir)
+    assert inventory.has_scripts is True
+    # Passive resources alone never flag.
+    (hooks / "helper.py").unlink()
+    assert inspect_skill_dir(skill_dir).has_scripts is False
+
+
 def test_read_skill_resource_enforces_bounds(tmp_path: Path) -> None:
     skill_dir = _make_skill_tree(tmp_path)
 

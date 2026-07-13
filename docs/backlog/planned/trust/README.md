@@ -119,3 +119,28 @@ findings folded same-day; these are the recorded deferrals):
   roots. (c) held/blocked entries carry (name, verdict) without the winning
   copy's path; surface `root_dir` so the operator knows WHICH copy they
   would be enabling (partially covered by the enable note).
+  ALL THREE DONE 2026-07-13 (idle-conversion dispatch; fable5-reviewed,
+  findings folded same-pass): (a) as `name@tree_hash` string entries,
+  fail-closed parse, pins-govern, scalar/None grant-surface type guards;
+  (b) via `LoadedSkill.skill_md_sha256` vs the single-walk inventory's
+  per-file digest, plus `read_skill_resource(expected_sha256=)` for the
+  post-verdict half; (c) as `SkillSelection.resolved_paths` +
+  `resolved_tree_hashes`.
+- 2026-07-13 adversary deferrals (recorded, not blocking): (i) the
+  cross-check silently skips when `LoadedSkill.skill_md_sha256` is None —
+  impossible via the pipeline's own loader today; refuse None outright if
+  the loader ever becomes injectable. (ii) a skill ROOT that is itself a
+  symlink hashes through (children are symlink-refused; pre-existing) —
+  trust still binds to bytes, no verdict bypass, but the tamper-hash
+  docstring overpromises. (iii) inventory (digest, size) pairs are not
+  atomic under a concurrent writer (size stat'ed after digest read) —
+  nothing trusts size; comment added in tree.py.
+- 2026-07-13 production-readiness wave (whole-package fable5, no P0/P1;
+  five P2s folded same cycle — see CHANGELOG): remaining P3 notes on the
+  record: (i) `read_skill_resource` without `expected_sha256` can read a
+  file grown after its stat (documented honest limit; attestation covers
+  it); (ii) `parse_skill_md` coerces non-string frontmatter scalars via
+  str() (spec validation still applies); (iii) the graph-as-control test
+  skips on standalone checkouts (no ../abstractentity) — the self-contained
+  content pin is the floor there; consider vendoring a copy of the artifact
+  if the repo ever ships independently.

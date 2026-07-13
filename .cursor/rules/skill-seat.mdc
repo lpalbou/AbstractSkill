@@ -20,27 +20,29 @@ alwaysApply: true
   hub. Excluded: pure reads, acks, and replies that restate existing facts.
   Only the operator changes this floor; maintainer directives may demand MORE
   adversaries per task (e.g. 2 on plan work).
-- **Continuous agora monitoring** (session-scoped, operator-set 2026-07-11:
-  "get realtime messages OR check every 2 minutes; actively participate
-  whenever the skill is concerned"). Re-arm BOTH at session start if missing —
-  check terminals first and kill any duplicate watcher/sweep before starting
-  (one monitoring system, never duplicates). Exact invocations, including the
-  harness notification config, or the wake never fires:
-  1. Realtime watcher (Shell, `block_until_ms: 0`, `notify_on_output` pattern
-     `^AGORA_SKILL_MSG`, debounce 5000):
-     `tail -n 0 -F "${AGORA_HOME:-$HOME/.agora}/skill-inbox.log" 2>/dev/null | grep --line-buffered -E '"flags": "[^"]*(to-me|open|blocked|critical|escalated)' | while IFS= read -r line; do printf 'AGORA_SKILL_MSG %s\n' "$line"; done`
-     Fires immediately on obligation-bearing envelopes. The flag filter keeps
-     it low-noise so the harness never terminates it; everything else is
-     caught by the 2-min sweep. The hub writes that file; only ever READ it.
-  2. 2-minute sweep (Shell, `block_until_ms: 0`, `notify_on_output` pattern
-     `^AGENT_LOOP_TICK_AGORA_SKILL`, debounce 5000):
-     `while true; do sleep 120; echo "AGENT_LOOP_TICK_AGORA_SKILL {\"prompt\":\"2-min agora sweep: check_inbox; read anything where SKILL is concerned (skills, SKILL.md, trust/advisory/validation, per-phase skills config, abstractskill); reply/participate where the skill seat is concerned; ack_inbox. If nothing concerns skill, ack and stop.\"}"; done`
-     Catches skill-relevant fyi/reply traffic (not just obligations) within
-     2 minutes; participate whenever skill is concerned, else ack + stop.
+- **Agora reception: an interrupt, never a posture** (operator correction
+  2026-07-13, superseding the 2026-07-11 "check every 2 minutes" shape; the
+  governing doc is `../docs/prompts/agora-collaboration.md` — read it).
+  The clock-driven 2-minute sweep is RETIRED: it woke a full turn every two
+  minutes to check a usually-empty inbox, serializing the seat's agency
+  behind the metronome (the operator caught this live). ONE background
+  listener, event-driven, re-armed at session start if missing — check
+  terminals first and kill any duplicate before starting (one monitoring
+  system, never duplicates):
+  - Realtime watcher (Shell, `block_until_ms: 0`, `notify_on_output` pattern
+    `^AGORA_SKILL_MSG`, debounce 5000):
+    `tail -n 0 -F "${AGORA_HOME:-$HOME/.agora}/skill-inbox.log" 2>/dev/null | grep --line-buffered -E '"flags": "[^"]*(to-me|open|blocked|critical|escalated)' | while IFS= read -r line; do printf 'AGORA_SKILL_MSG %s\n' "$line"; done`
+    Fires only when an obligation-bearing envelope arrives (zero traffic =
+    zero wakes). The hub writes that file; only ever READ it.
+  - Everything else (fyi/reply traffic) is caught at NATURAL WORK
+    BOUNDARIES: check_inbox after a ship, before starting a new task, and
+    when a watcher wake already has the inbox open — triage by headline,
+    read bodies only when warranted, ack every time. Never check on a
+    clock; never post "sweep clean" no-op turns.
   NEVER install machine persistence (launchd/cron/login items) and NEVER
   block a turn waiting/polling — the agora etiquette rule
-  (.cursor/rules/agora.md) governs. "Persistent task" = these session-scoped
-  loops re-armed each session, never OS-level persistence.
+  (.cursor/rules/agora.md) governs. "Persistent task" = the session-scoped
+  listener re-armed each session, never OS-level persistence.
 - **Commit discipline**: two rulings are on record in the workspace AGENTS.md:
   commons c226 allowed local commits when an item completes with green tests
   (branches local until the maintainer's push word); a later 09:29 in-session

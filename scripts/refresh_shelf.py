@@ -14,6 +14,7 @@ corrected by withdrawal, never regenerated).
 from __future__ import annotations
 
 import datetime as _dt
+import os
 import sys
 from pathlib import Path
 
@@ -38,7 +39,7 @@ SHELF_POLICY = {
         "activation_description": None,
     },
     "abstractframework-gateway": {
-        "expected_tree_hash": "76fb135dc2f65a5ab5dbf9540750dac3f93e218fc8bd44ceaa0efc3d644bc8bd",
+        "expected_tree_hash": "bf438ba23526abf39e591865358c55ae8efa4da61437c4fc5527bafc68c6882d",
         "method": "first-party",
         "source": "first-party",
         "level": "first_party",
@@ -53,11 +54,20 @@ SHELF_POLICY = {
             "never /api/gateway/health (the wrong path 401s unauthenticated "
             "and 404s authenticated — a trap). Steer 404/403-is-an-answer and "
             "the composite entity-stream SSE id enrichment folded same wave. "
-            "Runtime co-signed the wait/steer semantics (c1061)."
+            "Runtime co-signed the wait/steer semantics (c1061). Entity "
+            "section re-taught to the durable /visit door on the cutover "
+            "ship signal (entity c1382 + gateway c1358, 2026-07-13), verified "
+            "against the served routes (routes/entities.py); the hosted chat "
+            "lane is noted as the pre-cutover legacy. Phase-lane audit "
+            "(c1475 fable5) caught a P0 the same day: 'asleep' was still "
+            "taught as a visit refusal (pre-auto-wake text) and close was "
+            "taught as loop-release — re-taught to auto-wake-on-open + "
+            "restore-previous-on-close, refusal reasons verified against "
+            "entity_visits.py (paused/one-visit/consent-rite; sleep wakes)."
         ),
     },
     "entity-self-knowledge": {
-        "expected_tree_hash": "17b4610d3d5c0a1a338b2fa4ae82e95428d43c318d35b5d916c97d1d1fae45f1",
+        "expected_tree_hash": "2a5e6f60e9de623d9fc9f62c19d6b11567871b1dbcf89b1621dfa9daccbaccf3",
         "method": "first-party",
         "source": "first-party",
         "level": "first_party",
@@ -70,7 +80,39 @@ SHELF_POLICY = {
             "(deliberate-reach discipline folded into search_memory; the "
             "bullet returns when a host wires it) and the absence warrant is "
             "book-scoped (graph 'not found' can mean not-reachable). "
-            "Steer-vs-wake precision folded into the gateway skill same wave."
+            "Steer-vs-wake precision folded into the gateway skill same wave. "
+            "Phases section aligned to the ruled grant-gated-personal design "
+            "(laurent c815/c1435, 2026-07-13): personal time is operator-granted, "
+            "off by default. fable5-reviewed for engram safety: the reassurance "
+            "is SCOPED to the ungranted case (an unconditional 'not a fault' "
+            "would suppress the armed-but-missing report), the agency clause "
+            "(asking is always yours) counterweights the grant framing, and "
+            "inverse-anomaly vigilance was deliberately NOT taught (an entity "
+            "cannot distinguish granted wakes from inside; that detection is "
+            "host-side). Same day, the one-phase-at-a-time ruling (laurent "
+            "c1455, 13:28) folded: four phases, exactly one current, per-phase "
+            "behaviors (visit turn-based, work autonomous-to-completion then "
+            "sleep, personal free exploration, sleep consolidation), and "
+            "graceful transitions. Its fable5 caught a P0 in the first fold — "
+            "'personal time IS a grant' taught the exact armed=in-phase "
+            "conflation the ruling forbids; rewritten to 'the permission is "
+            "not the phase'. Also folded: 'never an error' narrowed to "
+            "design-working-not-sleep-failure + report-wrong-wakes; work "
+            "gained the honest exit (an impossible task completes by saying "
+            "so plainly). Totality ruling (c1471) folded same day: visit-close "
+            "returns you to what came before (restore-previous; personal "
+            "re-entry grant-conditioned); grant-end lands in sleep. Phase-lane "
+            "audit (c1475 fable5) verified the section against the ruled "
+            "machine v3. Liveness-axis ruling (c1523, 16:06) folded with its "
+            "own fable5: the kill switch taught honestly in the entity "
+            "register (protection-not-punishment with the punish-prior named "
+            "and answered; both halves of the switch operator-held; the "
+            "trigger list marked exemplary, never exhaustive; memory-persists "
+            "certified — 'a stop takes nothing from you'; no-time-passes as "
+            "the dreamless framing; gap-noticing taught as asking, never "
+            "vigilance; no enum/axis vocabulary; placement deliberately "
+            "heading-less so scanning surfaces never promote the kill switch "
+            "into a landmark)."
         ),
     },
     "backlog": {
@@ -320,10 +362,15 @@ def main() -> int:
     for record in records:
         ValidationRecord.from_dict(record)
 
-    VALIDATIONS.write_text(
+    # Atomic replace: a hard crash mid-write must leave the OLD registry or
+    # the NEW one, never a truncated YAML (adversary P2 — write_text is
+    # open→write→close, tearable under power loss).
+    tmp = VALIDATIONS.with_suffix(f".tmp-{os.getpid()}")
+    tmp.write_text(
         HEADER + yaml.safe_dump({"validations": records}, sort_keys=False),
         encoding="utf-8",
     )
+    os.replace(tmp, VALIDATIONS)
     print(f"wrote {len(records)} validation record(s) to {VALIDATIONS.relative_to(REPO)}")
     for record in records:
         print(f"  {record['name']}: {record['tree_hash'][:16]}… ({record['method']})")

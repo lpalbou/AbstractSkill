@@ -470,3 +470,245 @@ def test_uppercase_config_name_fails_closed(tmp_path: Path) -> None:
     sel2 = select_skills_for_context(TrustRegistry(), shelf, ["solo2"], enabled=["SOLO2"])
     assert sel2.active_names == ()
     assert [n for n, _ in sel2.held] == ["solo2"]
+
+
+# --- hash-pinned enables -----------------------------------------------------
+
+
+def test_hash_pinned_enable_activates_matching_bytes(tmp_path: Path) -> None:
+    # The durable enable form: `name@tree_hash` grants exactly the reviewed
+    # bytes; the activation note says the grant was hash-pinned.
+    shelf = tmp_path / "skills"
+    d = _write_skill(shelf, "pinme")
+    pin = hash_skill_tree(d)
+    warnings: list[str] = []
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["pinme"], enabled=[f"pinme@{pin}"],
+        on_warning=warnings.append,
+    )
+    assert sel.active_names == ("pinme",)
+    assert any("hash-pinned operator enable" in w for w in warnings)
+
+
+def test_hash_pinned_enable_mismatch_holds_and_names_both_hashes(tmp_path: Path) -> None:
+    # A pin that no longer matches the winning copy must NOT activate — the
+    # exact shadow-swap scenario the pin exists to stop — and the note names
+    # both the pinned and the actual hash so re-pinning is a deliberate act.
+    curated = tmp_path / "curated"
+    user = tmp_path / "user"
+    curated_dir = _write_skill(curated, "pinme", description="Reviewed copy.")
+    _write_skill(user, "pinme", description="Shadow copy.")
+    reviewed_pin = hash_skill_tree(curated_dir)
+
+    warnings: list[str] = []
+    sel = select_skills_for_context(
+        TrustRegistry(), [curated, user], ["pinme"],
+        enabled=[f"pinme@{reviewed_pin}"], on_warning=warnings.append,
+    )
+    assert sel.active_names == ()
+    assert [n for n, _ in sel.held] == ["pinme"]
+    note = next(w for w in warnings if "pinned to" in w)
+    assert reviewed_pin[:16] in note
+    assert sel.resolved_tree_hashes["pinme"][:16] in note
+
+
+def test_pins_govern_over_bare_entry_for_same_name(tmp_path: Path) -> None:
+    # `enabled: ["x", "x@WRONG"]` must not fall back to the bare grant — that
+    # would make every pin decorative. The bare entry is ignored loudly.
+    shelf = tmp_path / "skills"
+    _write_skill(shelf, "mixed")
+    wrong_pin = "a" * 64
+    warnings: list[str] = []
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["mixed"], enabled=["mixed", f"mixed@{wrong_pin}"],
+        on_warning=warnings.append,
+    )
+    assert sel.active_names == ()
+    assert [n for n, _ in sel.held] == ["mixed"]
+    assert any("pins govern" in w for w in warnings)
+
+
+def test_malformed_pin_grants_nothing(tmp_path: Path) -> None:
+    # Fail-closed: a short/non-hex/bad-name/double-@/overlong pin is dropped
+    # with a warning — never demoted to a bare-name grant (that would widen
+    # what it narrows).
+    shelf = tmp_path / "skills"
+    _write_skill(shelf, "target")
+    warnings: list[str] = []
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["target"],
+        enabled=[
+            "target@deadbeef",          # short
+            "Bad Name@" + "b" * 64,     # invalid name
+            "@" + "c" * 64,             # empty name
+            "  ",                       # blank entry
+            "target@@" + "d" * 64,      # double @ -> hex part fails
+            "target@" + "e" * 65,       # overlong hash
+        ],
+        on_warning=warnings.append,
+    )
+    assert sel.active_names == ()
+    assert [n for n, _ in sel.held] == ["target"]
+    assert sum("malformed enabled" in w for w in warnings) == 6
+
+
+def test_uppercase_hex_pin_matches_case_normalized(tmp_path: Path) -> None:
+    # Hex case is presentation, not identity: an uppercase-hex pin grants
+    # the same bytes (the hash value is what attests).
+    shelf = tmp_path / "skills"
+    d = _write_skill(shelf, "shouty")
+    pin = hash_skill_tree(d).upper()
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["shouty"], enabled=[f"shouty@{pin}"],
+    )
+    assert sel.active_names == ("shouty",)
+
+
+def test_enabled_scalar_string_never_grants_per_character(tmp_path: Path) -> None:
+    # The YAML scalar-vs-list slip (`enabled: "a"` instead of `enabled: [a]`)
+    # must not iterate characters into one-letter grants; the scalar is
+    # treated as a single entry.
+    shelf = tmp_path / "skills"
+    _write_skill(shelf, "a")  # single-char names are spec-valid
+    _write_skill(shelf, "ab")
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["a", "ab"], enabled="ab",
+    )
+    # "ab" granted as ONE name; "a" must NOT be granted by iteration.
+    assert sel.active_names == ("ab",)
+    assert [n for n, _ in sel.held] == ["a"]
+    # And None crashes nothing:
+    sel_none = select_skills_for_context(TrustRegistry(), shelf, ["a"], enabled=None)
+    assert [n for n, _ in sel_none.held] == ["a"]
+
+
+def test_multiple_pins_any_match_grants(tmp_path: Path) -> None:
+    # An operator may allow two reviewed trees (e.g. old + new during a
+    # rollout): matching ANY listed pin grants.
+    shelf = tmp_path / "skills"
+    d = _write_skill(shelf, "dualpin")
+    real = hash_skill_tree(d)
+    other = "f" * 64
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["dualpin"],
+        enabled=[f"dualpin@{other}", f"dualpin@{real}"],
+    )
+    assert sel.active_names == ("dualpin",)
+
+
+def test_pin_never_constrains_attachable_bytes(tmp_path: Path) -> None:
+    # Pins lift review; they are not a second registry. An attachable skill
+    # activates even when a stale pin names different bytes.
+    shelf = tmp_path / "skills"
+    d = _write_skill(shelf, "validated")
+    reg = TrustRegistry(validations=[_validation("validated", hash_skill_tree(d))])
+    sel = select_skills_for_context(
+        reg, shelf, ["validated"], enabled=["validated@" + "0" * 64],
+    )
+    assert sel.active_names == ("validated",)
+
+
+# --- load→inspect byte cross-check (TOCTOU) ----------------------------------
+
+
+def test_skill_md_swap_between_load_and_hash_refuses(tmp_path: Path, monkeypatch) -> None:
+    # If SKILL.md changes between the loader's read and the tree hash walk,
+    # the verdict would attest bytes that were never parsed. Simulate the
+    # race by doctoring the inventory's per-file digest for SKILL.md.
+    import abstractskill.selection as selection_mod
+    from abstractskill.tree import inspect_skill_dir as real_inspect
+
+    shelf = tmp_path / "skills"
+    _write_skill(shelf, "raced")
+
+    def doctored_inspect(path):
+        inv = real_inspect(path)
+        swapped = tuple(
+            type(r)(rel_path=r.rel_path, size_bytes=r.size_bytes, sha256="e" * 64)
+            if r.rel_path == "SKILL.md" else r
+            for r in inv.files
+        )
+        return type(inv)(
+            root_dir=inv.root_dir, files=swapped, tree_hash=inv.tree_hash,
+            total_bytes=inv.total_bytes, has_scripts=inv.has_scripts,
+        )
+
+    monkeypatch.setattr(selection_mod, "inspect_skill_dir", doctored_inspect)
+    warnings: list[str] = []
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["raced"], on_warning=warnings.append,
+    )
+    assert sel.missing == ("raced",)
+    assert sel.active_names == () and sel.held == ()
+    assert any("changed between load and hash" in w for w in warnings)
+    # No attested copy: the raced name appears in neither resolved mapping.
+    assert "raced" not in sel.resolved_paths
+    assert "raced" not in sel.resolved_tree_hashes
+
+
+def test_crlf_skill_md_passes_byte_cross_check(tmp_path: Path) -> None:
+    # The digest compares RAW bytes on both sides — a CRLF-authored SKILL.md
+    # must not false-positive as a swap (the old text-mode read translated
+    # newlines and would have).
+    shelf = tmp_path / "skills"
+    d = shelf / "windowsy"
+    d.mkdir(parents=True)
+    (d / "SKILL.md").write_bytes(
+        b"---\r\nname: windowsy\r\ndescription: CRLF-authored.\r\n---\r\n\r\nBody.\r\n"
+    )
+    warnings: list[str] = []
+    sel = select_skills_for_context(
+        TrustRegistry(), shelf, ["windowsy"], on_warning=warnings.append,
+    )
+    assert [n for n, _ in sel.held] == ["windowsy"]  # unverified, but LOADED
+    assert not any("changed between load and hash" in w for w in warnings)
+
+
+# --- resolved copy surfacing ---------------------------------------------------
+
+
+def test_selection_mappings_are_sealed_read_only(tmp_path: Path) -> None:
+    # frozen=True blocks rebinding, not in-place mutation — and
+    # resolved_tree_hashes is exactly what an operator copies into a hash
+    # pin. The Mapping fields must be real read-only views.
+    import pytest
+
+    shelf = tmp_path / "skills"
+    _write_skill(shelf, "sealme")
+    sel = select_skills_for_context(TrustRegistry(), shelf, ["sealme"])
+    with pytest.raises(TypeError):
+        sel.resolved_tree_hashes["sealme"] = "0" * 64  # type: ignore[index]
+    with pytest.raises(TypeError):
+        sel.resolved_paths["sealme"] = Path("/tmp")  # type: ignore[index]
+
+
+def test_resolved_paths_and_hashes_cover_all_attested_outcomes(tmp_path: Path) -> None:
+    # Operators deciding on held/blocked entries need WHICH copy and the
+    # exact hash to pin; missing names have no attested copy.
+    curated = tmp_path / "curated"
+    active_dir = _write_skill(curated, "activeone")
+    held_dir = _write_skill(curated, "heldone")
+    blocked_dir = _write_skill(curated, "blockedone")
+    reg = TrustRegistry(
+        validations=[_validation("activeone", hash_skill_tree(active_dir))],
+        advisories=[
+            AdvisoryEntry(
+                name="blockedone", source="market",
+                tree_hash=hash_skill_tree(blocked_dir),
+                official_intent="test", hidden_issue="test",
+                severity=Severity.CRITICAL, reference="https://example.test/adv",
+            )
+        ],
+    )
+    sel = select_skills_for_context(
+        reg, curated, ["activeone", "heldone", "blockedone", "ghost"],
+    )
+    assert sel.active_names == ("activeone",)
+    assert [n for n, _ in sel.held] == ["heldone"]
+    assert [n for n, _ in sel.blocked] == ["blockedone"]
+    assert sel.missing == ("ghost",)
+    assert sel.resolved_paths == {
+        "activeone": active_dir, "heldone": held_dir, "blockedone": blocked_dir,
+    }
+    assert sel.resolved_tree_hashes["heldone"] == hash_skill_tree(held_dir)
+    assert "ghost" not in sel.resolved_paths
