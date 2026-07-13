@@ -22,6 +22,40 @@ Flows run; skills are activated. AbstractSkill owns the portable skill contract 
 pip install abstractskill
 ```
 
+Note: `pip install` delivers the LIBRARY only. The curated skills themselves
+(the shelf below) live in this repository under `registry/` and are consumed
+from a checkout — they are deliberately not packaged into the wheel today
+(a shelf you install should be a shelf you can byte-verify against the
+repository's validation records).
+
+## Where the skills live — and how an agent uses them
+
+The curated shelf is in this repository:
+
+```
+registry/skills/            # 11 curated skills (one folder per SKILL.md)
+registry/validations.yaml   # trust records: byte pins per skill tree
+registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)
+registry/guidance.yaml      # class-level curation guidance
+registry/catalog.yaml       # the vendoring catalog (pinned upstream commits)
+docs/skills-catalog.md      # human-readable index: descriptions + links
+```
+
+To point an **abstractcode** agent at this shelf (trust gate included), set
+three environment variables to the checkout's absolute paths:
+
+```bash
+export ABSTRACTCODE_SKILLS_ROOTS=/path/to/abstractskill/registry/skills
+export ABSTRACTCODE_SKILLS_VALIDATIONS=/path/to/abstractskill/registry/validations.yaml
+export ABSTRACTCODE_SKILLS_ADVISORIES=/path/to/abstractskill/registry/advisories.yaml
+```
+
+then activate per session with `/skills use <name>` (discovery alone lists;
+activation composes). The trust gate is location-independent — records bind
+to content hashes, never paths — so the shelf works from any checkout
+location. Any other host consumes the same shelf through
+`select_skills_for_context` (see Quick start below).
+
 ## Quick start
 
 ```python
