@@ -39,6 +39,7 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any, Iterable, Mapping
 
 import yaml
@@ -210,6 +211,10 @@ class ValidationRecord:
             raise SkillValidationError(
                 "external-audit ValidationRecord requires evidence['reference'] (a source URL)"
             )
+        # Seal evidence (frozen blocks rebinding, not in-place mutation — a
+        # mutated evidence dict would silently rewrite an audit trail).
+        if not isinstance(self.evidence, MappingProxyType):
+            object.__setattr__(self, "evidence", MappingProxyType(dict(self.evidence)))
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -867,6 +872,10 @@ def _load_entries(path: Path, key: str) -> list[Mapping[str, Any]]:
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError as exc:
         raise SkillValidationError(f"invalid trust registry YAML at {path}: {exc}") from exc
+    except UnicodeDecodeError as exc:
+        # A ValueError, not a SkillError — unwrapped it would bypass callers'
+        # fail-closed handling of malformed registry input.
+        raise SkillValidationError(f"trust registry at {path} is not valid UTF-8: {exc}") from exc
     if not isinstance(data, Mapping):
         raise SkillValidationError(f"trust registry {path} must be a mapping with a {key!r} list")
     if key not in data:

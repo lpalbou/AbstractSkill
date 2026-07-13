@@ -111,12 +111,25 @@ Everything below is exported from the top-level `abstractskill` package.
   a user shadow of a curated name never inherits the curated validation
   record (different hash ⇒ unverified ⇒ held), while byte-identical copies
   activate on the record regardless of root (trust binds to content, not
-  location). A requires_review skill activated via `enabled` is always
-  loudly noted with the winning copy's path + hash (the enable grant is
-  name-bound; the note keeps a standing enable from silently activating a
-  shadow).
+  location). `enabled` entries may be bare names or HASH-PINNED as
+  `name@tree_hash` (full sha256): a pin grants exactly the reviewed bytes —
+  the durable form for standing enables. Pins govern over a bare entry for
+  the same name; malformed pins grant nothing (fail-closed); a pin that no
+  longer matches holds the skill with a note naming both hashes; pins never
+  constrain attachable skills. A requires_review skill activated via a BARE
+  enable is always loudly noted with the winning copy's path + hash (the
+  bare grant is name-bound; the note keeps a standing enable from silently
+  activating a shadow). The pipeline also cross-checks the SKILL.md bytes
+  it parsed against the hashed tree's own per-file digest — a swap between
+  load and hash (TOCTOU on user-writable roots) refuses the skill loudly.
 - `SkillSelection` — active, held, blocked, missing, activation_descriptions
-  (current-hash only), warnings.
+  (current-hash only), warnings, plus `resolved_paths` and
+  `resolved_tree_hashes` naming the winning copy for every attested name
+  (the tree hash is the exact value to pin in an `enabled` entry).
+- `read_skill_resource(skill_dir, rel_path, *, max_bytes, expected_sha256=None)`
+  — progressive-disclosure read, strictly inside the tree; pass the
+  inventory's `SkillResource.sha256` as `expected_sha256` to refuse a
+  resource swapped after selection (post-verdict TOCTOU half).
 
 ## Errors
 

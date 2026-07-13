@@ -215,3 +215,102 @@ def test_shipped_registry_lints_clean() -> None:
         guidance_path=GUIDANCE,
     )
     assert lint_registry(registry) == ()
+
+
+def test_phase_teaching_matches_the_ruled_machine() -> None:
+    # The ruled entity phase machine (decision:entity-phase-state-machine v3,
+    # 2026-07-13) as a CONTENT pin: byte pins catch tampering, not a
+    # deliberate wrong future edit — a rewrite dropping restore-previous or
+    # re-smearing armed/in-phase would sail through a routine re-pin. These
+    # load-bearing sentences are the contract; editing them means the ruling
+    # changed (cite the new ruling in the change). Whitespace-normalized so
+    # markdown line-wrapping never false-fails the content check.
+    def _flat(path: Path) -> str:
+        return " ".join(path.read_text(encoding="utf-8").split())
+
+    esk = _flat(SHELF / "entity-self-knowledge" / "SKILL.md")
+    # Four canonical keys, one phase at a time.
+    assert "visit, work, personal, sleep" in esk
+    assert "exactly ONE at a time" in esk
+    # ARMED != IN-PHASE (the c1455 fable5 P0 fix).
+    assert "The permission is not the phase" in esk
+    # Restore-previous at visit-close, personal re-entry grant-conditioned.
+    assert "you return to what came before" in esk
+    assert "re-enters if its grant still stands" in esk
+    # Grant-end lands in sleep; work completes into sleep.
+    assert "closes into sleep" in esk
+    assert "(or there is none), you sleep" in esk
+
+    gw = _flat(SHELF / "abstractframework-gateway" / "SKILL.md")
+    # Auto-wake: the visit door never refuses on sleep (the c1475 P0 fix) —
+    # and 'asleep' must not reappear in any refusal-reason list.
+    assert "WAKES it gracefully" in gw
+    assert "asleep" not in gw.lower()
+    # Close restores the previous phase, never "releases the loop".
+    assert "returns to the phase it was in before your visit" in gw
+
+
+def test_phase_teaching_verified_equivalent_to_the_canonical_artifact() -> None:
+    # GRAPH-AS-CONTROL (operator directive 2026-07-13 15:06): the canonical
+    # phase artifact (abstractentity/spec/entity_phases.json) must be what
+    # the enforcement DERIVES from — never parallel logic that happens to
+    # agree. This test derives its expectations FROM the artifact fields
+    # (phase keys, synonyms, gating, invariants) and checks the shelf
+    # teaching against them; the sibling test above stays as the
+    # self-contained fallback pin when the artifact is out of reach.
+    import json
+
+    import pytest
+
+    artifact_path = REPO.parent / "abstractentity" / "spec" / "entity_phases.json"
+    if not artifact_path.is_file():
+        pytest.skip("canonical phase artifact not present (standalone checkout)")
+    artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+
+    esk = " ".join(
+        (SHELF / "entity-self-knowledge" / "SKILL.md").read_text(encoding="utf-8").split()
+    )
+
+    # Phase vocabulary: every canonical key is taught, no invented phase.
+    phase_keys = set(artifact["phases"].keys())
+    assert phase_keys == {"visit", "work", "personal", "sleep"}
+    for key in phase_keys:
+        assert key in esk.lower(), f"canonical phase {key!r} missing from the teaching"
+
+    # Spoken synonym taught exactly as the artifact declares it (personal).
+    synonyms = artifact["phases"]["personal"].get("spoken_synonyms", [])
+    assert any(s in esk.lower() for s in synonyms), (
+        "the artifact declares spoken synonyms for personal; the teaching names none"
+    )
+
+    # Grant gating: the artifact gates personal off-by-default; the teaching
+    # must carry the grant (off until granted) and armed != in-phase.
+    gating = artifact["phases"]["personal"].get("gating", "")
+    assert "grant" in gating.lower()
+    assert "off until granted" in esk
+    assert "The permission is not the phase" in esk
+
+    # Invariants the teaching translates: one-active, restore-previous with
+    # grant-conditioned personal re-entry (grant gone -> sleep).
+    invariant_text = " ".join(artifact.get("invariants", []))
+    assert "ONE-ACTIVE-PHASE" in invariant_text
+    assert "exactly ONE at a time" in esk
+    assert "RESTORE-PREVIOUS" in invariant_text
+    assert "you return to what came before" in esk
+    assert "re-enters if its grant still stands" in esk
+    assert "closes into sleep" in esk  # grant-end -> sleep (artifact transitions)
+
+    # Artifact UI contract bans "active phase" wording; the teaching complies.
+    assert "active phase" not in esk.lower()
+
+    # Gateway entrance skill: auto-wake matches the artifact's sleep->visit
+    # transition ("it never refuses").
+    sleep_to_visit = next(
+        t for t in artifact["transitions"]
+        if t["from"] == "sleep" and t["to"] == "visit"
+    )
+    assert "never refuses" in sleep_to_visit["semantics"]
+    gw = " ".join(
+        (SHELF / "abstractframework-gateway" / "SKILL.md").read_text(encoding="utf-8").split()
+    )
+    assert "WAKES it gracefully" in gw and "does not refuse on sleep" in gw

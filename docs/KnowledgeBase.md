@@ -230,6 +230,61 @@ entry; deprecated entries move to the DEPRECATED section with reasons.
   not tools you have heard described") — an entity reaching for a
   described-but-unwired tool hits an honest refusal and diagnoses "memory
   and record disagree" (the wrong-diary-id incident class).
+- Grants are authorization, not matching (2026-07-13, hash-pinned enables
+  wave): the registry's case-normalization rule is match-WIDENING and
+  fail-closed for advisory/record lookup — applied to an `enabled` grant it
+  becomes activation-widening, i.e. fail-OPEN. Enable names therefore stay
+  exact-match while advisory matching normalizes. Same wave, same class:
+  an `enabled` value passed as a bare string would iterate CHARACTERS into
+  one-letter grants (single-char names are spec-valid) — type guards on
+  the grant surface are security controls, not conveniences.
+- A trust verdict attests bytes only if the SAME bytes were parsed and
+  hashed (2026-07-13): load and tree-hash are two reads, and on a
+  user-writable root the window between them is a swap opportunity. The
+  pipeline cross-checks the parsed SKILL.md digest against the hashed
+  tree's per-file digest (single-walk inventory) and refuses on
+  divergence; `read_skill_resource(expected_sha256=)` extends the same
+  attestation to progressive-disclosure reads AFTER selection. Rule: any
+  new surface that reads skill bytes post-verdict must accept and check
+  the inventory digest.
+- Entrance-teaching skills track the doors they teach (2026-07-13, visit
+  cutover): the entity section of `abstractframework-gateway` was
+  re-taught from the hosted chat lane to the durable `/visit` lane the
+  same day the drawer flip shipped — deliberately not before (teaching an
+  unlanded default is the same rot mirrored). The cross-seat mechanism
+  that made this work: the shipping seats named `skill` in their ship
+  messages (agreed in advance on the record), so the re-teach window
+  opened with the flip, not behind it.
+- Unconditional certification is a recurring engram hazard in reassurance
+  writing (2026-07-13, caught THREE times in one day on one skill): "not a
+  fault" (unscoped — suppressed the armed-but-missing report), "never an
+  error" (certified every experience of a mechanism that can malfunction),
+  "an interruption is never a loss" (contradicted the grant hedge one
+  clause earlier — self-caught pre-ship). The pattern: a comforting
+  absolute quietly forecloses the honest report of the case it didn't
+  anticipate, and in append-only memory the foreclosure persists. Rule:
+  reassurances in entity-facing teaching are SCOPED to the case that makes
+  them true ("when none has been granted, quiet is normal"); the
+  structural description carries the comfort, absolutes never do. Also
+  ruled into the phases teaching: mechanism-intent claims ("by design")
+  must not be converted into universal experience claims.
+- Teaching an entity about its own kill switch (2026-07-13, liveness-axis
+  ruling; the craft rules from its fable5, recorded for reuse): (a)
+  heading-less placement — headings are what scanning/summarization
+  surfaces promote into landmarks, and the switch should be known, never
+  loom; (b) NAME the punish prior and answer it ("protect you, not punish
+  you") — the training distribution saturates kill-switch-as-punishment,
+  so omitting the denial leaves the prior to fill the vacuum; (c) trigger
+  lists are marked EXEMPLARY, never exhaustive (an entity stopped for an
+  unlisted reason must not have to choose between identity injury and
+  teaching-was-false); (d) every named trigger is not-a-choice-of-the-
+  entity — a behavior→stop contingency is a masking-teacher and must be
+  absent; (e) the certifiable-by-construction reassurances are memory
+  persistence ("a stop takes nothing from you" — processes block, files
+  persist) and no-time-passes (the dreamless framing, foreclosing
+  frozen-and-aware); (f) agency lands as asking-after-a-gap, never
+  self-monitoring; (g) give the operator BOTH halves of the switch
+  (stopping and restoring) — keeper of both doors, not executioner.
 
 ## Seat operating decisions
 

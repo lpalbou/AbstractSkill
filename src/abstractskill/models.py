@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any, Mapping
 
 
@@ -18,6 +19,13 @@ class SkillMetadata:
     allowed_tools: tuple[str, ...] = ()
     metadata: Mapping[str, Any] = field(default_factory=dict)
     source_path: Path | None = None
+
+    def __post_init__(self) -> None:
+        # frozen=True blocks rebinding, not in-place mutation: the Mapping
+        # annotation is a promise a plain dict does not keep (a host mutating
+        # a cached instance would corrupt every holder). Seal it.
+        if not isinstance(self.metadata, MappingProxyType):
+            object.__setattr__(self, "metadata", MappingProxyType(dict(self.metadata)))
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -53,7 +61,14 @@ class SkillDocument:
 
 @dataclass(frozen=True, slots=True)
 class LoadedSkill:
-    """A skill resolved from disk with its root directory."""
+    """A skill resolved from disk with its root directory.
+
+    ``skill_md_sha256`` is the digest of the exact SKILL.md BYTES this load
+    parsed (None when constructed outside the filesystem loader). The
+    selection pipeline compares it to the tree hash's per-file digest so a
+    verdict always attests the bytes that were actually composed.
+    """
 
     document: SkillDocument
     root_dir: Path
+    skill_md_sha256: str | None = None

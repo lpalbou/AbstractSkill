@@ -88,11 +88,18 @@ skills:
 
 
 def test_redistribution_refusing_license_refused_at_construction() -> None:
-    # Vendoring copies bytes: source-available / unclear licenses REFUSE at
-    # the contract (adversary C2 — the docstring's claim is now enforced).
-    for bad in ("source-available", "Source-Available (view only)", "unknown", "proprietary"):
+    # Vendoring copies bytes: the gate is an ALLOWLIST (a denylist passed
+    # every non-permitting license it never heard of — CC-BY-NC, BUSL-1.1,
+    # SSPL). Anything off the allowlist refuses by default.
+    for bad in (
+        "source-available", "Source-Available (view only)", "unknown",
+        "proprietary", "CC-BY-NC-4.0", "BUSL-1.1", "SSPL-1.0", "Elastic-2.0",
+    ):
         with pytest.raises(SkillValidationError):
             _entry(license=bad)
+    # Allowlisted labels pass case-insensitively.
+    for good in ("MIT", "Apache-2.0", "bsd-3-clause"):
+        _entry(license=good)
 
 
 def test_flag_shaped_and_traversal_slugs_refused() -> None:

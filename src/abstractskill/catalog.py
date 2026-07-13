@@ -58,9 +58,15 @@ _REPO_SLUG_RE = re.compile(
     r"^[A-Za-z0-9][A-Za-z0-9_.-]*/[A-Za-z0-9][A-Za-z0-9_.-]*$"
 )
 
-# Licenses that do not clearly permit redistribution of byte copies are
-# REFUSED at the contract (vendoring copies bytes into our tree).
-_REFUSED_LICENSES = frozenset({"source-available", "unknown", "none", "unlicensed", "proprietary"})
+# Redistribution gate is an ALLOWLIST (adversary-found: a denylist passes
+# every non-permitting license it never heard of — CC-BY-NC, BUSL-1.1,
+# SSPL... — and vendoring copies bytes, so refusal must be the default).
+# SPDX-ish labels, lowercase-compared; widening this set is a deliberate
+# curator act with the license text read first.
+_REDISTRIBUTABLE_LICENSES = frozenset({
+    "mit", "apache-2.0", "bsd-2-clause", "bsd-3-clause", "isc",
+    "cc0-1.0", "unlicense", "mpl-2.0", "cc-by-4.0", "cc-by-sa-4.0",
+})
 
 # Subdirectory paths inside the upstream repo: relative, no traversal.
 _SUBDIR_BAD = re.compile(r"(^/)|(^\.\.(/|$))|(/\.\.(/|$))|(\\)")
@@ -80,9 +86,9 @@ class CatalogEntry:
     repo: str  # owner/repo slug the vendor script clones
     upstream_ref: str  # 40-hex commit SHA (immutable pin)
     subdir: str  # path of the skill dir inside the repo at that ref
-    license: str  # upstream license (SPDX-ish label; "source-available" refused)
+    license: str  # upstream license (SPDX-ish label from the allowlist)
     archetype: str  # knowledge | procedure | meta
-    risk: str  # safe | moderate | risky (curator's reviewed classification)
+    risk: str  # low | moderate | risky (curator's reviewed classification)
     improves: str  # what this adds to OUR framework (the curation rationale)
     activation_description: str | None = None  # framework-appropriate prompt line
     expected_tree_hash: str | None = None  # whole-tree hash after first vendoring
@@ -102,11 +108,12 @@ class CatalogEntry:
                 f"catalog entry {self.name!r}: repo must be an owner/repo slug with "
                 f"alphanumeric-leading segments, got {self.repo!r}"
             )
-        if self.license.strip().lower() in _REFUSED_LICENSES or "source-available" in self.license.lower():
+        if self.license.strip().lower() not in _REDISTRIBUTABLE_LICENSES:
             raise SkillValidationError(
-                f"catalog entry {self.name!r}: license {self.license!r} does not clearly "
-                "permit redistribution — vendoring copies bytes; a catalog entry needs a "
-                "redistribution-permitting license"
+                f"catalog entry {self.name!r}: license {self.license!r} is not on the "
+                f"redistribution allowlist ({sorted(_REDISTRIBUTABLE_LICENSES)}) — "
+                "vendoring copies bytes; read the license text and widen the allowlist "
+                "deliberately if it permits redistribution"
             )
         if not _SHA_RE.fullmatch(self.upstream_ref):
             raise SkillValidationError(
@@ -221,6 +228,8 @@ def load_catalog(path: Path | str) -> SkillCatalog:
         data = yaml.safe_load(catalog_path.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError as exc:
         raise SkillValidationError(f"invalid catalog YAML at {catalog_path}: {exc}") from exc
+    except UnicodeDecodeError as exc:
+        raise SkillValidationError(f"catalog at {catalog_path} is not valid UTF-8: {exc}") from exc
     if not isinstance(data, Mapping) or "skills" not in data:
         raise SkillValidationError(f"catalog {catalog_path} must be a mapping with a 'skills' list")
     raw_entries = data.get("skills", [])

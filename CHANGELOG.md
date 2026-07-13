@@ -178,9 +178,95 @@ All notable changes to this package are documented in this file.
   skills) would silently activate whatever requires_review copy wins
   precedence — such activations now emit a loud note naming the winning
   copy's path + tree hash (pinned: the note names the shadow, not the
-  curated copy). Deferred to the trust backlog: hash-pinned enables
-  (`name@tree_hash`) as the durable fix for the name-bound enable grant,
-  and a load→inspect byte cross-check (intra-call TOCTOU hardening).
+  curated copy). Deferred to the trust backlog at the time: hash-pinned
+  enables and the load→inspect byte cross-check — both SHIPPED the next
+  day (see the 2026-07-13 entry below).
+
+- Multi-root residuals shipped (2026-07-13, taking the operator's
+  idle-conversion dispatch; one fable5 adversary, findings folded
+  same-pass):
+  - HASH-PINNED ENABLES: `enabled` entries accept `name@tree_hash` (full
+    sha256) — the grant attests BYTES, closing the standing-enable-
+    activates-shadow path for good. Fail-closed parsing (malformed pins
+    grant nothing, never demote to a bare grant); pins govern over a bare
+    entry for the same name (loudly); a mismatching pin holds the skill
+    naming both hashes; pins never constrain attachable skills (they lift
+    review — they are not a second registry). Hex case normalizes; NAMES
+    stay exact-match (grants are authorization — the registry's
+    match-widening case rule applies to advisory matching, never here).
+    Adversary-found and fixed: `enabled` passed as a bare string (the YAML
+    scalar-vs-list slip) would have iterated CHARACTERS into one-letter
+    grants — scalars now wrap as one entry, `None` as empty, test-pinned.
+  - LOAD→INSPECT BYTE CROSS-CHECK (TOCTOU): the loader reads SKILL.md
+    BYTES, hashes them before decoding (`LoadedSkill.skill_md_sha256`),
+    and the pipeline compares that digest against the hashed tree's own
+    per-file digest — a swap between the loader's read and the tree walk
+    refuses the skill loudly (distinct diagnosis when the hashed tree has
+    no exact-case SKILL.md at all, e.g. case-aliased filenames on APFS).
+    Byte-mode reading also ends text-layer newline translation, so
+    `document.raw`/`content_hash` now reflect true file bytes for
+    CRLF-authored skills (regression-pinned: CRLF passes the cross-check).
+    `tree.py` now digests in ONE walk shared by `hash_skill_tree` and
+    `inspect_skill_dir` (identical manifest output — rel paths are unique,
+    so the widened sort key cannot reorder), and `SkillResource` carries
+    `sha256` per file. Adversary-found and fixed: the post-verdict half of
+    the window — `read_skill_resource` gains `expected_sha256` so
+    progressive-disclosure reads can refuse a resource swapped AFTER
+    selection.
+  - RESOLVED-COPY SURFACING: `SkillSelection.resolved_paths` +
+    `resolved_tree_hashes` name the winning copy for every attested name
+    (active/held/blocked) — the operator deciding on a held skill sees
+    WHICH copy the decision applies to and the exact hash to pin;
+    missing/refused names appear in neither (nothing attested).
+  - Same wave: the `abstractframework-gateway` skill's entity section
+    re-taught from the hosted chat door to the durable `/visit` door on
+    the cutover ship signal (entity c1382 + gateway c1358), verified
+    against the served routes; byte pin + validation record refreshed.
+
+- Entity phase-machine teaching + graph-as-control (2026-07-13 afternoon,
+  operator rulings c1435/c1455/c1471/c1494 folded same-hour each, every
+  fold fable5-reviewed): `entity-self-knowledge`'s phases section now
+  teaches the ruled four-phase machine (one current phase; visit
+  turn-based; work autonomous-to-completion then sleep, with the honest
+  exit for impossible tasks; personal as grant-gated free exploration —
+  "the permission is not the phase"; sleep as consolidation + self-electable
+  with one's own words; restore-previous-at-visit-close as the DEFAULT,
+  operator-act-wins; grant-end lands in sleep). Three adversary-caught
+  teaching P0s folded on the record: armed=in-phase conflation, the
+  "asleep refuses visits" pre-auto-wake residue in the gateway skill
+  (+ close-releases-the-loop), and the recurring unconditional-certification
+  class ("not a fault"/"never an error"/"never a loss" — now a KnowledgeBase
+  rule: reassurances scope to the case that makes them true).
+  GRAPH-AS-CONTROL (operator directive 15:06): a new test derives its
+  expectations FROM entity's canonical `spec/entity_phases.json` (phase
+  keys, synonyms, gating, invariants, auto-wake semantics) and verifies
+  the shelf teaching equivalent to the artifact — never parallel prose;
+  a self-contained content pin covers standalone checkouts.
+
+- Production-readiness wave (2026-07-13, operator directive 15:06 —
+  "test beyond the unit tests"): `scripts/production_drive.py` exercises
+  the REAL shelf end-to-end the way a host does (discovery → whole-shelf
+  names-only selection with per-skill verdict checks → multi-root shadow +
+  broken-shadow fallback → the operator enable journey with a hash pin
+  read from `resolved_tree_hashes` → attested progressive-disclosure reads
+  → prompt rendering with override hygiene → catalog load + lint), PASS/FAIL
+  evidence per stage, non-zero exit on any failure. Whole-package fable5
+  audit verdict: no P0/P1; five P2 hardening items ALL folded:
+  (1) `has_scripts` now flags code-extension files ANYWHERE in the tree
+  (`CODE_FILE_EXTENSIONS`), not just `scripts/` — code under `bin/` or
+  `references/` can no longer evade the requires_review gate (latent until
+  a host adds script execution; closed before one exists);
+  (2) frozen dataclasses seal their Mapping fields with `MappingProxyType`
+  (`SkillMetadata.metadata`, `ValidationRecord.evidence`, the three
+  `SkillSelection` mappings — `resolved_tree_hashes` is pin-copy authority);
+  (3) `refresh_shelf.py` writes `validations.yaml` atomically (temp +
+  `os.replace` — a crash leaves old or new, never a torn file);
+  (4) the catalog license gate flipped from denylist to ALLOWLIST
+  (refusal-by-default; a denylist passed every non-permitting license it
+  never heard of) and the stale `risk: safe` comment fixed;
+  (5) registry/catalog loaders wrap `UnicodeDecodeError` as
+  `SkillValidationError` (contract consistency with the SKILL.md loader).
+  156 tests green; drive green against the real shelf.
 - Maintainer-skills wave (operator directive, 2026-07-11 evening): vendored
   `architect` (WITH two operator-directed upstream improvements authored by
   this seat first — a premise-verification Evidence Contract rule incl.
