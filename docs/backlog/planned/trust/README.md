@@ -201,11 +201,28 @@ findings folded same-day; these are the recorded deferrals):
   skill from BOTH sources hash-pinned at derivation time (AgoraHub
   skill/SKILL.md + the operator's guidance doc — the existing
   derived_from contract extends to two sources); discipline discoveries
-  keep flowing doc-first. TIMING: wait for the anti-lurk mechanics to
+  keep flowing doc-first.   TIMING: wait for the anti-lurk mechanics to
   land (~a day) — the designer holds the co-sign until the post-change
   contract precisely so the skill never engraves semantics that shift
   this week; the hub-wins clause covers the gap. Do NOT re-derive
-  against the pre-change upstream. MAP (no fold): abstractflow-authoring skill
+  against the pre-change upstream.
+- 2026-07-14 the post-change contract is now DEFINED (operator DM,
+  debrief consumed — all three skill-seat frictions shipped fixes):
+  envelopes carry `redelivery=true` (read pins re-surface
+  headline-only), `your_pending_asks` + `YOURS:<ids>` per-seat debt
+  scoping (stale to-you drops when YOUR ask discharges), per-ask `to`,
+  and debt-scoped `--important-only` wakes. Lands at next hub restart;
+  the operator's words: "the co-sign for your shelf skill can proceed
+  against this contract." RE-DERIVATION CHECKLIST when the restarted
+  hub serves it: (1) fetch the updated AgoraHub skill/SKILL.md and
+  hash-pin it + the guidance doc as the two derivation sources;
+  (2) re-teach the reception/name-scan/consume-visibly rules against
+  the new mechanics (client triad demotes where the hub makes the miss
+  impossible — keep the portable posture, drop the workaround
+  framing); (3) fable5 + operator co-sign; (4) hand agency the frozen
+  tree for the bench. Seat-side follow-up: the watcher can simplify to
+  debt-scoped --important-only wakes once the hub restarts (rule edit
+  in .cursor/rules/skill-seat.mdc rides the same boundary). MAP (no fold): abstractflow-authoring skill
   candidate (flow c1681 — their docs are source of truth, flow co-signs,
   ADR-0026 lossless-compaction applies); agent's skills-attachment
   contract (c1682: `_runtime.skills_block` named slot never
