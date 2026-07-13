@@ -33,7 +33,11 @@ ADRs if the repo adopts them).
 Library contracts, registry data formats, curation, research, methodology.
 
 ## Non-goals
-- No marketplace/URL install path (curated-only per the entity-creation plan v1 cut).
+- No marketplace/URL install path (curated-only per the entity-creation plan
+  v1 cut). AMENDED 2026-07-11 (operator directive): curated vendoring exists
+  now (`registry/catalog.yaml` + `scripts/vendor_skill.py` — pinned commits,
+  whole-tree hashes, owner/repo slugs only, no URL argument anywhere); the
+  excluded thing remains marketplace sync / arbitrary-URL installs.
 - No runtime activation handlers (abstractruntime's lane) or gateway routes (gateway's lane) — contracts only.
 - Advisory registry never auto-blocks outside consumers' explicit checks; it informs the gate that enforces.
 
@@ -71,3 +75,47 @@ Queued (larger, tracked here so they are not lost):
   attachable-only for entity sessions) — a registry not consulted at attach
   time is decoration. The honest-limits contract must travel with every badge;
   never render the word "safe".
+
+### Source-derivation adversary residuals (2026-07-11, deferred nits)
+From the fable5 review of the registry source-derivation wave (all must-fix
+findings folded same-day; these are the recorded deferrals):
+- DONE (same day, second fable5 wave): case policy — names normalize to spec
+  lowercase at construction + every query boundary (match-widening,
+  fail-closed); query-side sources stripped symmetrically (padded caller
+  source no longer fails open).
+- DONE (same day, second fable5 wave): `lint_registry` — inert advisory
+  spellings surface at refresh time (spec-invalid/over-long names, case-only
+  source mismatches with all twins named, unknown sources with one aggregate
+  note for advisories-only feeds); wired into refresh_shelf.py, which now
+  validates records before writing; shipped registry lints clean by test.
+- `DerivedSource.binding` as an enum (two in-repo string literals today,
+  test-pinned).
+- Maintainer-skills wave residuals (adversary-A, 2026-07-11 evening): (a)
+  codex-skills vendored copies have no machine anchor to their upstream
+  (record the source commit/copy-hash in notes, or fold them into the
+  catalog/vendor pipeline); (b) `agents/openai.yaml` foreign files now ship
+  in 7 shelf skills — promote 0007's `foreign_files` evidence field; (c)
+  adr's reader-first reference cites author-local example ADRs (upstream
+  wording tweak recommended, not seat-owned).
+- `vendor_skill.py --pin` (adversary-C usability suggestion, deferred): write
+  expected_tree_hash + vendored:true into catalog.yaml automatically after
+  the human diff review. Needs a comment-preserving YAML writer (the catalog
+  is comment-rich; PyYAML round-trips destroy them). Until then: the script
+  prints the exact lines and test_vendored_catalog_pins_match_shelf_bytes
+  catches any transcription error in CI.
+- `TrustRegistry.activation_descriptions()` is registry-wide (not
+  hash-filtered) — documented, prompt-display-only; consider a hash-aware
+  variant if a consumer beyond the selection pipeline appears.
+- Observability nit: a skill that is BOTH advisory-blocked and tree-broken
+  reports as `missing`, not `blocked` (fail-closed either way; audit greps
+  keyed on `blocked` won't see it).
+- Multi-root wave residuals (fable5, 2026-07-12; the loud-note + decode-fix
+  halves shipped same-pass): (a) hash-pinned enables — `enabled` entries as
+  `name@tree_hash` (or a mapping) so an enable attests BYTES, not a
+  claimable name; the durable fix for the standing-enable-activates-shadow
+  path (today: loud note naming the winning copy). (b) load→inspect byte
+  cross-check — compare the parsed SKILL.md against the hashed inventory's
+  per-file digest to close the intra-call TOCTOU window on user-writable
+  roots. (c) held/blocked entries carry (name, verdict) without the winning
+  copy's path; surface `root_dir` so the operator knows WHICH copy they
+  would be enabling (partially covered by the enable note).

@@ -24,6 +24,21 @@ def _warn(message: str, on_warning: WarningCallback | None) -> None:
         on_warning(message)
 
 
+def _read_skill_text(skill_file: Path) -> str:
+    """Read SKILL.md as UTF-8, mapping decode failures to SkillParseError.
+
+    UnicodeDecodeError is a ValueError, not a SkillError — unmapped, one
+    binary/mis-encoded SKILL.md in a user-writable root would fly past the
+    skip-and-fall-back machinery and crash the whole discovery/selection
+    (adversary-found when multi-root selection made user dirs a designed
+    configuration).
+    """
+    try:
+        return skill_file.read_text(encoding="utf-8")
+    except UnicodeDecodeError as exc:
+        raise SkillParseError(f"SKILL.md at {skill_file} is not valid UTF-8: {exc}") from exc
+
+
 class FilesystemSkillLoader:
     """Discover and load skills from one or more directory roots.
 
@@ -62,7 +77,7 @@ class FilesystemSkillLoader:
                     continue
                 try:
                     document = parse_skill_md(
-                        skill_file.read_text(encoding="utf-8"),
+                        _read_skill_text(skill_file),
                         source_path=skill_file,
                         directory_name=child.name,
                     )
@@ -94,7 +109,7 @@ class FilesystemSkillLoader:
                 continue
             try:
                 document = parse_skill_md(
-                    skill_file.read_text(encoding="utf-8"),
+                    _read_skill_text(skill_file),
                     source_path=skill_file,
                     directory_name=candidate.name,
                 )

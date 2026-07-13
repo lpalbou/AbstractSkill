@@ -33,7 +33,9 @@ from abstractskill import FilesystemSkillLoader, format_available_skills_xml, pa
 doc = parse_skill_md(Path("my-skill/SKILL.md").read_text(encoding="utf-8"))
 print(doc.metadata.name, doc.metadata.description)
 
-# Discover skills under one or more roots (later roots override earlier ones)
+# Discover skills under one or more roots (later roots override earlier ones).
+# NOTE: discovery is for LISTING only — it applies no trust gate. Do not pipe
+# discover() straight into activation.
 loader = FilesystemSkillLoader([Path.home() / ".abstract" / "skills", Path(".abstract/skills")])
 skills = loader.discover()
 print(format_available_skills_xml(skills))
@@ -41,6 +43,27 @@ print(format_available_skills_xml(skills))
 # Load full instructions when a skill is activated
 loaded = loader.load("my-skill")
 print(loaded.document.content_hash)
+```
+
+To ACTIVATE skills into a context, gate them through trust in one call so the
+order (load → hash → evaluate_trust → compose) cannot be skipped:
+
+```python
+from abstractskill import TrustRegistry, select_skills_for_context, format_available_skills_xml
+
+registry = TrustRegistry.load(
+    validations_path="registry/validations.yaml",
+    advisories_path="registry/advisories.yaml",
+)
+selection = select_skills_for_context(
+    registry, shelf_root="registry/skills",
+    names=["coredoc", "backlog"],  # names-only is enough: sources derive from the registry
+    enabled=[],  # names the operator explicitly review-enabled for this context
+)
+# Only trust-gated skills reach the prompt; blocked skills never appear.
+block = format_available_skills_xml(
+    list(selection.active), descriptions=selection.activation_descriptions
+)
 ```
 
 ## Package scope
@@ -62,7 +85,7 @@ print(loaded.document.content_hash)
   `GuidanceEntry` — validated-skill attestations bound to tree hashes, a
   do-not-use advisory registry (four mandated fields, graded severity), and a
   fail-closed `TrustVerdict` (blocked / requires_review / attachable). The
-  curated first-party shelf lives under `registry/`. See the
+  curated shelf (first-party + catalog-vendored skills) lives under `registry/`. See the
   [trust model](docs/trust.md).
 
 ### Hashing contract: hash = bytes, parse = meaning

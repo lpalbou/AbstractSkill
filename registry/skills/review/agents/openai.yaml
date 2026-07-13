@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review"
+  short_description: "Independent multi-lens quality review"
+  default_prompt: "Use $review to run an evidence-based review across correctness, architecture fit, and user or operational impact."

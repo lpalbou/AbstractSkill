@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architect"
+  short_description: "Independent architecture alternatives review"
+  default_prompt: "Use $architect to compare multiple architectural alternatives before settling on a design."

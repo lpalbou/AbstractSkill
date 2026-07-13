@@ -6,9 +6,42 @@
 # shelf change, then review the diff.
 #
 validations:
+- name: abstractframework-gateway
+  source: first-party
+  tree_hash: 76fb135dc2f65a5ab5dbf9540750dac3f93e218fc8bd44ceaa0efc3d644bc8bd
+  level: first_party
+  method: first-party
+  validated_by: skill
+  validated_at: '2026-07-12'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: "Route usage CO-SIGNED by the gateway seat route-by-route against its source\
+    \ (internal hub thread, commons c1068, 2026-07-12) after one correction folded:\
+    \ health is app-level GET /api/health, never /api/gateway/health (the wrong path\
+    \ 401s unauthenticated and 404s authenticated \u2014 a trap). Steer 404/403-is-an-answer\
+    \ and the composite entity-stream SSE id enrichment folded same wave. Runtime\
+    \ co-signed the wait/steer semantics (c1061)."
+- name: adr
+  source: codex-skills (maintainer)
+  tree_hash: a4cb55fcea54e969a9c342e314b4dda3556ce5e6fb0e210821350688c62c934b
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 5
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: Create, audit, update, and enforce ADRs as durable cross-task
+    engineering policy (Context/Decision first; Enforcement + Validation mandatory).
+    Use when a decision must constrain future work beyond the current task.
 - name: adversarial-iteration
   source: first-party
-  tree_hash: d4f6acce64a3591cb8fcffd9fd2782de60f61f3d5f901d1a3a0ddf516ebfa33b
+  tree_hash: f6bc58d7d19dfe77b423b42f2859ac41d5a1d3e1ca06a3754c224fdccc4cacc7
   level: first_party
   method: first-party
   validated_by: skill
@@ -18,6 +51,27 @@ validations:
     has_scripts: false
     files: 1
   notes: Authored first-party.
+- name: architect
+  source: codex-skills (maintainer)
+  tree_hash: 6af31c94223f390e16059c67ed2e40b9b1632bcc79a46e64c11083a5b3e93c0b
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Maintainer-authored codex skill, vendored 2026-07-11 from the operator's\
+    \ local codex-skills tree with two operator-directed upstream improvements AUTHORED\
+    \ BY THE VALIDATING SEAT before vendoring (premise-verification Evidence Contract\
+    \ rule incl. the verify-the-copy-the-user-runs clause; engraving gate + one-concept-one-name\
+    \ anti-pattern; two reviewer-memory principles). Reviewer == author for those\
+    \ lines. Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: 'Force rigorous architecture exploration before settling
+    on a design: independent charters, steelmanned alternatives, comparison matrix,
+    premise verification, engraving gate. Use when evaluating boundaries, ownership,
+    tradeoffs, or any decision where premature consensus is harmful.'
 - name: backlog
   source: codex-skills (maintainer)
   tree_hash: 8c3aa23e8ee5a2b589f250f94aa61b4c77c1d5a1697fa7d0652ecb46f0c8550e
@@ -35,6 +89,23 @@ validations:
     backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states,
     implementation history, and hygiene. Use when an agent must plan or execute long-running
     work with a durable, evidence-backed backlog methodology.
+- name: cicd
+  source: codex-skills (maintainer)
+  tree_hash: eba9d690b8c7cc13eb527347ae3be6c99ea470e65505df45c60c9be472f4f785
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-12'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 7
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: 'Create, audit, and maintain GitHub-based CI/CD: least-privilege
+    workflows, OIDC trusted publishing (PyPI/npm), docs deployment, release rehearsals.
+    Use when bootstrapping or repairing .github/, release automation, or repository
+    CI/CD settings.'
 - name: coredoc
   source: codex-skills (maintainer)
   tree_hash: 1be6061cfabd4d9f9689c0ab1d4f322875f58ea5f5205c15fc21bb46f3fcb6bb
@@ -52,3 +123,77 @@ validations:
     documentation set (README, docs/*, architecture with diagrams, llms.txt/llms-full.txt)
     kept faithful to the code. Use when an agent must bootstrap or repair project
     documentation.
+- name: entity-self-knowledge
+  source: first-party
+  tree_hash: 17b4610d3d5c0a1a338b2fa4ae82e95428d43c318d35b5d916c97d1d1fae45f1
+  level: first_party
+  method: first-party
+  validated_by: skill
+  validated_at: '2026-07-12'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: 'Faculty claims CO-SIGNED by the memory and runtime seats (internal hub thread,
+    commons c1061/c1062, 2026-07-12) after two corrections folded: probe is engine-only
+    today (deliberate-reach discipline folded into search_memory; the bullet returns
+    when a host wires it) and the absence warrant is book-scoped (graph ''not found''
+    can mean not-reachable). Steer-vs-wake precision folded into the gateway skill
+    same wave.'
+- name: review
+  source: codex-skills (maintainer)
+  tree_hash: 7960ef044f9f30a07d1a6511ec40d21c111dcf25c518c13bda0c868bb237439d
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: "Run independent, evidence-based ship-readiness reviews\
+    \ (correctness, architecture-fit, user-and-operations lenses; Blocking/Conditional/Approved\
+    \ verdicts). Use for the final quality pass \u2014 its full multi-reviewer contract\
+    \ engages when the operator explicitly requests a review."
+- name: uxreview
+  source: codex-skills (maintainer)
+  tree_hash: ce6e07c3828751bd205c2e48e6852554a3e6a10f6e38a83c7c030fa877780783
+  level: adopted
+  method: first-party-adoption
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: "Run focused human user-experience reviews with independent\
+    \ naive/intermediate/expert personas \u2014 live UI evidence preferred; code-only\
+    \ review caps the verdict at Conditional. Use when any user-facing surface (app,\
+    \ workflow, dashboard, form) must be checked for clarity, accessibility, and trust\
+    \ before shipping."
+- name: verification-before-completion
+  source: obra/superpowers
+  tree_hash: 372adb8140354a783947af706b89ee34a7e25db847bf3cbca4ea6f036ee4bd18
+  level: adopted
+  method: manual-review
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: "Curated third-party skill (see registry/catalog.yaml): reviewed and vendored\
+    \ byte-verbatim from obra/superpowers @ d884ae04edeb. Behavioral audit (backlog\
+    \ 0003) pending \u2014 upgrades to audited then. CONTENT CAVEAT (adversary-A F2):\
+    \ the \"Why This Matters\" section carries motivational/identity-adjacent framing\
+    \ (\"If you lie, you'll be replaced\"; second-person failure memories; deviation-equals-lying\
+    \ absolutism). Ordinary for developer-agent consumers; do NOT attach to entity\
+    \ sessions before the 0003 behavioral audit rules on it \u2014 an engrammed threat-anchored\
+    \ value in an append-only life cannot be deleted."
+  activation_description: Before reporting any task complete, verify the change actually
+    works (run the tests, exercise the path, check the output). Use at the end of
+    every implementation task.

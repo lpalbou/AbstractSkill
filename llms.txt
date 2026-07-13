@@ -19,6 +19,8 @@ identical semantics without duplicating parsers.
 - [FAQ](docs/faq.md): common questions and limitations.
 - [Troubleshooting](docs/troubleshooting.md): symptoms, diagnostics, and fixes.
 - [Trust model](docs/trust.md): validated skills, do-not-use advisories, guidance, fail-closed verdict.
+- [Curated skills catalog](docs/skills-catalog.md): reviewed+pinned third-party skills, tiers, curated-only vendoring.
+- [Skills vs workflows vs MCP](docs/skills-flows-mcp.md): which extension mechanism when — comparison table, decision rules, package responsibilities.
 - [Trust-network position](docs/trust-network-position.md): join / leverage / build.
 - [Security policy](SECURITY.md): what the library does and does not guarantee.
 - [Changelog](CHANGELOG.md): release history.
@@ -30,6 +32,7 @@ identical semantics without duplicating parsers.
 - `hash_skill_tree(dir)`, `inspect_skill_dir(dir)` (tamper hash + `has_scripts`).
 - `effective_tools(grant, skills)` (grant ∩ declared; never widens).
 - `evaluate_trust(registry, tree_hash=..., has_scripts=...)` → `TrustVerdict` (blocked / requires_review / attachable).
+- `select_skills_for_context(registry, shelf_root, names)` → `SkillSelection` (the ONE trust-gated activation pipeline; names-only calls derive sources from the registry).
 
 ## Planning
 

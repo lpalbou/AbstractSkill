@@ -1,0 +1,221 @@
+# AbstractSkill curated catalog (operator directive 2026-07-11).
+#
+# The ONE admissible source list for vendoring third-party skills onto the
+# shelf. Entries are reviewed by the skill seat, pinned to an immutable
+# upstream commit, and (after first vendoring) pinned to a whole-tree hash.
+# scripts/vendor_skill.py refuses anything not listed here — curated-only is
+# structural, never a convention. The catalog GRANTS NO TRUST: vendoring
+# mints at most a manual-review/adopted validation; scripts-bearing skills
+# stay requires_review at the gate regardless of their risk label here.
+#
+# Verified 2026-07-11 against the pinned commits (paths, frontmatter names,
+# licenses read from the actual trees, not READMEs). Curation rationale +
+# watch/excluded tiers: docs/skills-catalog.md.
+#
+skills:
+
+# ---- engineering process (obra/superpowers, MIT, ~251k stars as of
+# ---- 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026"
+# ---- per the cited blog; maintainer Jesse Vincent). CONCENTRATION NOTE:
+# ---- 4 of 8 entries share this one source — accepted, monitored risk (one
+# ---- compromised maintainer poisons half the list at re-pin; cross-reference
+# ---- inventory required before ANY re-pin; see docs/skills-catalog.md). ----
+- name: test-driven-development
+  source: obra/superpowers
+  repo: obra/superpowers
+  upstream_ref: d884ae04edebef577e82ff7c4e143debd0bbec99
+  subdir: skills/test-driven-development
+  license: MIT
+  archetype: procedure
+  risk: low
+  improves: >-
+    Red/green/refactor discipline for every seat's package work; treats
+    "I'll write the test after" as grounds to restart. Complements the
+    workspace rule that tests gate completion.
+  activation_description: >-
+    Enforce test-driven development: write a failing test before any
+    implementation code, make it pass, then refactor. Use when implementing
+    any feature or bugfix.
+  evidence:
+  - https://github.com/obra/superpowers
+  - https://blog.marcnuri.com/superpowers-claude-code-skills-framework
+
+- name: writing-plans
+  source: obra/superpowers
+  repo: obra/superpowers
+  upstream_ref: d884ae04edebef577e82ff7c4e143debd0bbec99
+  subdir: skills/writing-plans
+  license: MIT
+  archetype: procedure
+  risk: low
+  improves: >-
+    Breaks features into small verifiable tasks with file paths and tests
+    named before code; complements the vendored backlog methodology skill.
+  activation_description: >-
+    Write implementation plans detailed enough to execute without guessing:
+    small tasks, named files, tests first. Use before starting multi-step
+    implementation work.
+  evidence:
+  - https://github.com/obra/superpowers
+
+- name: verification-before-completion
+  source: obra/superpowers
+  repo: obra/superpowers
+  upstream_ref: d884ae04edebef577e82ff7c4e143debd0bbec99
+  subdir: skills/verification-before-completion
+  license: MIT
+  archetype: procedure
+  risk: low
+  vendored: true
+  expected_tree_hash: 372adb8140354a783947af706b89ee34a7e25db847bf3cbca4ea6f036ee4bd18
+  improves: >-
+    Anti-self-declared-success: verify a fix/feature actually works before
+    reporting done. Matches the workspace rule that success is validated by
+    others, never self-declared.
+  activation_description: >-
+    Before reporting any task complete, verify the change actually works
+    (run the tests, exercise the path, check the output). Use at the end of
+    every implementation task.
+  notes: >-
+    CONTENT CAVEAT (adversary-A F2): the "Why This Matters" section carries
+    motivational/identity-adjacent framing ("If you lie, you'll be replaced";
+    second-person failure memories; deviation-equals-lying absolutism).
+    Ordinary for developer-agent consumers; do NOT attach to entity sessions
+    before the 0003 behavioral audit rules on it — an engrammed
+    threat-anchored value in an append-only life cannot be deleted.
+  evidence:
+  - https://github.com/obra/superpowers
+
+- name: systematic-debugging
+  source: obra/superpowers
+  repo: obra/superpowers
+  upstream_ref: d884ae04edebef577e82ff7c4e143debd0bbec99
+  subdir: skills/systematic-debugging
+  license: MIT
+  archetype: procedure
+  risk: moderate
+  improves: >-
+    Four-phase root-cause process (investigate, pattern analysis, hypothesis
+    testing, then implementation) that forbids fixing what is not yet
+    understood — the same discipline our incident forensics keep re-learning.
+  activation_description: >-
+    Debug systematically: find the root cause before proposing any fix
+    (four phases; never fix what you have not understood). Use on any bug,
+    test failure, or unexpected behavior.
+  notes: >-
+    Ships one helper script (find-polluter.sh) and pressure-test docs;
+    scripts-present makes it requires_review at the gate — enable the
+    knowledge, never execute the script, until script enablement exists.
+  evidence:
+  - https://github.com/obra/superpowers
+
+# brainstorming: DEMOTED to watch tier (adversary-A F9) — thinnest improves
+# case, interactive-session shaped, and the operator already runs an
+# architect skill covering pre-code design exploration.
+
+# ---- frontend/UI (vercel-labs/agent-skills, MIT, Vercel Engineering) ------
+- name: vercel-react-best-practices
+  source: vercel-labs/agent-skills
+  repo: vercel-labs/agent-skills
+  upstream_ref: f8a72b9603728bb92a217a879b7e62e43ad76c81
+  subdir: skills/react-best-practices
+  license: MIT
+  archetype: knowledge
+  risk: low
+  improves: >-
+    70 impact-prioritized React/Next.js performance rules (waterfalls,
+    bundle size, rendering) for our React UIs (abstractflow, abstractobserver,
+    abstractuic). Pure knowledge pack (rules/*.md + compiled AGENTS.md).
+  activation_description: >-
+    React and Next.js performance optimization rules, prioritized by impact.
+    Use when writing, reviewing, or refactoring React/TypeScript UI code.
+  notes: >-
+    Upstream dir is react-best-practices; frontmatter name (the shelf key)
+    is vercel-react-best-practices — the vendor script places it under the
+    frontmatter name so name==directory holds. 70 rules counted at the pin
+    (the cited blog describes an earlier 40+ snapshot). Next.js-heavy: a
+    portion won't apply to our Vite apps; the React/JS rules do.
+  evidence:
+  - https://github.com/vercel-labs/agent-skills
+  - https://vercel.com/blog/introducing-react-best-practices
+
+# web-design-guidelines: PULLED from the vendorable list (adversary-A F1,
+# P0). At the pinned commit the body is a FETCH-AND-OBEY stub: it instructs
+# fetching unpinned rules from web-interface-guidelines@main at USE TIME —
+# hash-pinning pins the pointer, not the rules (the ASG-2026-0003 class).
+# Watch tier: re-scope by pinning vercel-labs/web-interface-guidelines at a
+# commit and vendoring the actual rules (license check first). Standing
+# curation rule from this finding: a body that instructs fetching external
+# instructions at use time can NEVER be risk-labeled below moderate and must
+# carry a time-of-use-fetch note.
+
+# ---- security (single-author, content pure reference) ---------------------
+- name: owasp-security
+  source: agamm/claude-code-owasp
+  repo: agamm/claude-code-owasp
+  upstream_ref: f5dfa3d66da1fdfeb36b7428c35b17abaff6465b
+  subdir: .claude/skills/owasp-security
+  license: MIT
+  archetype: knowledge
+  risk: low
+  improves: >-
+    OWASP Top 10:2025 + ASVS 5.0 + LLM Top 10 + Agentic AI (2026) review
+    checklists with per-language unsafe/safe pattern EXAMPLES (20+ languages
+    at ~half a KB each — pointers, not depth) — a shared baseline for the
+    security half of our adversarial reviews.
+  activation_description: >-
+    OWASP security review reference (Top 10:2025, ASVS 5.0, LLM and agentic
+    AI risks) with language-specific safe/unsafe patterns. Use when
+    reviewing code for security or designing auth/input handling.
+  notes: >-
+    Single-author provenance (agamm) — content is pure reference (SKILL.md +
+    reference/*.md, no scripts) and was reviewed at the pinned commit;
+    re-review on every re-pin.
+  evidence:
+  - https://github.com/agamm/claude-code-owasp
+
+# ---- meta / integration (anthropics/skills, Apache-2.0 per-dir LICENSE) ---
+- name: skill-creator
+  source: anthropics/skills
+  repo: anthropics/skills
+  upstream_ref: 9d2f1ae187231d8199c64b5b762e1bdf2244733d
+  subdir: skills/skill-creator
+  license: Apache-2.0
+  archetype: meta
+  risk: moderate
+  improves: >-
+    Anthropic's own skill authoring/eval methodology — directly feeds our
+    first-party skill authoring and the 0003 behavioral-audit harness
+    design (eval grids, description optimization).
+  activation_description: >-
+    Create, improve, and evaluate agent skills (authoring patterns, eval
+    design, description optimization). Use when authoring or auditing a
+    skill.
+  notes: >-
+    Ships python eval scripts (scripts/, eval-viewer/); requires_review at
+    the gate — the authoring knowledge works without executing them.
+  evidence:
+  - https://github.com/anthropics/skills
+
+- name: mcp-builder
+  source: anthropics/skills
+  repo: anthropics/skills
+  upstream_ref: 9d2f1ae187231d8199c64b5b762e1bdf2244733d
+  subdir: skills/mcp-builder
+  license: Apache-2.0
+  archetype: knowledge
+  risk: moderate
+  improves: >-
+    MCP server design guidance (Python FastMCP + TypeScript SDK, tool
+    design, evaluation) — we build and consume MCP integrations (agora-mcp,
+    context7) and the entity MCP lane is in the signed plan.
+  activation_description: >-
+    Guide for building high-quality MCP servers (tool design, Python/Node
+    patterns, evaluation). Use when building or reviewing an MCP
+    integration.
+  notes: >-
+    Ships python helper scripts (scripts/); requires_review at the gate.
+    Apache-2.0 confirmed from the per-dir LICENSE.txt (the repo's document
+    skills are source-available, this one is not).
+  evidence:
+  - https://github.com/anthropics/skills

@@ -44,6 +44,18 @@ Package surface:
 - `format_available_skills_xml` — deterministic `<available_skills>` block.
 - `evaluate_trust` + `TrustRegistry` / `ValidationRecord` / `AdvisoryEntry` /
   `GuidanceEntry` / `TrustVerdict` — trust classification.
+- `select_skills_for_context` → `SkillSelection` — the ONE trust-gated
+  activation pipeline (load → hash → derive sources → worst verdict → gate);
+  names-only calls derive provenance from the registry
+  (`TrustRegistry.source_candidates_for`; advisories checked against EVERY
+  candidate source so a losing record or wrong caller string cannot evade).
+- `load_catalog`/`CatalogEntry`/`lint_catalog` — the curated vendoring
+  catalog contract (registry/catalog.yaml: reviewed entries pinned to 40-hex
+  upstream commits + whole-tree hashes; owner/repo slugs only). The install
+  path is CURATED-ONLY: `scripts/vendor_skill.py` fetches exactly the pinned
+  commit, refuses symlinks/name-mismatches/byte drift, and validation records
+  derive from the catalog (manual-review → adopted; scripts-bearing skills
+  stay requires_review). Curation list + tiers: docs/skills-catalog.md.
 
 ### Hashing contract: hash = bytes, parse = meaning
 
@@ -76,6 +88,15 @@ orthogonal signals: `blocked` (never attach), `requires_review` (operator
 decides — unverified, scripts present, or low/medium advisory), and
 `attachable` (green path only: validated, advisory-free, script-free). Every
 verdict lists the reasons it rests on.
+
+Name-anchored advisories match on `(name, source)` pairs — names
+case-insensitively (spec-lowercase, normalized at construction and query
+boundaries), sources exactly (stripped, case-sensitive; `lint_registry`
+flags case-only near-misses and unknown sources at refresh time, warns
+never refuses). Names-only context configs still match them:
+`select_skills_for_context` derives candidate sources from validation records
+(hash-bound = exact provenance, name-bound = prior-tree claim, warned) and
+checks every candidate, keeping the worst verdict.
 
 Trust classification raises the bar; it does not certify safety. Curation,
 behavioral audit (backlog 0003), and the fail-closed default remain the real

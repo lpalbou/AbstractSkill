@@ -341,3 +341,251 @@ def test_guidance_entry_requires_fields_and_never_blocks() -> None:
     verdict = evaluate_trust(registry, tree_hash=HASH_A, name="anything", source="anywhere")
     assert verdict.blocked is False
     assert len(registry.guidance) == 1
+
+
+# --- source derivation (TrustRegistry.source_for) ---
+
+def _named_validation(name: str, source: str, tree_hash: str, level: TrustLevel = TrustLevel.ADOPTED) -> ValidationRecord:
+    return ValidationRecord(
+        name=name, source=source, tree_hash=tree_hash, level=level,
+        method="first-party-adoption", validated_by="skill", validated_at="2026-07-11",
+    )
+
+
+def test_source_for_prefers_hash_bound() -> None:
+    reg = TrustRegistry(validations=[
+        _named_validation("demo", "old-market", HASH_B),   # name-bound (other bytes)
+        _named_validation("demo", "market", HASH_A),        # hash-bound (these bytes)
+    ])
+    derived = reg.source_for(name="demo", tree_hash=HASH_A)
+    assert derived is not None
+    assert (derived.source, derived.binding, derived.ambiguous) == ("market", "hash", False)
+
+
+def test_source_for_name_bound_fallback() -> None:
+    reg = TrustRegistry(validations=[_named_validation("demo", "market", HASH_B)])
+    derived = reg.source_for(name="demo", tree_hash=HASH_A)  # no record for HASH_A
+    assert derived is not None
+    assert (derived.source, derived.binding) == ("market", "name")
+
+
+def test_source_for_none_when_unknown() -> None:
+    assert TrustRegistry().source_for(name="ghost", tree_hash=HASH_A) is None
+
+
+def test_source_for_hash_bound_prefers_matching_name() -> None:
+    # Same bytes vendored under two names; the record naming THIS skill wins
+    # even when the other-name record carries a HIGHER trust level.
+    other = ValidationRecord(
+        name="other-name", source="src-other", tree_hash=HASH_A,
+        level=TrustLevel.AUDITED, method="external-audit", validated_by="skill",
+        validated_at="2026-07-11", evidence={"reference": "https://audit.example"},
+    )
+    reg = TrustRegistry(validations=[
+        other,
+        _named_validation("demo", "src-demo", HASH_A),
+    ])
+    derived = reg.source_for(name="demo", tree_hash=HASH_A)
+    assert derived is not None
+    assert derived.source == "src-demo"
+    assert derived.ambiguous is True  # registry disagrees about these bytes' source
+
+
+def test_source_for_name_bound_ambiguity_flagged() -> None:
+    reg = TrustRegistry(validations=[
+        _named_validation("demo", "market-a", HASH_A, level=TrustLevel.COMMUNITY),
+        _named_validation("demo", "market-b", HASH_B, level=TrustLevel.ADOPTED),
+    ])
+    derived = reg.source_for(name="demo", tree_hash="c" * 64)
+    assert derived is not None
+    assert derived.source == "market-b"  # highest trust level wins, deterministic
+    assert derived.binding == "name"
+    assert derived.ambiguous is True
+
+
+def test_source_for_normalizes_hash_spelling() -> None:
+    reg = TrustRegistry(validations=[_named_validation("demo", "market", HASH_A)])
+    derived = reg.source_for(name="demo", tree_hash=HASH_A.upper())
+    assert derived is not None and derived.binding == "hash"
+
+
+# --- name case normalization + registry lint ---
+
+def test_uppercase_advisory_name_matches_spec_lowercase_skill() -> None:
+    # The Agent Skills spec requires lowercase names, so 'Evil' in a registry
+    # entry could never match a loadable skill — names normalize at
+    # construction and at the query boundary (silent-miss killer).
+    advisory = AdvisoryEntry(
+        name="Evil-Skill", source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x",
+    )
+    assert advisory.name == "evil-skill"
+    registry = TrustRegistry(advisories=[advisory])
+    verdict = evaluate_trust(registry, tree_hash=HASH_A, name="evil-skill", source="market")
+    assert verdict.blocked
+    # Query-side case symmetry: an uppercase query still matches.
+    verdict2 = evaluate_trust(registry, tree_hash=HASH_A, name="EVIL-SKILL", source="market")
+    assert verdict2.blocked
+
+
+def test_validation_record_name_lowercased() -> None:
+    record = _named_validation("Demo", "market", HASH_A)
+    assert record.name == "demo"
+    reg = TrustRegistry(validations=[record])
+    derived = reg.source_for(name="DEMO", tree_hash=None)
+    assert derived is not None and derived.source == "market"
+
+
+def test_lint_flags_spec_invalid_advisory_name() -> None:
+    advisory = AdvisoryEntry(
+        name="my_skill!", source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x", advisory_id="ASG-1",
+    )
+    from abstractskill import lint_registry
+    warnings = lint_registry(TrustRegistry(advisories=[advisory]))
+    assert any("violates the skill-name spec" in w and "ASG-1" in w for w in warnings)
+
+
+def test_lint_flags_case_only_source_mismatch() -> None:
+    from abstractskill import lint_registry
+    validation = _named_validation("demo", "codex-skills (maintainer)", HASH_A)
+    advisory = AdvisoryEntry(
+        name="demo", source="Codex-Skills (Maintainer)", official_intent="i",
+        hidden_issue="h", severity=Severity.HIGH, reference="https://x",
+    )
+    warnings = lint_registry(TrustRegistry(validations=[validation], advisories=[advisory]))
+    assert any("only by case" in w for w in warnings)
+
+
+def test_lint_flags_unknown_source_softly() -> None:
+    from abstractskill import lint_registry
+    validation = _named_validation("demo", "first-party", HASH_A)
+    advisory = AdvisoryEntry(
+        name="demo", source="some-marketplace", official_intent="i",
+        hidden_issue="h", severity=Severity.HIGH, reference="https://x",
+    )
+    warnings = lint_registry(TrustRegistry(validations=[validation], advisories=[advisory]))
+    assert any("matches no known validation source" in w for w in warnings)
+
+
+def test_lint_clean_registry_and_exemptions() -> None:
+    from abstractskill import lint_registry
+    validation = _named_validation("demo", "market", HASH_A)
+    matching = AdvisoryEntry(  # name-anchored, source known: clean
+        name="demo", source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x",
+    )
+    hash_anchored = AdvisoryEntry(  # unknown source but hash-anchored: exempt
+        name="other", source="anywhere", official_intent="i", hidden_issue="h",
+        severity=Severity.LOW, reference="https://x", tree_hash=HASH_B,
+    )
+    withdrawn = AdvisoryEntry(  # withdrawn: history, not linted
+        name="gone", source="nowhere", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x", status="withdrawn",
+        withdrawn_reason="fixed upstream",
+    )
+    warnings = lint_registry(
+        TrustRegistry(validations=[validation], advisories=[matching, hash_anchored, withdrawn])
+    )
+    assert warnings == ()
+
+
+def test_padded_query_source_still_matches_advisory() -> None:
+    # Re-attack finding 1: a padded caller source (quoted-YAML class) must not
+    # fail OPEN — stripping the query widens the advisory surface (safe).
+    advisory = AdvisoryEntry(
+        name="evil", source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x",
+    )
+    reg = TrustRegistry(validations=[_validation()], advisories=[advisory])
+    verdict = evaluate_trust(reg, tree_hash=HASH_A, name="evil", source="market ")
+    assert verdict.blocked
+
+
+def test_lint_flags_overlong_advisory_name() -> None:
+    # Re-attack finding 2: SKILL_NAME_RE has no length bound; a 65-char name
+    # passes the regex yet can never load (64-char spec cap).
+    from abstractskill import lint_registry
+    advisory = AdvisoryEntry(
+        name="a" * 65, source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x", advisory_id="ASG-LEN",
+    )
+    warnings = lint_registry(TrustRegistry(advisories=[advisory]))
+    assert any("ASG-LEN" in w and "skill-name spec" in w for w in warnings)
+
+
+def test_lint_names_all_case_twins_deterministically() -> None:
+    # Re-attack finding 3: case-twin validation sources are themselves
+    # flagged, and the advisory message names ALL twins sorted.
+    from abstractskill import lint_registry
+    v1 = _named_validation("demo", "Market", HASH_A)
+    v2 = _named_validation("demo2", "market", HASH_B)
+    advisory = AdvisoryEntry(
+        name="demo", source="MARKET", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x",
+    )
+    warnings = lint_registry(TrustRegistry(validations=[v1, v2], advisories=[advisory]))
+    assert any("differ only by case" in w and "'Market'" in w and "'market'" in w for w in warnings)
+    assert any("only by case" in w and "MARKET" in w for w in warnings)
+
+
+def test_lint_advisories_only_registry_one_aggregate_line() -> None:
+    # Re-attack finding 4: an advisories-only feed gets ONE aggregate note,
+    # never N per-entry "unknown source" noise lines.
+    from abstractskill import lint_registry
+    advisories = [
+        AdvisoryEntry(
+            name=f"skill-{i}", source="feed", official_intent="i", hidden_issue="h",
+            severity=Severity.HIGH, reference="https://x",
+        )
+        for i in range(3)
+    ]
+    warnings = lint_registry(TrustRegistry(advisories=advisories))
+    source_lines = [w for w in warnings if "cross-checked" in w or "unknown" in w.lower()]
+    assert len(source_lines) == 1
+    assert "no validation records" in source_lines[0]
+
+
+def test_lint_hash_anchored_bad_name_message_names_the_live_anchor() -> None:
+    # Re-attack finding 5: a hash-anchored advisory with a display-fidelity
+    # name is not "can never match" — the hash anchor still protects.
+    from abstractskill import lint_registry
+    advisory = AdvisoryEntry(
+        name="PDF_Tools!", source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.LOW, reference="https://x", tree_hash=HASH_A,
+    )
+    warnings = lint_registry(TrustRegistry(advisories=[advisory]))
+    assert any("hash anchor still matches" in w for w in warnings)
+    assert not any("can never match a loadable skill" in w for w in warnings)
+
+
+def test_matches_level_source_strip_is_independent_of_evaluate_trust() -> None:
+    # Defense-in-depth pin: the strip inside AdvisoryEntry.matches holds for
+    # DIRECT callers (active_advisories_for), not only via evaluate_trust's
+    # head normalization.
+    advisory = AdvisoryEntry(
+        name="evil", source="market", official_intent="i", hidden_issue="h",
+        severity=Severity.HIGH, reference="https://x",
+    )
+    reg = TrustRegistry(advisories=[advisory])
+    hits = reg.active_advisories_for(tree_hash=None, name="EVIL ", source=" market\n")
+    assert [strength for _, strength in hits] == ["name"]
+
+
+def test_activation_descriptions_rank_tiebreak_pinned() -> None:
+    # The registry-wide map's documented rule: on same-name collisions the
+    # higher trust level wins, deterministically (was covered by code-reading
+    # only — cycle-3 adversary asked for the pin).
+    low = ValidationRecord(
+        name="demo", source="market", tree_hash=HASH_A, level=TrustLevel.COMMUNITY,
+        method="manual-review", validated_by="s", validated_at="2026-07-11",
+        activation_description="LOW",
+    )
+    high = ValidationRecord(
+        name="Demo", source="market", tree_hash=HASH_B, level=TrustLevel.ADOPTED,
+        method="first-party-adoption", validated_by="s", validated_at="2026-07-11",
+        activation_description="HIGH",
+    )
+    reg = TrustRegistry(validations=[low, high])
+    # Construction lowercases both names to one key; higher rank wins.
+    assert reg.activation_descriptions() == {"demo": "HIGH"}

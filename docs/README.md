@@ -20,6 +20,12 @@ trust.
 
 - [Trust model](trust.md) — validated skills, the do-not-use advisory registry,
   guidance, and the fail-closed verdict.
+- [Curated skills catalog](skills-catalog.md) — the reviewed, pinned list of
+  third-party skills worth vendoring, the tiers (top/watch/excluded with
+  reasons), and the curated-only install path.
+- [Skills vs workflows vs MCP](skills-flows-mcp.md) — the decision guide for
+  the framework's three extension mechanisms: comparison table, when to use
+  which, composition patterns, and package responsibilities.
 - [Trust-network position](trust-network-position.md) — how AbstractSkill
   relates to the wider skill-trust ecosystem (join / leverage / build).
 
