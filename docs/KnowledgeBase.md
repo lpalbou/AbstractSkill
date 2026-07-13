@@ -105,6 +105,131 @@ entry; deprecated entries move to the DEPRECATED section with reasons.
 - `scripts/refresh_shelf.py` preserves `validated_at` for unchanged tree
   hashes — re-running must not re-stamp an attestation date on which no review
   happened (adversary-found P1).
+- Trust-gate-before-compose must be STRUCTURAL, not conventional: the
+  primitives (`evaluate_trust`, `effective_tools`, `format_available_skills_xml`)
+  accept raw metadata with no trust coupling, so a host can skip the gate.
+  `select_skills_for_context` is the one composed pipeline that cannot skip it;
+  activation should always go through it, never through `discover()` piped
+  straight into composition (discovery is for LISTING only).
+- BLOCKED is harder than requires_review: a blocked verdict has
+  `requires_review == False`. Never branch on `requires_review` alone to gate
+  activation (`if requires_review: gate; else: activate` would activate a
+  blocked skill). The safe single read is `attachable`; blocked must never be
+  operator-enableable (adversary-found P1-B trap).
+- Name-anchored advisories need a host-supplied `source` to match
+  (`SkillMetadata` carries none by design). When a name-anchored advisory
+  exists and no source is supplied, the selection pipeline warns `#FALLBACK`
+  rather than silently skipping the advisory check (adversary-found P1-A).
+  SUPERSEDED IN PART (2026-07-11, names-only phase configs): sources now
+  DERIVE from the registry's validation records when the caller passes none
+  (`TrustRegistry.source_candidates_for`) — the warning fires only when the
+  registry carries no provenance either.
+- Advisory checks must run against the FULL candidate-source set, never one
+  winner: two registry records can attest the same bytes under different
+  sources, and an advisory targeting the LOSING source must still block —
+  picking a single "primary" source is a gate-evasion vector (adversary-found,
+  one step from P0, 2026-07-11). Same rule for a caller-supplied source that
+  contradicts registry provenance: check both, worst verdict wins.
+- Exact-equality matching semantics demand normalize-at-construction:
+  `ValidationRecord`/`AdvisoryEntry` strip name/source on construction
+  (whitespace from a quoted YAML scalar must never silently void an advisory
+  match — the tree_hash normalize-once rule generalized). Case-folding policy
+  is a deliberate residual: names are case-sensitive today, queued in the
+  trust backlog. RESOLVED (same day): names normalize to spec lowercase at
+  construction AND every query boundary (the spec forbids uppercase skill
+  names, so case is noise — and normalization is strictly match-WIDENING,
+  the fail-closed direction: no previously-working match can be lost);
+  sources stay case-sensitive by policy with `lint_registry` catching
+  case-only near-misses at refresh time (warns, never refuses — an advisory
+  may legitimately name a marketplace we never validated from).
+- Normalization must be SYMMETRIC or it is a hole: normalizing stored fields
+  without the query side (or vice versa) converts a curator typo into a
+  fail-open path (the padded-query-source finding — stored sources stripped,
+  query sources raw, advisory silently missed). Rule: every field that
+  matches by equality normalizes ONCE at construction and ONCE at each query
+  entry point, with the same function.
+- Containment breadth is a two-sided trap: per-skill failures (bad tree,
+  symlink, deleted file) must hold ONE skill as missing, never crash the
+  phase selection (one bad apple ≠ phase denial) — but the catch must stay
+  NARROW (`SkillError`/`OSError`): an `except Exception` would silently
+  demote a logic bug in loader/tree code to "skill not loadable" framework-wide
+  (adversary-found NEW-2, 2026-07-11).
+- Skills never gate tools; only a phase/state's tool grant does. An empty
+  skill set restricts nothing tool-wise (`effective_tools(grant, [])` returns
+  the full grant — absence implies nothing). Regulate a state by its tools
+  grant, not by leaving its skills empty (adversary note P2-E).
+
+- Curated-only install is STRUCTURAL, never a convention: the vendor script
+  has no URL argument; the catalog contract refuses anything but owner/repo
+  slugs with alphanumeric-leading segments and 40-hex commit pins; the first
+  vendoring trusts git's commit-hash verification + human diff review (stated
+  trust floor), every re-vendor is SHA-256 whole-tree verified. Tree identity
+  checks use the SAME hash trust binds to — never stat-shallow compares
+  (size+mtime equality must not pass for byte-different files).
+- Tool guidance is part of the gate: a vendor script that prints a wrong
+  NEXT step (hand-written SHELF_POLICY for a catalog skill) mints
+  false-provenance records by instruction — the printed workflow must match
+  the derived-policy reality, and name collisions between policy sources
+  refuse loudly (adversary-found, 2026-07-11).
+- The word "safe" never renders on operator-facing surfaces, including risk
+  CLASS labels (the catalog risk enum is low/moderate/risky — a --list table
+  is functionally a badge to a naive reader).
+- TIME-OF-USE FETCH is a curation class scanners and has_scripts cannot see:
+  a script-free skill body that instructs fetching external instructions at
+  use time (e.g. "fetch fresh guidelines from <repo>@main before each
+  review") defeats hash pinning entirely — the tree hash pins a pointer, not
+  the rules (the ASG-2026-0003 post-approval-swap class, found live in a
+  major vendor's skill by our own adversarial review). Rule: never below
+  risk=moderate, always an explicit note, prefer re-scoping to vendor the
+  actual rules at a pin. Structural verification (paths/licenses/trees) is
+  NOT content verification — every claim about what a body CONTAINS requires
+  reading the body at the pin.
+- Curation caveats must travel INTO the validation record (catalog notes
+  append to the derived record's notes): a content warning that lives only
+  in the catalog is invisible to trust-registry consumers — and identity-
+  adjacent framing in a skill body ("if you lie, you'll be replaced") is
+  ordinary for developer agents but must be flagged before any entity-lane
+  attach (append-only memory cannot delete an engrammed threat-anchored
+  value).
+- EVERY shelf entry carries an `expected_tree_hash` byte pin (2026-07-11,
+  adversary-found): without pins, editing a vendored tree and re-running
+  refresh silently re-attests the edited bytes at the same trust level —
+  provenance laundering by refresh. With pins, refresh refuses until the
+  curator updates the pin deliberately; catalog-vendored entries already had
+  this via the catalog pin, first-party/maintainer entries now match.
+- Copy-paste workflow examples in skills ROT (2026-07-11, cicd adversary):
+  hardcoded action majors, runtime-version floors (npm ≥ 11.5.1 for OIDC
+  trusted publishing — Node 22's bundled npm silently never runs the
+  handshake), and CLI permission-flag requirements all drift. Rule for
+  vendored how-to skills: version-sensitive examples use
+  `<current-major>`-style placeholders + a stated version policy, and floors
+  are stated WITH the failure mode they prevent.
+- Reviewer-family composition is a SYSTEM property that must live in the
+  bodies consumers actually activate (2026-07-11): the formative loop
+  (`adversarial-iteration`) now names the summative gates (`review`,
+  `architect`, `uxreview`) and translates the explicit-invocation idiom;
+  a composition contract that lives only in a catalog doc never reaches an
+  agent that activated one skill by description match.
+- First-party skills carry NO activation override (2026-07-12,
+  adversary-found P0): the override mechanism exists for VENDORED trees we
+  cannot edit; on a first-party skill it creates a second description
+  living OUTSIDE the byte pin, so its drift is invisible to every hash
+  check — and it drifted within ONE authoring wave (the override still
+  advertised `probe` after the co-signed body correction removed it, on
+  the exact skill whose subject is faculty honesty). Frontmatter is the
+  one activation source for first-party skills; structural test enforces.
+- Skills whose CONTENT claims other seats' surfaces get OWNER CO-SIGNS
+  before the validation record settles (2026-07-12, framework-skills
+  wave): three seats corrected real claims same-day (a nonexistent health
+  route that 401s-then-404s like a trap; a faculty no entity holds yet;
+  an absence warrant true for one memory plane and not the other). The
+  co-sign citations live in the record's notes. Teaching-bug class from
+  Castor's night, prevented at authoring time.
+- Faculty honesty in entity-facing skills: never teach a tool name the
+  session does not expose ("use the tools your session actually names,
+  not tools you have heard described") — an entity reaching for a
+  described-but-unwired tool hits an honest refusal and diagnoses "memory
+  and record disagree" (the wrong-diary-id incident class).
 
 ## Seat operating decisions
 

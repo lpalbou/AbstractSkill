@@ -1,0 +1,4 @@
+interface:
+  display_name: "UX Review"
+  short_description: "Independent persona-based UX review"
+  default_prompt: "Use $uxreview to run naive, intermediate, and expert user reviews of this UI or workflow before approval."

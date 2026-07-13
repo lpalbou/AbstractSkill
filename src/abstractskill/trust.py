@@ -158,8 +158,22 @@ class ValidationRecord:
     activation_description: str | None = None
 
     def __post_init__(self) -> None:
-        _require_nonempty(self.name, field_name="name", owner="ValidationRecord")
-        _require_nonempty(self.source, field_name="source", owner="ValidationRecord")
+        # Write back the STRIPPED, case-normalized name and STRIPPED source:
+        # advisory matching is exact string equality, so stray whitespace (a
+        # quoted YAML scalar) or a case typo ('Evil') would otherwise silently
+        # void a match — the same normalize-once rule the tree_hash follows.
+        # Names lowercase because the Agent Skills spec requires lowercase
+        # skill names (SKILL_NAME_RE): an uppercase registry name can never
+        # match a loadable skill. Sources keep their case (display fidelity;
+        # lint_registry catches case-only near-misses).
+        object.__setattr__(
+            self,
+            "name",
+            _require_nonempty(self.name, field_name="name", owner="ValidationRecord").lower(),
+        )
+        object.__setattr__(
+            self, "source", _require_nonempty(self.source, field_name="source", owner="ValidationRecord")
+        )
         _require_nonempty(self.validated_by, field_name="validated_by", owner="ValidationRecord")
         _require_nonempty(self.validated_at, field_name="validated_at", owner="ValidationRecord")
         object.__setattr__(self, "tree_hash", _require_hash(self.tree_hash, what="ValidationRecord.tree_hash"))
@@ -256,6 +270,16 @@ class AdvisoryEntry:
     weaker fallback when the malicious bytes vary or are unknown. For
     CATEGORY-level risk notices that name no specific skill, use
     ``GuidanceEntry`` — an advisory must be able to match a real skill.
+
+    MATCHING SEMANTICS: ``name`` is matched case-insensitively (normalized to
+    the Agent Skills spec's lowercase at construction and at every query
+    boundary — an uppercase spelling can never match a loadable skill, so
+    case is noise, not signal). ``source`` is EXACT string equality
+    (case-sensitive) after whitespace stripping: an advisory author must
+    reproduce the registry's source spelling byte-exactly (e.g.
+    ``codex-skills (maintainer)``) — ``lint_registry`` flags case-only
+    near-misses and unknown sources at refresh time. Prefer undecorated
+    source identifiers going forward.
     """
 
     name: str
@@ -275,8 +299,19 @@ class AdvisoryEntry:
         _require_nonempty(self.official_intent, field_name="official_intent", owner="AdvisoryEntry")
         _require_nonempty(self.hidden_issue, field_name="hidden_issue", owner="AdvisoryEntry")
         _require_nonempty(self.reference, field_name="reference", owner="AdvisoryEntry")
-        _require_nonempty(self.name, field_name="name", owner="AdvisoryEntry")
-        _require_nonempty(self.source, field_name="source", owner="AdvisoryEntry")
+        # Stripped + case-normalized write-back: matching is exact string
+        # equality on (name, source); whitespace from a quoted YAML scalar or
+        # a case typo ('Evil' vs the spec-lowercase 'evil') must never
+        # silently void a safety notice. Sources keep their case
+        # (lint_registry catches case-only near-misses).
+        object.__setattr__(
+            self,
+            "name",
+            _require_nonempty(self.name, field_name="name", owner="AdvisoryEntry").lower(),
+        )
+        object.__setattr__(
+            self, "source", _require_nonempty(self.source, field_name="source", owner="AdvisoryEntry")
+        )
         if not isinstance(self.severity, Severity):
             raise SkillValidationError("AdvisoryEntry.severity must be a Severity")
         if self.tree_hash is not None:
@@ -296,10 +331,24 @@ class AdvisoryEntry:
         return self.severity in _BLOCKING_SEVERITIES
 
     def matches(self, *, tree_hash: str | None, name: str | None, source: str | None) -> str | None:
-        """Return match strength ('hash' | 'name') or None."""
-        if self.tree_hash and tree_hash and self.tree_hash == tree_hash:
+        """Return match strength ('hash' | 'name') or None.
+
+        Hash and name inputs are normalized here (lowercase) so every public
+        path matches symmetrically — stored fields are already normalized at
+        construction. Source stays case-sensitive (documented policy;
+        ``lint_registry`` catches case-only near-misses).
+        """
+        if self.tree_hash and tree_hash and self.tree_hash == tree_hash.strip().lower():
             return "hash"
-        if self.name == name and self.source == source:
+        # Source is case-sensitive but stripped: stored sources are stripped
+        # at construction, so stripping the query can only turn a guaranteed
+        # miss into a match — widening the advisory surface (fail-closed).
+        if (
+            name is not None
+            and self.name == name.strip().lower()
+            and source is not None
+            and self.source == source.strip()
+        ):
             return "name"
         return None
 
@@ -407,15 +456,42 @@ class GuidanceEntry:
 
 
 @dataclass(frozen=True, slots=True)
+class DerivedSource:
+    """A skill source derived from the registry's validation records.
+
+    ``binding`` says how strong the provenance is: ``"hash"`` means a record
+    attests THESE exact bytes came from ``source``; ``"name"`` means only a
+    record for the same name (other bytes) carries it — a claim about a
+    previous tree, usable for advisory matching but weaker (callers should
+    warn). ``ambiguous`` is True when candidate records of the same binding
+    strength disagree on the source (the returned one is the deterministic
+    highest-trust pick).
+    """
+
+    source: str
+    binding: str  # "hash" | "name"
+    ambiguous: bool = False
+
+
+@dataclass(frozen=True, slots=True)
 class TrustVerdict:
     """The explainable outcome of evaluate_trust.
 
-    Three orthogonal booleans, fail-closed:
-    - ``blocked``: never attach (a blocking advisory matched).
-    - ``requires_review``: an operator must decide (unverified, scripts, or a
-      low/medium advisory).
+    Three orthogonal booleans, fail-closed. THE SAFE SINGLE READ IS
+    ``attachable`` — never branch on ``requires_review`` alone, because a
+    BLOCKED verdict has ``requires_review == False`` (blocked is a harder
+    state than review), so ``if requires_review: gate; else: activate`` would
+    ACTIVATE a blocked skill. Use ``attachable`` for the green path, and
+    ``blocked`` for the hard stop; ``requires_review`` only distinguishes
+    "operator may enable" from "blocked" once you already know it is not
+    attachable. Prefer ``select_skills_for_context`` so this ordering is a
+    function, not a per-host convention.
+
+    - ``blocked``: never attach, never enable (a blocking advisory matched).
+    - ``requires_review``: not attachable, but an operator MAY enable
+      (unverified, scripts present, or a low/medium advisory).
     - ``attachable``: green path only — positively validated, no advisory, no
-      scripts. A consumer reading ONLY this attaches nothing unvetted.
+      scripts.
     """
 
     level: TrustLevel
@@ -506,6 +582,64 @@ class TrustRegistry:
     def validations_for(self, tree_hash: str) -> list[ValidationRecord]:
         return [record for record in self._validations if record.tree_hash == tree_hash.strip().lower()]
 
+    def source_candidates_for(self, *, name: str, tree_hash: str | None = None) -> tuple[DerivedSource, ...]:
+        """ALL registry-derived provenance candidates for a skill, strongest first.
+
+        This is what lets a names-only context config (the per-phase
+        ``skills:`` list) still match NAME-ANCHORED advisories: the phase
+        config names the skill, the registry carries who it came from.
+
+        Records bound to ``tree_hash`` (exact — they attest THESE bytes)
+        supersede records bound only to ``name`` (claims about previous
+        trees): a re-vendored, re-validated tree is not haunted by its name's
+        past sources. But within the winning strength EVERY distinct source
+        is a candidate — a gate must check advisories against all provenance
+        claims about these bytes, never a single winner (a losing record's
+        source could be the one an advisory targets). Ordering within a
+        strength: records naming THIS skill first, then highest trust level
+        (deterministic). ``ambiguous`` is set on every candidate when the
+        winning strength carries more than one distinct source.
+        """
+        # Query-side name normalization, symmetric with record construction
+        # (records store spec-lowercase names).
+        name = name.strip().lower()
+        hash_bound: list[ValidationRecord] = []
+        if tree_hash:
+            hash_bound = self.validations_for(tree_hash)
+        if hash_bound:
+            # Same bytes may be vendored under another shelf name; the bytes'
+            # provenance still applies. Prefer the record naming THIS skill.
+            ranked = sorted(
+                hash_bound,
+                key=lambda r: (r.name == name, r.level.rank),
+                reverse=True,
+            )
+            binding = "hash"
+        else:
+            ranked = sorted(
+                (r for r in self._validations if r.name == name),
+                key=lambda r: r.level.rank,
+                reverse=True,
+            )
+            binding = "name"
+        ordered_sources = list(dict.fromkeys(r.source for r in ranked))
+        ambiguous = len(ordered_sources) > 1
+        return tuple(
+            DerivedSource(source=source, binding=binding, ambiguous=ambiguous)
+            for source in ordered_sources
+        )
+
+    def source_for(self, *, name: str, tree_hash: str | None = None) -> DerivedSource | None:
+        """The PRIMARY (display) provenance for a skill, or None.
+
+        Convenience for rendering (a picker cell's provenance line). Gate
+        paths must not stop here: ``select_skills_for_context`` checks
+        advisories against ALL of ``source_candidates_for`` — the primary
+        pick alone could dodge an advisory a losing candidate matches.
+        """
+        candidates = self.source_candidates_for(name=name, tree_hash=tree_hash)
+        return candidates[0] if candidates else None
+
     def activation_descriptions(self) -> dict[str, str]:
         """Per-name activation-description overrides from validation records.
 
@@ -514,6 +648,10 @@ class TrustRegistry:
         activates on framework-appropriate text (the tree stays byte-verbatim;
         only the prompt-facing line is overridden). If two records for the same
         name disagree, the higher trust level wins (deterministic).
+
+        NOTE: this map is registry-wide and NOT hash-filtered — a record for
+        other bytes contributes. When composing from a trust-gated selection,
+        prefer ``SkillSelection.activation_descriptions`` (current-hash only).
         """
         best: dict[str, ValidationRecord] = {}
         for record in self._validations:
@@ -547,13 +685,19 @@ def evaluate_trust(
     scripts-bearing skill always needs a human decision (bundled scripts carry
     a ~2.12x higher measured vulnerability rate; see the guidance registry).
     """
-    # Normalize the hash ONCE, up front: the advisory match and the validation
-    # lookup must see the same bytes, or a case difference could pass one and
-    # fail the other (an uppercase-hex query bypassing an advisory block while
-    # keeping its validation — the "advisory wins" invariant must hold for
-    # every spelling of the same hash).
+    # Normalize the hash AND the name ONCE, up front: the advisory match and
+    # the validation lookup must see the same bytes, or a case difference
+    # could pass one and fail the other (an uppercase-hex query bypassing an
+    # advisory block while keeping its validation — the "advisory wins"
+    # invariant must hold for every spelling of the same hash). Names are
+    # spec-lowercase; records/advisories normalize at construction, so the
+    # query side normalizes symmetrically.
     if tree_hash is not None:
         tree_hash = tree_hash.strip().lower()
+    if name is not None:
+        name = name.strip().lower()
+    if source is not None:
+        source = source.strip()
 
     reasons: list[str] = []
     warnings: list[str] = []
@@ -617,6 +761,103 @@ def evaluate_trust(
         validation=validation,
         warnings=tuple(warnings),
     )
+
+
+def lint_registry(registry: TrustRegistry) -> tuple[str, ...]:
+    """Curator lint: surface registry entries that can never protect anyone.
+
+    Matching is exact string equality, so an advisory whose spelling drifts
+    from reality is INERT — a notice masquerading as protection (the first
+    adversary pass found this class for guidance labels; this lint catches
+    the per-entry spellings). Warnings, never refusals: an advisory may
+    legitimately name a skill/source we have never validated (a marketplace
+    warning), so only the curator can judge — the lint makes the judgment
+    happen at refresh time instead of at incident time.
+
+    Checks:
+    - validation sources that differ only by case (a registry smell even with
+      zero advisories — source matching is case-sensitive);
+    - an advisory name that violates the Agent Skills name spec (incl. the
+      64-char cap) can never match a loadable skill (hash-anchored entries
+      get the honest wording: name-fallback dead, hash anchor still live);
+    - a name-anchored advisory (no tree_hash) whose source matches no
+      validation source — possibly a foreign marketplace (fine), possibly a
+      typo of a known source (inert);
+    - a source that matches a known validation source only case-insensitively
+      — almost certainly a typo (sources are matched case-sensitively);
+    - a registry with name-anchored advisories but NO validations gets one
+      aggregate note (advisories-only feed), never per-entry noise.
+    Active advisories only; withdrawn entries are history.
+    """
+    from abstractskill.validation import MAX_NAME_LENGTH, SKILL_NAME_RE
+
+    warnings: list[str] = []
+    known_sources = sorted({record.source for record in registry.validations})
+    # Fold case-insensitively, keeping ALL twins (sorted, deterministic): two
+    # validation sources differing only by case are themselves a registry
+    # smell worth naming completely — an arbitrary single twin could send a
+    # curator "fixing" toward the wrong spelling.
+    known_sources_folded: dict[str, list[str]] = {}
+    for source in known_sources:
+        known_sources_folded.setdefault(source.lower(), []).append(source)
+    for folded, twins in known_sources_folded.items():
+        if len(twins) > 1:
+            warnings.append(
+                f"lint: validation sources {twins} differ only by case — source "
+                "matching is case-sensitive; converge on one spelling"
+            )
+
+    name_anchored_seen = False
+    for advisory in registry.advisories:
+        if not advisory.is_active:
+            continue
+        label = advisory.advisory_id or advisory.name
+        name_spec_ok = (
+            SKILL_NAME_RE.fullmatch(advisory.name) is not None
+            and len(advisory.name) <= MAX_NAME_LENGTH
+        )
+        if not name_spec_ok:
+            if advisory.tree_hash is not None:
+                warnings.append(
+                    f"lint: advisory {label!r} names {advisory.name!r}, which violates "
+                    "the skill-name spec (lowercase a-z/0-9/hyphens, max 64 chars) — "
+                    "the name-fallback match path is dead; the hash anchor still matches"
+                )
+            else:
+                warnings.append(
+                    f"lint: advisory {label!r} names {advisory.name!r}, which violates "
+                    "the skill-name spec (lowercase a-z/0-9/hyphens, max 64 chars) and "
+                    "can never match a loadable skill — verify the spelling"
+                )
+        if advisory.tree_hash is not None:
+            continue  # hash-anchored: the hash is the match key; source is context.
+        name_anchored_seen = True
+        if not known_sources:
+            continue  # aggregate line below; per-entry noise carries nothing.
+        if advisory.source in known_sources:
+            continue
+        twins = known_sources_folded.get(advisory.source.lower())
+        if twins:
+            warnings.append(
+                f"lint: advisory {label!r} source {advisory.source!r} matches known "
+                f"validation source(s) {twins} only by case — source matching is "
+                "case-sensitive, so this advisory will never match; fix the spelling"
+            )
+        else:
+            warnings.append(
+                f"lint: advisory {label!r} is name-anchored on source {advisory.source!r}, "
+                "which matches no known validation source — legitimate for a foreign "
+                "marketplace, but if this skill is expected on a local shelf, verify "
+                "the source spelling byte-exactly against the shelf's validation records"
+            )
+
+    if name_anchored_seen and not known_sources:
+        warnings.append(
+            "lint: registry has no validation records; name-anchored advisory source "
+            "spellings cannot be cross-checked (advisories-only feed — expected if "
+            "validations live elsewhere)"
+        )
+    return tuple(warnings)
 
 
 def _load_entries(path: Path, key: str) -> list[Mapping[str, Any]]:

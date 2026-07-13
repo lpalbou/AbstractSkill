@@ -88,3 +88,14 @@ and improved, not merely finished.
 A short trail a later reader can audit: the deliverable, the adversary's
 ranked findings, the cycles and their improvements, and an honest list of
 what was deferred and why. Quality you can point at, not quality you assert.
+
+## Relation to the summative gate
+
+This skill is FORMATIVE — the improvement loop DURING work. It does not
+issue ship-readiness verdicts: when a `review` skill is available, that gate
+owns Blocking/Conditional/Approved at the end; `architect` owns
+decision-quality comparisons; `uxreview` owns specialist human-usability
+verdicts over UI evidence. An adversary's mid-loop verdict is an input to
+the next cycle, never a release decision. Where those skills say "explicitly
+names `$<skill>`", read it as the operator explicitly requesting that skill
+in any idiom — description-matched auto-activation is the un-mandated mode.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADR System"
+  short_description: "Write and enforce living architecture decision records"
+  default_prompt: "Use $adr to create, update, or enforce architecture decision records and keep changes aligned with accepted project rules."

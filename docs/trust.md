@@ -84,6 +84,32 @@ A consumer that reads only `attachable` therefore attaches nothing unvetted.
 Every verdict lists `reasons` naming the records it rests on, so a UI shows
 **why**, not just a colored badge.
 
+## Source derivation (names-only configs)
+
+Name-anchored advisories match on the `(name, source)` pair — names
+case-insensitively (normalized to the spec's lowercase at construction and
+at query boundaries; an uppercase spelling can never match a loadable
+skill), sources by **exact string equality** after whitespace stripping
+(`lint_registry` flags case-only near-misses and unknown sources at refresh
+time). A per-phase config stores skill NAMES only; provenance lives in the
+registry's validation records. `select_skills_for_context` therefore derives
+each skill's candidate sources when the caller supplies none:
+
+- **hash-bound** records (records for THESE exact bytes) are exact provenance
+  and supersede everything;
+- **name-bound** records (same name, other bytes) are prior-tree claims —
+  used, but loudly `#FALLBACK`-warned;
+- advisories are checked against **every** candidate (a caller-supplied
+  source included) and the WORST verdict wins — neither a wrong caller
+  string nor a losing registry record can evade an advisory;
+- blank/non-string caller sources demote to derivation with a loud note;
+- with no source anywhere and a same-name name-anchored advisory active, the
+  pipeline warns that name/source matching is disabled for that skill
+  (hash-anchored advisories always apply regardless).
+
+`TrustRegistry.source_for` returns the primary (display) candidate for
+picker/provenance rendering; gate paths always use the full candidate set.
+
 ## What trust does NOT guarantee
 
 Trust classification raises the bar; it does not certify safety. A validation
@@ -98,5 +124,10 @@ the judgment explicit, explainable, and byte-bound.
 - `scripts/refresh_shelf.py` regenerates `validations.yaml` from the vendored
   shelf's real hashes; a test fails if a checked-in record drifts from the
   bytes.
+- The same script runs `lint_registry` after regeneration: inert advisory
+  spellings (spec-invalid names, sources that match no known validation
+  source or match only by case) surface at refresh time, not incident time.
+  Lint warns, never refuses — an advisory may legitimately name a
+  marketplace we never validated from; the curator judges.
 - The [advisory-registry review](backlog/recurrent/advisory-registry-review.md)
   recurrent task keeps references live and hashes current.

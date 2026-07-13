@@ -104,3 +104,32 @@ for reason in verdict.reasons:
 
 The verdict is fail-closed: only a validated, advisory-free, script-free skill
 is `attachable`. See the [trust model](trust.md) for the full semantics.
+
+## Activate skills into a context (the composed pipeline)
+
+For activation, do not wire the primitives by hand — use the ONE pipeline so
+the ordering (load → hash → trust-gate → compose) cannot be skipped, and pass
+the activation-description overrides so upstream wrong-audience text never
+reaches a prompt:
+
+```python
+from abstractskill import TrustRegistry, format_available_skills_xml, select_skills_for_context
+
+registry = TrustRegistry.load(
+    validations_path="registry/validations.yaml",
+    advisories_path="registry/advisories.yaml",
+)
+selection = select_skills_for_context(
+    registry, shelf_root="registry/skills",
+    names=["coredoc", "verification-before-completion"],  # names-only is enough
+    enabled=[],  # operator-enabled requires_review skills for THIS context
+)
+block = format_available_skills_xml(
+    list(selection.active),
+    descriptions=selection.activation_descriptions,  # REQUIRED for honest prompts:
+    # without it the UPSTREAM description renders verbatim (wrong-audience leak)
+)
+```
+
+To add new third-party skills to the shelf, use the curated catalog path —
+see the [curated skills catalog](skills-catalog.md).
