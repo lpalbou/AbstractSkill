@@ -144,3 +144,17 @@ findings folded same-day; these are the recorded deferrals):
   skips on standalone checkouts (no ../abstractentity) — the self-contained
   content pin is the floor there; consider vendoring a copy of the artifact
   if the repo ever ships independently.
+- 2026-07-13 consumer-path audit (operator "I see none" incident; fable5
+  consumer-view adversary): folded same-day — README "Where the skills
+  live" section with the abstractcode env wiring, pip-delivers-library-only
+  honesty note, `.gitattributes * -text` (EOL rewrites would degrade every
+  byte pin on Windows clones). DEFERRED, needs a deliberate decision:
+  (a) packaging `registry/` as wheel data + a `shelf_path()` accessor (a
+  pip-installed shelf must stay byte-verifiable against the repo's
+  records — decide the verification story before shipping bytes in a
+  wheel); (b) fleet seats currently run with an EMPTY trust registry
+  (abstractcode's env sanitation strips ABSTRACTCODE_SKILLS_*, no config
+  keys exist for registry paths, isolated HOMEs) — the env lines per seat
+  are the c1609 one-liner, config-file keys are the durable fix
+  (abstractcode's lane, cross-seat); (c) `guidance.yaml` never reaches the
+  CLI consumer (informational only; abstractcode's lane).

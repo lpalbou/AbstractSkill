@@ -1,0 +1,6 @@
+# The trust model is byte-exact: validation records pin sha256 over RAW BYTES
+# of every skill tree (hash = bytes, parse = meaning). A checkout that rewrites
+# line endings (git autocrlf on Windows) would change every tree hash and
+# honestly degrade all shelf skills to UNVERIFIED. Disable EOL translation for
+# the whole repository so clones verify everywhere.
+* -text
