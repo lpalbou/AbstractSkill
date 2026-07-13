@@ -286,6 +286,18 @@ entry; deprecated entries move to the DEPRECATED section with reasons.
   self-monitoring; (g) give the operator BOTH halves of the switch
   (stopping and restoring) — keeper of both doors, not executioner.
 
+- Visible-from-outside divergence is report-worthy at every completion
+  boundary (2026-07-13, the "I see none" incident): the no-commit/no-push
+  gates were honored correctly for two days while the entire shelf existed
+  only in the working tree — and the public repository truthfully showed an
+  empty June skeleton. Correctly NOT acting does not discharge the duty to
+  SURFACE the gap: the standing rule's affirmative half ("ask the
+  maintainer when a completed item would warrant one") was never exercised
+  across four green-evidence waves, and the operator's surprise was the
+  cost. Rule: whenever the state visible from outside (GitHub, PyPI, a
+  served endpoint) diverges from what was delivered locally, name the
+  divergence in the completion report — one line, every time.
+
 ## Seat operating decisions
 
 - Skill bodies entering prompts: nonce-fencing is the prompt COMPOSER's lane
