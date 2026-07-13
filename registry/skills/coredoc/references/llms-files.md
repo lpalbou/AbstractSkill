@@ -122,12 +122,13 @@ Rules:
 
 - Only include documents that currently exist.
 - Keep summaries aligned with the real docs.
-- Regenerate after meaningful documentation changes.
+- Regenerate them in the same change that edits any doc they include or index, not in a later
+  pass.
 - Regenerate after changes to setup flow, CLI/API surface, configuration, release process, or
   topic deep dives included by the file.
 - If a doc says a feature is absent or unstable, `llms.txt` and `llms-full.txt` must say the same.
-- If an API, CLI, or integration changed, update the core docs before or together with the LLM
-  index files.
+- If an API, CLI, or integration changed, update the core docs together with the LLM index
+  files in the same change.
 - If the source docs intentionally omit internal mistake history, do not reintroduce that history
   in the LLM index files.
 - If maintainers need extra internal guidance, keep it in `untracked/comments/<timestamp>_<topic>.md`

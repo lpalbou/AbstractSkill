@@ -116,7 +116,7 @@ SHELF_POLICY = {
         ),
     },
     "backlog": {
-        "expected_tree_hash": "8c3aa23e8ee5a2b589f250f94aa61b4c77c1d5a1697fa7d0652ecb46f0c8550e",
+        "expected_tree_hash": "a32605b977a5fd8c246dc4c554a5ba846c660aa1dc7ebb74dfa4c88abda77dfb",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -126,9 +126,19 @@ SHELF_POLICY = {
             "implementation history, and hygiene. Use when an agent must plan or execute "
             "long-running work with a durable, evidence-backed backlog methodology."
         ),
+        "notes": (
+            "Maintainer-authored codex skill; first-party reviewed and vendored "
+            "byte-verbatim. Field-evidence fold 2026-07-13 (agency c1679, live board "
+            "seeding): discovery-first rules added in SKILL.md (repository template "
+            "and parser/board grammar win over generic templates; undiscoverable "
+            "grammar comes from its owner and gets checked in; broken local shapes "
+            "are followed-and-flagged with core signals carried) plus a matching "
+            "header in references/layout-and-templates.md. Fable5-reviewed. "
+            "Behavioral audit (backlog 0003) pending — upgrades to audited then."
+        ),
     },
     "coredoc": {
-        "expected_tree_hash": "1be6061cfabd4d9f9689c0ab1d4f322875f58ea5f5205c15fc21bb46f3fcb6bb",
+        "expected_tree_hash": "9e574029b99507ce2f50b0a8e792529274da8e022a87982ed0313d04e22c1bc7",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -137,6 +147,15 @@ SHELF_POLICY = {
             "(README, docs/*, architecture with diagrams, llms.txt/llms-full.txt) kept "
             "faithful to the code. Use when an agent must bootstrap or repair project "
             "documentation."
+        ),
+        "notes": (
+            "Maintainer-authored codex skill; first-party reviewed and vendored "
+            "byte-verbatim. Field-evidence fold 2026-07-13 (agency c1679): llms "
+            "freshness sharpened from habit to invariant in SKILL.md and "
+            "references/llms-files.md — regenerate llms files in the same change "
+            "that edits docs (the stale window misrepresents the docs). "
+            "Fable5-reviewed. Behavioral audit (backlog 0003) pending — upgrades "
+            "to audited then."
         ),
     },
     "architect": {

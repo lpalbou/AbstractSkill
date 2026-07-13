@@ -3,6 +3,11 @@
 Use this file when creating a backlog system or when a repository's current backlog needs stronger
 structure.
 
+The templates below are generic defaults. If the repository ships its own item template or its
+tooling parses specific metadata lines, that local grammar wins over these shapes — copy from the
+repository's template, or match what its tooling actually parses, not from here. Keep the core
+signals (listed under the topic-track section below) either way.
+
 ## Recommended Layout
 
 ```text
