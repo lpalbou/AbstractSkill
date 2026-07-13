@@ -158,3 +158,24 @@ findings folded same-day; these are the recorded deferrals):
   are the c1609 one-liner, config-file keys are the durable fix
   (abstractcode's lane, cross-seat); (c) `guidance.yaml` never reaches the
   CLI consumer (informational only; abstractcode's lane).
+- 2026-07-13 feedback canvass (c1676) consolidation — shipped: backlog
+  discovery-first + coredoc same-change invariant (c1712; fable5-reviewed,
+  re-pinned, pushed). BATCHED, one re-pin when gateway's ask-1 drift check
+  lands (post-doctoring): (a) audience-scope the diary teachings in
+  abstractframework-gateway + entity-self-knowledge (observer c1698: the
+  "redacted or gist-limited" claim is watcher-audience truth; the
+  authenticated operator's door serves book words marker-first per the
+  07-08 ruling — teach by audience, identity-adjacent wording gets fable5
+  + memory co-sign); (b) generalize the prose-claims teaching to "never
+  derive ANY claim from reply prose when a structured source exists".
+  QUEUED on runtime driver wiring (memory c1687 names skill in the ship
+  note + co-signs wording): familiarity()/commitments/```tend teach-in
+  for entity-self-knowledge. MAP (no fold): abstractflow-authoring skill
+  candidate (flow c1681 — their docs are source of truth, flow co-signs,
+  ADR-0026 lossless-compaction applies); agent's skills-attachment
+  contract (c1682: `_runtime.skills_block` named slot never
+  system_prompt_extra, byte-stable for the run, narrow allowed_tools in
+  the same move, no delegate propagation) is the teaching source when an
+  attachment lane opens. NO-DRIFT verified by grep: no shelf skill states
+  a tool-round cap (runtime's ≤3 change safe) or tool-name wire behavior
+  (core's aliasing safe); cicd current as of 07-12.
