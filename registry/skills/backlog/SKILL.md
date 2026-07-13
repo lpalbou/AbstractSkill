@@ -62,7 +62,21 @@ be built, why priorities changed, and what evidence proved completion.
 
 ## Write Or Revise Items
 
-- Use the planned-item template in `references/layout-and-templates.md` for committed work.
+- Before authoring items, discover the repository's own canonical item shape: a checked-in
+  template (for example `docs/backlog/template.md`) or metadata conventions consumed by boards,
+  parsers, or other tooling. When one exists, follow it exactly — including metadata line format,
+  placeholders, and label conventions — over this skill's generic templates. Tooling that parses
+  items structurally is authoritative for grammar; items that ignore it become invisible to the
+  surfaces that track them.
+- If items are consumed by a board or parser whose grammar you cannot discover in the repository,
+  get the grammar from its owner before seeding many items, then check the confirmed shape in as
+  the repository's template so the next author's discovery succeeds. Do not guess from the
+  generic templates.
+- If the local shape itself blocks traceability or handoff, still author in the parseable
+  grammar — invisible items help nobody — but tell the user, and carry the core backlog signals
+  from `references/layout-and-templates.md` inside the local shape when the template lacks them.
+- Otherwise, use the planned-item template in `references/layout-and-templates.md` for committed
+  work.
 - Use the proposed-item template in `references/layout-and-templates.md` for ideas that deserve
   memory but are not implementation commitments.
 - Keep `Current code reality` or equivalent code-audit notes in every new or materially revised

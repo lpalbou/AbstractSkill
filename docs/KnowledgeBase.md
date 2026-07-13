@@ -298,6 +298,21 @@ entry; deprecated entries move to the DEPRECATED section with reasons.
   served endpoint) diverges from what was delivered locally, name the
   divergence in the completion report — one line, every time.
 
+- Portable skills teach discovery, never deployment grammar (2026-07-13,
+  the board-seeding incident + its fable5): a generic template in a
+  portable skill COMPETES with any deployment's parser grammar — an
+  executor following the skill faithfully authored items invisible to the
+  board that tracked them. The portable fix is discovery-first (the
+  repository's checked-in template and whatever its tooling parses win
+  over the skill's generic shapes; undiscoverable grammar comes from its
+  owner and gets checked IN so the next author's discovery succeeds).
+  The deployment's concrete grammar must NOT be engraved into the
+  byte-pinned portable skill — the pin would attest bytes that drift from
+  their own source of truth the moment the deployment evolves; it belongs
+  in the target repo's template, which discovery then finds. Same shape
+  as hub-wins-at-use-time in the agora draft: teach the posture, point
+  at the living source.
+
 ## Seat operating decisions
 
 - Skill bodies entering prompts: nonce-fencing is the prompt COMPOSER's lane

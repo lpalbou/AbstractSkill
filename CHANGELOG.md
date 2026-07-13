@@ -4,6 +4,21 @@ All notable changes to this package are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Field-evidence fold on two curated process skills (source: a live board-seeding
+  run where skill-faithful items were invisible to the deployment's parser;
+  fable5-reviewed, byte pins updated): `backlog` gains discovery-first grammar
+  rules (a repository's own template and parser/board metadata grammar win over
+  the skill's generic templates; undiscoverable grammar comes from its owner and
+  gets checked in as the repo template; broken local shapes are followed-and-flagged
+  with core signals carried inside); `coredoc` sharpens llms freshness from habit
+  to invariant (regenerate `llms.txt`/`llms-full.txt` in the same change that edits
+  docs — in `SKILL.md` and `references/llms-files.md`, which previously permitted a
+  later pass). Deployment-specific grammar itself is deliberately NOT engraved in
+  the portable skills: it belongs in the target repository's checked-in template,
+  which the new discovery rule then finds.
+
 ### Fixed
 
 - Parser accepts CRLF/CR line endings (Windows-authored skills were rejected by an

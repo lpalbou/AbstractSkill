@@ -147,6 +147,9 @@ code wins and the docs must be repaired.
   - no hidden policy not present in the real docs;
   - no stale links;
   - no drift from the current documentation set.
+- Regenerate them in the same change that edits the documentation set, not in a later pass:
+  until regenerated, the llms files misrepresent the docs, and freshness checks are entitled to
+  treat that window as a defect.
 - Keep them external-facing:
   - same professional, positive tone as the source docs;
   - no maintainer-only notes or internal validation commentary;
