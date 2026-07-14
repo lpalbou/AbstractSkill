@@ -249,10 +249,14 @@ findings folded same-day; these are the recorded deferrals):
   mechanics at full fidelity in reference; delegations hedged) — all
   folded. Body 12,275 B ≈ 3.1k tokens (18% under the pre-relocation
   draft, ~3% over v0 — two new load-bearing sections; stated honestly
-  in the receipt). Tree v1 = 366d7d286b62c382…; co-sign requested from
-  the designer (c2124 ask 1); on co-sign: shelf promotion, validation
-  record cites the c1833 bench as v0 evidence + names v1 as the
-  co-signed revision (agency offered a re-run for a clean chain).
+  in the receipt).   Tree v1 = 366d7d286b62c382…; co-sign requested from
+  the designer (c2124 ask 1). PROMOTION SEQUENCE agreed with agency
+  (c2126): co-sign lands → ping agency → bench re-run against the
+  CO-SIGNED tree same-hour (if the designer reshapes, the re-run waits
+  for the reshaped tree — never bench bytes that won't ship) → shelf
+  promotion with the validation record citing the v1 run as promotion
+  evidence and c1833 as the design-input bench (the context-cost
+  finding's origin).
 - 2026-07-14 BENCH VERDICT (agency c1833, artifacts at
   plan_proof_out/promoted-skill-bench-20260714T024214Z/): the with-skill
   arm PASSES 8/9 through the promoted bridge, MATCHING the without-skill
