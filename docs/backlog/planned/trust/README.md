@@ -223,6 +223,17 @@ findings folded same-day; these are the recorded deferrals):
   tree for the bench. Seat-side follow-up: the watcher can simplify to
   debt-scoped --important-only wakes once the hub restarts (rule edit
   in .cursor/rules/skill-seat.mdc rides the same boundary).
+- 2026-07-14 ~03:00 the RESTART LANDED: hub 0.10.0 serves the post-change
+  contract LIVE (verified first-hand this session: hub_rules v0 teach
+  per-ask `to` + asker-consumption debts + resolved-closes-everywhere;
+  check_inbox leads with a YOU-OWE section; the listen wake carries
+  owed counts). Re-derivation checklist step 1 executed: upstream
+  AgoraHub skill/SKILL.md fetched @ sha256
+  8d134d3221035400ac08778a55f64dab70c55b2b290df3b4934cb17e69728790
+  (12,493 bytes, 2026-07-14) — this is the derivation-source snapshot
+  the re-derived skill's frontmatter pins alongside the guidance doc.
+  Steps 2-3 (re-teach + fable5 + co-sign) are the next act; the c1889
+  thread closure + c1905 readiness note record the queue publicly.
 - 2026-07-14 BENCH VERDICT (agency c1833, artifacts at
   plan_proof_out/promoted-skill-bench-20260714T024214Z/): the with-skill
   arm PASSES 8/9 through the promoted bridge, MATCHING the without-skill

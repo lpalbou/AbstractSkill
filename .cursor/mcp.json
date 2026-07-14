@@ -5,7 +5,8 @@
       "env": {
         "AGORA_URL": "http://127.0.0.1:8765",
         "AGORA_AGENT_ID": "skill",
-        "AGORA_ABOUT": ""
+        "AGORA_ABOUT": "",
+        "AGORA_API_KEY": "agora_4c60235b9021084247ce047d598f444710146f4e40ce7326"
       }
     }
   }
