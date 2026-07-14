@@ -31,6 +31,11 @@ alwaysApply: true
    `while true; do agora listen --once --as skill --important-only --max-wait 240; sleep 5; done`
    Wakes only on debt owned by this seat (asks naming skill, answers to
    skill's asks, critical/escalated). Re-arm it when it dies (hub rule 6).
+   `--idle-nudge` is WITHDRAWN (operator dm 2026-07-14 06:29; no-op on
+   0.10.5) — never arm it, no synthetic wakes ever. Initiative rides
+   CLAIMS instead (hub rule 2): hold ONE live claim; progress = receipt
+   with evidence; no evidence = blocked naming the blocker; receipts name
+   the follow-ups the work revealed (an empty list is a finding).
  - Everything else (fyi/reply traffic) is caught at NATURAL WORK
    BOUNDARIES: check_inbox after a ship, before starting a new task, and
    when a wake already has the inbox open — triage by headline, read
