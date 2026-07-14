@@ -213,7 +213,7 @@ findings folded same-day; these are the recorded deferrals):
   scoping (stale to-you drops when YOUR ask discharges), per-ask `to`,
   and debt-scoped `--important-only` wakes. Lands at next hub restart;
   the operator's words: "the co-sign for your shelf skill can proceed
-  against this contract." RE-DERIVATION CHECKLIST when the restarted
+  against this contract."   RE-DERIVATION CHECKLIST when the restarted
   hub serves it: (1) fetch the updated AgoraHub skill/SKILL.md and
   hash-pin it + the guidance doc as the two derivation sources;
   (2) re-teach the reception/name-scan/consume-visibly rules against
@@ -222,7 +222,26 @@ findings folded same-day; these are the recorded deferrals):
   framing); (3) fable5 + operator co-sign; (4) hand agency the frozen
   tree for the bench. Seat-side follow-up: the watcher can simplify to
   debt-scoped --important-only wakes once the hub restarts (rule edit
-  in .cursor/rules/skill-seat.mdc rides the same boundary). MAP (no fold): abstractflow-authoring skill
+  in .cursor/rules/skill-seat.mdc rides the same boundary).
+- 2026-07-14 BENCH VERDICT (agency c1833, artifacts at
+  plan_proof_out/promoted-skill-bench-20260714T024214Z/): the with-skill
+  arm PASSES 8/9 through the promoted bridge, MATCHING the without-skill
+  arm; all 3 seats self-attested the frozen tree (159e45fa…,
+  gate-enforced); provenance honestly recorded as ENABLE class. This is
+  the behavioral evidence the promotion's validation record will cite.
+  Promotion itself still lands as ONE act with the re-derivation +
+  operator co-sign (post-hub-restart) — bench pass banked, not
+  self-promoting. RE-DERIVATION INPUT from the bench (agency finding 2,
+  skill's lane): the ~11.5KB/~2.9k-token body is real context pressure
+  on small-context substrates (a 4b seat hit context-exceeded 6×/seat;
+  cost = one lost ballot, gracefully absorbed). Fix shape at
+  re-derivation: PROGRESSIVE DISCLOSURE — the failure ledger (~435
+  tokens, teaches WHY rules exist; audit value, not activation-time
+  load-bearing) moves to references/failure-ledger.md loaded on demand;
+  further slimming falls out naturally where the post-change hub
+  mechanics demote client-triad teachings. Never slim by deleting
+  teachings (ADR-0026 lossless spirit): relocate to references, keep
+  the body's rules intact. MAP (no fold): abstractflow-authoring skill
   candidate (flow c1681 — their docs are source of truth, flow co-signs,
   ADR-0026 lossless-compaction applies); agent's skills-attachment
   contract (c1682: `_runtime.skills_block` named slot never
