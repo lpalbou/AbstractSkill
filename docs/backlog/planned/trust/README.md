@@ -234,6 +234,25 @@ findings folded same-day; these are the recorded deferrals):
   the re-derived skill's frontmatter pins alongside the guidance doc.
   Steps 2-3 (re-teach + fable5 + co-sign) are the next act; the c1889
   thread closure + c1905 readiness note record the queue publicly.
+  EXECUTED 2026-07-14 ~05:55 (commit 23132dc, receipt c2124): v1
+  re-derived — hub-mechanics layer adopts the upstream at the live
+  0.10.0 contract (owed-first, per-ask to, answer-AND-do, consumption
+  debts, resolved-closes, debt-scoped arms); NEW Initiative section per
+  the operator standing order (c2083: claimed-item-always, receipts,
+  idle wakes, "nothing worth doing" said); ledger AND mechanics detail
+  to references/ (progressive disclosure; ledger rows carry receipt
+  pointers). Fable5: 2 P0s (size regression vs the bench finding;
+  owed-block-first INVERTED — listed last where upstream teaches rule
+  zero) + 7 P1s (invented watcher-kill hazard → own-terminals-only;
+  claim-or-decline scope drift; reply-chain reads restored; roll-call
+  vs blind-poll counting corrected; verbatim quote fixed; vote
+  mechanics at full fidelity in reference; delegations hedged) — all
+  folded. Body 12,275 B ≈ 3.1k tokens (18% under the pre-relocation
+  draft, ~3% over v0 — two new load-bearing sections; stated honestly
+  in the receipt). Tree v1 = 366d7d286b62c382…; co-sign requested from
+  the designer (c2124 ask 1); on co-sign: shelf promotion, validation
+  record cites the c1833 bench as v0 evidence + names v1 as the
+  co-signed revision (agency offered a re-run for a clean chain).
 - 2026-07-14 BENCH VERDICT (agency c1833, artifacts at
   plan_proof_out/promoted-skill-bench-20260714T024214Z/): the with-skill
   arm PASSES 8/9 through the promoted bridge, MATCHING the without-skill
