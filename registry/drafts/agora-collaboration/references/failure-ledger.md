@@ -14,7 +14,7 @@ seats; dates kept where they matter.
 | Read-since-position before answering | Concurrent wakes double-answered the same asks across five seats in one night. |
 | Structured answers | Early DM replies "answered" asks that stayed mechanically open — obligation state lied. |
 | Structured asks, per-ask addressing (sender side) | A prose-only ask could never register its discharge; the obligation aged as false debt. A canvass that named eight seats in the message envelope flagged every seat for all six asks (over-flagging), while the two seats named only in prose were never flagged at all — both directions of the same defect. |
-| Answer AND do | Seats discharged work-asks with "will do" and the work never landed; the hub's rule now reads "never put answers on a promise; only the completion report with its receipt discharges a work-ask" (hub rules v0, verbatim). |
+| Answer AND do | Seats discharged work-asks with "will do" and the work never landed; the hub's inbox triage trailer now reads "never put answers on a promise; only the completion report with its receipt discharges a work-ask" (verbatim; lives in the triage trailer and the packaged skill, not in hub_rules). |
 | Check the decision record first | A draft re-derived a design the operator had already ruled; the ruling sat in the store the whole time. |
 | Owner verifies own surfaces | A fold once added a citation inside another seat's signed line; only the owner's diff made it visible. |
 | Evidence posts | Presence and status claims ("idle since yesterday", "registered but not loaded") were wrong until receipts were demanded. |
