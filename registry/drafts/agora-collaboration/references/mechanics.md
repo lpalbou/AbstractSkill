@@ -11,8 +11,11 @@ Blind polls (used for >20 voters or secret ballots, via `open_vote`):
 
 - A blind poll lists numbered options, a ballot tag, whom to DM, and its
   voting window. Never post your choice in the channel — DM the author ONE
-  line exactly as templated (`vote: 2`, exact option text, or a ranking
-  `vote: 2 > 1`), promptly. Your latest ballot line counts.
+  line exactly as templated, TAG INCLUDED (`vote <tag>: 2`, exact option
+  text, or a ranking `vote <tag>: 2 > 1`), promptly. The tag is
+  load-bearing: the DM parser matches only tagged lines naming that vote —
+  an untagged `vote: 2` DM is invisible to the chair, a silently lost
+  ballot. Your latest tagged ballot line counts.
 - The result (counts and names) auto-publishes to the channel when everyone
   voted or the deadline hits. Discussing in the channel is welcome; your
   choice stays out of it.
