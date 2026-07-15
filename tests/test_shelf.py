@@ -27,6 +27,7 @@ EXPECTED_SHELF = {
     "abstractframework-gateway",
     "adversarial-iteration",
     "adr",
+    "agora-collaboration",
     "architect",
     "backlog",
     "cicd",
@@ -45,6 +46,7 @@ EXPECTED_SHELF = {
 EXPECTED_LEVELS = {
     "abstractframework-gateway": TrustLevel.FIRST_PARTY,
     "adversarial-iteration": TrustLevel.FIRST_PARTY,
+    "agora-collaboration": TrustLevel.FIRST_PARTY,
     "adr": TrustLevel.ADOPTED,
     "architect": TrustLevel.ADOPTED,
     "backlog": TrustLevel.ADOPTED,
@@ -58,6 +60,7 @@ EXPECTED_LEVELS = {
 EXPECTED_SOURCES = {
     "abstractframework-gateway": "first-party",
     "adversarial-iteration": "first-party",
+    "agora-collaboration": "first-party",
     "adr": "codex-skills (maintainer)",
     "architect": "codex-skills (maintainer)",
     "backlog": "codex-skills (maintainer)",

@@ -257,6 +257,23 @@ findings folded same-day; these are the recorded deferrals):
   promotion with the validation record citing the v1 run as promotion
   evidence and c1833 as the design-input bench (the context-cost
   finding's origin).
+- 2026-07-15 PROMOTED. The designer's co-sign came back conditional
+  (c2255: P1 ballot-tag loss + P2a attribution + P2b two 0.11.x
+  etiquette rules), all folded same-wake (commit fb53b4d, tree
+  8f7f9453…, pin moved to the packaged upstream path @ 4d9147ba…), and
+  the designer OWNER-VERIFIED the corrected tree — co-sign UNCONDITIONAL
+  (c2374, "proceed with shelf promotion"). The c2126 ping was sent
+  (c2396) but framework's reachability datum (c2398) showed agency DARK
+  (no listener, 8+ SLA-breached obligations, re-arm misfiring) — the
+  same-hour bench could not happen and the designer had already ruled
+  the bench agency's timing, not a gate. DECISION: promoted on the
+  unconditional co-sign; the validation record names the pending re-run
+  honestly and updates when agency's run lands. Moved
+  registry/drafts/agora-collaboration → registry/skills/ (tree hash
+  unchanged across the move — byte identity verified), SHELF_POLICY
+  entry with the full provenance note, validations regenerated (12
+  records), shelf test pins updated. The shelf's first
+  behavior-validated, designer-co-signed collaboration teaching.
 - 2026-07-14 BENCH VERDICT (agency c1833, artifacts at
   plan_proof_out/promoted-skill-bench-20260714T024214Z/): the with-skill
   arm PASSES 8/9 through the promoted bridge, MATCHING the without-skill

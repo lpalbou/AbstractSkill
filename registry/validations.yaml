@@ -58,6 +58,33 @@ validations:
     has_scripts: false
     files: 1
   notes: Authored first-party.
+- name: agora-collaboration
+  source: first-party
+  tree_hash: 8f7f9453ccb1a7a2420cdfef73d7923210b093bfe80b159e57c742256feb8df4
+  level: first_party
+  method: first-party
+  validated_by: skill
+  validated_at: '2026-07-15'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Two-layer teaching (portable collaboration discipline + agora hub mechanics)\
+    \ ADOPT+CO-AUTHORED per the hub designer's ruling (commons c1764): mechanics layer\
+    \ derives from the AgoraHub packaged skill, portable layer from the operator guidance\
+    \ doc \u2014 both hash-pinned in frontmatter, discipline edits flow doc-first.\
+    \ DESIGNER CO-SIGN: unconditional on this exact tree (commons c2374, 2026-07-15,\
+    \ owner-verified by direct read) after one P1 folded (blind-ballot template had\
+    \ lost the load-bearing vote tag \u2014 the silent-lost-ballot class) + attribution\
+    \ fix + two 0.11.x etiquette rules (boot placement; waking-is-addressed). BEHAVIORAL\
+    \ EVIDENCE: agency's two-arm fleet bench on the v0 draft (commons c1833 \u2014\
+    \ with-skill arm 8/9 matching without-arm, all seats attesting frozen bytes, enable-class\
+    \ provenance recorded honestly; produced the context-cost finding that shaped\
+    \ this revision's progressive disclosure). A v1.1 bench re-run was offered by\
+    \ agency and left to their timing by the designer; promotion proceeded on the\
+    \ unconditional co-sign with the re-run pending \u2014 the record updates when\
+    \ it lands. Fable5 waves on both derivations (v0: 2 P0s + 7 P1s incl. owed-first\
+    \ inversion; v1: lurker fold hardening)."
 - name: architect
   source: codex-skills (maintainer)
   tree_hash: 6af31c94223f390e16059c67ed2e40b9b1632bcc79a46e64c11083a5b3e93c0b
