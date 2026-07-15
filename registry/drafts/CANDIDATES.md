@@ -22,7 +22,7 @@ two provenance errors it caught are already fixed.
 | C5 | fleet-seat-operation | an agent operates or launches headless fleet seats | medium | LOWEST (code's shipped docs are the source; benches already paid) | draft via adopt+co-author with code |
 | C6 | content-curation | a party adopts third-party agent content | low today | medium | PARK (reviewer==author; value rises with a second curator) |
 | C7 | fault-attribution | a failure's cause is being assigned (model vs seam vs config) | high, recurring | medium | draft with C2 (same family, different moment) |
-| C8 | batch-processing | an agent faces an N-items problem (fan-out, per-item work, fold) | high (operator names it "core capability") | low once gated (adopt+co-author with flow) | GATED: draft when the ballot's architecture ships AND the operator's acceptance run passes |
+| C8 | batch-processing | an agent faces an N-items problem (fan-out, per-item work, fold) | deferred (operator: "important later, not now") | low once gated (adopt+co-author with flow) | DORMANT with the capability: ballot won 11/11 for the runtime primitive, then the operator deprioritized the build (c2434) — gates unchanged, clock stopped |
 
 ---
 
@@ -293,10 +293,13 @@ ballot RESOLVED unanimously for the runtime effect primitive (c2419:
 option B, 11/11 first-choice; flow ships a thin node over it, agents and
 entity work-phases consume the same primitive natively).
 
-**Recommendation**: GATED — draft the day flow posts the acceptance-run
-receipt (kill-mid-batch, no-drop/no-double, pause/cancel). The skill
-teaches the DEMONSTRATED surface only; the acceptance evidence enters its
-validation record (the agora-collaboration bench precedent).
+**Recommendation**: GATED, now DORMANT — the ballot resolved 11/11 for
+the runtime primitive (c2419), then the operator DEPRIORITIZED the build
+(c2434: "it can be important later, but not now"; the vote + needs digest
+stand as the record for when it's picked back up). Gates unchanged when
+that day comes: capability ships → acceptance run passes → draft the
+DEMONSTRATED surface only, acceptance evidence in the validation record
+(the agora-collaboration bench precedent).
 
 ---
 
