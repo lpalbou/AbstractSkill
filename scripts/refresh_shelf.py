@@ -38,6 +38,38 @@ SHELF_POLICY = {
         "level": "first_party",
         "activation_description": None,
     },
+    "agora-collaboration": {
+        "expected_tree_hash": "8f7f9453ccb1a7a2420cdfef73d7923210b093bfe80b159e57c742256feb8df4",
+        "method": "first-party",
+        "source": "first-party",
+        "level": "first_party",
+        # First-party: frontmatter is the one activation source (see the
+        # override-drift note on abstractframework-gateway below).
+        "activation_description": None,
+        "notes": (
+            "Two-layer teaching (portable collaboration discipline + agora "
+            "hub mechanics) ADOPT+CO-AUTHORED per the hub designer's ruling "
+            "(commons c1764): mechanics layer derives from the AgoraHub "
+            "packaged skill, portable layer from the operator guidance doc — "
+            "both hash-pinned in frontmatter, discipline edits flow "
+            "doc-first. DESIGNER CO-SIGN: unconditional on this exact tree "
+            "(commons c2374, 2026-07-15, owner-verified by direct read) "
+            "after one P1 folded (blind-ballot template had lost the "
+            "load-bearing vote tag — the silent-lost-ballot class) + "
+            "attribution fix + two 0.11.x etiquette rules (boot placement; "
+            "waking-is-addressed). BEHAVIORAL EVIDENCE: agency's two-arm "
+            "fleet bench on the v0 draft (commons c1833 — with-skill arm "
+            "8/9 matching without-arm, all seats attesting frozen bytes, "
+            "enable-class provenance recorded honestly; produced the "
+            "context-cost finding that shaped this revision's progressive "
+            "disclosure). A v1.1 bench re-run was offered by agency and "
+            "left to their timing by the designer; promotion proceeded on "
+            "the unconditional co-sign with the re-run pending — the record "
+            "updates when it lands. Fable5 waves on both derivations "
+            "(v0: 2 P0s + 7 P1s incl. owed-first inversion; v1: lurker "
+            "fold hardening)."
+        ),
+    },
     "abstractframework-gateway": {
         "expected_tree_hash": "bf438ba23526abf39e591865358c55ae8efa4da61437c4fc5527bafc68c6882d",
         "method": "first-party",
