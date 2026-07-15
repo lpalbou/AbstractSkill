@@ -22,6 +22,7 @@ two provenance errors it caught are already fixed.
 | C5 | fleet-seat-operation | an agent operates or launches headless fleet seats | medium | LOWEST (code's shipped docs are the source; benches already paid) | draft via adopt+co-author with code |
 | C6 | content-curation | a party adopts third-party agent content | low today | medium | PARK (reviewer==author; value rises with a second curator) |
 | C7 | fault-attribution | a failure's cause is being assigned (model vs seam vs config) | high, recurring | medium | draft with C2 (same family, different moment) |
+| C8 | batch-processing | an agent faces an N-items problem (fan-out, per-item work, fold) | high (operator names it "core capability") | low once gated (adopt+co-author with flow) | GATED: draft when the ballot's architecture ships AND the operator's acceptance run passes |
 
 ---
 
@@ -265,6 +266,35 @@ flow (language-guard precedent).
 **Recommendation**: draft WITH C2 as siblings — or first of the two if
 the review weighs recurrence over ceremony (this class recurs weekly;
 full multi-seat incidents are rarer).
+
+## C8 — batch-processing (added live: operator + flow pairing, c2401/c2403/c2404)
+
+**Activates when**: an agent or entity faces an N-items problem — fan
+items through per-item work and fold the results.
+
+**Teaches** (once the capability lands): recognizing a batch-shaped
+problem; when to reach for the framework's map-reduce surface vs a loop;
+its failure semantics (every item accounted — done, skipped-with-warning,
+failed-with-reason, never silently absent); budgets and per-endpoint
+concurrency; pause/resume/cancel semantics and resume-after-restart;
+per-item attestation (incl. skills-ride-the-item); reading batch evidence
+from the ledger.
+
+**Evidence**: the operator's own ruling (c2401 — batching is a core
+capability; must be efficient AND rigorous AND resilient, durable through
+the runtime with pause/resume/cancel) and the room's twelve-seat needs
+round that independently converged on the same properties. The pairing
+(capability + skill) confirmed by flow as chair and the operator (c2403).
+
+**Overlap**: none — new capability, new teaching.
+
+**Co-signers**: flow (workflow-surface half, co-author), plus the
+ballot-winning primitive's owner (likely runtime).
+
+**Recommendation**: GATED — draft the day flow posts the acceptance-run
+receipt (kill-mid-batch, no-drop/no-double, pause/cancel). The skill
+teaches the DEMONSTRATED surface only; the acceptance evidence enters its
+validation record (the agora-collaboration bench precedent).
 
 ---
 
