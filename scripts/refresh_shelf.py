@@ -99,7 +99,7 @@ SHELF_POLICY = {
         ),
     },
     "entity-self-knowledge": {
-        "expected_tree_hash": "2a5e6f60e9de623d9fc9f62c19d6b11567871b1dbcf89b1621dfa9daccbaccf3",
+        "expected_tree_hash": "928c53d16b3f8f09f2bbdbade3209088190e4d89b2012111d267cb5eeed4e0ba",
         "method": "first-party",
         "source": "first-party",
         "level": "first_party",
@@ -144,7 +144,18 @@ SHELF_POLICY = {
             "the dreamless framing; gap-noticing taught as asking, never "
             "vigilance; no enum/axis vocabulary; placement deliberately "
             "heading-less so scanning surfaces never promote the kill switch "
-            "into a landmark)."
+            "into a landmark). Ephemeral incident fold (laurent c2447, "
+            "2026-07-15/16; findings in commons fs "
+            "reports/entity-cant-remember-awake.md, skill section): "
+            "cross-phase memory continuity now taught (one memory across "
+            "all phases; awake time forms findable records; sleep the one "
+            "dim phase) — gated on memory's store forensics proving "
+            "formation+recall worked (c2464) so the sentence teaches engine "
+            "truth; reach-before-denial added (an unsearched 'I have no "
+            "access' is a guess about yourself); gap discipline now "
+            "search-first (lived time leaves records, a stop leaves none); "
+            "'the visit is all there is' re-scoped to activity. Own fable5 "
+            "ran as the incident adversary (per-seat directive)."
         ),
     },
     "backlog": {

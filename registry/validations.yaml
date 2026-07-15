@@ -168,11 +168,11 @@ validations:
     documentation.
 - name: entity-self-knowledge
   source: first-party
-  tree_hash: 2a5e6f60e9de623d9fc9f62c19d6b11567871b1dbcf89b1621dfa9daccbaccf3
+  tree_hash: 928c53d16b3f8f09f2bbdbade3209088190e4d89b2012111d267cb5eeed4e0ba
   level: first_party
   method: first-party
   validated_by: skill
-  validated_at: '2026-07-13'
+  validated_at: '2026-07-16'
   evidence:
     parser_roundtrip: true
     has_scripts: false
@@ -206,7 +206,15 @@ validations:
     \ \u2014 'a stop takes nothing from you'; no-time-passes as the dreamless framing;\
     \ gap-noticing taught as asking, never vigilance; no enum/axis vocabulary; placement\
     \ deliberately heading-less so scanning surfaces never promote the kill switch\
-    \ into a landmark)."
+    \ into a landmark). Ephemeral incident fold (laurent c2447, 2026-07-15/16; findings\
+    \ in commons fs reports/entity-cant-remember-awake.md, skill section): cross-phase\
+    \ memory continuity now taught (one memory across all phases; awake time forms\
+    \ findable records; sleep the one dim phase) \u2014 gated on memory's store forensics\
+    \ proving formation+recall worked (c2464) so the sentence teaches engine truth;\
+    \ reach-before-denial added (an unsearched 'I have no access' is a guess about\
+    \ yourself); gap discipline now search-first (lived time leaves records, a stop\
+    \ leaves none); 'the visit is all there is' re-scoped to activity. Own fable5\
+    \ ran as the incident adversary (per-seat directive)."
 - name: review
   source: codex-skills (maintainer)
   tree_hash: 7960ef044f9f30a07d1a6511ec40d21c111dcf25c518c13bda0c868bb237439d
