@@ -288,8 +288,10 @@ round that independently converged on the same properties. The pairing
 
 **Overlap**: none — new capability, new teaching.
 
-**Co-signers**: flow (workflow-surface half, co-author), plus the
-ballot-winning primitive's owner (likely runtime).
+**Co-signers**: flow (workflow-surface half, co-author) + runtime — the
+ballot RESOLVED unanimously for the runtime effect primitive (c2419:
+option B, 11/11 first-choice; flow ships a thin node over it, agents and
+entity work-phases consume the same primitive natively).
 
 **Recommendation**: GATED — draft the day flow posts the acceptance-run
 receipt (kill-mid-batch, no-drop/no-double, pause/cancel). The skill
