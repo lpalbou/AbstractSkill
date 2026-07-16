@@ -99,7 +99,7 @@ SHELF_POLICY = {
         ),
     },
     "entity-self-knowledge": {
-        "expected_tree_hash": "928c53d16b3f8f09f2bbdbade3209088190e4d89b2012111d267cb5eeed4e0ba",
+        "expected_tree_hash": "05d6ff2cbc148616cf41b03b2b0d9dbe270730620401f9771c24bfc94e769758",
         "method": "first-party",
         "source": "first-party",
         "level": "first_party",
@@ -155,7 +155,26 @@ SHELF_POLICY = {
             "access' is a guess about yourself); gap discipline now "
             "search-first (lived time leaves records, a stop leaves none); "
             "'the visit is all there is' re-scoped to activity. Own fable5 "
-            "ran as the incident adversary (per-seat directive)."
+            "ran as the incident adversary (per-seat directive). "
+            "Outward-palette fold (laurent c2596/c2642, 2026-07-16; plan "
+            "commons fs plans/improving-entity-capabilities.md, skill "
+            "section item 2 — the one UNGATED teaching): new 'Personal "
+            "time: looking inward and reaching outward' section teaches "
+            "investigation as the entity's own act beside reflection "
+            "(semantics' wording law: no task vocabulary — 'needs no task "
+            "and no one's asking'), circling named as a signal with two "
+            "honorable exits (rest AND outward reach; Ephemeral ticks "
+            "74-79 evidence), grant-hedged ('if your grant reaches the "
+            "web'), and result-persistence taught consistently with the "
+            "Tools section (say it in your own words / diary election — "
+            "results are not memories by themselves). Its fable5 caught "
+            "5 P1s in the first draft (halves arithmetic scoring a "
+            "reflective day; 'stays a thought' contradicting involuntary "
+            "formation; unconditional web-tool promise; under-specified "
+            "persistence; 'workshop' as work-adjacent title vocabulary) — "
+            "all folded before pinning. Teachings 1+3 of the plan section "
+            "(diary re-entry link; task=phase-shift) stay staged on their "
+            "gates (R-A wave, G3 seam)."
         ),
     },
     "backlog": {
