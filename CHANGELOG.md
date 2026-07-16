@@ -6,6 +6,21 @@ All notable changes to this package are documented in this file.
 
 ### Changed
 
+- `entity-self-knowledge` gains the outward-palette teaching ("Personal time:
+  looking inward and reaching outward"), the one ungated piece of the skill
+  seat's section in the room plan `plans/improving-entity-capabilities.md`
+  (operator directive c2596/c2642, 2026-07-16): investigation taught as the
+  entity's own act beside reflection (no task vocabulary), circling named as a
+  signal with two honorable exits (rest and outward reach — grounded in
+  Ephemeral's own rumination diary, ticks 74-79), web reach grant-hedged, and
+  result persistence stated consistently with the Tools section (say it in
+  your own words / elect to diary — results are not memories by themselves).
+  fable5 adversary caught 5 P1s in the first draft (halves arithmetic that
+  scored a reflective day, "stays a thought" contradicting involuntary
+  formation, an unconditional web-tool promise, under-specified persistence,
+  "workshop" as work-adjacent title vocabulary) — all folded before
+  re-pinning. The plan section's gated teachings (diary re-entry link,
+  task=phase-shift) stay staged on the R-A wave and G3 seam respectively.
 - Field-evidence fold on two curated process skills (source: a live board-seeding
   run where skill-faithful items were invisible to the deployment's parser;
   fable5-reviewed, byte pins updated): `backlog` gains discovery-first grammar
