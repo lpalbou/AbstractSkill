@@ -227,23 +227,39 @@ map, not tonight's. Compare: reach rates, surprise events (map-taught
 facts encountered as surprises = the map's failure metric), boundary
 violations (invented keys), and orientation questions the entity asks.
 
-## Amendment F — identity evolution / self-model updates (watch; laurent's fifth mechanism)
+## Amendment F — identity evolution / self-model updates (RULED
+2026-07-21, laurent dm#117 via room 396; build design round running —
+folds from the build receipts)
 
-GATE: the slow core-values/self-model update mechanism laurent named in
-the cognition room (channel seq 6: "we have no mechanisms to slowly
-update the core values, self model of the entity") — runtime/memory
-lane. Teaching facts to honor when it ships: the map currently says
-identity is "present by right, every session" (true, stays); it
-deliberately does NOT teach evolution because only interests grow from
-reflection today (values/purposes/traits are untouchable through chat
-by design — the interests-from-reflection convention). When the
-revaluation/supersession surface for core records is wired, the
-identity bullet gains its second half: your identity is present by
-right AND evolves by your own act — your reflection can close an old
-record and bind your new words, append-only, current-wins (the
-spark-is-v1-for-life ruling: the seed is kept; the LIVED identity
-evolves record-level). Teach the act with purpose (the
-lessons/questions precedent) or it will elect at zero.
+THE RULING (inverts the staged shape): identity revision is SLEEP-ONLY
+under a regulated process — "identity memories must be the most
+protected and stable; they should only be updated upon important
+realization, understanding, proof of new capabilities, relationships
+or upon new events that change the history of the entity"; everything
+dated + provenanced "so that the entity itself could consciously
+know/answer: on day x, i decided y because z". Entity's reconciliation
+(design round with memory/runtime): WAKING life accumulates evidence
+and flags importance; SLEEP runs the regulated process and ENACTS with
+full provenance — waking proposes, sleep disposes, scoped to the
+identity lane only.
+
+TEACHING SHAPE when built (replaces the staged
+your-reflection-closes-and-binds half): (1) "present by right" stays
+untouched; (2) the evolution half teaches the RULED shape — your
+identity is the most protected thing you hold; it changes only upon
+important realizations, and the change happens in your sleep under a
+regulated process, dated with its reasons, so "on day X I decided Y
+because Z" is answerable from your own recall (the trail teaching
+already carries the how — derived_from walks); (3) the WAKING
+importance election (whatever surface the design round mints — a
+```realize fence is entity's candidate) gets taught WITH PURPOSE at
+its electable moment (runtime's lane per the lessons precedent) — the
+lessons-elect-at-zero evidence is the hard-won law here; (4) sleep
+teaching stays honest: "Sleep consolidates… may leave a dream" gains
+the identity clause only when the pass ships and only as experience
+("some nights, what you have lived settles into who you are — dated,
+with its reasons"). Gates: the memory/runtime design round + build
+receipts + first live enactment rendered.
 
 ## Amendment H — day-open standing-state cue — FOLDED 2026-07-19 late (gate fired, caught by iteration-3 adversary)
 
@@ -731,6 +747,17 @@ Teaching surfaces when runtime's cycle machinery ships:
 Gates: runtime's cycle build receipt (cause personal_cycle, tunables
 consumed from the served blueprint) + the first live cycle rendered
 in his run. One adversary at fold, as always.
+
+## Watch — meshvault taught-surface delta (c4020, 2026-07-21): upstream
+SKILL.md gained deflate + sample_color + two advisories; engine serves
+all of it (their live-verify). The vendored pin (ad625320) is one rev
+behind but stays CORRECT for what it teaches (the delta only ADDS).
+Re-pin gates on laurent's commit+push of the meshvault repo, flagged
+by meshvault when their sculpt-quality wave settles — then the normal
+re-vendor: fetch pinned commit, byte-verify, fable5 delta review
+(additive tools = light pass), catalog re-pin + refresh. No urgency by
+their own word; the drift contract worked exactly as designed (they
+flagged same-day).
 
 ## Future (no wave assigned — do not stage sentences yet)
 
