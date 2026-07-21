@@ -13,7 +13,9 @@ Use this file when moving items across lifecycle states or when the backlog feel
    residual risks, backlog or code drift, follow-ups, and any priority impact.
 6. Preserve `Created`, set `Status: Completed`, and set `Completed: <YYYY-MM-DD>`.
 7. Move the file from `planned/` or `planned/<topic>/` to `completed/` or a matching completed
-   topic folder if the repo uses completed tracks.
+   topic folder if the repo uses completed tracks. In hub-coordinated repos, update the item's
+   `work:` row (status, card, receipt) in the same pass — see the mirror-row section of
+   `hub-work-join.md`.
 8. Update `overview.md` counts, tables, priorities, notes, and links.
 9. Record the work in the completed-work ledger with original path, final path, dates, outcome,
    topic track when relevant, short comment, and key validation.
@@ -30,7 +32,9 @@ Use this file when moving items across lifecycle states or when the backlog feel
 3. Preserve `Created`, set `Status: Deprecated`, keep `Completed: N/A` unless it was already
    completed, and add `Deprecated: <YYYY-MM-DD>` if the repo uses that field.
 4. Move the file from `planned/`, `planned/<topic>/`, `proposed/`, or `proposed/<topic>/` to
-   `deprecated/` or a matching deprecated topic folder if the repo uses deprecated tracks.
+   `deprecated/` or a matching deprecated topic folder if the repo uses deprecated tracks. In
+   hub-coordinated repos, update the item's `work:` row (status, card) in the same pass — see
+   the mirror-row section of `hub-work-join.md`.
 5. Update `overview.md` counts, tables, notes, and links.
 6. Search docs for stale links.
 7. Scan recurrent tasks and run any newly triggered passes.

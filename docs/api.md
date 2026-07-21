@@ -17,7 +17,9 @@ Everything below is exported from the top-level `abstractskill` package.
 ## Models
 
 - `SkillMetadata` — name, description, license, compatibility, allowed_tools,
-  metadata, source_path. `.to_dict()`.
+  metadata, source_path. `.to_dict()`. `metadata` is a free mapping; the
+  `requires_mcp`/`requires_tools` dependency convention rides here (see
+  Selection).
 - `SkillDocument` — metadata, body, raw, content_hash. `.name`.
 - `LoadedSkill` — document + root_dir.
 
@@ -125,7 +127,27 @@ Everything below is exported from the top-level `abstractskill` package.
 - `SkillSelection` — active, held, blocked, missing, activation_descriptions
   (current-hash only), warnings, plus `resolved_paths` and
   `resolved_tree_hashes` naming the winning copy for every attested name
-  (the tree hash is the exact value to pin in an `enabled` entry).
+  (the tree hash is the exact value to pin in an `enabled` entry), and
+  `requires` (declared dependencies per resolved name — see below).
+- Declared tool dependencies (`SkillRequires`): a skill whose recipes
+  presuppose an MCP server or specific tools declares them in frontmatter —
+  `metadata.requires_mcp: [server-names]` and/or
+  `metadata.requires_tools: [tool-names]` (a bare string coerces to a
+  one-item list; malformed values are dropped LOUDLY, never silently). The
+  selection surfaces the declaration as `selection.requires[name]`
+  (`.mcp_servers` / `.tools`; only declaring skills get a row) for every
+  resolved name — active, held, and blocked alike, so renders can gray an
+  absent dependency regardless of verdict. The declaration is HOST
+  information, never a gate here: the host checks it against its own
+  inventory before composing and refuses activation WITH THE REASON —
+  worded to what the host actually CHECKED (the blessed template from the
+  first consumer: "requires MCP server 'x' — not declared on this
+  gateway"; a declared-only inventory must never overclaim "not
+  reachable") — instead of an agent discovering absent tools mid-task.
+  Auto-install is out of scope by design — the declaration names, it
+  never executes.
+  First declaring skill on the shelf: `meshvault-live-editing`
+  (`requires_mcp: [meshvault-mcp]`).
 - `read_skill_resource(skill_dir, rel_path, *, max_bytes, expected_sha256=None)`
   — progressive-disclosure read, strictly inside the tree; pass the
   inventory's `SkillResource.sha256` as `expected_sha256` to refuse a

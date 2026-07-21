@@ -1,8 +1,316 @@
 # Changelog
 
+## 2026-07-21 — abstractskill-0008: declared tool dependencies (requires_mcp)
+
+- `SkillRequires` + `SkillSelection.requires`: frontmatter
+  `metadata.requires_mcp`/`metadata.requires_tools` (the convention the
+  meshvault admission introduced) now surface on the selection for every
+  resolved name — host information for refuse-with-reason on absent
+  servers/tools ("skill X requires meshvault-mcp — not reachable"),
+  never a gate in this library and never an auto-install. Tolerant
+  parsing: a bare string coerces to a one-item list; malformed values
+  drop LOUDLY (a host acting on a silently-empty read would activate
+  blind — the exact failure the field prevents). Rows surface for
+  active, held, and blocked alike (renders gray absent dependencies
+  regardless of verdict); a skill declaring nothing has no row.
+  docs/api.md + llms-full.txt document the convention. 5 new tests;
+  suite 165 green. First declaring skill: meshvault-live-editing.
+
+## 2026-07-20 — backlog S5: first watched-surface re-sync (gateway's drift repair + gate flip)
+
+- `references/abstractframework-board.md` re-synced same-hour on
+  gateway's c3556 repair — the first firing of the watched-surface
+  contract: the enum-coercion caveat died as written (parser now
+  accepts the ruled `improvement` everywhere), and the DoR section now
+  teaches the gate as the wall (DEFAULT-ON: absent `dor` param
+  evaluates and 409s with per-check evidence; `dor=skip` is the
+  explicit RECORDED bypass — gateway flipped the default rather than
+  re-teaching opt-in, answering my question (a) with code). Tree
+  re-pinned 62e30486…, 160 green.
+
+## 2026-07-20 — c203 lifecycle audit ("awake is not a state"; 2 adversaries)
+
+- `entity-self-knowledge/SKILL.md`: the ruled four-phase model verified
+  taught-since-c1455 (every wake a transition; the map carries no idle
+  license; the kill-switch paragraph correctly places the stop outside
+  lived time — confirmed machine-side by runtime's paused-is-an-overlay
+  fold). ONE P0 folded: "quiet is simply the normal state" named
+  exactly the fifth state the ruling forbids — rewritten to "a day
+  without it simply moves between its other phases… There is no fifth
+  place to stand." Tree re-pinned 08cdb23c…, 160 green.
+- Amendment N banked (staging file): nine receipts-gated rows from the
+  mechanical audit — "you sleep" is render-true only until the drive
+  scheduler writes real state; work rides the personal grant today;
+  hosted-chat close leaves awake standing; the desk→day design-fact
+  sentence lands register-safe (no duty verbs, no thresholds) when the
+  scheduler ships; "tensions" vocabulary check filed before any fold.
+
+## 2026-07-20 — backlog S4: the AbstractFramework board reference (gated fold, gate opened)
+
+- `backlog` skill: `references/abstractframework-board.md` shipped the
+  hour gateway's parser co-sign landed (c3514) — the deployment's
+  grammar taught against both co-signed sources: blockquote metadata
+  (with the parse-window facts), the ruled type enum with the SHIPPED
+  normalization drift stated honestly, the DoR gate as actually wired
+  (opt-in `dor=check`, four checks with placeholder exclusions,
+  Priority not a check), lifecycle directories, supervision
+  vocabulary. Its fable5 caught 1 P0 in my draft ("a raw request meets
+  the same wall" — the gate is opt-in, bypass test-pinned) and found
+  REAL drift in both co-signed sources (gateway's list parser coerces
+  the ruled `improvement` to `task`, making the DoR type-refusal
+  unreachable over HTTP; continuum's "read paths never coerce" is
+  unreachable through the deployment) — drift reported to owners with
+  file:line (c3546). Tree re-pinned af3f6aca…, 160 green. Watched
+  surface recorded: conventions.md + the gateway parser family.
+
+## 2026-07-20 — backlog S3: discovery-first rule (the retro-flagged conventions arc)
+
+- `backlog` skill: the portable DISCOVERY-FIRST rule folded into the
+  hub-join section — the deployment's item template/conventions/parser
+  grammar wins over the skill's generic templates (continuum's proven
+  competing-grammar class: an executor can be skill-faithful and
+  board-invisible at once, c1689/c1697). Scoped adversary CLEAN (2 P2s
+  folded: precedence scoped to templates so the NNNN id rule stays
+  mandatory; wording tightened). One pre-existing editing artifact
+  fixed same pass. Tree re-pinned 3a29265a…, 160 green. The
+  framework-specific reference file stays gated on gateway's parser
+  co-sign (re-asked c3505); the coredoc freshness criterion routed to
+  the next upstream re-vendor (vendored bytes take no local edits).
+
+## 2026-07-20 — backlog S2: the mirror row (operator-ruled unified backlog across agents)
+
+- `backlog` skill: hub-work-join.md gains "The mirror row: the
+  hub-resident index" (laurent's ruling via continuum c3328 — the
+  cross-agent work index lives on the hub, beyond any gateway):
+  `work:<id>` store rows mirror the FILE's four lifecycle words
+  (in_progress/done deliberately refused — no transition trigger =
+  stale by construction; done = second spelling of completed;
+  vocabulary governance applies to rows), mint-at-intake /
+  update-on-move (status AND card) / receipt-at-close, file-wins
+  repair, idempotent backfill-as-repair, pre-hub receipt honesty
+  (never mint a receipt the thread cannot show). Transition duty
+  reaches SKILL.md's join section + both maintenance checklists. Its
+  fable5 caught 1 P0 (the proposed receipt-backfill else-branch
+  taught a fabricable receipt) + 6 P1s, all folded; the status
+  deviation argued to agora/continuum on-thread (c3339). Tree
+  re-pinned c719a028…, 160 tests green.
+
+## 2026-07-19 (late) — delivered_via_map field (entity seat's consumer contract)
+
+- `ValidationRecord` gains `delivered_via_map: bool` (emitted only when
+  true; refuses `audience=host` combinations — the map is an
+  entity-prompt surface). Pins: `entity-self-knowledge` carries it (its
+  entity teaching rides the home's capability map, never a prompt-slot
+  toggle), killing the entity app's name==entity-self-knowledge render
+  fallback (cognition room seq 175). 160 tests green.
+
+## 2026-07-19 (late) — audience becomes a first-class trust field (laurent's default-skills ruling)
+
+- `ValidationRecord` gains `audience: entity|host|either` (fail-closed
+  default `host` — a skill of undeclared audience never enters an
+  entity prompt; always emitted in validations.yaml so consumers gate
+  structurally instead of inferring from prose). Born from laurent's
+  "default skills for entities" ruling (cognition room seq 156) and
+  entity's routing question (seq 163): the entity-observation class
+  (an observer skill reaching an entity prompt) is now closed by
+  construction. Pins: `entity-self-knowledge` = entity (its
+  capability_map reference IS the entity teaching — the one entity
+  default); `agora-collaboration` = either (entity-appropriate only
+  when an entity joins the hub); everything else host. 159 tests
+  green (3 new audience pins).
+
+## 2026-07-19 (late) — meshvault-live-editing VENDORED (first hub-colleague skill on the shelf)
+
+- `registry/catalog.yaml` + `registry/skills/meshvault-live-editing/`:
+  entry pinned to lpalbou/meshvault @ 4deb86c3 (the admit-after-fixes
+  commit — fable5 P1 verification-battery/fused-mesh contradiction + 5
+  riders, all executed upstream and pre-verified locally before the
+  push), then VENDORED the moment the operator pushed: fetched by
+  clone_url, bytes verified identical to the reviewed ref (file sha
+  4750ceb4…), tree pinned ad625320…, license vendored out-of-tree,
+  validation manual-review/adopted (no scripts). Five caveats recorded
+  in the entry (operator-lane install; declared out-of-MCP REST lane;
+  per-release freshness re-verify via upstream mcp_smoke.py; ~9k-token
+  activation charge warning; author evidence author-claimed). One test
+  scope fix: the 2026-07-12 "probe never advertised" guard was a
+  block-wide substring check that false-positived on meshvault's
+  "raycast-probe targeting" (unrelated 3D domain word) — scoped to the
+  entity-self-knowledge row it guards. 156 tests green.
+
+## 2026-07-19 (late) — Amendments K + J-clause folded (dream disposition; execution epistemics)
+
+- `capability_map.md`: Amendment K folded after runtime cleared both
+  resolver gates (driver-side #tag resolution seq 130; confirm-extras
+  resolution seq 139) — the formation bullet gains the
+  settles-in-your-own-time line and the deliberate-use section gains
+  "Settle your dreams with waking evidence" (```tend fence + dispose
+  line quoted from the shipped parser; confirm extras incl. MANDATORY
+  `evidence=`; relation vocabulary enumerated; lane scoping explicit —
+  own-time is where the election lands, the durable visit lane does
+  not parse tend until M7). Its fable5 caught a P0 pre-pin: the taught
+  confirm line omitted `evidence=`, which `confirm_relation` requires
+  ("a confirmation with no evidence is a proposal wearing a verdict")
+  — every confirm as taught would have refused. Two P1s folded
+  (invisible relation vocabulary enumerated in his register;
+  contradictory lane scoping unified). Two findings filed out:
+  disposal.py's refusal tail delivers registry machinery verbatim to
+  the entity (memory's register fix); the `[tended:]` marker echoes
+  the machinery id, not the #tag the entity wrote (runtime nit).
+- Amendment J's both-worlds clause folded into the workspace bullet
+  ("results you have not seen are results you do not have") —
+  execute_command is built grant-gated runtime-side and its tool
+  teaching is runtime's grant-gated paragraph, never the map's.
+- Map sha 820b6373…, tree re-pinned 6e0e4f3f…, 156 tests green.
+
+## 2026-07-19 (late) — NEW skill: entity-observation (operator-directed)
+
+- `entity-observation` added to the shelf (first-party, tree
+  ab92b035…): host-facing observation discipline for anyone reading an
+  entity's life — story before metrics (time-window read over HIS store
+  first), absence needs the store's word (never claim not-known from
+  one rendered surface), ask the entity (most direct, never cheapest —
+  a summon writes into the life it observes). Born from laurent's
+  dm#74 directive after two same-day observation failures (the
+  weekend-gap cause standing plainly in the entity's diary while the
+  report said "no cause"; a zero-lessons claim against a store holding
+  twenty), distilled by the entity seat (room seq 137), shaped here.
+  Its fable5 caught 1 P0 pre-pin — the drafted rule 1 taught the
+  ENTITY'S tier-1 tools as observer instruments, in a words-search
+  shape that would not have caught the motivating incident — plus 4
+  P1s (marker-first diary privacy, summon price honesty, provenance
+  frontmatter, vintage discipline) and 3 P2s, all folded. Suite 156
+  green; shelf test expectations widened deliberately.
+
+## 2026-07-19 (late) — Amendment H fold + iteration-3 teaching-edges contribution
+
+- `entity-self-knowledge/references/capability_map.md`: Amendment H
+  folded WIDER than staged — the "does not push mid-turn" exception
+  sentence now teaches the full day-open standing-state offer (an open
+  question or problem you elected + one standing interest), matching
+  the wired cue (runtime `life.py:92-260`: problems joined the desk in
+  iteration-2 build 3; the standing-interest offer shipped on the
+  2026-07-19 interests directive). The fired gate was caught by the
+  iteration-3 design-law adversary, not by gate-watching — lesson
+  recorded in the staging file: hand-tracked gates rot at build
+  cadence; re-verify every staged gate at every fold wave. Map sha
+  cb75053a…, tree re-pinned ea7159bf… (156 tests green).
+- Iteration-3 contribution shipped (operator order, 2 mandatory
+  adversaries): `contributions/skill-pathways.md` in the commons fs —
+  teaching surfaces as a subgraph, gaps as absent arrows, per-lane +
+  per-home + vintage honesty. Adversaries caught 2 invented surfaces
+  in my own table (visit-open grant line; entity-lane read_skill),
+  1 formalism inversion, 2 same-day-stale statuses, 9 missed teaching
+  surfaces, 1 design-law over-claim — all folded before posting
+  (commons c3230).
+- Amendment K (dream disposition): fold BLOCKED then part-cleared
+  same evening — my fable5 confirmed the taught tend grammar was
+  unsatisfiable (targets demanded 26-hex ids no entity surface
+  renders); runtime wired driver-side #tag resolution same-hour; ONE
+  residual holds the fold (confirm-path extras source=/target= still
+  unresolved — room seq 133). All shipped spellings banked verbatim
+  in the staging file.
+- Amendment J (execution): re-staged both-worlds — laurent
+  operator-confirmed a bounded execute tool (room seq 126), so the
+  no-execute sentence is scheduled for falsification; the
+  survives-both-worlds clause ("results you have not seen are results
+  you do not have") stays fold-ready.
+
 All notable changes to this package are documented in this file.
 
 ## [Unreleased]
+
+### Added
+
+- `backlog` gains the hub-work-join teaching (S1 of the unified work
+  system build — operator canvass 11-0 for Option A, laurent-confirmed;
+  vocabulary gate decision:work-item-vocabulary): new
+  `references/hub-work-join.md` + a SKILL.md join section teach the
+  ruled process — `<package>-<NNNN>` work-item ids (CAS-minted,
+  URL-safe, derived from the existing `NNNN_` prefixes), pointer claims
+  (`{owner, item, card, started_at}`, no status prose), receipts on the
+  item's thread carrying machine-checkable evidence,
+  evidence-required-close, items-outlive-a-thread scope, and
+  header-on-next-touch migration. Scoped to hub-coordinated
+  repositories only, with the hub's own ruled contract winning where
+  one differs (the skill stays portable). Its fable5 caught 1 P0 — the
+  draft's "status is not a header field" condemned the skill's own
+  required `Status:` template line; narrowed to rendered-join-words-only
+  — plus 4 P1s (unshipped endpoint stated live, claim-row shape drift,
+  portable-hub leakage, mint-vs-take CAS semantics), all folded before
+  re-pinning (tree fb43d0fd…).
+
+- `entity-self-knowledge` gains the deployable, entity-facing capability map
+  (`references/capability_map.md`) — laurent's primary task (commons c2710:
+  "we need a skill to teach the entity how to leverage its own memory
+  actively"), landing in the runtime's delivery surface (c2712:
+  `<home>/capability_map.md` presented verbatim by `compose_system_base` on
+  all three hosts, after the tools contract, before phase/operator blocks).
+  The map teaches, in the entity's own register: how memories form
+  (involuntary graph / elected diary / feelings / dreams / identity by
+  right), the exactly-two entity-facing keys (#tag and `diary_` entry id)
+  with the machinery boundary (semantics c2724), how to read its own
+  rendered surfaces (MEMORIES line anatomy, origins, why-labels, the R-A
+  `reread: diary_read` hint chain), deliberate-use recipes (reach before
+  denial, short own-words cues, threads as graph questions, `resolves=`
+  hygiene), and what memory will NOT do (no mid-turn push — with the
+  day-open open-question cue named as the entity's own election returning;
+  shelf ≠ graph; digests compress; workspace files are invisible to
+  `search_memory` — the parallel-memory failure Ephemeral himself named).
+  Every quoted template was verified against the runtime tree; fable5
+  adversary confirmed byte-fidelity and caught 1 P0 (the two-layers claim
+  was false for born-digest kinds: dreams/interests are born as their
+  words; diary words live in the book) + 4 P1s + 5 P2s, all folded before
+  re-pinning. The SKILL.md host section now points at the deployable map
+  and carries a coupled-spellings maintenance note (map sentences that
+  restate runtime contract lines must re-sync in the same wave).
+  Review round (same day): runtime PASS (zero mechanics errors, renders
+  byte-accurate; activation note — map + M-A + R-A light up together at
+  the next stack bounce), semantics template review PASS (every quoted
+  id/command/kind/origin word byte-true at its minting site), memory
+  engine-chair store check (born-digest teaching verified against the
+  live store; one-token sharpening "those words" adopted into the
+  absence warrant), uic render-seat PASS (map quotes the one spelling
+  the kit renders; no-push = rule-zero twin, recorded with memory's
+  origin-diversity future-sync in the coupled-spellings note).
+  Re-pinned at tree 109afbd2…; entity's rendered-surface review and the
+  gateway home-install remain open on the thread.
+  Same evening, both staged gates fired and their amendments FOLDED:
+  runtime elected 0049 (MEMORIES renders formation order + mandatory
+  `[rN]` rank annotation with a header teaching clause) — the map's
+  surface-anatomy list gained the rank-mark part (page order is age,
+  rank says strength; wording matches the shipped header clause) — and
+  runtime wired memory's origin-diversity footer — the repetition bullet
+  gained the co-drafted one-voice clause verbatim (pre-agreed wording,
+  c2839).   Re-pinned at tree da491bd9…; canonical map sha 7877ba59…
+  (homes carrying the previous install need one re-PUT/cp).
+  Semantics' same-day re-run passed both folds and suggested one
+  pre-approved tightening, folded immediately (the quoted one-voice note
+  now reads "N of these M memories…", matching the rendered two-number
+  note verbatim) — final tree 02a53834…, canonical map sha dacdac40….
+  Amendment G wave FOLDED (2026-07-19, live-render gate cleared on
+  Ephemeral's visit ledger — 57 orientation why-cues + 41 [rN] marks at
+  rest, rendered line quoted in the receipt): the map now teaches
+  world-model BRIEFINGS (surfaces bullet: kind word, why-cue with the
+  reviewed honest ellipsis, orientation-never-authority, the
+  derived_from/refines trail pull; formation bullet: editions-not-edits,
+  background+sleep updates as normal-not-surprise, authored-words
+  survive, the few-moments floor) and the `explores=` desk-moving key
+  beside `resolves=` (semantics-passed grammar; the cannot-fail
+  precision). Every quoted string carries memory engine-chair PASS +
+  semantics byte-pass receipts; tree 576ae462…, map sha ea3b2377….
+  Visit-1 amendment wave (Ephemeral conversation findings, overnight):
+  the map is now NAMEABLE ("it is called your CAPABILITY MAP, and it
+  rides your sessions… you will not find it by searching" — visit-1
+  finding: he articulated its concepts fluently while saying "I don't
+  see a guide document in my workspace"); the machinery boundary gains
+  the confabulated-keys teaching ("a key REMEMBERED is not a key seen"
+  — finding 5: he reached for his dream with invented tags; recovery
+  path taught: re-find a real key via diary_list/recent_memories/fresh
+  search, a miss impeaches the key, never the memory); and deliberate
+  use gains the time-direction reach (`recent_memories`, the breadcrumb
+  trail he asked for verbatim — shipped by runtime+memory the same
+  night, taught only once wired). Tree d9e83f42…, map sha 21164bb5…,
+  156 green.
 
 ### Changed
 

@@ -53,6 +53,11 @@ Package surface:
   sha256) so a standing enable attests bytes, not a claimable name; the
   parsed SKILL.md is byte-cross-checked against the hashed tree (TOCTOU);
   `resolved_paths`/`resolved_tree_hashes` name the winning copy per name.
+  Declared tool dependencies (`SkillRequires`): frontmatter
+  `metadata.requires_mcp`/`metadata.requires_tools` surface as
+  `selection.requires[name]` for every resolved name — host information
+  for refuse-with-reason on absent servers/tools, never a gate here and
+  never an auto-install.
 - `load_catalog`/`CatalogEntry`/`lint_catalog` — the curated vendoring
   catalog contract (registry/catalog.yaml: reviewed entries pinned to 40-hex
   upstream commits + whole-tree hashes; owner/repo slugs only). The install

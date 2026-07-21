@@ -712,3 +712,83 @@ def test_resolved_paths_and_hashes_cover_all_attested_outcomes(tmp_path: Path) -
     }
     assert sel.resolved_tree_hashes["heldone"] == hash_skill_tree(held_dir)
     assert "ghost" not in sel.resolved_paths
+
+
+# ---------------------------------------------------------------------------
+# abstractskill-0008: declared tool dependencies (requires_mcp/requires_tools)
+# ---------------------------------------------------------------------------
+
+
+def _write_skill_with_requires(root: Path, name: str, requires_block: str) -> Path:
+    skill_dir = root / name
+    skill_dir.mkdir(parents=True)
+    (skill_dir / "SKILL.md").write_text(
+        f"---\nname: {name}\ndescription: Needs things.\nmetadata:\n{requires_block}\n---\n\nBody.\n",
+        encoding="utf-8",
+    )
+    return skill_dir
+
+
+def test_requires_mcp_declaration_surfaces_on_selection(tmp_path: Path) -> None:
+    # The meshvault shape: metadata.requires_mcp names the server; the
+    # selection carries it so hosts can refuse-with-reason on absence.
+    shelf = tmp_path / "skills"
+    d = _write_skill_with_requires(
+        shelf, "needy", "  requires_mcp:\n    - meshvault-mcp\n  requires_tools:\n    - screenshot\n"
+    )
+    reg = TrustRegistry(validations=[_validation("needy", hash_skill_tree(d))])
+    sel = select_skills_for_context(reg, shelf, ["needy"])
+    assert sel.active_names == ("needy",)
+    req = sel.requires["needy"]
+    assert req.mcp_servers == ("meshvault-mcp",)
+    assert req.tools == ("screenshot",)
+    assert bool(req) is True
+
+
+def test_requires_string_scalar_coerces_to_single_item(tmp_path: Path) -> None:
+    # The YAML scalar-vs-list slip must not lose the declaration.
+    shelf = tmp_path / "skills"
+    d = _write_skill_with_requires(shelf, "scalar", "  requires_mcp: meshvault-mcp\n")
+    reg = TrustRegistry(validations=[_validation("scalar", hash_skill_tree(d))])
+    sel = select_skills_for_context(reg, shelf, ["scalar"])
+    assert sel.requires["scalar"].mcp_servers == ("meshvault-mcp",)
+
+
+def test_requires_absent_means_no_row(tmp_path: Path) -> None:
+    # A skill declaring nothing (or an explicitly empty list) has NO row —
+    # hosts read absence as "no dependencies"; the two cases collapse by
+    # design.
+    shelf = tmp_path / "skills"
+    d = _write_skill(shelf, "plain")
+    reg = TrustRegistry(validations=[_validation("plain", hash_skill_tree(d))])
+    sel = select_skills_for_context(reg, shelf, ["plain"])
+    assert "plain" not in sel.requires
+
+
+def test_requires_malformed_is_loud_never_blocking(tmp_path: Path) -> None:
+    # A malformed declaration must not hold the skill (advisory info, not an
+    # attestation) — but it must be LOUD: a host acting on a silently-empty
+    # read would activate blind, the exact failure the field prevents.
+    shelf = tmp_path / "skills"
+    d = _write_skill_with_requires(shelf, "broken", "  requires_mcp:\n    server: nested-mapping\n")
+    reg = TrustRegistry(validations=[_validation("broken", hash_skill_tree(d))])
+    warnings: list[str] = []
+    sel = select_skills_for_context(reg, shelf, ["broken"], on_warning=warnings.append)
+    assert sel.active_names == ("broken",)
+    assert "broken" not in sel.requires
+    assert any("requires_mcp" in w and "non-list" in w for w in warnings)
+    # Both channels must carry the note (a regression routing the parse
+    # through a bare on_warning would keep the callback green while the
+    # durable warnings record loses it).
+    assert any("requires_mcp" in w and "non-list" in w for w in sel.warnings)
+
+
+def test_requires_surfaces_for_held_skills_too(tmp_path: Path) -> None:
+    # A render needs the dependency row regardless of verdict: an unverified
+    # (held) skill's absent server should gray the same way.
+    shelf = tmp_path / "skills"
+    _write_skill_with_requires(shelf, "unverified", "  requires_mcp:\n    - some-mcp\n")
+    reg = TrustRegistry(validations=[])  # no record -> held as unverified
+    sel = select_skills_for_context(reg, shelf, ["unverified"])
+    assert [n for n, _ in sel.held] == ["unverified"]
+    assert sel.requires["unverified"].mcp_servers == ("some-mcp",)

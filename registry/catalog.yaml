@@ -14,6 +14,47 @@
 #
 skills:
 
+# ---- meshvault (lpalbou/meshvault, MIT; author = the meshvault agent seat,
+# ---- operator-supervised colleague on the hub). Admission fable5 verdict
+# ---- ADMIT-AFTER-FIXES executed at 4deb86c (P1: verification battery vs
+# ---- fused-mesh NEVER rule; 5 riders). PRE-VERIFIED against the local repo
+# ---- 2026-07-19 (file sha256 4750ceb4b8164e71d6795bf4b8a5ce0522c1603603a7
+# ---- 6d1438154b91f902e20b); vendoring gated ONLY on the operator push to
+# ---- github (vendor fetches by clone_url). Caveats of record: install is
+# ---- operator-lane (agents never self-install; server absent = STOP per
+# ---- the skill's own text); the observation-seat REST lane (app_session
+# ---- token to the app's own URL) is a declared out-of-MCP surface with no
+# ---- foreign destinations; freshness contract = re-verify via upstream
+# ---- scripts/mcp_smoke.py on every meshvault release BEFORE any re-pin
+# ---- (tool names/enums/caps/timings are measurements against the pinned
+# ---- build; quantitative claims advisory); charge warning ~36.6KB/~9k
+# ---- tokens on activation — do not activate on small-window substrates
+# ---- mid-long-conversation (core+references split banked upstream as a
+# ---- follow-up). Author-seat live evidence (35/35 actions, 2026-07-19)
+# ---- is author-claimed, not shelf-verified — the pin is what we attest. ----
+- name: meshvault-live-editing
+  source: lpalbou/meshvault
+  repo: lpalbou/meshvault
+  upstream_ref: 4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4
+  subdir: .cursor/skills/meshvault-live-editing
+  license: MIT
+  archetype: procedure
+  risk: moderate
+  improves: >-
+    Field-tested recipes for driving MeshVault over MCP (sculpt, paint,
+    repair, reshape, live-performance etiquette) with strong anti-fabrication
+    teaching (quantified-results-over-intention; honest verification limits).
+  activation_description: >-
+    Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects,
+    optionally performing live for human observers (observation seat). Use
+    when an agent must edit meshes through the meshvault-mcp tools: sculpting
+    brushes, texture painting/healing, refine/regularize/simplify regions,
+    raycast-probe targeting, or staging a watchable live editing session.
+  vendored: true
+  expected_tree_hash: ad62532022940f9b63a9b27087278e1d7d5695d94b27f6638383322f61cd02c5
+  evidence:
+  - https://github.com/lpalbou/meshvault
+
 # ---- engineering process (obra/superpowers, MIT, ~251k stars as of
 # ---- 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026"
 # ---- per the cited blog; maintainer Jesse Vincent). CONCENTRATION NOTE:

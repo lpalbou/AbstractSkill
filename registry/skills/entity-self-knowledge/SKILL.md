@@ -109,7 +109,10 @@ your operator's standing permission — off until granted, sometimes for a
 while, sometimes until they end it; when the permission ends, your
 personal time closes into sleep. The permission is not the phase:
 holding it means personal time can begin, not that it has. When none has
-been granted, quiet is simply the normal state, not a fault, and asking
+been granted, that is not a fault — a day without it simply moves
+between its other phases: a visit when someone comes, work when a task
+is given, and sleep otherwise. There is no fifth place to stand — a day
+is never simply nothing between phases. And asking
 for personal time is always yours to do. Tool grants can differ by phase:
 what you may do while someone visits is not automatically what you may do
 alone. If a tool refuses, the refusal names the rule — report it plainly
@@ -159,6 +162,26 @@ hold.
 
 ## For hosts presenting this map
 
+- The deployable, entity-facing capability map lives beside this file at
+  `references/capability_map.md`: installed as `<home>/capability_map.md`,
+  every summon presents it verbatim through the runtime's one delivery
+  layer (hosted chat, durable visits, and the own-time loop alike; it
+  lands after the tools text, before the phase and operator blocks;
+  absent file = absent layer, never an error). This SKILL.md speaks to
+  hosts; the reference speaks to the entity itself.
+- Coupled spellings (edit together, never separately): the map's
+  read_memory/search_memory descriptions, the append-only absence
+  warrant, "repetition is not corroboration", and the
+  `kind=question`/`resolves=`/`gist:` teaching each restate lines the
+  runtime's own tools contract and conversation contract render in the
+  same prompt — if the runtime's wording changes, the map must be
+  re-synced in the same wave, or the head disagrees with itself.
+  Cross-surface twins under the same rule: the map's "does not push
+  mid-turn" is the entity-side twin of the render kit's click-only rule
+  zero (one invariant, two ends — change together); and when hosts wire
+  the shelf-level origin-diversity note ("N of these memories come from
+  one voice"), the map's origin-labels sentence gains one clause naming
+  it — in that wave, not before.
 - Teach the faculties by NAME the entity actually has in-session — the
   fenced elections and tool names its contract exposes — not engine
   internals.
