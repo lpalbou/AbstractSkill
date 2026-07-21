@@ -1,6 +1,6 @@
 ---
 name: backlog
-description: Create, audit, normalize, and maintain backlog artifacts that track execution-planning work, implementation history, and follow-up triage. Use when Codex needs to set up a backlog system, write or revise backlog items, update backlog overviews or ledgers, move work between planned/proposed/completed/deprecated states, run backlog hygiene, or preserve post-completion follow-ups. Do not use backlog alone to define durable cross-task policy; cite or escalate relevant ADRs instead.
+description: Create, audit, normalize, and maintain backlog artifacts that track execution-planning work, implementation history, and follow-up triage. Use when Codex needs to set up a backlog system, write or revise backlog items, update backlog overviews or ledgers, move work between planned/proposed/completed/deprecated states, run backlog hygiene, preserve post-completion follow-ups, or join hub-coordinated work (work-item ids, pointer claims, evidence-bearing receipts). Do not use backlog alone to define durable cross-task policy; cite or escalate relevant ADRs instead.
 ---
 
 # Backlog System
@@ -69,7 +69,7 @@ be built, why priorities changed, and what evidence proved completion.
   items structurally is authoritative for grammar; items that ignore it become invisible to the
   surfaces that track them.
 - If items are consumed by a board or parser whose grammar you cannot discover in the repository,
-  get the grammar from its owner before seeding many items, then check the confirmed shape in as
+  get the grammar from its owner before seeding many items, then check in the confirmed shape as
   the repository's template so the next author's discovery succeeds. Do not guess from the
   generic templates.
 - If the local shape itself blocks traceability or handoff, still author in the parseable
@@ -129,8 +129,32 @@ be built, why priorities changed, and what evidence proved completion.
   weaker habits such as duplicate planned and completed files, vague status-only items, or items
   with no code reality or validation.
 
+## Join Hub Coordination When Present
+
+- If the repository is coordinated through an agora hub (seats, claims, receipts), read
+  `references/hub-work-join.md` and apply its join rules, deferring to the hub's own ruled work
+  contract where one differs: the item file is the state, the hub carries obligations and
+  receipts, and one work-item id (`<package>-<NNNN>`, derived from the `NNNN_` prefix) travels
+  both ways.
+- Claims are pointer rows (`{owner, item, card, started_at}`) with no status prose; every
+  advance toward done is a receipt on the item's thread carrying machine-checkable evidence;
+  closing an item requires the completion report to cite its receipts.
+- Do not write rendered join words (`in-progress`, `in-review`) into item files or claim rows:
+  the directory is the lifecycle at rest, the template's `Status:` line states only that
+  lifecycle word, and join states are computed by boards, never stored.
+- Where the hub adopts the mirror rule, a `work:<id>` store row mirrors the file's lifecycle
+  word as the cross-agent index: mint at intake, update status+card on every directory move
+  (same pass as the move), stamp the receipt at close — see the mirror-row section of
+  `references/hub-work-join.md`.
+- DISCOVERY FIRST: read the deployment's item template, conventions doc, and parser/board
+  contract before authoring — where they differ from this skill's generic templates, the
+  deployment's grammar wins: a parser reads only its own grammar, so an item can be
+  skill-faithful and board-invisible at once. For AbstractFramework-gateway/board repos,
+  `references/abstractframework-board.md` is that deployment's co-signed grammar.
+
 ## Use References Selectively
 
 - Read `references/layout-and-templates.md` when creating or reshaping backlog files.
 - Read `references/maintenance-checklists.md` when closing work, deprecating work, or running
   backlog hygiene and follow-up triage.
+- Read `references/hub-work-join.md` when the repository coordinates work through an agora hub.

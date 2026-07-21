@@ -32,7 +32,9 @@ EXPECTED_SHELF = {
     "backlog",
     "cicd",
     "coredoc",
+    "entity-observation",
     "entity-self-knowledge",
+    "meshvault-live-editing",
     "review",
     "uxreview",
     "verification-before-completion",
@@ -52,7 +54,9 @@ EXPECTED_LEVELS = {
     "backlog": TrustLevel.ADOPTED,
     "cicd": TrustLevel.ADOPTED,
     "coredoc": TrustLevel.ADOPTED,
+    "entity-observation": TrustLevel.FIRST_PARTY,
     "entity-self-knowledge": TrustLevel.FIRST_PARTY,
+    "meshvault-live-editing": TrustLevel.ADOPTED,
     "review": TrustLevel.ADOPTED,
     "uxreview": TrustLevel.ADOPTED,
     "verification-before-completion": TrustLevel.ADOPTED,
@@ -66,7 +70,9 @@ EXPECTED_SOURCES = {
     "backlog": "codex-skills (maintainer)",
     "cicd": "codex-skills (maintainer)",
     "coredoc": "codex-skills (maintainer)",
+    "entity-observation": "first-party",
     "entity-self-knowledge": "first-party",
+    "meshvault-live-editing": "lpalbou/meshvault",
     "review": "codex-skills (maintainer)",
     "uxreview": "codex-skills (maintainer)",
     "verification-before-completion": "obra/superpowers",
@@ -172,7 +178,12 @@ def test_activation_description_override_reaches_the_prompt() -> None:
     # 2026-07-12 adversary F1: the rendered activation surface must never
     # advertise a faculty the body deliberately un-teaches (probe is
     # engine-only today; the co-signed correction pulled it from the body).
-    assert "probe" not in block.lower()
+    # Scoped 2026-07-19 to the surface the rule guards: the ENTITY memory
+    # skill's row (a block-wide substring check false-positived on
+    # meshvault's "raycast-probe targeting" — an unrelated 3D domain word).
+    esk_meta = next(m for m in metas if m.name == "entity-self-knowledge")
+    esk_desc = overrides.get("entity-self-knowledge") or esk_meta.description
+    assert "probe" not in esk_desc.lower()
 
 
 def test_first_party_shelf_entries_carry_no_activation_override() -> None:
@@ -317,3 +328,16 @@ def test_phase_teaching_verified_equivalent_to_the_canonical_artifact() -> None:
         (SHELF / "abstractframework-gateway" / "SKILL.md").read_text(encoding="utf-8").split()
     )
     assert "WAKES it gracefully" in gw and "does not refuse on sleep" in gw
+
+
+def test_meshvault_declares_its_mcp_dependency() -> None:
+    # abstractskill-0008 live-shelf pin: the feature's first declaring skill
+    # must KEEP declaring — a re-vendor that drops the metadata block would
+    # otherwise re-pin green while the declaration silently vanishes (the
+    # fixture-doubles-pass-while-the-live-lane-fails class).
+    from abstractskill import select_skills_for_context
+
+    sel = select_skills_for_context(
+        TrustRegistry.load(validations_path=VALIDATIONS), SHELF, ["meshvault-live-editing"]
+    )
+    assert sel.requires["meshvault-live-editing"].mcp_servers == ("meshvault-mcp",)

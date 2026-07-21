@@ -55,6 +55,69 @@ _TREE_HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 @dataclass(frozen=True, slots=True)
+class SkillRequires:
+    """A skill's DECLARED runtime dependencies (abstractskill-0008).
+
+    Read from frontmatter ``metadata.requires_mcp`` (MCP server names) and
+    ``metadata.requires_tools`` (tool names) — the documented convention the
+    meshvault admission introduced. The declaration is INFORMATION for the
+    host, never a gate here: the selection surface carries it so a host can
+    check its live MCP/tool inventory and refuse activation WITH THE REASON
+    ("skill X requires meshvault-mcp — not reachable") instead of an agent
+    discovering absent tools mid-task (teach-what-is-wired applied to
+    skills themselves). Auto-install is deliberately out of scope: the
+    declaration names, it never executes.
+    """
+
+    mcp_servers: tuple[str, ...] = ()
+    tools: tuple[str, ...] = ()
+
+    def __bool__(self) -> bool:
+        return bool(self.mcp_servers or self.tools)
+
+
+def _parse_requires(meta: SkillMetadata, note) -> SkillRequires:
+    """Read the requires_mcp/requires_tools convention, loudly tolerant.
+
+    A malformed declaration must not hold the skill (the declaration is
+    advisory host-information, not an attestation) — but it must never be
+    SILENTLY dropped either: the author declared intent, and a host acting
+    on an empty read of a malformed field would activate blind, which is
+    the exact failure the field exists to prevent. String coerces to a
+    one-item list (the YAML scalar-vs-list slip); non-string items are
+    skipped with a note naming them.
+    """
+
+    def _read(key: str) -> tuple[str, ...]:
+        raw = meta.metadata.get(key)
+        if raw is None:
+            return ()
+        if isinstance(raw, str):
+            raw = [raw]
+        if not isinstance(raw, (list, tuple)):
+            note(
+                f"#FALLBACK: skill {meta.name!r} declares {key} with a "
+                f"non-list value ({type(raw).__name__}); treating as "
+                "undeclared — hosts cannot check what they cannot read"
+            )
+            return ()
+        out: list[str] = []
+        for item in raw:
+            if isinstance(item, str) and item.strip():
+                out.append(item.strip())
+            else:
+                note(
+                    f"#FALLBACK: skill {meta.name!r} {key} entry {item!r} is "
+                    "not a non-empty string; skipped"
+                )
+        # Order-preserving dedup: a duplicated server name is harmless for
+        # membership checks but noisy for renders ("requires: a-mcp, a-mcp").
+        return tuple(dict.fromkeys(out))
+
+    return SkillRequires(mcp_servers=_read("requires_mcp"), tools=_read("requires_tools"))
+
+
+@dataclass(frozen=True, slots=True)
 class SkillSelection:
     """The trust-gated outcome for one context (e.g. one entity phase).
 
@@ -81,12 +144,24 @@ class SkillSelection:
     warnings: tuple[str, ...] = ()
     resolved_paths: Mapping[str, Path] = field(default_factory=dict)
     resolved_tree_hashes: Mapping[str, str] = field(default_factory=dict)
+    # Declared dependencies per resolved name (abstractskill-0008): present
+    # for every name that loaded cleanly AND declared something (active,
+    # held, and blocked alike — a render needs the row regardless of
+    # verdict). Hosts check these against their live inventory BEFORE
+    # composing an active skill and refuse-with-reason on absence; a name
+    # absent from this mapping declared nothing.
+    requires: Mapping[str, SkillRequires] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         # Seal the Mapping fields (frozen blocks rebinding, not mutation):
         # resolved_tree_hashes is exactly what an operator copies into a
         # hash pin — a mutable view of it would be a corruptible authority.
-        for name in ("activation_descriptions", "resolved_paths", "resolved_tree_hashes"):
+        for name in (
+            "activation_descriptions",
+            "resolved_paths",
+            "resolved_tree_hashes",
+            "requires",
+        ):
             value = getattr(self, name)
             if not isinstance(value, MappingProxyType):
                 object.__setattr__(self, name, MappingProxyType(dict(value)))
@@ -239,6 +314,7 @@ def select_skills_for_context(
     warnings: list[str] = []
     resolved_paths: dict[str, Path] = {}
     resolved_hashes: dict[str, str] = {}
+    requires_map: dict[str, SkillRequires] = {}
 
     def _note(msg: str) -> None:
         _warn(msg, on_warning)
@@ -307,6 +383,15 @@ def select_skills_for_context(
 
         resolved_paths[name] = loaded.root_dir
         resolved_hashes[name] = inventory.tree_hash
+
+        # --- declared dependencies (abstractskill-0008) ----------------------
+        # Read from the PARSED document's frontmatter (the same bytes the
+        # cross-check above just attested). Surfaced for every resolved name
+        # so renders can gray a held skill's absent dependency too; only
+        # declaring skills get a row.
+        declared = _parse_requires(loaded.document.metadata, _note)
+        if declared:
+            requires_map[name] = declared
 
         # --- candidate sources ---------------------------------------------
         # Explicit caller mapping first (blank/whitespace = absent, loudly);
@@ -456,4 +541,5 @@ def select_skills_for_context(
         warnings=tuple(warnings),
         resolved_paths=resolved_paths,
         resolved_tree_hashes=resolved_hashes,
+        requires=requires_map,
     )

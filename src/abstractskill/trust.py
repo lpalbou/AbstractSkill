@@ -157,6 +157,20 @@ class ValidationRecord:
     evidence: Mapping[str, Any] = field(default_factory=dict)
     notes: str | None = None
     activation_description: str | None = None
+    # Who may RECEIVE this skill's teaching (2026-07-19, the
+    # entity-observation class closed structurally): "entity" = written for
+    # an entity's prompt; "host" = agent seats/operators only, must never
+    # enter an entity prompt; "either" = reviewed for both. Absent in older
+    # records → "host" (fail-closed: a skill of undeclared audience never
+    # reaches an entity). Consumers (gateway entity gate, matrix renders)
+    # read this field structurally instead of inferring from prose.
+    audience: str = "host"
+    # True when the skill's ENTITY-facing teaching is delivered as the
+    # home's capability map (the always-verbatim exception, c2865) rather
+    # than a prompt slot — renders as DELIVERED, never a per-phase toggle
+    # (entity seat's named consumer ask, cognition room seq 175; kills the
+    # name==entity-self-knowledge fallback). Emitted only when true.
+    delivered_via_map: bool = False
 
     def __post_init__(self) -> None:
         # Write back the STRIPPED, case-normalized name and STRIPPED source:
@@ -211,6 +225,16 @@ class ValidationRecord:
             raise SkillValidationError(
                 "external-audit ValidationRecord requires evidence['reference'] (a source URL)"
             )
+        if self.audience not in ("entity", "host", "either"):
+            raise SkillValidationError(
+                f"unknown audience {self.audience!r}; must be one of "
+                "['either', 'entity', 'host'] (who may receive the teaching)"
+            )
+        if self.delivered_via_map and self.audience == "host":
+            raise SkillValidationError(
+                "delivered_via_map=True contradicts audience='host' — the map "
+                "delivers to ENTITY prompts; a host-only skill cannot ride it"
+            )
         # Seal evidence (frozen blocks rebinding, not in-place mutation — a
         # mutated evidence dict would silently rewrite an audit trail).
         if not isinstance(self.evidence, MappingProxyType):
@@ -232,6 +256,11 @@ class ValidationRecord:
             payload["notes"] = self.notes
         if self.activation_description:
             payload["activation_description"] = self.activation_description
+        # Always emitted (never elided at default): consumers GATE on this
+        # field, so the YAML must be self-documenting.
+        payload["audience"] = self.audience
+        if self.delivered_via_map:
+            payload["delivered_via_map"] = True
         return payload
 
     @classmethod
@@ -263,6 +292,8 @@ class ValidationRecord:
             activation_description=(
                 str(data["activation_description"]) if data.get("activation_description") else None
             ),
+            audience=str(data.get("audience") or "host"),
+            delivered_via_map=bool(data.get("delivered_via_map", False)),
         )
 
 

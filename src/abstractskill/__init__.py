@@ -24,7 +24,7 @@ from abstractskill.models import LoadedSkill, SkillDocument, SkillMetadata
 from abstractskill.parser import parse_skill_md
 from abstractskill.policy import EffectiveTools, effective_tools, effective_tools_for_skill
 from abstractskill.prompt import format_available_skills_xml
-from abstractskill.selection import SkillSelection, select_skills_for_context
+from abstractskill.selection import SkillRequires, SkillSelection, select_skills_for_context
 from abstractskill.tree import (
     SkillInventory,
     SkillResource,
@@ -77,6 +77,7 @@ __all__ = [
     "SkillNotFoundError",
     "SkillParseError",
     "SkillResource",
+    "SkillRequires",
     "SkillSelection",
     "SkillValidationError",
     "TrustLevel",
