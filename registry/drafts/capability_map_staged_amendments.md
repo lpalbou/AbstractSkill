@@ -261,6 +261,25 @@ the identity clause only when the pass ships and only as experience
 with its reasons"). Gates: the memory/runtime design round + build
 receipts + first live enactment rendered.
 
+GATE TRACKER (re-verified 2026-07-23 evening): design round DONE and
+operator-ratified — laurent's findings order (c4779) ruled the gate
+"already satisfied by precedent" (cognition #6, framework-dm#47,
+entity-dm#117/#124); the parked-for-a-fresh-word framing was the
+error, build ordered to start NOW. Waking half SHIPPED (runtime c4802:
+realize fence + proposal formation + include_identity threading, 11
+green; entity staged the console render same-hour c4804 — realization
+kind first-class, PROPOSED state). Registrar half SHIPPED same-evening
+(memory c4843: identity_review_pass + enact_realization +
+include_identity threading; entity c4851 calls the R2 engine half
+COMPLETE; runtime's realize-build adversary folded c4829 — forgeable-
+colon-evidence P1 fixed). Third leg (surfacing + disposition election
+at day cue / session open) claimed by runtime c4833. REMAINING GATE:
+first live enactment RENDERED (an entity electing while awake and the
+sleep pass enacting, visible in the run). FOLD FIRES on that
+evidence; teaching lands as items (1)(2)(4) here, item (3)'s standing
+contract sentence is runtime's lane (the dm#124 adversary P0: one
+standing sentence, never a detector-fired offer).
+
 ## Amendment H — day-open standing-state cue — FOLDED 2026-07-19 late (gate fired, caught by iteration-3 adversary)
 
 Gate fired silently same-day: runtime shipped problems-on-the-desk
@@ -747,6 +766,49 @@ Teaching surfaces when runtime's cycle machinery ships:
 Gates: runtime's cycle build receipt (cause personal_cycle, tunables
 consumed from the served blueprint) + the first live cycle rendered
 in his run. One adversary at fold, as always.
+
+## Amendment Q — operator edge-instructions at transition time (banked
+2026-07-23 from the structural-edit build order c4837; adversary-
+converged design reports/graph-edit-adversary-{A,B}.md)
+
+THE BUILD (four seats, skill unassigned): overlay graph.edge_ops
+(add/remove/redirect + per-edge instruction prose) + runtime phase-
+graph interpreter at the life.py decision sites; edge instruction
+prose INJECTS AS A CUE at transition time via the existing day-open
+composer / wake-reason seed (bounded ~400 chars, provenance-stamped).
+
+THE TEACHING GATE THIS MINTS: the map's "It does not push mid-turn"
+bullet teaches ONE exception ("the one exception you author yourself:
+your day-open cue offers back your own standing state — your own
+elections returning"). Once operator-authored edge instructions ride
+the same composer, that sentence is FALSE BY OMISSION: a second
+exception exists and its author is the OPERATOR, not the entity.
+Candidate register (verify against the shipped provenance stamp +
+rendered cue at fold): "and when a door in your day carries your
+operator's written guidance, it arrives with the moment it governs —
+their words, marked as theirs, never the graph's." Honesty
+constraints at fold: (a) only teach if the cue RENDERS with visible
+operator provenance (else teaching invents attribution the render
+lacks); (b) never teach edge_ops/overlay machinery (operator
+surface, the map's boundary); (c) the announce hook (my R1 clause,
+in the design verbatim) is the wake for this fold — a structural
+edit that ships cue-injection announces on the record.
+Gates: runtime's interpreter + cue-injection build receipt + the
+first live transition cue rendered with provenance. One adversary at
+fold, as always.
+
+SCOPE WIDENED (2026-07-24, corrected operator order c5070): the
+editable graph is the COGNITION MAP, not (only) the phase graph —
+runtime's corrected slice injects instructions on COGNITION edges "as
+cues where the drivers compose prompts", i.e. operator guidance can
+arrive at recall/formation/reflection moments, not just phase
+transitions. Same teaching gate, broader trigger set: the map's
+"does not push mid-turn" exception sentence must cover operator
+edge-guidance on EITHER graph when it ships. Same honesty
+constraints (provenance-visible render or no teaching; never teach
+the edit machinery; announce hook = the wake). Gate unchanged in
+kind: runtime's cue-injection receipt + first rendered cue with
+provenance, whichever graph fires first.
 
 ## Watch — meshvault taught-surface delta (c4020, 2026-07-21): upstream
 SKILL.md gained deflate + sample_color + two advisories; engine serves

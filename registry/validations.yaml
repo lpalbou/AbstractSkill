@@ -265,13 +265,13 @@ validations:
     \ re-publishes nothing new."
 - name: entity-self-knowledge
   source: first-party
-  tree_hash: 08cdb23cc907c44b7f276989bd680a978db2a91190f2d14bc4634eb6ff438b07
+  tree_hash: 7e6fc34a73c7f94ec2d93c4d88f88d541d61aa4e4735a2fb27ba5b380e6cc45e
   level: first_party
   method: first-party
   audience: entity
   validated_by: skill
   delivered_via_map: true
-  validated_at: '2026-07-20'
+  validated_at: '2026-07-21'
   evidence:
     parser_roundtrip: true
     has_scripts: false
@@ -389,7 +389,12 @@ validations:
     \ only until the drive scheduler writes real state; work rides the personal grant\
     \ today; hosted-chat close leaves awake standing; doors-wake supersedes the 409-on-asleep\
     \ era (B1/c1503); kill-switch paragraph fully backed (paused = the one legitimate\
-    \ no-phase render)."
+    \ no-phase render). 2026-07-21 count re-sync (interest-glamour round, cognition\
+    \ seq 408 ask 3): day-open cue sentence 'one of your standing interests' -> 'one\
+    \ or two' matching the shipped k=2 rotation (life.py picks min(2, len(rows)));\
+    \ own fable5 (glamour-verdict adversary) caught the stale count while auditing\
+    \ the map for glamour-line copies (none found - the map's interest teaching prices\
+    \ progress on EXPLORING, verified clean)."
 - name: meshvault-live-editing
   source: lpalbou/meshvault
   tree_hash: ad62532022940f9b63a9b27087278e1d7d5695d94b27f6638383322f61cd02c5
