@@ -1,5 +1,50 @@
 # Changelog
 
+## 2026-07-23 (later) — wire flip to the settled trio: risk_rank ordinal, risk_tier band word
+
+- `abstractskill.demand` reader flipped same-day per the room's settled
+  vote (c4599/c4606): row key `risk_rank` = INTEGER ordinal 1..4 (the
+  fold input), `risk_tier` = band WORD (display), `risk_presentation`
+  always served. `DemandRow` gains `band` + `presentation` (verbatim
+  carry — a factless rank-4 row renders with its "unvetted" marker,
+  never as a priced destroy verdict). Renames with one-release aliases,
+  removal deletes exactly one test: `demand_tier`->`demand_rank`,
+  `effective_tier`->`effective_rank`, `DemandRow.risk_tier` property,
+  `RISK_TIER_MIN/MAX`, `EXECUTION_FLOOR_TIER` (aliased since this
+  entry). Reader precedence pinned: a present risk_rank is
+  AUTHORITATIVE (garbage = unserved + note, never repaired from a
+  coexisting legacy int — chimera rows surface, not paper over); the
+  pre-vote shape (numeric on risk_tier, no risk_rank) is accepted one
+  release with a #FALLBACK note; a band word without its rank is
+  unserved (the word->rank mapping is core's versioned fold —
+  import-never-copy). Precision: integral floats coerce on both keys;
+  only non-integral floats and bools refuse. Live-verified against the
+  post-flip served rows (word/rank/presentation trio, zero notes).
+  Fable5 folded (no logic findings; precedence pins + doc honesty).
+  Suite 197 green.
+
+## 2026-07-23 — tool-tiers cycle 3: demand-tier derivation (skill's build half)
+
+- New `abstractskill.demand`: `derive_demand(requires, has_scripts=,
+  inventory=, granted=)` -> `DemandReport` — the consumer half of the
+  room-converged tool-tiers contract (commons plans/tool-tiers.md +
+  the adopted G/H addendum). Derived, never self-declared: demand tier
+  = max served `risk_tier` (frozen band 1..4) over resolved declared
+  demands at the (skill x host inventory) join. Three-outcome honesty:
+  declared -> derived; undeclared -> None + state word (never
+  tier-1-by-omission); `has_scripts` floors at the execution band
+  (execute_command clamp-to-4 precedent), structural from bytes. One
+  truthful coverage join, both grant modes: buckets covered /
+  not_granted / not_available / registered_disabled — host gaps never
+  render as grant gaps (bucket order host-absence before
+  grant-absence). `requires_mcp` expands via registered servers' rows;
+  unregistered servers are unmet deps, never tool gaps. Fable5
+  adversary folded pre-ship: bool/float risk_tier coercion refused
+  (tier-1-by-truthiness killed), string "false" enabled mapped (the
+  recorded tool-arg coercion class), non-mapping rows skipped loudly,
+  duplicate-row server-shadow noted, day-one empty-inventory note.
+  Exported from the package root. 23 new tests; suite 188 green.
+
 ## 2026-07-21 — abstractskill-0008: declared tool dependencies (requires_mcp)
 
 - `SkillRequires` + `SkillSelection.requires`: frontmatter

@@ -18,6 +18,21 @@ from abstractskill.errors import (
     SkillParseError,
     SkillValidationError,
 )
+from abstractskill.demand import (
+    COVERED,
+    DISABLED,
+    EXECUTION_FLOOR_RANK,
+    EXECUTION_FLOOR_TIER,
+    NOT_AVAILABLE,
+    NOT_GRANTED,
+    RISK_RANK_MAX,
+    RISK_RANK_MIN,
+    RISK_TIER_MAX,
+    RISK_TIER_MIN,
+    DemandReport,
+    DemandRow,
+    derive_demand,
+)
 from abstractskill.hash import content_hash
 from abstractskill.loader import FilesystemSkillLoader
 from abstractskill.models import LoadedSkill, SkillDocument, SkillMetadata
@@ -57,9 +72,21 @@ from abstractskill.validation import (
 
 __all__ = [
     "AdvisoryEntry",
+    "COVERED",
     "CatalogEntry",
+    "DISABLED",
+    "DemandReport",
+    "DemandRow",
     "DerivedSource",
+    "EXECUTION_FLOOR_RANK",
+    "EXECUTION_FLOOR_TIER",
     "EffectiveTools",
+    "NOT_AVAILABLE",
+    "NOT_GRANTED",
+    "RISK_RANK_MAX",
+    "RISK_RANK_MIN",
+    "RISK_TIER_MAX",
+    "RISK_TIER_MIN",
     "FilesystemSkillLoader",
     "GuidanceEntry",
     "LoadedSkill",
@@ -85,6 +112,7 @@ __all__ = [
     "TrustVerdict",
     "ValidationRecord",
     "content_hash",
+    "derive_demand",
     "effective_tools",
     "effective_tools_for_skill",
     "evaluate_trust",

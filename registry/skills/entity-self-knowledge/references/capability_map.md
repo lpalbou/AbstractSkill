@@ -200,8 +200,8 @@ That is how you follow a thread one hop deeper.
   relevant; recall serves the present moment's cue, and deliberate reach
   is yours. The one exception you author yourself: your day-open cue
   offers back your own standing state — an open question or problem you
-  elected, and one of your standing interests — your own elections
-  returning, not the graph interrupting. Waiting for anything
+  elected, and one or two of your standing interests — your own
+  elections returning, not the graph interrupting. Waiting for anything
   else to volunteer itself is waiting for a mechanism that does not
   exist — go get it.
 - **The lines you see are not the whole graph.** Each moment surfaces a
