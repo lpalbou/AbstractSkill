@@ -33,6 +33,7 @@ identical semantics without duplicating parsers.
 - `effective_tools(grant, skills)` (grant ∩ declared; never widens).
 - `evaluate_trust(registry, tree_hash=..., has_scripts=...)` → `TrustVerdict` (blocked / requires_review / attachable).
 - `select_skills_for_context(registry, shelf_root, names)` → `SkillSelection` (the ONE trust-gated activation pipeline; names-only calls derive sources from the registry).
+- `derive_demand(requires=..., inventory=..., granted=...)` → `DemandReport` (derived demand tier from declared tool/MCP requirements; hosts enforce grants separately).
 
 ## Planning
 

@@ -1,0 +1,68 @@
+# Documentation site for AbstractSkill, deployed to GitHub Pages.
+#
+# Built with MkDocs Material from docs/ (see mkdocs.yml at the repo root).
+# Site URL: https://lpalbou.github.io/AbstractSkill/
+#
+# One-time setup: enable Pages with Source = "GitHub Actions".
+
+name: Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "README.md"
+      - "CHANGELOG.md"
+      - "SECURITY.md"
+      - "mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build documentation site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install MkDocs
+        run: python -m pip install -U pip mkdocs-material
+      - name: Stage root docs for MkDocs
+        run: |
+          cp CHANGELOG.md docs/changelog.md
+          cp SECURITY.md docs/security.md
+          sed -i 's|](docs/|](|g' docs/security.md
+      - name: Build site
+        run: mkdocs build
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

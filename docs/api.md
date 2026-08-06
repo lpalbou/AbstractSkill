@@ -153,6 +153,21 @@ Everything below is exported from the top-level `abstractskill` package.
   inventory's `SkillResource.sha256` as `expected_sha256` to refuse a
   resource swapped after selection (post-verdict TOCTOU half).
 
+## Demand
+
+- `derive_demand(*, requires, has_scripts=False, inventory=None, granted=None) -> DemandReport`
+  — derive the demand tier from declared tool/MCP requirements joined against a
+  host inventory. Informational only: hosts enforce grants separately; this
+  library never widens or auto-grants tools.
+- `DemandReport` — `tier` (derived max risk rank), `rows` (per-declaration
+  coverage), `warnings`, `notes`.
+- `DemandRow` — one declared requirement with `rank`, `band`, `presentation`,
+  coverage bucket, and resolved tool names.
+- Coverage buckets: `COVERED`, `NOT_GRANTED`, `NOT_AVAILABLE`, `DISABLED`.
+- Rank constants: `RISK_RANK_MIN`, `RISK_RANK_MAX`, `EXECUTION_FLOOR_RANK`.
+- One-release aliases (deprecated names, still exported): `RISK_TIER_MIN`,
+  `RISK_TIER_MAX`, `EXECUTION_FLOOR_TIER`.
+
 ## Errors
 
 - `SkillError` (base), `SkillParseError`, `SkillValidationError`,

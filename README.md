@@ -33,7 +33,7 @@ repository's validation records).
 The curated shelf is in this repository:
 
 ```
-registry/skills/            # 11 curated skills (one folder per SKILL.md)
+registry/skills/            # 14 curated skills (one folder per SKILL.md)
 registry/validations.yaml   # trust records: byte pins per skill tree
 registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)
 registry/guidance.yaml      # class-level curation guidance
@@ -121,6 +121,13 @@ block = format_available_skills_xml(
   fail-closed `TrustVerdict` (blocked / requires_review / attachable). The
   curated shelf (first-party + catalog-vendored skills) lives under `registry/`. See the
   [trust model](docs/trust.md).
+- `select_skills_for_context` + `SkillSelection` — the one trust-gated activation
+  pipeline (load → hash → evaluate → gate); hash-pinned enables; declared MCP/tool
+  dependencies surfaced for host-side refusal.
+- `load_catalog` / `CatalogEntry` / `SkillCatalog` — curated vendoring catalog
+  (pinned upstream commits, expected tree hashes).
+- `derive_demand` + `DemandReport` — derived demand tier from declared tool/MCP
+  requirements joined against a host inventory (informational; hosts enforce grants).
 
 ### Hashing contract: hash = bytes, parse = meaning
 
@@ -135,7 +142,8 @@ Those layers live in `abstractgateway` and `abstractruntime` and consume this li
 
 ## Documentation
 
-Full documentation is in [`docs/`](docs/README.md): getting started,
+Full documentation is in [`docs/`](docs/README.md) and on
+[GitHub Pages](https://lpalbou.github.io/AbstractSkill/): getting started,
 architecture (with diagrams), the API reference, the trust model, and the
 trust-network position. See also [SECURITY.md](SECURITY.md) for the trust
 guarantees this library does and does not make.
@@ -146,6 +154,9 @@ guarantees this library does and does not make.
 python -m pip install -e ".[test]"
 python -m pytest -q
 python -m build
+python -m pip install mkdocs-material
+cp CHANGELOG.md docs/changelog.md && cp SECURITY.md docs/security.md
+mkdocs build
 ```
 
 ## License
