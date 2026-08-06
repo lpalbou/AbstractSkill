@@ -1,8 +1,11 @@
 site_name: AbstractSkill
-site_url: https://lpalbou.github.io/AbstractSkill/
+site_description: Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework.
+site_url: https://www.lpalbou.info/AbstractSkill/
 repo_url: https://github.com/lpalbou/AbstractSkill
 repo_name: lpalbou/AbstractSkill
 edit_uri: edit/main/docs/
+
+docs_dir: docs
 
 theme:
   name: material
@@ -20,16 +23,30 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
     - navigation.sections
     - navigation.expand
     - content.code.copy
 
 markdown_extensions:
   - admonition
+  - footnotes
   - pymdownx.superfences
   - pymdownx.highlight
   - toc:
       permalink: true
+
+plugins:
+  - search
+
+validation:
+  nav:
+    omitted_files: ignore
+  links:
+    not_found: ignore
+    unrecognized_links: ignore
 
 nav:
   - Home: index.md
@@ -44,6 +61,3 @@ nav:
   - Trust-network position: trust-network-position.md
   - Changelog: changelog.md
   - Security: security.md
-
-plugins:
-  - search

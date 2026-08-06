@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version, with or without the leading v (example: 0.1.0)"
+        description: "Release version, with or without the leading v (example: 0.2.0)"
         required: true
         type: string
 
@@ -39,10 +39,28 @@ jobs:
       - name: Pytest
         run: python -m pytest -q -m "not integration"
 
+  docs:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          python -m pip install "mkdocs>=1.6.0" "mkdocs-material>=9.0.0"
+      - name: Prepare MkDocs sources
+        run: bash .github/scripts/prepare_mkdocs.sh
+      - name: MkDocs build
+        run: mkdocs build -q
+
   build:
     name: Build distributions
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test, docs]
     outputs:
       version: ${{ steps.release-meta.outputs.version }}
       tag: ${{ steps.release-meta.outputs.tag }}
@@ -83,12 +101,12 @@ jobs:
               )
 
           changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
-          header = re.search(rf"^## \[?{re.escape(version)}\]? - .+$", changelog, re.MULTILINE)
+          header = re.search(rf"^## \[{re.escape(version)}\] - .+$", changelog, re.MULTILINE)
           if not header:
               raise SystemExit(f"CHANGELOG.md has no entry for {version}")
 
           rest = changelog[header.end():]
-          next_header = re.search(r"^## ", rest, re.MULTILINE)
+          next_header = re.search(r"^## \[", rest, re.MULTILINE)
           notes = rest[: next_header.start() if next_header else len(rest)].strip()
           if not notes:
               raise SystemExit(f"CHANGELOG.md entry for {version} is empty")
@@ -177,3 +195,30 @@ jobs:
           body_path: release-notes.md
           files: dist/*
           fail_on_unmatched_files: true
+
+  deploy-docs:
+    name: Deploy docs to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build, github-release]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install docs dependencies
+        run: |
+          python -m pip install -U pip
+          python -m pip install "mkdocs>=1.6.0" "mkdocs-material>=9.0.0"
+      - name: Prepare MkDocs sources
+        run: bash .github/scripts/prepare_mkdocs.sh
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Deploy MkDocs site
+        run: mkdocs gh-deploy --force --clean --message "Deploy docs for ${{ needs.build.outputs.tag }}"

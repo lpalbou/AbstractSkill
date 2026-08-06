@@ -1,5 +1,9 @@
 # AbstractSkill
 
+[![PyPI version](https://img.shields.io/pypi/v/abstractskill.svg)](https://pypi.org/project/abstractskill/)
+[![CI](https://github.com/lpalbou/AbstractSkill/actions/workflows/ci.yml/badge.svg)](https://github.com/lpalbou/AbstractSkill/actions/workflows/ci.yml)
+[![Tested Python](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Flpalbou%2FAbstractSkill%2Fmain%2F.github%2Fworkflows%2Fci.yml&query=%24.jobs.test.strategy.matrix%5B%22python-version%22%5D&label=tested%20python&color=blue)](https://github.com/lpalbou/AbstractSkill/actions/workflows/ci.yml)
+
 AbstractSkill is the shared Python library for [Agent Skills](https://agentskills.io/) (`SKILL.md`) in the
 [AbstractFramework](https://github.com/lpalbou/AbstractFramework) ecosystem.
 
@@ -143,7 +147,7 @@ Those layers live in `abstractgateway` and `abstractruntime` and consume this li
 ## Documentation
 
 Full documentation is in [`docs/`](docs/README.md) and on
-[GitHub Pages](https://lpalbou.github.io/AbstractSkill/): getting started,
+[GitHub Pages](https://www.lpalbou.info/AbstractSkill/): getting started,
 architecture (with diagrams), the API reference, the trust model, and the
 trust-network position. See also [SECURITY.md](SECURITY.md) for the trust
 guarantees this library does and does not make.
@@ -154,9 +158,9 @@ guarantees this library does and does not make.
 python -m pip install -e ".[test]"
 python -m pytest -q
 python -m build
-python -m pip install mkdocs-material
-cp CHANGELOG.md docs/changelog.md && cp SECURITY.md docs/security.md
-mkdocs build
+python -m pip install "mkdocs>=1.6.0" "mkdocs-material>=9.0.0"
+bash .github/scripts/prepare_mkdocs.sh
+mkdocs build -q
 ```
 
 ## License

@@ -51,7 +51,7 @@ test = ["pytest>=7.0.0"]
 [project.urls]
 Homepage = "https://github.com/lpalbou/AbstractSkill"
 Repository = "https://github.com/lpalbou/AbstractSkill"
-Documentation = "https://lpalbou.github.io/AbstractSkill/"
+Documentation = "https://www.lpalbou.info/AbstractSkill/"
 
 [tool.setuptools.package-dir]
 "" = "src"
