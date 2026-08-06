@@ -1,0 +1,1072 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework.">
+      
+      
+      
+        <link rel="canonical" href="https://www.lpalbou.info/AbstractSkill/skills-flows-mcp/">
+      
+      
+        <link rel="prev" href="../skills-catalog/">
+      
+      
+        <link rel="next" href="../trust-network-position/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Skills vs workflows vs MCP - AbstractSkill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#skills-workflows-and-mcp-which-one-when" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AbstractSkill" class="md-header__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AbstractSkill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Skills vs workflows vs MCP
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AbstractSkill" class="md-nav__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AbstractSkill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills vs workflows vs MCP
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills vs workflows vs MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-a-workflow-is-not-a-better-skill-everywhere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a workflow is not "a better skill" everywhere
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#responsibilities-by-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities by package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting started with each
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust-network-position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust-network position
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-a-workflow-is-not-a-better-skill-everywhere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a workflow is not "a better skill" everywhere
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#responsibilities-by-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsibilities by package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting started with each
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="skills-workflows-and-mcp-which-one-when">Skills, Workflows, and MCP — which one, when<a class="headerlink" href="#skills-workflows-and-mcp-which-one-when" title="Permanent link">&para;</a></h1>
+<p>AbstractFramework has three ways to extend what an agent can do. They look
+similar from a distance ("all three add capabilities") but they live at
+different layers, travel differently, and fail differently. This page is the
+decision guide.</p>
+<p><strong>TL;DR: skills for judgment, flows for execution, MCP for reach.</strong></p>
+<p>One sentence each:</p>
+<ul>
+<li>A <strong>skill</strong> is a portable procedure pack — versioned expertise (a folder
+  with a <code>SKILL.md</code>) that any agent, in any agentic framework, can load into
+  its context and follow. Skills ACTIVATE: they shape how an agent thinks
+  and works. A skill is a higher-level view over capabilities and tools — a
+  subpart of a cognition.</li>
+<li>A <strong>workflow (flow)</strong> is a durable executable graph — nodes, edges, waits,
+  and effects that AbstractRuntime executes and AbstractGateway serves, with
+  an append-only ledger, resumability, and replay. Flows RUN: they are the
+  execution unit of this framework, and only this framework.</li>
+<li><strong>MCP (Model Context Protocol)</strong> is a wire protocol for tool servers —
+  a standard way to reach tools that live in another process or on a remote
+  machine, from this framework or any MCP-speaking client. MCP CONNECTS:
+  it is transport for capabilities, not the capability's logic or judgment.</li>
+</ul>
+<h2 id="the-comparison">The comparison<a class="headerlink" href="#the-comparison" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Skill</th>
+<th>Workflow (flow)</th>
+<th>MCP server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reach for it when</td>
+<td>The agent needs judgment, method, or knowledge — or must work outside AbstractFramework</td>
+<td>The work must survive crashes, wait for humans, or be audited step by step</td>
+<td>The tool lives behind a network/process boundary you connect to</td>
+</tr>
+<tr>
+<td>What it is</td>
+<td>Markdown procedure pack (<code>SKILL.md</code> + optional resources)</td>
+<td>Executable graph in a versioned bundle (<code>.flow</code>)</td>
+<td>Protocol endpoint exposing tools/resources</td>
+</tr>
+<tr>
+<td>Unit of</td>
+<td>Expertise / method</td>
+<td>Execution / orchestration</td>
+<td>Tool transport</td>
+</tr>
+<tr>
+<td>Runs where</td>
+<td>Inside the agent's own reasoning (prompt context)</td>
+<td>On AbstractRuntime, served by AbstractGateway</td>
+<td>On the server that hosts it (local or remote)</td>
+</tr>
+<tr>
+<td>Portability</td>
+<td>Any agent, any framework (the ecosystem compatibility layer — Claude Code, Codex, abstractcode, others)</td>
+<td>AbstractFramework only</td>
+<td>Any MCP client, any framework</td>
+</tr>
+<tr>
+<td>Durability</td>
+<td>None of its own — the hosting agent's run is durable, not the skill</td>
+<td>Native: ledger, waits, resume, crash-replay</td>
+<td>None of its own — calls are request/response</td>
+</tr>
+<tr>
+<td>Enforcement</td>
+<td>None — the model may ignore or misread it</td>
+<td>Structural — the framework guarantees the steps, order, and typed data; LLM/tool outputs inside nodes still vary</td>
+<td>Per-call — the protocol is precise; the server's behavior is its own</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Stateless content (byte-pinned, hash-verified)</td>
+<td>Durable run state (vars, waits, artifacts)</td>
+<td>Server-side — treat as outside your trust boundary, even for local servers (a separate process you must gate)</td>
+</tr>
+<tr>
+<td>Trust model</td>
+<td>Content trust: tree hash + validation records + advisories (the abstractskill gate)</td>
+<td>Code trust: immutable published bundle versions, tool grants + approval policies at run time</td>
+<td>Boundary trust: authentication, allowlists, per-tool approval; treat as external</td>
+</tr>
+<tr>
+<td>Composition</td>
+<td>Skills can only narrow the operator's tool grant, never widen beyond it (multi-skill bound is shared: <code>grant ∩ union(declared)</code>)</td>
+<td>Calls tools, spawns subflows/agents; skill activation inside runs is the designed composition (hosts adopt it progressively)</td>
+<td>Its tools enter the SAME grant/approval lanes as native tools</td>
+</tr>
+<tr>
+<td>Fails by</td>
+<td>Being ignored or misread by the model</td>
+<td>A failed or waiting run, visible in the ledger</td>
+<td>Network/server errors, or a lying tool result</td>
+</tr>
+<tr>
+<td>Cost of adding one</td>
+<td>Write markdown, curate, pin to exact bytes</td>
+<td>Author a graph, test, publish a bundle</td>
+<td>Stand up/point at a server, declare and gate its tools</td>
+</tr>
+</tbody>
+</table>
+<p>One boundary note: skills may ship <code>scripts/</code>, but scripts never run
+implicitly — script-bearing skills require operator review at the gate, and
+script execution additionally requires an explicit tool grant.</p>
+<h2 id="decision-rules">Decision rules<a class="headerlink" href="#decision-rules" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Is it knowledge or method — "how to think about X"?</strong> Skill. Review
+   checklists, API usage patterns, process discipline, teaching an entity
+   its own faculties: none of these need an executor; they need to be READ
+   at the right moment. If it must also work outside AbstractFramework
+   (Claude Code, Codex, any SKILL.md-aware agent), it can only be a skill.</li>
+<li><strong>Must it survive a crash, wait for a human, run for hours, or be
+   audited step by step?</strong> Workflow. Durability, waits, approvals, replay,
+   and per-step ledgers are flow properties; no amount of skill prose gives
+   you them.</li>
+<li><strong>Does the capability live in another service or on another machine —
+   something you connect to rather than spawn?</strong> MCP. Remote browsers,
+   corporate databases, third-party SaaS tools — protocol first, then gate
+   its tools like any other grant. (A capability in your own process, or a
+   program the host can simply run, is a NATIVE TOOL — none of the three;
+   this page only arbitrates the three extension mechanisms above the
+   native tool baseline.)</li>
+<li><strong>Mixed?</strong> Compose. The common shapes:</li>
+<li>An external agent reads the <code>abstractframework-gateway</code> skill and
+     drives flows over HTTP — the skill is the bridge INTO the framework;
+     the flow does the durable work once inside. This pattern is fully
+     live today.</li>
+<li>A skill instructs the agent to use MCP-served tools well — the skill
+     provides judgment, MCP provides reach.</li>
+<li>A flow's agent node activates skills for judgment inside a durable
+     run — the DESIGNED pairing (the flow provides durability, the skill
+     provides method); hosts adopt it progressively, abstractcode first.
+     A live in-framework example of the same pattern: AbstractFlow's
+     authoring assistant rides a 600+-line method document (its
+     workflow-authoring skill) on the planner prompt of a gateway-hosted
+     durable run — the skill teaches how to think about workflow
+     structure, the run executes the authoring cycles.</li>
+</ol>
+<p>One vocabulary neighbor worth separating: flows also declare INTERFACES
+(e.g. <code>abstractcode.agent.v1</code>) — a skill declares METHOD to models, while
+an interface declares a flow's CONTRACT to hosts (which inputs/outputs make
+it runnable in a given slot). Interface declarations are self-declared and
+not yet machine-validated (the governance registry is designed, not built),
+so treat them as claims a host checks, not guarantees.</p>
+<p>Rule of thumb: <strong>skills for judgment, flows for execution, MCP for reach.</strong>
+When someone proposes a new capability, ask which of the three failure
+modes you can least afford — misreading (skill), losing progress (flow), or
+crossing a network boundary blind (MCP) — and anchor the design there.</p>
+<h2 id="why-a-workflow-is-not-a-better-skill-everywhere">Why a workflow is not "a better skill" everywhere<a class="headerlink" href="#why-a-workflow-is-not-a-better-skill-everywhere" title="Permanent link">&para;</a></h2>
+<p>A workflow encodes procedure as executable structure: the framework, not the
+model, guarantees the steps happen, in order, with typed data and durable
+waits. That is strictly stronger <em>inside</em> AbstractFramework — and worthless
+outside it, because nothing else executes the graph. A skill encodes
+procedure as language: any capable agent anywhere can follow it, but nothing
+enforces it. They are the same intent at two trust levels, and the
+portability/enforcement trade is exactly why both exist. Skills are
+necessary regardless of how good flows get: they are the compatibility layer
+with the ecosystem outside the framework, the way MCP is the compatibility
+layer with tools outside the process.</p>
+<h2 id="responsibilities-by-package">Responsibilities by package<a class="headerlink" href="#responsibilities-by-package" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>abstractskill</strong> owns the skill contract: parsing/validation of
+  <code>SKILL.md</code>, filesystem discovery with progressive disclosure, byte-exact
+  tree hashing, the trust registry (validations, advisories, the
+  activation gate <code>select_skills_for_context</code>), the curated catalog +
+  vendoring pipeline, and <code>allowed-tools</code> composition semantics.</li>
+<li><strong>abstractflow</strong> owns workflow authoring (editor + assistant) and the
+  VisualFlow format; <strong>abstractruntime</strong> owns the compiler + the <code>.flow</code>
+  bundle format and executes flows durably; <strong>abstractgateway</strong> serves them
+  (bundles, runs, ledgers, waits, commands) and is the one HTTP door —
+  including for external agents.</li>
+<li><strong>MCP integration</strong> is served at the boundary that executes tools: MCP
+  tools are declared and gated beside native tools (grant lanes, approval
+  policies), never as a separate privilege system.</li>
+<li>Hosts (abstractcode, gateway-served agents, entity runtimes) are where
+  the three MEET: a host selects skills through the trust gate, runs flows
+  through the runtime, and reaches MCP tools through its tool executor.
+  Honest adoption state: skill selection ships in abstractskill today and
+  abstractcode consumes it (its <code>/skills</code> command); the gateway-served and
+  entity-runtime activation lanes are designed and being adopted
+  progressively.</li>
+</ul>
+<h2 id="getting-started-with-each">Getting started with each<a class="headerlink" href="#getting-started-with-each" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Skills: <a href="../getting-started/">getting-started.md</a> for the library,
+  <a href="../skills-catalog/">skills-catalog.md</a> for what to vendor and why.</li>
+<li>Workflows: author in the AbstractFlow editor, publish bundles through the
+  gateway (see the AbstractGateway repository's <code>docs/api.md</code>).</li>
+<li>MCP: configure servers at the tool-executing boundary (see the
+  AbstractRuntime repository's MCP worker documentation); their tools then
+  gate like any native tool.</li>
+</ul>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The shelf's <code>abstractframework-gateway</code> skill — the practical entrance
+  guide this page's theory points at.</li>
+<li><a href="../skills-catalog/">skills-catalog.md</a> — every curated skill, with trust
+  rationale.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

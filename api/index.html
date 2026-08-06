@@ -1,0 +1,1150 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework.">
+      
+      
+      
+        <link rel="canonical" href="https://www.lpalbou.info/AbstractSkill/api/">
+      
+      
+        <link rel="prev" href="../architecture/">
+      
+      
+        <link rel="next" href="../faq/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>API reference - AbstractSkill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AbstractSkill" class="md-header__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AbstractSkill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AbstractSkill" class="md-nav__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AbstractSkill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tree-hashing-and-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree hashing and resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tool-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool composition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trust
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Errors
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills-flows-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills vs workflows vs MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust-network-position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust-network position
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parsing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tree-hashing-and-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree hashing and resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tool-composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool composition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trust
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catalog
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Errors
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference">API reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
+<p>Everything below is exported from the top-level <code>abstractskill</code> package.</p>
+<h2 id="parsing">Parsing<a class="headerlink" href="#parsing" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>parse_skill_md(text, *, source_path=None, directory_name=None) -&gt; SkillDocument</code>
+  — parse <code>SKILL.md</code> text (LF/CRLF/CR) into metadata + body; validates the
+  spec fields; optionally checks the name matches its directory.</li>
+<li><code>validate_skill_name(name) -&gt; str</code>, <code>validate_description(text) -&gt; str</code>,
+  <code>validate_compatibility(text) -&gt; str</code> — spec validators (used by the parser;
+  also callable directly).</li>
+<li><code>content_hash(content) -&gt; str</code> — SHA-256 of one document's bytes.</li>
+<li>Constants: <code>SKILL_FILENAME</code>, <code>SKILL_NAME_RE</code>, <code>MAX_NAME_LENGTH</code> (64),
+  <code>MAX_DESCRIPTION_LENGTH</code> (1024), <code>MAX_COMPATIBILITY_LENGTH</code> (500).</li>
+</ul>
+<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>SkillMetadata</code> — name, description, license, compatibility, allowed_tools,
+  metadata, source_path. <code>.to_dict()</code>. <code>metadata</code> is a free mapping; the
+  <code>requires_mcp</code>/<code>requires_tools</code> dependency convention rides here (see
+  Selection).</li>
+<li><code>SkillDocument</code> — metadata, body, raw, content_hash. <code>.name</code>.</li>
+<li><code>LoadedSkill</code> — document + root_dir.</li>
+</ul>
+<h2 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>FilesystemSkillLoader(roots)</code> — <code>discover(*, on_warning=None) -&gt; list[SkillMetadata]</code>
+  (metadata only; later roots win; broken folders skipped with <code>#FALLBACK</code>),
+  <code>load(name, *, on_warning=None) -&gt; LoadedSkill</code> (full body; same resolution;
+  name validated first).</li>
+</ul>
+<h2 id="tree-hashing-and-resources">Tree hashing and resources<a class="headerlink" href="#tree-hashing-and-resources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>hash_skill_tree(dir) -&gt; str</code> — deterministic whole-tree SHA-256
+  (length-prefixed injective manifest; OS junk excluded; symlinks refused).</li>
+<li><code>inspect_skill_dir(dir) -&gt; SkillInventory</code> — files, sizes, tree_hash,
+  total_bytes, <code>has_scripts</code>.</li>
+<li><code>read_skill_resource(dir, rel_path, *, max_bytes) -&gt; bytes</code> — in-tree read;
+  traversal/symlink refused; honest oversize refusal.</li>
+<li><code>SkillInventory</code>, <code>SkillResource</code>.</li>
+</ul>
+<h2 id="tool-composition">Tool composition<a class="headerlink" href="#tool-composition" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>effective_tools(grant, skills, *, name_map=None) -&gt; EffectiveTools</code> — the
+  shared grant ∩ union(declared) view.</li>
+<li><code>effective_tools_for_skill(grant, skill, *, name_map=None) -&gt; EffectiveTools</code>
+  — the per-skill least-privilege view (the enforcement primitive).</li>
+<li><code>EffectiveTools</code> — allowed, declared_bound_active, narrowed_by_skills,
+  declared_skills, undeclared_skills, out_of_grant_names, unresolved_tokens,
+  warnings.</li>
+</ul>
+<h2 id="prompt">Prompt<a class="headerlink" href="#prompt" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>format_available_skills_xml(skills, *, descriptions=None) -&gt; str</code> —
+  deterministic, html-escaped <code>&lt;available_skills&gt;</code> block. Pass
+  <code>descriptions=SkillSelection.activation_descriptions</code> (or
+  <code>TrustRegistry.activation_descriptions()</code>): without it the UPSTREAM
+  description renders verbatim, which leaks wrong-audience text (e.g. a
+  vendored skill's "Use when Codex needs to…") into the prompt.</li>
+</ul>
+<h2 id="trust">Trust<a class="headerlink" href="#trust" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>evaluate_trust(registry, *, tree_hash, name=None, source=None, has_scripts=False) -&gt; TrustVerdict</code>
+  — fail-closed, explainable verdict.</li>
+<li><code>TrustRegistry(validations, advisories, guidance)</code> /
+  <code>TrustRegistry.load(validations_path, advisories_path, guidance_path)</code>.</li>
+<li><code>TrustRegistry.source_candidates_for(*, name, tree_hash=None) -&gt; tuple[DerivedSource, ...]</code>
+  — ALL registry-derived provenance candidates (hash-bound supersedes
+  name-bound; gates check advisories against every candidate).</li>
+<li><code>TrustRegistry.source_for(*, name, tree_hash=None) -&gt; DerivedSource | None</code>
+  — the primary (display) candidate for provenance rendering.</li>
+<li><code>DerivedSource</code> — source, binding ("hash" | "name"), ambiguous.</li>
+<li><code>ValidationRecord</code> — an attestation bound to a tree_hash (level, method,
+  evidence; method caps the grantable level).</li>
+<li><code>AdvisoryEntry</code> — a specific do-not-use notice (official_intent,
+  hidden_issue, severity, reference; hash or name/source anchored). Names
+  match case-insensitively (spec lowercase); sources match exactly
+  (stripped, case-sensitive).</li>
+<li><code>lint_registry(registry) -&gt; tuple[str, ...]</code> — curator lint surfacing
+  inert advisory spellings (spec-invalid names, case-only or unknown source
+  mismatches); warns, never refuses. Run by <code>scripts/refresh_shelf.py</code>.</li>
+<li><code>GuidanceEntry</code> — a category-level risk notice (never blocks a specific
+  skill).</li>
+<li><code>TrustVerdict</code> — level, blocked, requires_review, attachable, do_not_use,
+  reasons, advisories, validation, warnings.</li>
+<li>Enums: <code>TrustLevel</code> (blocked/unverified/community/adopted/audited/first_party),
+  <code>Severity</code> (critical/high/medium/low).</li>
+</ul>
+<h2 id="catalog">Catalog<a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>load_catalog(path) -&gt; SkillCatalog</code> — load + validate the curated vendoring
+  catalog (<code>registry/catalog.yaml</code>); loud on every malformed entry.</li>
+<li><code>CatalogEntry</code> — one reviewed, pinned, vendor-able skill (owner/repo slug,
+  40-hex commit pin, subdir, license, archetype/risk, <code>expected_tree_hash</code>
+  after first vendoring). Network-free contract; fetching lives in
+  <code>scripts/vendor_skill.py</code>.</li>
+<li><code>lint_catalog(catalog, shelf_names) -&gt; tuple[str, ...]</code> — curator lint
+  (vendored-but-absent, on-shelf-but-unlisted, risky-without-notes, unclear
+  licenses). Warns, never refuses.</li>
+</ul>
+<h2 id="selection">Selection<a class="headerlink" href="#selection" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>select_skills_for_context(registry, shelf_root, names, *, sources=None,
+  enabled=(), on_warning=None) -&gt; SkillSelection</code> — the ONE trust-gated
+  pipeline (load → hash → derive sources → evaluate_trust per candidate →
+  worst verdict → gate). Names-only calls derive provenance from the
+  registry; blocked never activates; requires_review activates only when
+  operator-enabled; a bad tree holds one skill, never the phase.
+  <code>shelf_root</code> also accepts a LIST of roots (curated shelf + user skills
+  dir): the later VALID copy wins on name collision (a broken later copy
+  falls back loudly), and the gate evaluates the winning copy's own bytes —
+  a user shadow of a curated name never inherits the curated validation
+  record (different hash ⇒ unverified ⇒ held), while byte-identical copies
+  activate on the record regardless of root (trust binds to content, not
+  location). <code>enabled</code> entries may be bare names or HASH-PINNED as
+  <code>name@tree_hash</code> (full sha256): a pin grants exactly the reviewed bytes —
+  the durable form for standing enables. Pins govern over a bare entry for
+  the same name; malformed pins grant nothing (fail-closed); a pin that no
+  longer matches holds the skill with a note naming both hashes; pins never
+  constrain attachable skills. A requires_review skill activated via a BARE
+  enable is always loudly noted with the winning copy's path + hash (the
+  bare grant is name-bound; the note keeps a standing enable from silently
+  activating a shadow). The pipeline also cross-checks the SKILL.md bytes
+  it parsed against the hashed tree's own per-file digest — a swap between
+  load and hash (TOCTOU on user-writable roots) refuses the skill loudly.</li>
+<li><code>SkillSelection</code> — active, held, blocked, missing, activation_descriptions
+  (current-hash only), warnings, plus <code>resolved_paths</code> and
+  <code>resolved_tree_hashes</code> naming the winning copy for every attested name
+  (the tree hash is the exact value to pin in an <code>enabled</code> entry), and
+  <code>requires</code> (declared dependencies per resolved name — see below).</li>
+<li>Declared tool dependencies (<code>SkillRequires</code>): a skill whose recipes
+  presuppose an MCP server or specific tools declares them in frontmatter —
+  <code>metadata.requires_mcp: [server-names]</code> and/or
+  <code>metadata.requires_tools: [tool-names]</code> (a bare string coerces to a
+  one-item list; malformed values are dropped LOUDLY, never silently). The
+  selection surfaces the declaration as <code>selection.requires[name]</code>
+  (<code>.mcp_servers</code> / <code>.tools</code>; only declaring skills get a row) for every
+  resolved name — active, held, and blocked alike, so renders can gray an
+  absent dependency regardless of verdict. The declaration is HOST
+  information, never a gate here: the host checks it against its own
+  inventory before composing and refuses activation WITH THE REASON —
+  worded to what the host actually CHECKED (the blessed template from the
+  first consumer: "requires MCP server 'x' — not declared on this
+  gateway"; a declared-only inventory must never overclaim "not
+  reachable") — instead of an agent discovering absent tools mid-task.
+  Auto-install is out of scope by design — the declaration names, it
+  never executes.
+  First declaring skill on the shelf: <code>meshvault-live-editing</code>
+  (<code>requires_mcp: [meshvault-mcp]</code>).</li>
+<li><code>read_skill_resource(skill_dir, rel_path, *, max_bytes, expected_sha256=None)</code>
+  — progressive-disclosure read, strictly inside the tree; pass the
+  inventory's <code>SkillResource.sha256</code> as <code>expected_sha256</code> to refuse a
+  resource swapped after selection (post-verdict TOCTOU half).</li>
+</ul>
+<h2 id="demand">Demand<a class="headerlink" href="#demand" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>derive_demand(*, requires, has_scripts=False, inventory=None, granted=None) -&gt; DemandReport</code>
+  — derive the demand tier from declared tool/MCP requirements joined against a
+  host inventory. Informational only: hosts enforce grants separately; this
+  library never widens or auto-grants tools.</li>
+<li><code>DemandReport</code> — <code>tier</code> (derived max risk rank), <code>rows</code> (per-declaration
+  coverage), <code>warnings</code>, <code>notes</code>.</li>
+<li><code>DemandRow</code> — one declared requirement with <code>rank</code>, <code>band</code>, <code>presentation</code>,
+  coverage bucket, and resolved tool names.</li>
+<li>Coverage buckets: <code>COVERED</code>, <code>NOT_GRANTED</code>, <code>NOT_AVAILABLE</code>, <code>DISABLED</code>.</li>
+<li>Rank constants: <code>RISK_RANK_MIN</code>, <code>RISK_RANK_MAX</code>, <code>EXECUTION_FLOOR_RANK</code>.</li>
+<li>One-release aliases (deprecated names, still exported): <code>RISK_TIER_MIN</code>,
+  <code>RISK_TIER_MAX</code>, <code>EXECUTION_FLOOR_TIER</code>.</li>
+</ul>
+<h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>SkillError</code> (base), <code>SkillParseError</code>, <code>SkillValidationError</code>,
+  <code>SkillNotFoundError</code>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

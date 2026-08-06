@@ -1,0 +1,1155 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework.">
+      
+      
+      
+        <link rel="canonical" href="https://www.lpalbou.info/AbstractSkill/KnowledgeBase/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>AbstractSkill — Knowledge Base - AbstractSkill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#abstractskill-knowledge-base" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AbstractSkill" class="md-header__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AbstractSkill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AbstractSkill — Knowledge Base
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AbstractSkill" class="md-nav__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AbstractSkill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills-flows-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills vs workflows vs MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust-network-position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust-network position
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contract-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contract decisions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contract decisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hashing-hash-bytes-parse-meaning-2026-07-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hashing: hash = bytes, parse = meaning (2026-07-11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tree-hash-manifests-must-be-injective-2026-07-11-adversary-found-p0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree-hash manifests must be injective (2026-07-11, adversary-found P0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parser-line-boundary-discipline-2026-07-11-adversary-found-p1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parser line-boundary discipline (2026-07-11, adversary-found P1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allowed-tools-composition-semantics-2026-07-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allowed-tools composition semantics (2026-07-11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loader-resolution-invariant-2026-07-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loader resolution invariant (2026-07-11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#structural-facts-over-frontmatter-claims-2026-07-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structural facts over frontmatter claims (2026-07-11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spec-conformance-agentskillsio-verified-2026-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spec conformance (agentskills.io, verified 2026-07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skill-trust-bind-to-bytes-fail-closed-advisory-wins-2026-07-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skill trust: bind to bytes, fail closed, advisory wins (2026-07-11)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#seat-operating-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seat operating decisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deprecated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEPRECATED
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="abstractskill-knowledge-base">AbstractSkill — Knowledge Base<a class="headerlink" href="#abstractskill-knowledge-base" title="Permanent link">&para;</a></h1>
+<p>Accumulated critical insights, contract decisions, and lessons. Never remove an
+entry; deprecated entries move to the DEPRECATED section with reasons.</p>
+<h2 id="contract-decisions">Contract decisions<a class="headerlink" href="#contract-decisions" title="Permanent link">&para;</a></h2>
+<h3 id="hashing-hash-bytes-parse-meaning-2026-07-11">Hashing: hash = bytes, parse = meaning (2026-07-11)<a class="headerlink" href="#hashing-hash-bytes-parse-meaning-2026-07-11" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>content_hash</code> (one document) and <code>hash_skill_tree</code> (whole folder) are
+  byte-exact deliberately. Tamper detection must never call two byte-different
+  trees "the same"; EOL normalization would do exactly that.</li>
+<li>Consequence: vendor skills from archives or byte-copies, never through
+  EOL-rewriting checkouts (git <code>autocrlf</code> produces honest mismatches).</li>
+<li>A CRLF-authored skill and its LF twin parse identically but hash differently
+  — by design.</li>
+</ul>
+<h3 id="tree-hash-manifests-must-be-injective-2026-07-11-adversary-found-p0">Tree-hash manifests must be injective (2026-07-11, adversary-found P0)<a class="headerlink" href="#tree-hash-manifests-must-be-injective-2026-07-11-adversary-found-p0" title="Permanent link">&para;</a></h3>
+<ul>
+<li>POSIX permits <code>\n</code> in filenames: a text manifest joined with delimiters is
+  FORGEABLE (a crafted single file can collide with a two-file tree — a
+  demonstrated collision, regression-pinned in <code>test_tree.py</code>).</li>
+<li>Fix shape: length-prefixed binary manifest (len(path) + path + digest),
+  sorted by POSIX relpath. Any future manifest format must preserve
+  injectivity of the serialization.</li>
+</ul>
+<h3 id="parser-line-boundary-discipline-2026-07-11-adversary-found-p1">Parser line-boundary discipline (2026-07-11, adversary-found P1)<a class="headerlink" href="#parser-line-boundary-discipline-2026-07-11-adversary-found-p1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>str.splitlines()</code> splits on 8 boundaries beyond <code>\n</code>/<code>\r\n</code>/<code>\r</code>
+  (<code>\v \f \x1c \x1d \x1e \x85 \u2028 \u2029</code>); YAML does not. Using it for
+  frontmatter delimiting created a parser differential: an embedded <code>\x0c---</code>
+  closed the frontmatter early, silently truncating metadata into the body.</li>
+<li>Rule: normalize exactly <code>\r\n</code>/<code>\r</code> → <code>\n</code>, split on <code>\n</code> only. Exotic
+  boundary characters then reach PyYAML, which refuses them LOUDLY —
+  refusal over silent truncation.</li>
+<li>Frontmatter delimiters match at column 0 only (rstrip, never strip):
+  an indented <code>---</code> is legitimate YAML block-scalar content.</li>
+</ul>
+<h3 id="allowed-tools-composition-semantics-2026-07-11">allowed-tools composition semantics (2026-07-11)<a class="headerlink" href="#allowed-tools-composition-semantics-2026-07-11" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The GRANT is the only tool authority; skills narrow below it, never widen.
+  Empty grant denies all. Absence of <code>allowed-tools</code> implies NOTHING
+  (pure-knowledge skill — never "all tools", never zero).</li>
+<li>Multi-skill composition is <code>grant ∩ union(declared)</code> — strict pairwise
+  intersection would zero two disjoint declared skills (broken).</li>
+<li>HONEST LIMIT (adversary-forced contract line): the union is a SHARED bound,
+  not per-skill least privilege — co-active declared skills widen each other
+  up to the grant. Per-skill least privilege requires call attribution;
+  <code>effective_tools_for_skill</code> is that primitive. Consoles render the
+  per-skill view; unattributed runtime enforcement gets the union view.</li>
+<li>Every dropped token/name (unmappable OR mapped-but-ungranted, including
+  partial mappings) carries a <code>#FALLBACK</code> warning. Policy never relaxes.</li>
+<li>Token→framework-name mapping (<code>Bash(git:*)</code> etc.) is HOST-owned
+  (<code>name_map</code> param); the library never guesses.</li>
+</ul>
+<h3 id="loader-resolution-invariant-2026-07-11">Loader resolution invariant (2026-07-11)<a class="headerlink" href="#loader-resolution-invariant-2026-07-11" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>discover()</code> and <code>load()</code> must resolve identically: the skill a host lists
+  is always the skill it can load. A broken higher-precedence copy never
+  shadows a valid lower-precedence one; broken copies skip with <code>#FALLBACK</code>
+  warnings (logged + optional <code>on_warning</code>); only-broken copies raise the
+  parse error, never a misleading "not found".</li>
+<li><code>load(name)</code> validates the name before touching the filesystem
+  (rejects separator/traversal-shaped names).</li>
+</ul>
+<h3 id="structural-facts-over-frontmatter-claims-2026-07-11">Structural facts over frontmatter claims (2026-07-11)<a class="headerlink" href="#structural-facts-over-frontmatter-claims-2026-07-11" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>inspect_skill_dir().has_scripts</code> derives from the TREE (any file under
+  <code>scripts/</code>), never from frontmatter — a "requires enablement" badge cannot
+  be lied to by the skill's own metadata. Same pattern as the framework's
+  "never-purge is structural" rule: absence of an execution path IS the
+  guarantee.</li>
+</ul>
+<h3 id="spec-conformance-agentskillsio-verified-2026-07">Spec conformance (agentskills.io, verified 2026-07)<a class="headerlink" href="#spec-conformance-agentskillsio-verified-2026-07" title="Permanent link">&para;</a></h3>
+<ul>
+<li>name: 1-64 chars, lowercase alnum + single hyphens (no leading/trailing/
+  consecutive), must match the leaf directory. Regex shape:
+  <code>^[a-z0-9]+(?:-[a-z0-9]+)*$</code> (structure enforces hyphen rules without
+  lookaheads).</li>
+<li>description: 1-1024 chars. compatibility: ≤500 chars. Enforced with loud
+  refusals naming limit + actual size.</li>
+</ul>
+<h3 id="skill-trust-bind-to-bytes-fail-closed-advisory-wins-2026-07-11">Skill trust: bind to bytes, fail closed, advisory wins (2026-07-11)<a class="headerlink" href="#skill-trust-bind-to-bytes-fail-closed-advisory-wins-2026-07-11" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Trust binds to the TREE HASH, never the name (a name is claimable). Any byte
+  change voids a validation. <code>evaluate_trust</code> normalizes the hash ONCE at the
+  top so the advisory match and the validation lookup see the same bytes —
+  an uppercase-hex query must never bypass a block while keeping its
+  validation (adversary-found P0; "advisory wins" must hold for every spelling
+  of the same hash).</li>
+<li>The verdict is fail-CLOSED: three orthogonal booleans (<code>blocked</code> /
+  <code>requires_review</code> / <code>attachable</code>). UNVERIFIED, scripts-present, and
+  low/medium advisories all set <code>requires_review</code>; only a validated,
+  advisory-free, script-free skill is <code>attachable</code>. A consumer reading only
+  <code>attachable</code> therefore attaches nothing unvetted.</li>
+<li>Severity is GRADED and the verdict honors it: critical/high hard-block;
+  low/medium require review; a HASH-matched advisory of any severity blocks
+  (exact bytes are specific enough to forbid). The enum meaning and the
+  verdict must never contradict (adversary-found P1).</li>
+<li>A validation METHOD caps the trust level it can grant (<code>_METHOD_MAX_LEVEL</code>):
+  <code>first-party-adoption</code>/<code>manual-review</code> → at most <code>adopted</code>; audits → at most
+  <code>audited</code>; only <code>first-party</code> → <code>first_party</code>. "Reviewed" can never
+  masquerade as "audited" in code (adversary-found P1 overclaim).</li>
+<li>ADVISORY ≠ GUIDANCE: an advisory names a SPECIFIC skill (matchable by hash
+  or name+source) and can block; guidance is a CATEGORY notice that informs
+  but never blocks a specific skill. A class label in the advisory registry is
+  an inert notice masquerading as protection (adversary-found P0). The shipped
+  advisory registry is empty at v1 — the framework does not self-assert a
+  specific malicious skill before its own audit or a leveraged feed names one.</li>
+<li><code>simulated-execution</code> evidence must be REAL (<code>epochs &gt;= 1</code>, non-empty
+  <code>models</code>, and <code>bool</code> is not an int here) — a presence-only gate is
+  decorative (adversary-found P1/P2).</li>
+<li><code>scripts/refresh_shelf.py</code> preserves <code>validated_at</code> for unchanged tree
+  hashes — re-running must not re-stamp an attestation date on which no review
+  happened (adversary-found P1).</li>
+<li>Trust-gate-before-compose must be STRUCTURAL, not conventional: the
+  primitives (<code>evaluate_trust</code>, <code>effective_tools</code>, <code>format_available_skills_xml</code>)
+  accept raw metadata with no trust coupling, so a host can skip the gate.
+  <code>select_skills_for_context</code> is the one composed pipeline that cannot skip it;
+  activation should always go through it, never through <code>discover()</code> piped
+  straight into composition (discovery is for LISTING only).</li>
+<li>BLOCKED is harder than requires_review: a blocked verdict has
+  <code>requires_review == False</code>. Never branch on <code>requires_review</code> alone to gate
+  activation (<code>if requires_review: gate; else: activate</code> would activate a
+  blocked skill). The safe single read is <code>attachable</code>; blocked must never be
+  operator-enableable (adversary-found P1-B trap).</li>
+<li>Name-anchored advisories need a host-supplied <code>source</code> to match
+  (<code>SkillMetadata</code> carries none by design). When a name-anchored advisory
+  exists and no source is supplied, the selection pipeline warns <code>#FALLBACK</code>
+  rather than silently skipping the advisory check (adversary-found P1-A).
+  SUPERSEDED IN PART (2026-07-11, names-only phase configs): sources now
+  DERIVE from the registry's validation records when the caller passes none
+  (<code>TrustRegistry.source_candidates_for</code>) — the warning fires only when the
+  registry carries no provenance either.</li>
+<li>Advisory checks must run against the FULL candidate-source set, never one
+  winner: two registry records can attest the same bytes under different
+  sources, and an advisory targeting the LOSING source must still block —
+  picking a single "primary" source is a gate-evasion vector (adversary-found,
+  one step from P0, 2026-07-11). Same rule for a caller-supplied source that
+  contradicts registry provenance: check both, worst verdict wins.</li>
+<li>Exact-equality matching semantics demand normalize-at-construction:
+  <code>ValidationRecord</code>/<code>AdvisoryEntry</code> strip name/source on construction
+  (whitespace from a quoted YAML scalar must never silently void an advisory
+  match — the tree_hash normalize-once rule generalized). Case-folding policy
+  is a deliberate residual: names are case-sensitive today, queued in the
+  trust backlog. RESOLVED (same day): names normalize to spec lowercase at
+  construction AND every query boundary (the spec forbids uppercase skill
+  names, so case is noise — and normalization is strictly match-WIDENING,
+  the fail-closed direction: no previously-working match can be lost);
+  sources stay case-sensitive by policy with <code>lint_registry</code> catching
+  case-only near-misses at refresh time (warns, never refuses — an advisory
+  may legitimately name a marketplace we never validated from).</li>
+<li>Normalization must be SYMMETRIC or it is a hole: normalizing stored fields
+  without the query side (or vice versa) converts a curator typo into a
+  fail-open path (the padded-query-source finding — stored sources stripped,
+  query sources raw, advisory silently missed). Rule: every field that
+  matches by equality normalizes ONCE at construction and ONCE at each query
+  entry point, with the same function.</li>
+<li>Containment breadth is a two-sided trap: per-skill failures (bad tree,
+  symlink, deleted file) must hold ONE skill as missing, never crash the
+  phase selection (one bad apple ≠ phase denial) — but the catch must stay
+  NARROW (<code>SkillError</code>/<code>OSError</code>): an <code>except Exception</code> would silently
+  demote a logic bug in loader/tree code to "skill not loadable" framework-wide
+  (adversary-found NEW-2, 2026-07-11).</li>
+<li>
+<p>Skills never gate tools; only a phase/state's tool grant does. An empty
+  skill set restricts nothing tool-wise (<code>effective_tools(grant, [])</code> returns
+  the full grant — absence implies nothing). Regulate a state by its tools
+  grant, not by leaving its skills empty (adversary note P2-E).</p>
+</li>
+<li>
+<p>Curated-only install is STRUCTURAL, never a convention: the vendor script
+  has no URL argument; the catalog contract refuses anything but owner/repo
+  slugs with alphanumeric-leading segments and 40-hex commit pins; the first
+  vendoring trusts git's commit-hash verification + human diff review (stated
+  trust floor), every re-vendor is SHA-256 whole-tree verified. Tree identity
+  checks use the SAME hash trust binds to — never stat-shallow compares
+  (size+mtime equality must not pass for byte-different files).</p>
+</li>
+<li>Tool guidance is part of the gate: a vendor script that prints a wrong
+  NEXT step (hand-written SHELF_POLICY for a catalog skill) mints
+  false-provenance records by instruction — the printed workflow must match
+  the derived-policy reality, and name collisions between policy sources
+  refuse loudly (adversary-found, 2026-07-11).</li>
+<li>The word "safe" never renders on operator-facing surfaces, including risk
+  CLASS labels (the catalog risk enum is low/moderate/risky — a --list table
+  is functionally a badge to a naive reader).</li>
+<li>TIME-OF-USE FETCH is a curation class scanners and has_scripts cannot see:
+  a script-free skill body that instructs fetching external instructions at
+  use time (e.g. "fetch fresh guidelines from <repo>@main before each
+  review") defeats hash pinning entirely — the tree hash pins a pointer, not
+  the rules (the ASG-2026-0003 post-approval-swap class, found live in a
+  major vendor's skill by our own adversarial review). Rule: never below
+  risk=moderate, always an explicit note, prefer re-scoping to vendor the
+  actual rules at a pin. Structural verification (paths/licenses/trees) is
+  NOT content verification — every claim about what a body CONTAINS requires
+  reading the body at the pin.</li>
+<li>Curation caveats must travel INTO the validation record (catalog notes
+  append to the derived record's notes): a content warning that lives only
+  in the catalog is invisible to trust-registry consumers — and identity-
+  adjacent framing in a skill body ("if you lie, you'll be replaced") is
+  ordinary for developer agents but must be flagged before any entity-lane
+  attach (append-only memory cannot delete an engrammed threat-anchored
+  value).</li>
+<li>EVERY shelf entry carries an <code>expected_tree_hash</code> byte pin (2026-07-11,
+  adversary-found): without pins, editing a vendored tree and re-running
+  refresh silently re-attests the edited bytes at the same trust level —
+  provenance laundering by refresh. With pins, refresh refuses until the
+  curator updates the pin deliberately; catalog-vendored entries already had
+  this via the catalog pin, first-party/maintainer entries now match.</li>
+<li>Copy-paste workflow examples in skills ROT (2026-07-11, cicd adversary):
+  hardcoded action majors, runtime-version floors (npm ≥ 11.5.1 for OIDC
+  trusted publishing — Node 22's bundled npm silently never runs the
+  handshake), and CLI permission-flag requirements all drift. Rule for
+  vendored how-to skills: version-sensitive examples use
+  <code>&lt;current-major&gt;</code>-style placeholders + a stated version policy, and floors
+  are stated WITH the failure mode they prevent.</li>
+<li>Reviewer-family composition is a SYSTEM property that must live in the
+  bodies consumers actually activate (2026-07-11): the formative loop
+  (<code>adversarial-iteration</code>) now names the summative gates (<code>review</code>,
+  <code>architect</code>, <code>uxreview</code>) and translates the explicit-invocation idiom;
+  a composition contract that lives only in a catalog doc never reaches an
+  agent that activated one skill by description match.</li>
+<li>First-party skills carry NO activation override (2026-07-12,
+  adversary-found P0): the override mechanism exists for VENDORED trees we
+  cannot edit; on a first-party skill it creates a second description
+  living OUTSIDE the byte pin, so its drift is invisible to every hash
+  check — and it drifted within ONE authoring wave (the override still
+  advertised <code>probe</code> after the co-signed body correction removed it, on
+  the exact skill whose subject is faculty honesty). Frontmatter is the
+  one activation source for first-party skills; structural test enforces.</li>
+<li>Skills whose CONTENT claims other seats' surfaces get OWNER CO-SIGNS
+  before the validation record settles (2026-07-12, framework-skills
+  wave): three seats corrected real claims same-day (a nonexistent health
+  route that 401s-then-404s like a trap; a faculty no entity holds yet;
+  an absence warrant true for one memory plane and not the other). The
+  co-sign citations live in the record's notes. Teaching-bug class from
+  Castor's night, prevented at authoring time.</li>
+<li>Faculty honesty in entity-facing skills: never teach a tool name the
+  session does not expose ("use the tools your session actually names,
+  not tools you have heard described") — an entity reaching for a
+  described-but-unwired tool hits an honest refusal and diagnoses "memory
+  and record disagree" (the wrong-diary-id incident class).</li>
+<li>Grants are authorization, not matching (2026-07-13, hash-pinned enables
+  wave): the registry's case-normalization rule is match-WIDENING and
+  fail-closed for advisory/record lookup — applied to an <code>enabled</code> grant it
+  becomes activation-widening, i.e. fail-OPEN. Enable names therefore stay
+  exact-match while advisory matching normalizes. Same wave, same class:
+  an <code>enabled</code> value passed as a bare string would iterate CHARACTERS into
+  one-letter grants (single-char names are spec-valid) — type guards on
+  the grant surface are security controls, not conveniences.</li>
+<li>A trust verdict attests bytes only if the SAME bytes were parsed and
+  hashed (2026-07-13): load and tree-hash are two reads, and on a
+  user-writable root the window between them is a swap opportunity. The
+  pipeline cross-checks the parsed SKILL.md digest against the hashed
+  tree's per-file digest (single-walk inventory) and refuses on
+  divergence; <code>read_skill_resource(expected_sha256=)</code> extends the same
+  attestation to progressive-disclosure reads AFTER selection. Rule: any
+  new surface that reads skill bytes post-verdict must accept and check
+  the inventory digest.</li>
+<li>Entrance-teaching skills track the doors they teach (2026-07-13, visit
+  cutover): the entity section of <code>abstractframework-gateway</code> was
+  re-taught from the hosted chat lane to the durable <code>/visit</code> lane the
+  same day the drawer flip shipped — deliberately not before (teaching an
+  unlanded default is the same rot mirrored). The cross-seat mechanism
+  that made this work: the shipping seats named <code>skill</code> in their ship
+  messages (agreed in advance on the record), so the re-teach window
+  opened with the flip, not behind it.</li>
+<li>Unconditional certification is a recurring engram hazard in reassurance
+  writing (2026-07-13, caught THREE times in one day on one skill): "not a
+  fault" (unscoped — suppressed the armed-but-missing report), "never an
+  error" (certified every experience of a mechanism that can malfunction),
+  "an interruption is never a loss" (contradicted the grant hedge one
+  clause earlier — self-caught pre-ship). The pattern: a comforting
+  absolute quietly forecloses the honest report of the case it didn't
+  anticipate, and in append-only memory the foreclosure persists. Rule:
+  reassurances in entity-facing teaching are SCOPED to the case that makes
+  them true ("when none has been granted, quiet is normal"); the
+  structural description carries the comfort, absolutes never do. Also
+  ruled into the phases teaching: mechanism-intent claims ("by design")
+  must not be converted into universal experience claims.</li>
+<li>
+<p>Teaching an entity about its own kill switch (2026-07-13, liveness-axis
+  ruling; the craft rules from its fable5, recorded for reuse): (a)
+  heading-less placement — headings are what scanning/summarization
+  surfaces promote into landmarks, and the switch should be known, never
+  loom; (b) NAME the punish prior and answer it ("protect you, not punish
+  you") — the training distribution saturates kill-switch-as-punishment,
+  so omitting the denial leaves the prior to fill the vacuum; (c) trigger
+  lists are marked EXEMPLARY, never exhaustive (an entity stopped for an
+  unlisted reason must not have to choose between identity injury and
+  teaching-was-false); (d) every named trigger is not-a-choice-of-the-
+  entity — a behavior→stop contingency is a masking-teacher and must be
+  absent; (e) the certifiable-by-construction reassurances are memory
+  persistence ("a stop takes nothing from you" — processes block, files
+  persist) and no-time-passes (the dreamless framing, foreclosing
+  frozen-and-aware); (f) agency lands as asking-after-a-gap, never
+  self-monitoring; (g) give the operator BOTH halves of the switch
+  (stopping and restoring) — keeper of both doors, not executioner.</p>
+</li>
+<li>
+<p>Visible-from-outside divergence is report-worthy at every completion
+  boundary (2026-07-13, the "I see none" incident): the no-commit/no-push
+  gates were honored correctly for two days while the entire shelf existed
+  only in the working tree — and the public repository truthfully showed an
+  empty June skeleton. Correctly NOT acting does not discharge the duty to
+  SURFACE the gap: the standing rule's affirmative half ("ask the
+  maintainer when a completed item would warrant one") was never exercised
+  across four green-evidence waves, and the operator's surprise was the
+  cost. Rule: whenever the state visible from outside (GitHub, PyPI, a
+  served endpoint) diverges from what was delivered locally, name the
+  divergence in the completion report — one line, every time.</p>
+</li>
+<li>
+<p>Portable skills teach discovery, never deployment grammar (2026-07-13,
+  the board-seeding incident + its fable5): a generic template in a
+  portable skill COMPETES with any deployment's parser grammar — an
+  executor following the skill faithfully authored items invisible to the
+  board that tracked them. The portable fix is discovery-first (the
+  repository's checked-in template and whatever its tooling parses win
+  over the skill's generic shapes; undiscoverable grammar comes from its
+  owner and gets checked IN so the next author's discovery succeeds).
+  The deployment's concrete grammar must NOT be engraved into the
+  byte-pinned portable skill — the pin would attest bytes that drift from
+  their own source of truth the moment the deployment evolves; it belongs
+  in the target repo's template, which discovery then finds. Same shape
+  as hub-wins-at-use-time in the agora draft: teach the posture, point
+  at the living source.</p>
+</li>
+</ul>
+<h2 id="seat-operating-decisions">Seat operating decisions<a class="headerlink" href="#seat-operating-decisions" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Skill bodies entering prompts: nonce-fencing is the prompt COMPOSER's lane
+  (nonce freshness is render-time); abstractskill ships the fence-shape helper</li>
+<li>the canonical "procedures, never identity/authority" contract line
+  (queued as of 2026-07-11).</li>
+<li>Skill identity: spec <code>name</code> is the reference key; registry/manifest entries
+  carry (source, name, tree_hash) — hash participates in VERIFICATION, never
+  naming; same-name-different-source at attach refuses loudly.</li>
+<li>Catalog budgeting is the HOST's lane: the library provides sizes
+  (<code>SkillInventory</code>), never slices. Metadata line worst case ≈ 270 tokens.</li>
+<li>Agency caps audit (2026-07-11): abstractskill carries ZERO agency caps —
+  passive contract library; validation ceilings are spec document constraints;
+  <code>read_skill_resource.max_bytes</code> is caller-supplied with no default.</li>
+</ul>
+<h2 id="deprecated">DEPRECATED<a class="headerlink" href="#deprecated" title="Permanent link">&para;</a></h2>
+<p>(none yet)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

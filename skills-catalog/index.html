@@ -1,0 +1,1499 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework.">
+      
+      
+      
+        <link rel="canonical" href="https://www.lpalbou.info/AbstractSkill/skills-catalog/">
+      
+      
+        <link rel="prev" href="../trust/">
+      
+      
+        <link rel="next" href="../skills-flows-mcp/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Skills catalog - AbstractSkill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#curated-skills-catalog" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AbstractSkill" class="md-header__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AbstractSkill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Skills catalog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AbstractSkill" class="md-nav__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AbstractSkill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills catalog
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#all-skills-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        All skills at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-curated-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why curated-only
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#top-curated-skills-vendorable-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top curated skills (vendorable now)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Top curated skills (vendorable now)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#engineering-process-obrasuperpowers-mit-251k-stars-as-of-2026-07-11-shipped-as-an-anthropic-marketplace-plugin-in-early-2026-per-the-cited-blog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engineering process — obra/superpowers (MIT, ~251k stars as of 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026" per the cited blog)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontendui-vercel-labsagent-skills-mit-vercel-engineering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend/UI — vercel-labs/agent-skills (MIT, Vercel Engineering)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-agammclaude-code-owasp-mit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security — agamm/claude-code-owasp (MIT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#meta-integration-anthropicsskills-apache-20-per-dir-licensetxt-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meta / integration — anthropics/skills (Apache-2.0, per-dir LICENSE.txt verified)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintainer-skills-wave-operator-directive-2026-07-11-evening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintainer skills wave (operator directive, 2026-07-11 evening)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintainer skills wave (operator directive, 2026-07-11 evening)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#review-uxreview-as-is-improved-or-merged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        review / uxreview: as-is, improved, or merged?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch-tier-not-yet-catalog-pinned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch tier (not yet catalog-pinned)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#excluded-with-reasons-on-the-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Excluded (with reasons on the record)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-curated-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a curated skill
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-curation-does-not-guarantee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What curation does NOT guarantee
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills-flows-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills vs workflows vs MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust-network-position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust-network position
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#all-skills-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        All skills at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-curated-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why curated-only
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#top-curated-skills-vendorable-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top curated skills (vendorable now)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Top curated skills (vendorable now)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#engineering-process-obrasuperpowers-mit-251k-stars-as-of-2026-07-11-shipped-as-an-anthropic-marketplace-plugin-in-early-2026-per-the-cited-blog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engineering process — obra/superpowers (MIT, ~251k stars as of 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026" per the cited blog)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontendui-vercel-labsagent-skills-mit-vercel-engineering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend/UI — vercel-labs/agent-skills (MIT, Vercel Engineering)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-agammclaude-code-owasp-mit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security — agamm/claude-code-owasp (MIT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#meta-integration-anthropicsskills-apache-20-per-dir-licensetxt-verified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Meta / integration — anthropics/skills (Apache-2.0, per-dir LICENSE.txt verified)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintainer-skills-wave-operator-directive-2026-07-11-evening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintainer skills wave (operator directive, 2026-07-11 evening)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintainer skills wave (operator directive, 2026-07-11 evening)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#review-uxreview-as-is-improved-or-merged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        review / uxreview: as-is, improved, or merged?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch-tier-not-yet-catalog-pinned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch tier (not yet catalog-pinned)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#excluded-with-reasons-on-the-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Excluded (with reasons on the record)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-curated-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a curated skill
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-curation-does-not-guarantee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What curation does NOT guarantee
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="curated-skills-catalog">Curated skills catalog<a class="headerlink" href="#curated-skills-catalog" title="Permanent link">&para;</a></h1>
+<p>The reviewed, pinned list of third-party skills AbstractFramework can vendor
+onto the shelf — and the reasons. Machine-readable half:
+<a href="../registry/catalog.yaml"><code>registry/catalog.yaml</code></a>. Install path:
+<code>python scripts/vendor_skill.py &lt;name&gt;</code> (curated-only; see
+<a href="#adding-a-curated-skill">Adding a curated skill</a>).</p>
+<p>Curation date: 2026-07-11. Structural facts (paths, frontmatter names,
+licenses, file trees, script presence) were verified against the pinned
+commits directly — never from READMEs or aggregator listings. Body CONTENT
+was read for the vendored entries; an adversarial review additionally
+content-read every top entry and its findings are folded below (one entry
+was pulled for a time-of-use fetch; one carries a content caveat).</p>
+<h2 id="all-skills-at-a-glance">All skills at a glance<a class="headerlink" href="#all-skills-at-a-glance" title="Permanent link">&para;</a></h2>
+<p>Everything the skill seat manages: the vendored shelf (active today) plus
+the curated catalog (vendorable on demand). Descriptions are the
+framework-facing activation lines; links point at the exact pinned source.</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Status</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abstractframework-gateway</code></td>
+<td>shelf (first_party)</td>
+<td>Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent.</td>
+<td><a href="../registry/skills/abstractframework-gateway/SKILL.md">registry/skills/abstractframework-gateway</a></td>
+</tr>
+<tr>
+<td><code>adversarial-iteration</code></td>
+<td>shelf (first_party)</td>
+<td>Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record.</td>
+<td><a href="../registry/skills/adversarial-iteration/SKILL.md">registry/skills/adversarial-iteration</a></td>
+</tr>
+<tr>
+<td><code>agora-collaboration</code></td>
+<td>shelf (first_party)</td>
+<td>Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0).</td>
+<td><a href="../registry/skills/agora-collaboration/SKILL.md">registry/skills/agora-collaboration</a></td>
+</tr>
+<tr>
+<td><code>entity-self-knowledge</code></td>
+<td>shelf (first_party)</td>
+<td>A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules.</td>
+<td><a href="../registry/skills/entity-self-knowledge/SKILL.md">registry/skills/entity-self-knowledge</a></td>
+</tr>
+<tr>
+<td><code>coredoc</code></td>
+<td>shelf (adopted)</td>
+<td>Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code.</td>
+<td><a href="../registry/skills/coredoc/SKILL.md">registry/skills/coredoc</a></td>
+</tr>
+<tr>
+<td><code>backlog</code></td>
+<td>shelf (adopted)</td>
+<td>Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene.</td>
+<td><a href="../registry/skills/backlog/SKILL.md">registry/skills/backlog</a></td>
+</tr>
+<tr>
+<td><code>architect</code></td>
+<td>shelf (adopted)</td>
+<td>Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix — now with premise verification + the engraving gate.</td>
+<td><a href="../registry/skills/architect/SKILL.md">registry/skills/architect</a></td>
+</tr>
+<tr>
+<td><code>adr</code></td>
+<td>shelf (adopted)</td>
+<td>Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with <code>backlog</code>.</td>
+<td><a href="../registry/skills/adr/SKILL.md">registry/skills/adr</a></td>
+</tr>
+<tr>
+<td><code>cicd</code></td>
+<td>shelf (adopted)</td>
+<td>GitHub-based CI/CD: least-privilege workflows, OIDC trusted publishing, docs deployment, release rehearsals, maintenance playbook.</td>
+<td><a href="../registry/skills/cicd/SKILL.md">registry/skills/cicd</a></td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>shelf (adopted)</td>
+<td>Independent evidence-based ship-readiness reviews (correctness / architecture-fit / user-and-operations lenses; Blocking/Conditional/Approved).</td>
+<td><a href="../registry/skills/review/SKILL.md">registry/skills/review</a></td>
+</tr>
+<tr>
+<td><code>uxreview</code></td>
+<td>shelf (adopted)</td>
+<td>Human UX reviews with independent naive/intermediate/expert personas over live UI evidence; code-only review caps the verdict.</td>
+<td><a href="../registry/skills/uxreview/SKILL.md">registry/skills/uxreview</a></td>
+</tr>
+<tr>
+<td><code>verification-before-completion</code></td>
+<td>shelf (adopted) ⚠ content caveat</td>
+<td>Evidence before claims: run the verification commands and read the output before any completion claim. Entity-lane hold until the 0003 audit.</td>
+<td><a href="https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/verification-before-completion">obra/superpowers @ d884ae0</a></td>
+</tr>
+<tr>
+<td><code>test-driven-development</code></td>
+<td>catalog (vendorable)</td>
+<td>Write a failing test before any implementation code, make it pass, then refactor — "test after" is grounds to restart.</td>
+<td><a href="https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/test-driven-development">obra/superpowers @ d884ae0</a></td>
+</tr>
+<tr>
+<td><code>writing-plans</code></td>
+<td>catalog (vendorable)</td>
+<td>Implementation plans detailed enough to execute without guessing: small tasks, named files, tests first.</td>
+<td><a href="https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/writing-plans">obra/superpowers @ d884ae0</a></td>
+</tr>
+<tr>
+<td><code>systematic-debugging</code></td>
+<td>catalog (vendorable, scripts → review)</td>
+<td>Four-phase root-cause process — investigate, pattern analysis, hypothesis testing, then implementation; never fix what you have not understood.</td>
+<td><a href="https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/systematic-debugging">obra/superpowers @ d884ae0</a></td>
+</tr>
+<tr>
+<td><code>vercel-react-best-practices</code></td>
+<td>catalog (vendorable)</td>
+<td>70 impact-prioritized React/Next.js performance rules (waterfalls, bundle size, rendering) for our React UIs.</td>
+<td><a href="https://github.com/vercel-labs/agent-skills/tree/f8a72b9603728bb92a217a879b7e62e43ad76c81/skills/react-best-practices">vercel-labs/agent-skills @ f8a72b9</a></td>
+</tr>
+<tr>
+<td><code>owasp-security</code></td>
+<td>catalog (vendorable)</td>
+<td>OWASP Top 10:2025 + ASVS 5.0 + LLM/agentic-AI review checklists with per-language unsafe/safe pattern examples.</td>
+<td><a href="https://github.com/agamm/claude-code-owasp/tree/f5dfa3d66da1fdfeb36b7428c35b17abaff6465b/.claude/skills/owasp-security">agamm/claude-code-owasp @ f5dfa3d</a></td>
+</tr>
+<tr>
+<td><code>skill-creator</code></td>
+<td>catalog (vendorable, scripts → review)</td>
+<td>Create, improve, and evaluate agent skills (authoring patterns, eval design, description optimization).</td>
+<td><a href="https://github.com/anthropics/skills/tree/9d2f1ae187231d8199c64b5b762e1bdf2244733d/skills/skill-creator">anthropics/skills @ 9d2f1ae</a></td>
+</tr>
+<tr>
+<td><code>mcp-builder</code></td>
+<td>catalog (vendorable, scripts → review)</td>
+<td>Guide for building high-quality MCP servers (tool design, Python FastMCP + TypeScript SDK, evaluation).</td>
+<td><a href="https://github.com/anthropics/skills/tree/9d2f1ae187231d8199c64b5b762e1bdf2244733d/skills/mcp-builder">anthropics/skills @ 9d2f1ae</a></td>
+</tr>
+<tr>
+<td><code>web-design-guidelines</code></td>
+<td>watch (PULLED — time-of-use fetch)</td>
+<td>100+ UI review rules upstream, but the pinned body fetches unpinned rules at use time; re-scope before any vendor.</td>
+<td><a href="https://github.com/vercel-labs/agent-skills/tree/f8a72b9603728bb92a217a879b7e62e43ad76c81/skills/web-design-guidelines">vercel-labs/agent-skills @ f8a72b9</a></td>
+</tr>
+<tr>
+<td><code>brainstorming</code></td>
+<td>watch (demoted)</td>
+<td>Socratic design refinement before code; interactive-session shaped, overlaps the operator's architect skill.</td>
+<td><a href="https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/brainstorming">obra/superpowers @ d884ae0</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-curated-only">Why curated-only<a class="headerlink" href="#why-curated-only" title="Permanent link">&para;</a></h2>
+<p>The 2026 skill ecosystem measures badly: Snyk's ToxicSkills audit found 36.8%
+of 3,984 registry skills flawed, 13.4% critical; a 98,380-skill behavioral
+study confirmed 157 malicious; the AIR incident shipped a post-approval URL
+swap to ~26,000 agents THROUGH three scanners (all figures with their
+references in <a href="../registry/guidance.yaml"><code>registry/guidance.yaml</code></a>). The
+ecosystem's standard installer (<code>npx skills add</code>) symlinks trees with no
+hash pinning, and its own documentation tells users to treat skills as
+unverified code and read them before installing. Curation, commit pins,
+whole-tree hashes, and a fail-closed trust gate are the response — not
+because they certify safety (nothing does; see
+<a href="#what-curation-does-not-guarantee">What curation does NOT guarantee</a>) but
+because they make every admission a reviewed, reproducible, revocable act.</p>
+<p>A finding from this catalog's own adversarial review, now a standing
+curation rule: <strong>a skill body that instructs fetching external instructions
+at use time is a time-of-use fetch — pinning its tree pins a pointer, not
+the rules; it can never be risk-labeled <code>low</code> and must carry an explicit
+note.</strong> (<code>web-design-guidelines</code> was pulled from the vendorable list for
+exactly this; see the watch tier.)</p>
+<h2 id="top-curated-skills-vendorable-now">Top curated skills (vendorable now)<a class="headerlink" href="#top-curated-skills-vendorable-now" title="Permanent link">&para;</a></h2>
+<p>All entries are pinned in <code>registry/catalog.yaml</code>. Risk is the curator's
+reviewed classification (<code>low</code> = text-only reviewed content; <code>moderate</code> =
+scripts present or comparable surface; <code>risky</code> = requires capabilities the
+gate withholds); the structural facts win at the gate regardless
+(scripts-present ⇒ <code>requires_review</code>, whatever the label says). Archetypes:
+<code>knowledge</code> = reference material; <code>procedure</code> = a working method the agent
+follows; <code>meta</code> = skills about skills. License text travels with every
+vendored copy (out-of-tree at <code>registry/licenses/&lt;name&gt;.LICENSE</code>, so the
+pinned tree hash covers only upstream bytes).</p>
+<h3 id="engineering-process-obrasuperpowers-mit-251k-stars-as-of-2026-07-11-shipped-as-an-anthropic-marketplace-plugin-in-early-2026-per-the-cited-blog">Engineering process — <code>obra/superpowers</code> (MIT, ~251k stars as of 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026" per the cited blog)<a class="headerlink" href="#engineering-process-obrasuperpowers-mit-251k-stars-as-of-2026-07-11-shipped-as-an-anthropic-marketplace-plugin-in-early-2026-per-the-cited-blog" title="Permanent link">&para;</a></h3>
+<p>CONCENTRATION, stated as an accepted risk: 4 of the 8 vendorable entries
+share this one source. One compromised maintainer account poisons half the
+list at the next re-pin — mitigations: pins never auto-follow, every re-pin
+is a fresh review, and a cross-reference inventory (superpowers skills
+reference sibling skills that are NOT on our shelf — dangling references are
+squatting surfaces) runs before any re-pin.</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Risk</th>
+<th>What it improves here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test-driven-development</code></td>
+<td>low</td>
+<td>Red/green/refactor discipline for package work; "test after" is grounds to restart.</td>
+</tr>
+<tr>
+<td><code>writing-plans</code></td>
+<td>low</td>
+<td>Small verifiable tasks, files and tests named before code; complements the vendored <code>backlog</code> skill.</td>
+</tr>
+<tr>
+<td><code>verification-before-completion</code></td>
+<td>low</td>
+<td>Evidence before claims — the anti-self-declared-success rule made procedural. <strong>Vendored</strong> (the catalog's first live entry). CONTENT CAVEAT: its "Why This Matters" section carries identity-adjacent framing ("If you lie, you'll be replaced"; second-person failure memories) — fine for developer agents, <strong>not for entity sessions</strong> before the 0003 audit rules on it; the caveat travels in the validation record.</td>
+</tr>
+<tr>
+<td><code>systematic-debugging</code></td>
+<td>moderate</td>
+<td>Four-phase root-cause process that forbids fixing what is not understood. Ships one helper script → <code>requires_review</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="frontendui-vercel-labsagent-skills-mit-vercel-engineering">Frontend/UI — <code>vercel-labs/agent-skills</code> (MIT, Vercel Engineering)<a class="headerlink" href="#frontendui-vercel-labsagent-skills-mit-vercel-engineering" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Risk</th>
+<th>What it improves here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vercel-react-best-practices</code></td>
+<td>low</td>
+<td>70 rules at the pin (the cited blog describes an earlier 40+ snapshot), impact-prioritized React/Next.js performance guidance for our React UIs. Next.js-heavy — a portion won't apply to our Vite apps; the React/JS rules do. Note: upstream dir is <code>react-best-practices</code>; the frontmatter name (the shelf key) is <code>vercel-react-best-practices</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="security-agammclaude-code-owasp-mit">Security — <code>agamm/claude-code-owasp</code> (MIT)<a class="headerlink" href="#security-agammclaude-code-owasp-mit" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Risk</th>
+<th>What it improves here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>owasp-security</code></td>
+<td>low</td>
+<td>OWASP Top 10:2025 + ASVS 5.0 + LLM/Agentic top-10 checklists with per-language unsafe/safe pattern EXAMPLES (20+ languages at ~half a KB each — pointers, not depth). Single-author provenance: reviewed at the pin; re-review on every re-pin. Persuasive-content risk is invisible to <code>has_scripts</code> — a poisoned security checklist steers reviews wrong; that is exactly why re-pin review is mandatory.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="meta-integration-anthropicsskills-apache-20-per-dir-licensetxt-verified">Meta / integration — <code>anthropics/skills</code> (Apache-2.0, per-dir LICENSE.txt verified)<a class="headerlink" href="#meta-integration-anthropicsskills-apache-20-per-dir-licensetxt-verified" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Risk</th>
+<th>What it improves here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>skill-creator</code></td>
+<td>moderate</td>
+<td>Anthropic's skill authoring + eval methodology; feeds our first-party authoring and the 0003 behavioral-audit harness design. Python eval scripts present → <code>requires_review</code>.</td>
+</tr>
+<tr>
+<td><code>mcp-builder</code></td>
+<td>moderate</td>
+<td>MCP server design guidance (FastMCP/TS SDK, tool design, evaluation) — we build and consume MCP integrations. Helper scripts present → <code>requires_review</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="maintainer-skills-wave-operator-directive-2026-07-11-evening">Maintainer skills wave (operator directive, 2026-07-11 evening)<a class="headerlink" href="#maintainer-skills-wave-operator-directive-2026-07-11-evening" title="Permanent link">&para;</a></h2>
+<p>Five of the maintainer's own codex skills were evaluated and vendored
+(source <code>codex-skills (maintainer)</code>, <code>first-party-adoption</code> → adopted, same
+path as coredoc/backlog):</p>
+<ul>
+<li><strong><code>architect</code></strong> — vendored WITH two upstream improvements first (operator
+  asked for improvement based on this seat's findings): (1) an Evidence
+  Contract rule — verify each load-bearing premise against the current
+  tree/running state before arguing from it (premise decay is the most
+  recurrent architecture failure in this workspace's record: the phantom
+  run-store premise, stale-envelope answers, this catalog's own structural-
+  not-content P0); (2) an "engraving" Architecture Gate + one-concept-one-name
+  anti-pattern (names that reach append-only state are effectively
+  irreversible — the phase-rename and personal_grant lessons). Two matching
+  distilled principles landed in its <code>reviewer-memory.md</code>.</li>
+<li><strong><code>adr</code></strong> — vendored as-is: complements the already-vendored <code>backlog</code>
+  (the two texts cross-own their boundary explicitly), and most framework
+  repos have no ADR system yet — this seat's own backlog notes the gap.</li>
+<li><strong><code>cicd</code></strong> — vendored WITH upstream repairs first (its adversary found the
+  copy-paste examples had rotted): the npm trusted-publishing job shipped
+  broken (Node 22's bundled npm predates the ≥ 11.5.1 OIDC floor — silent
+  no-handshake, confusing E404; now Node 24 + the floor stated), stale
+  hardcoded action majors replaced with <code>&lt;current-major&gt;</code> placeholders + a
+  version-policy line per reference (the node20 runner cutover would have
+  hard-broken them by 2026-09), the build/publish artifact-name mismatch
+  unified, <code>npm trust</code> gained the now-required <code>--allow-publish</code> + the
+  11.10.0 floor, the audit checklist gained the two dominant Actions
+  vulnerability classes (untrusted <code>${{ github.event.* }}</code> interpolation;
+  <code>pull_request_target</code> misuse) + SHA-pinning of third-party actions, and an
+  unused <code>attestations: write</code> permission was dropped (least-privilege).
+  Note: references the <code>release</code> skill, which is NOT on the shelf (dangling
+  cross-skill references are inert in our loader; they are also squatting
+  surfaces, so they are inventoried — the <code>references_skills</code> admission item
+  queued in the trust backlog). Its adversary's fleet-consistency suggestion
+  (reusable <code>workflow_call</code> shapes + cross-repo drift audit) is recorded as
+  an upstream candidate.</li>
+<li><strong><code>review</code> + <code>uxreview</code></strong> — EVALUATED: keep BOTH, separate, as-is (verdict
+  argued below).</li>
+</ul>
+<h3 id="review-uxreview-as-is-improved-or-merged">review / uxreview: as-is, improved, or merged?<a class="headerlink" href="#review-uxreview-as-is-improved-or-merged" title="Permanent link">&para;</a></h3>
+<p><strong>Keep both, separate.</strong> They occupy different phases and compose by
+explicit contract rather than overlapping:</p>
+<ul>
+<li><code>adversarial-iteration</code> (first-party) is FORMATIVE — the improvement loop
+  DURING work (attack, fold, iterate).</li>
+<li><code>review</code> is SUMMATIVE — the final ship-readiness gate (Blocking /
+  Conditional Approval / Approved), with an evidence cap (uninspectable
+  artifact ⇒ at best Conditional).</li>
+<li><code>uxreview</code> is the SPECIALIST persona swarm (naive/intermediate/expert;
+  live UI evidence preferred, code-only review caps the verdict at
+  Conditional) — and <code>review</code>'s own text already delegates to it ("uxreview
+  owns specialist human-usable verdicts") while <code>uxreview</code> refuses to be
+  silently replaced.</li>
+<li>Why NOT merge (the load-bearing reasons, adversary-sharpened): a merged
+  skill would FORK the maintainer's upstream — the re-vendor path and
+  <code>codex-skills (maintainer)</code> provenance die and maintenance transfers to
+  this seat; and activation precision is lost — the two descriptions trigger
+  on disjoint task shapes, so a merged body pays uxreview's persona charters
+  on every pure-backend review and vice versa. (A merged body COULD keep the
+  persona-independence text as a section — that alone would not have decided
+  it.)</li>
+<li>Framework interest is HIGH for both: three user-facing apps (abstractflow,
+  abstractobserver, abstractassistant) plus the shared UI kit (abstractuic)
+  get a repeatable UX gate; the room's review culture gets ship-verdict
+  vocabulary distinct from the formative loop — and <code>adversarial-iteration</code>
+  now carries the composition note in its own body (formative loop → review
+  owns ship-readiness; explicit-request idiom translated), so the system
+  contract reaches consumers at activation time, not just in this document.</li>
+<li>Considered and rejected: extracting the shared reviewer machinery
+  (fallback rules, output-format scaffolding, reviewer-memory pattern) into a
+  common reference. Skills are independently vendorable trees — a shared
+  dependency would be unreachable (<code>read_skill_resource</code> refuses paths
+  outside the tree) and unpinned (<code>hash_skill_tree</code> covers only the skill
+  dir); duplication across independently distributable skills is the right
+  trade.</li>
+<li>Field-memory caveat (all three reviewer skills ship a
+  <code>references/reviewer-memory.md</code> that says "update it during
+  skill-maintenance work"): on THIS shelf those are byte-frozen vendored
+  copies — updates happen UPSTREAM, then re-vendor + re-pin; never edit the
+  vendored tree (the byte pins in <code>scripts/refresh_shelf.py</code> now refuse
+  exactly that).</li>
+</ul>
+<h2 id="watch-tier-not-yet-catalog-pinned">Watch tier (not yet catalog-pinned)<a class="headerlink" href="#watch-tier-not-yet-catalog-pinned" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>web-design-guidelines</code></strong> (vercel-labs, PULLED from the top list —
+  adversary finding, P0): at the pinned commit the body is a time-of-use
+  fetch stub ("fetch fresh guidelines before each review" from
+  <code>web-interface-guidelines@main</code>) — the tree hash pins a pointer, not
+  rules. Re-scope path: pin <code>vercel-labs/web-interface-guidelines</code> at a
+  commit and vendor the actual rules document (license check first).</li>
+<li><strong><code>brainstorming</code></strong> (obra/superpowers, demoted): thinnest improves case;
+  interactive-session shaped (ships a local visual-companion server); the
+  operator already runs an <code>architect</code> skill covering pre-code design
+  exploration.</li>
+<li><strong>Python-lane candidates (named gap)</strong>: the framework is Python-dominant
+  (five packages, FastAPI, pytest-heavy) and the catalog currently gives
+  Python nothing. Research targets: pytest discipline packs, FastAPI/API
+  design guidance, and superpowers <code>requesting-code-review</code> /
+  <code>receiving-code-review</code> for the adversarial-review culture — noting the
+  latter deepen the single-source concentration.</li>
+<li><strong>Trail of Bits skills</strong> (<code>trailofbits/skills</code>, CC-BY-SA-4.0):
+  <code>differential-review</code>, <code>audit-context-building</code> are procedure packs aligned
+  with our adversarial process; most others run scanners. Plugin-shaped
+  layout needs per-skill path verification before pinning; share-alike
+  license noted.</li>
+<li><strong><code>hashicorp/agent-skills</code></strong> (MPL-2.0): <code>terraform-style-guide</code> is a clean
+  knowledge pack — admit when the framework actually touches IaC.</li>
+<li><strong><code>anthropics/skills</code> extras</strong>: <code>frontend-design</code> (aesthetic direction —
+  NOTE: its per-dir LICENSE.txt differs from the Apache text in
+  skill-creator/mcp-builder; verify before pinning) and <code>doc-coauthoring</code> —
+  candidates after the first wave proves the usage loop.</li>
+</ul>
+<h2 id="excluded-with-reasons-on-the-record">Excluded (with reasons on the record)<a class="headerlink" href="#excluded-with-reasons-on-the-record" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Anthropic document skills</strong> (<code>docx</code>/<code>pdf</code>/<code>pptx</code>/<code>xlsx</code>): source-available
+  (NOT open source — redistribution unclear for vendored byte-copies) and
+  script-execution-dependent; decorative without script enablement.</li>
+<li><strong><code>webapp-testing</code></strong>: requires browser + script execution; the gate
+  deliberately withholds both today.</li>
+<li><strong>Deep-research packs</strong> (8-phase research pipelines, scholar tools):
+  network + scripts by design; admit only when script/network enablement
+  exists so they are not decorative.</li>
+<li><strong>Aggregators</strong> (<code>VoltAgent/awesome-agent-skills</code> and similar): discovery
+  surfaces, not vendoring sources — every admission pins the ORIGINAL
+  author's repo. An aggregator in the middle is a supply-chain hop that adds
+  nothing but risk.</li>
+</ul>
+<h2 id="adding-a-curated-skill">Adding a curated skill<a class="headerlink" href="#adding-a-curated-skill" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code># 1. list what the catalog offers
+python scripts/vendor_skill.py --list
+
+# 2. vendor a pinned entry (fetches the exact commit, validates, hashes)
+python scripts/vendor_skill.py &lt;name&gt;
+
+# 3. review the vendored diff, then pin it in registry/catalog.yaml
+#    (expected_tree_hash + vendored: true — printed by step 2)
+
+# 4. regenerate the trust registry (validation records derive from the catalog)
+python scripts/refresh_shelf.py
+
+# 5. update the admission pins in tests/test_shelf.py — EXPECTED_SHELF,
+#    EXPECTED_LEVELS, EXPECTED_SOURCES (and EXPECTED_SCRIPTS_BEARING for a
+#    scripts-bearing skill). The pins are the review&#39;s second signature:
+#    a red suite here is the gate asking for your deliberate sign-off.
+python -m pytest -q
+</code></pre></div>
+<p>Never add a <code>SHELF_POLICY</code> entry for a catalog skill — the validation record
+derives from the catalog entry, and <code>refresh_shelf.py</code> refuses the collision
+(a hand-written policy would silently drop the byte-pin cross-check).</p>
+<p>The vendor script refuses: names not in the catalog (curated-only is
+structural), symlinked upstream trees, frontmatter/catalog name mismatches,
+spec-invalid skills, and — after first pinning — any byte drift from
+<code>expected_tree_hash</code>. Git runs with ambient config neutralized (no user
+hooks/filters can act during fetch), and VCS/OS-junk files never reach the
+shelf (the copy set equals the hash set). New skills enter as
+<code>manual-review</code> → <code>adopted</code> (the method caps the level; <code>audited</code> requires
+the 0003 behavioral harness).</p>
+<p>Trust floor, stated honestly: the FIRST vendoring of an entry trusts git's
+commit-hash verification (SHA-1DC) plus the curator's human diff review — the
+SHA-256 whole-tree pin exists only from that point on. Every re-vendor is
+then byte-verified end to end.
+Scripts-bearing skills surface as <code>requires_review</code> at
+<code>select_skills_for_context</code> until an operator explicitly enables them —
+enablement is the approval act, and script EXECUTION additionally requires
+a tool grant that simply does not exist today.</p>
+<h2 id="what-curation-does-not-guarantee">What curation does NOT guarantee<a class="headerlink" href="#what-curation-does-not-guarantee" title="Permanent link">&para;</a></h2>
+<p>A catalog entry attests that a named reviewer read the tree at a pinned
+commit and recorded why it helps this framework. It does not certify the
+skill is benign (semantic evasion beats any review), does not cover upstream
+behavior outside the pinned bytes, and says nothing about conditional
+triggers a reading cannot see. The trust ladder's honest-limits contract
+travels with every badge: never render the word "safe" (the risk column
+deliberately says <code>low</code>, not <code>safe</code>, for the same reason).</p>
+<p>Independence disclosure: at v1, curation, vendoring, and validation are the
+same seat's single review (<code>validated_by: skill</code>) — the method cap makes
+"reviewed ≠ audited" structural, and independent signal arrives with the
+0003 behavioral-audit harness and external-audit records.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
