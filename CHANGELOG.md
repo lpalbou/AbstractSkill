@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.2.0] - 2026-08-06
+
+### Added
+
+- Trust-gated activation pipeline: `select_skills_for_context`, `SkillSelection`,
+  hash-pinned enables, TOCTOU cross-checks, and declared MCP/tool dependency
+  surfacing (`SkillRequires`).
+- Fail-closed trust registry: `TrustRegistry`, `evaluate_trust`, validation
+  records, do-not-use advisories, guidance entries, and `lint_registry`.
+- Curated vendoring catalog: `load_catalog`, `CatalogEntry`, `SkillCatalog`,
+  `lint_catalog`, plus `scripts/vendor_skill.py` and `scripts/refresh_shelf.py`.
+- Whole-tree hashing and inventory: `hash_skill_tree`, `inspect_skill_dir`,
+  `read_skill_resource` with traversal/symlink refusal.
+- Derived demand tiering: `derive_demand`, `DemandReport`, `DemandRow` — host
+  inventory join for declared tool/MCP requirements (informational; grants
+  enforced by the host).
+- Tool composition: `effective_tools`, `effective_tools_for_skill` (grant ∩
+  declared; never widens).
+- 14 curated skills under `registry/skills/` with byte-pinned validations.
+- GitHub Pages documentation workflow (MkDocs Material).
+
+### Changed
+
+- Development status bumped to Beta (4).
+- Expanded API surface exported from `abstractskill.__init__`.
+
 ## 2026-07-23 (later) — wire flip to the settled trio: risk_rank ordinal, risk_tier band word
 
 - `abstractskill.demand` reader flipped same-day per the room's settled

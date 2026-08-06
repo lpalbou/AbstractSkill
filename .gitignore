@@ -30,6 +30,11 @@ venv/
 # macOS
 .DS_Store
 
+# MkDocs
+site/
+docs/changelog.md
+docs/security.md
+
 # Secrets
 *.key
 *.pem
