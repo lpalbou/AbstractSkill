@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from abstractskill import FilesystemSkillLoader, SkillNotFoundError
+from abstractskill import FilesystemSkillLoader, SkillNotFoundError, SkillParseError
 
 
 def _write_skill(root: Path, name: str, description: str) -> None:
@@ -88,8 +88,6 @@ def test_load_and_discover_agree_when_override_copy_is_broken(tmp_path: Path) ->
 
 
 def test_load_raises_parse_error_when_only_broken_copies_exist(tmp_path: Path) -> None:
-    from abstractskill import SkillParseError
-
     _write_broken_skill(tmp_path, "broken-skill")
     loader = FilesystemSkillLoader([tmp_path])
     with pytest.raises(SkillParseError):
@@ -103,3 +101,48 @@ def test_load_rejects_traversal_shaped_names(tmp_path: Path) -> None:
     loader = FilesystemSkillLoader([tmp_path])
     with pytest.raises(SkillValidationError):
         loader.load("../good-skill")
+
+
+def test_unreadable_override_copy_falls_back_loudly(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    user_root = tmp_path / "user"
+    project_root = tmp_path / "project"
+    _write_skill(user_root, "shared-skill", "Valid user copy")
+    _write_skill(project_root, "shared-skill", "Unreadable override")
+    unreadable = project_root / "shared-skill" / "SKILL.md"
+
+    original = Path.read_bytes
+
+    def _read_bytes(path: Path) -> bytes:
+        if path == unreadable:
+            raise OSError("permission denied")
+        return original(path)
+
+    monkeypatch.setattr(Path, "read_bytes", _read_bytes)
+
+    warnings: list[str] = []
+    loader = FilesystemSkillLoader([user_root, project_root])
+
+    discovered = loader.discover(on_warning=warnings.append)
+    assert [skill.name for skill in discovered] == ["shared-skill"]
+    assert discovered[0].description == "Valid user copy"
+
+    loaded = loader.load("shared-skill", on_warning=warnings.append)
+    assert loaded.root_dir == user_root / "shared-skill"
+    assert any("permission denied" in message for message in warnings)
+
+
+def test_unreadable_only_copy_raises_parse_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    _write_skill(tmp_path, "demo-skill", "Unreadable only copy")
+    unreadable = tmp_path / "demo-skill" / "SKILL.md"
+    original = Path.read_bytes
+
+    def _read_bytes(path: Path) -> bytes:
+        if path == unreadable:
+            raise OSError("permission denied")
+        return original(path)
+
+    monkeypatch.setattr(Path, "read_bytes", _read_bytes)
+
+    loader = FilesystemSkillLoader([tmp_path])
+    with pytest.raises(SkillParseError, match="unable to read SKILL.md"):
+        loader.load("demo-skill")

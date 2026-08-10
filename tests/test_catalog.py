@@ -75,6 +75,24 @@ def test_vendored_requires_hash() -> None:
     assert entry.expected_tree_hash == TREE
 
 
+def test_from_dict_string_false_does_not_enable_vendored() -> None:
+    entry = CatalogEntry.from_dict(
+        {
+            "name": "demo-skill",
+            "source": "owner/repo",
+            "repo": "owner/repo",
+            "upstream_ref": SHA,
+            "subdir": "skills/demo-skill",
+            "license": "MIT",
+            "archetype": "knowledge",
+            "risk": "low",
+            "improves": "testing",
+            "vendored": "false",
+        }
+    )
+    assert entry.vendored is False
+
+
 def test_load_catalog_duplicate_names_refused(tmp_path: Path) -> None:
     doc = f"""
 skills:

@@ -36,7 +36,7 @@ from typing import Any, Iterable, Mapping
 import yaml
 
 from abstractskill.errors import SkillValidationError
-from abstractskill.validation import validate_skill_name
+from abstractskill.validation import coerce_bool_flag, validate_skill_name
 
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 _TREE_HASH_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -197,7 +197,10 @@ class CatalogEntry:
             expected_tree_hash=(
                 str(data["expected_tree_hash"]) if data.get("expected_tree_hash") else None
             ),
-            vendored=bool(data.get("vendored", False)),
+            vendored=coerce_bool_flag(
+                data.get("vendored", False),
+                field_name="CatalogEntry.vendored",
+            ),
             evidence=tuple(str(u) for u in raw_evidence),
             notes=(str(data["notes"]) if data.get("notes") else None),
         )

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from typing import Any
 
 from abstractskill.errors import SkillValidationError
 
@@ -15,6 +16,29 @@ SKILL_FILENAME = "SKILL.md"
 MAX_NAME_LENGTH = 64
 MAX_DESCRIPTION_LENGTH = 1024
 MAX_COMPATIBILITY_LENGTH = 500
+
+
+def coerce_bool_flag(value: Any, *, field_name: str) -> bool:
+    """Parse a structured-data boolean without Python truthiness traps.
+
+    ``bool("false")`` is ``True`` in Python, so config/registry readers
+    must never use bare ``bool(...)`` on YAML/JSON scalars. Accept the
+    common boolean spellings and refuse everything else loudly.
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int) and value in (0, 1):
+        return bool(value)
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered in {"true", "yes", "1", "on"}:
+            return True
+        if lowered in {"false", "no", "0", "off"}:
+            return False
+    raise SkillValidationError(
+        f"{field_name} must be a boolean or boolean-like scalar "
+        "('true'/'false', 'yes'/'no', '1'/'0', 'on'/'off')"
+    )
 
 
 def validate_skill_name(name: str) -> str:

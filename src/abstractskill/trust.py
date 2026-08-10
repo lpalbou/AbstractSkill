@@ -45,6 +45,7 @@ from typing import Any, Iterable, Mapping
 import yaml
 
 from abstractskill.errors import SkillValidationError
+from abstractskill.validation import coerce_bool_flag
 
 logger = logging.getLogger("abstractskill")
 
@@ -293,7 +294,10 @@ class ValidationRecord:
                 str(data["activation_description"]) if data.get("activation_description") else None
             ),
             audience=str(data.get("audience") or "host"),
-            delivered_via_map=bool(data.get("delivered_via_map", False)),
+            delivered_via_map=coerce_bool_flag(
+                data.get("delivered_via_map", False),
+                field_name="ValidationRecord.delivered_via_map",
+            ),
         )
 
 

@@ -42,7 +42,10 @@ def _read_skill_text(skill_file: Path) -> tuple[str, str]:
     (adversary-found when multi-root selection made user dirs a designed
     configuration).
     """
-    raw = skill_file.read_bytes()
+    try:
+        raw = skill_file.read_bytes()
+    except OSError as exc:
+        raise SkillParseError(f"unable to read SKILL.md at {skill_file}: {exc}") from exc
     try:
         text = raw.decode("utf-8")
     except UnicodeDecodeError as exc:
@@ -80,7 +83,12 @@ class FilesystemSkillLoader:
         for root in self._roots:
             if not root.is_dir():
                 continue
-            for child in sorted(root.iterdir()):
+            try:
+                children = sorted(root.iterdir())
+            except OSError as exc:
+                _warn(f"#FALLBACK: skipping unreadable skill root {root}: {exc}", on_warning)
+                continue
+            for child in children:
                 if not child.is_dir():
                     continue
                 skill_file = child / SKILL_FILENAME

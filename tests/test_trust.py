@@ -313,6 +313,23 @@ def test_non_mapping_evidence_refused_at_load(tmp_path: Path) -> None:
         TrustRegistry.load(validations_path=path)
 
 
+def test_delivered_via_map_string_false_stays_false() -> None:
+    record = ValidationRecord.from_dict(
+        {
+            "name": "x",
+            "source": "s",
+            "tree_hash": HASH_A,
+            "level": "adopted",
+            "method": "manual-review",
+            "validated_by": "skill",
+            "validated_at": "2026-07-19",
+            "audience": "host",
+            "delivered_via_map": "false",
+        }
+    )
+    assert record.delivered_via_map is False
+
+
 def test_duplicate_guidance_id_refused() -> None:
     g = GuidanceEntry(
         guidance_id="G", title="t", risk_class="r", detail="d",
