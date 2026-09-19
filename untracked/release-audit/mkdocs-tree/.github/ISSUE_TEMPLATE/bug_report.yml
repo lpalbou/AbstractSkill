@@ -1,0 +1,65 @@
+name: Bug report
+description: Report a reproducible AbstractSkill bug
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Include enough detail to reproduce the parser, loader, or packaging behavior.
+  - type: input
+    id: version
+    attributes:
+      label: AbstractSkill version
+      description: Output of `python -c "from importlib.metadata import version; print(version('abstractskill'))"`
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - parser
+        - loader
+        - validation
+        - prompt formatting
+        - packaging/install
+        - documentation
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened?
+      description: Describe the incorrect behavior, including exact errors or unexpected skill output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Include commands, Python snippets, and sample SKILL.md content.
+      placeholder: |
+        1. Parse SKILL.md with ...
+        2. Discover skills from ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, installed extras, and relevant package versions.
+      placeholder: |
+        macOS 15, Python 3.12
+        pip install "abstractskill[test]"
+    validations:
+      required: true

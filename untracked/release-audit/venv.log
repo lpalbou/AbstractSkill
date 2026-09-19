@@ -1,0 +1,19 @@
+Processing ./.
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting PyYAML>=6.0 (from abstractskill==0.2.0)
+  Using cached pyyaml-6.0.3-cp312-cp312-macosx_11_0_arm64.whl.metadata (2.4 kB)
+Using cached pyyaml-6.0.3-cp312-cp312-macosx_11_0_arm64.whl (173 kB)
+Building wheels for collected packages: abstractskill
+  Building wheel for abstractskill (pyproject.toml): started
+  Building wheel for abstractskill (pyproject.toml): finished with status 'done'
+  Created wheel for abstractskill: filename=abstractskill-0.2.0-py3-none-any.whl size=53493 sha256=e3bee5f80e92b3f2dde785c97764c26a717299dd38b36a43aa2d04528b86a9ef
+  Stored in directory: /private/var/folders/2n/0v7_ckq916q9s57rj5kymkj40000gn/T/pip-ephem-wheel-cache-yh1slcdy/wheels/1f/22/97/a0cf8934b243260520ac489fc338162a6ad8e8df8b68d2b1ec
+Successfully built abstractskill
+Installing collected packages: PyYAML, abstractskill
+
+Successfully installed PyYAML-6.0.3 abstractskill-0.2.0

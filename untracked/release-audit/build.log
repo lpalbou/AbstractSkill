@@ -1,0 +1,158 @@
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=77.0.0
+  - wheel
+* Getting build dependencies for sdist...
+running egg_info
+writing src/abstractskill.egg-info/PKG-INFO
+writing dependency_links to src/abstractskill.egg-info/dependency_links.txt
+writing requirements to src/abstractskill.egg-info/requires.txt
+writing top-level names to src/abstractskill.egg-info/top_level.txt
+reading manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.0.0
+  - wheel==0.48.0
+* Building sdist...
+running sdist
+running egg_info
+writing src/abstractskill.egg-info/PKG-INFO
+writing dependency_links to src/abstractskill.egg-info/dependency_links.txt
+writing requirements to src/abstractskill.egg-info/requires.txt
+writing top-level names to src/abstractskill.egg-info/top_level.txt
+reading manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+running check
+creating abstractskill-0.2.0
+creating abstractskill-0.2.0/src/abstractskill
+creating abstractskill-0.2.0/src/abstractskill.egg-info
+creating abstractskill-0.2.0/tests
+copying files to abstractskill-0.2.0...
+copying LICENSE -> abstractskill-0.2.0
+copying README.md -> abstractskill-0.2.0
+copying pyproject.toml -> abstractskill-0.2.0
+copying src/abstractskill/__init__.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/catalog.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/demand.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/errors.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/hash.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/loader.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/models.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/parser.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/policy.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/prompt.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/selection.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/tree.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/trust.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill/validation.py -> abstractskill-0.2.0/src/abstractskill
+copying src/abstractskill.egg-info/PKG-INFO -> abstractskill-0.2.0/src/abstractskill.egg-info
+copying src/abstractskill.egg-info/SOURCES.txt -> abstractskill-0.2.0/src/abstractskill.egg-info
+copying src/abstractskill.egg-info/dependency_links.txt -> abstractskill-0.2.0/src/abstractskill.egg-info
+copying src/abstractskill.egg-info/requires.txt -> abstractskill-0.2.0/src/abstractskill.egg-info
+copying src/abstractskill.egg-info/top_level.txt -> abstractskill-0.2.0/src/abstractskill.egg-info
+copying tests/test_audience.py -> abstractskill-0.2.0/tests
+copying tests/test_catalog.py -> abstractskill-0.2.0/tests
+copying tests/test_demand.py -> abstractskill-0.2.0/tests
+copying tests/test_loader.py -> abstractskill-0.2.0/tests
+copying tests/test_parser.py -> abstractskill-0.2.0/tests
+copying tests/test_policy.py -> abstractskill-0.2.0/tests
+copying tests/test_refresh_shelf_pins.py -> abstractskill-0.2.0/tests
+copying tests/test_selection.py -> abstractskill-0.2.0/tests
+copying tests/test_shelf.py -> abstractskill-0.2.0/tests
+copying tests/test_tree.py -> abstractskill-0.2.0/tests
+copying tests/test_trust.py -> abstractskill-0.2.0/tests
+copying tests/test_vendor_script.py -> abstractskill-0.2.0/tests
+Writing abstractskill-0.2.0/setup.cfg
+Creating tar archive
+removing 'abstractskill-0.2.0' (and everything under it)
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=77.0.0
+  - wheel
+* Getting build dependencies for wheel...
+running egg_info
+writing src/abstractskill.egg-info/PKG-INFO
+writing dependency_links to src/abstractskill.egg-info/dependency_links.txt
+writing requirements to src/abstractskill.egg-info/requires.txt
+writing top-level names to src/abstractskill.egg-info/top_level.txt
+reading manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.0.0
+  - wheel==0.48.0
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build/lib/abstractskill
+copying src/abstractskill/catalog.py -> build/lib/abstractskill
+copying src/abstractskill/demand.py -> build/lib/abstractskill
+copying src/abstractskill/tree.py -> build/lib/abstractskill
+copying src/abstractskill/models.py -> build/lib/abstractskill
+copying src/abstractskill/policy.py -> build/lib/abstractskill
+copying src/abstractskill/__init__.py -> build/lib/abstractskill
+copying src/abstractskill/parser.py -> build/lib/abstractskill
+copying src/abstractskill/hash.py -> build/lib/abstractskill
+copying src/abstractskill/loader.py -> build/lib/abstractskill
+copying src/abstractskill/trust.py -> build/lib/abstractskill
+copying src/abstractskill/errors.py -> build/lib/abstractskill
+copying src/abstractskill/selection.py -> build/lib/abstractskill
+copying src/abstractskill/prompt.py -> build/lib/abstractskill
+copying src/abstractskill/validation.py -> build/lib/abstractskill
+running egg_info
+writing src/abstractskill.egg-info/PKG-INFO
+writing dependency_links to src/abstractskill.egg-info/dependency_links.txt
+writing requirements to src/abstractskill.egg-info/requires.txt
+writing top-level names to src/abstractskill.egg-info/top_level.txt
+reading manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src/abstractskill.egg-info/SOURCES.txt'
+installing to build/bdist.macosx-26.3-arm64/wheel
+running install
+running install_lib
+creating build/bdist.macosx-26.3-arm64/wheel
+creating build/bdist.macosx-26.3-arm64/wheel/abstractskill
+copying build/lib/abstractskill/catalog.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/demand.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/tree.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/models.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/policy.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/__init__.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/parser.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/hash.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/loader.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/trust.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/errors.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/selection.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/prompt.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+copying build/lib/abstractskill/validation.py -> build/bdist.macosx-26.3-arm64/wheel/./abstractskill
+running install_egg_info
+Copying src/abstractskill.egg-info to build/bdist.macosx-26.3-arm64/wheel/./abstractskill-0.2.0-py3.12.egg-info
+running install_scripts
+creating build/bdist.macosx-26.3-arm64/wheel/abstractskill-0.2.0.dist-info/WHEEL
+creating '/Users/albou/tmp/abstractframework/abstractskill/untracked/release-audit/build-out/.tmp-5eudrw0p/abstractskill-0.2.0-py3-none-any.whl' and adding 'build/bdist.macosx-26.3-arm64/wheel' to it
+adding 'abstractskill/__init__.py'
+adding 'abstractskill/catalog.py'
+adding 'abstractskill/demand.py'
+adding 'abstractskill/errors.py'
+adding 'abstractskill/hash.py'
+adding 'abstractskill/loader.py'
+adding 'abstractskill/models.py'
+adding 'abstractskill/parser.py'
+adding 'abstractskill/policy.py'
+adding 'abstractskill/prompt.py'
+adding 'abstractskill/selection.py'
+adding 'abstractskill/tree.py'
+adding 'abstractskill/trust.py'
+adding 'abstractskill/validation.py'
+adding 'abstractskill-0.2.0.dist-info/licenses/LICENSE'
+adding 'abstractskill-0.2.0.dist-info/METADATA'
+adding 'abstractskill-0.2.0.dist-info/WHEEL'
+adding 'abstractskill-0.2.0.dist-info/top_level.txt'
+adding 'abstractskill-0.2.0.dist-info/RECORD'
+removing build/bdist.macosx-26.3-arm64/wheel
+Successfully built abstractskill-0.2.0.tar.gz and abstractskill-0.2.0-py3-none-any.whl

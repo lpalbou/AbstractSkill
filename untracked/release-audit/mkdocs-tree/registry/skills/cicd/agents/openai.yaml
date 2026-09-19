@@ -1,0 +1,4 @@
+interface:
+  display_name: "CI/CD"
+  short_description: "Build and maintain GitHub Actions CI/CD"
+  default_prompt: "Use $cicd to bootstrap or repair GitHub Actions CI/CD, package publishing, docs deployment, and repository setup."

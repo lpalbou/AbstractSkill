@@ -1,0 +1,24 @@
+# AbstractSkill do-not-use advisory registry (maintainer directive 2026-07-11).
+#
+# SPECIFIC skills people should NOT use, based on OUR findings. Every entry
+# carries the four mandated fields — (a) official_intent, (b) hidden_issue,
+# (c) severity, (d) reference — and identifies a specific skill by tree_hash
+# (exact bytes, strong) or name+source (weaker fallback). A do-not-use
+# advisory MUST be able to match a real skill; category-level risk notices
+# that name no specific skill live in guidance.yaml instead (they inform, they
+# do not forbid a specific skill).
+#
+# Severity is graded and the verdict honors it: critical/high hard-BLOCK;
+# medium/low force REVIEW. Hash-matched advisories always block. Advisories are
+# corrected by WITHDRAWAL (status: withdrawn + reason + date), never deletion.
+#
+# This registry is intentionally EMPTY at v1: abstractskill has not yet run its
+# own behavioral audits (backlog 0003) and has not adopted an external trust
+# feed (backlog 0004), so it asserts no specific malicious skill on its own
+# authority — asserting a specific skill wrongly is itself harmful. Class-level
+# protection is active NOW via guidance.yaml, the fail-closed UNVERIFIED
+# default (unknown skills require review), and the has_scripts review gate.
+# Specific entries are added as audits and leveraged external findings identify
+# real skills, each with its four fields and a verifiable reference.
+
+advisories: []

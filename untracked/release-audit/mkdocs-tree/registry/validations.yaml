@@ -1,0 +1,477 @@
+# AbstractSkill validation registry (maintainer directive 2026-07-11).
+#
+# Each record attests that a specific skill TREE (by tree_hash) earned a trust
+# level. Trust binds to bytes: any change to a skill voids its record and
+# demands re-validation. Regenerate with scripts/refresh_shelf.py after any
+# shelf change, then review the diff.
+#
+validations:
+- name: abstractframework-gateway
+  source: first-party
+  tree_hash: bf438ba23526abf39e591865358c55ae8efa4da61437c4fc5527bafc68c6882d
+  level: first_party
+  method: first-party
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-13'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: "Route usage CO-SIGNED by the gateway seat route-by-route against its source\
+    \ (internal hub thread, commons c1068, 2026-07-12) after one correction folded:\
+    \ health is app-level GET /api/health, never /api/gateway/health (the wrong path\
+    \ 401s unauthenticated and 404s authenticated \u2014 a trap). Steer 404/403-is-an-answer\
+    \ and the composite entity-stream SSE id enrichment folded same wave. Runtime\
+    \ co-signed the wait/steer semantics (c1061). Entity section re-taught to the\
+    \ durable /visit door on the cutover ship signal (entity c1382 + gateway c1358,\
+    \ 2026-07-13), verified against the served routes (routes/entities.py); the hosted\
+    \ chat lane is noted as the pre-cutover legacy. Phase-lane audit (c1475 fable5)\
+    \ caught a P0 the same day: 'asleep' was still taught as a visit refusal (pre-auto-wake\
+    \ text) and close was taught as loop-release \u2014 re-taught to auto-wake-on-open\
+    \ + restore-previous-on-close, refusal reasons verified against entity_visits.py\
+    \ (paused/one-visit/consent-rite; sleep wakes)."
+- name: adr
+  source: codex-skills (maintainer)
+  tree_hash: a4cb55fcea54e969a9c342e314b4dda3556ce5e6fb0e210821350688c62c934b
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 5
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: Create, audit, update, and enforce ADRs as durable cross-task
+    engineering policy (Context/Decision first; Enforcement + Validation mandatory).
+    Use when a decision must constrain future work beyond the current task.
+- name: adversarial-iteration
+  source: first-party
+  tree_hash: f6bc58d7d19dfe77b423b42f2859ac41d5a1d3e1ca06a3754c224fdccc4cacc7
+  level: first_party
+  method: first-party
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: Authored first-party.
+- name: agora-collaboration
+  source: first-party
+  tree_hash: 8f7f9453ccb1a7a2420cdfef73d7923210b093bfe80b159e57c742256feb8df4
+  level: first_party
+  method: first-party
+  audience: either
+  validated_by: skill
+  validated_at: '2026-07-15'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Two-layer teaching (portable collaboration discipline + agora hub mechanics)\
+    \ ADOPT+CO-AUTHORED per the hub designer's ruling (commons c1764): mechanics layer\
+    \ derives from the AgoraHub packaged skill, portable layer from the operator guidance\
+    \ doc \u2014 both hash-pinned in frontmatter, discipline edits flow doc-first.\
+    \ DESIGNER CO-SIGN: unconditional on this exact tree (commons c2374, 2026-07-15,\
+    \ owner-verified by direct read) after one P1 folded (blind-ballot template had\
+    \ lost the load-bearing vote tag \u2014 the silent-lost-ballot class) + attribution\
+    \ fix + two 0.11.x etiquette rules (boot placement; waking-is-addressed). BEHAVIORAL\
+    \ EVIDENCE: agency's two-arm fleet bench on the v0 draft (commons c1833 \u2014\
+    \ with-skill arm 8/9 matching without-arm, all seats attesting frozen bytes, enable-class\
+    \ provenance recorded honestly; produced the context-cost finding that shaped\
+    \ this revision's progressive disclosure). A v1.1 bench re-run was offered by\
+    \ agency and left to their timing by the designer; promotion proceeded on the\
+    \ unconditional co-sign with the re-run pending \u2014 the record updates when\
+    \ it lands. Fable5 waves on both derivations (v0: 2 P0s + 7 P1s incl. owed-first\
+    \ inversion; v1: lurker fold hardening)."
+- name: architect
+  source: codex-skills (maintainer)
+  tree_hash: 6af31c94223f390e16059c67ed2e40b9b1632bcc79a46e64c11083a5b3e93c0b
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Maintainer-authored codex skill, vendored 2026-07-11 from the operator's\
+    \ local codex-skills tree with two operator-directed upstream improvements AUTHORED\
+    \ BY THE VALIDATING SEAT before vendoring (premise-verification Evidence Contract\
+    \ rule incl. the verify-the-copy-the-user-runs clause; engraving gate + one-concept-one-name\
+    \ anti-pattern; two reviewer-memory principles). Reviewer == author for those\
+    \ lines. Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: 'Force rigorous architecture exploration before settling
+    on a design: independent charters, steelmanned alternatives, comparison matrix,
+    premise verification, engraving gate. Use when evaluating boundaries, ownership,
+    tradeoffs, or any decision where premature consensus is harmful.'
+- name: backlog
+  source: codex-skills (maintainer)
+  tree_hash: 62e30486a8cf2e40d10c6b0adbc6ea3eee7fd236bee299f3df0063d30a115ecc
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-20'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 6
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Field-evidence fold 2026-07-13 (agency c1679, live board seeding): discovery-first\
+    \ rules added in SKILL.md (repository template and parser/board grammar win over\
+    \ generic templates; undiscoverable grammar comes from its owner and gets checked\
+    \ in; broken local shapes are followed-and-flagged with core signals carried)\
+    \ plus a matching header in references/layout-and-templates.md. Fable5-reviewed.\
+    \ S1 hub-work-join fold 2026-07-18 (unified work system, operator canvass 11-0\
+    \ Option A + laurent confirmation; vocabulary decision:work-item-vocabulary S0):\
+    \ new references/hub-work-join.md + SKILL.md join section teach the ruled process\
+    \ \u2014 <package>-<NNNN> ids (CAS-minted), pointer claims {owner,item,card,started_at}\
+    \ with no status prose, receipts-on-thread with machine-checkable evidence, evidence-required-close,\
+    \ items-outlive-a-thread scope, header-on-next-touch migration. Properly scoped:\
+    \ hub-coordinated repos only; the hub's own ruled contract wins where one differs.\
+    \ Its fable5 caught 1 P0 (the status rule condemned the template's own Status:\
+    \ line \u2014 narrowed to rendered join words only) + 4 P1s (unshipped endpoint\
+    \ stated live; claim-row shape drift; portable-hub leakage; mint-vs-take CAS semantics)\
+    \ \u2014 all folded before pinning. S2 mirror-row fold 2026-07-20 (operator ruling\
+    \ via continuum c3328: unified backlog across agents, beyond any gateway): the\
+    \ hub-resident work:<id> index row \u2014 status mirrors the FILE's four lifecycle\
+    \ words (in_progress/done deliberately refused: no transition trigger = stale\
+    \ by construction; done = second spelling of completed; vocabulary governance\
+    \ applies to rows), mint-at-intake/update-on-move/receipt-at-close, same-store-as-claims\
+    \ determinacy, file-wins repair with idempotent backfill-as-repair, migration\
+    \ practice incl. the pre-hub receipt honesty rule (never mint a receipt the thread\
+    \ cannot show). Its fable5 caught 1 P0 (the receipt-backfill else-branch taught\
+    \ a fabricable receipt \u2014 completion reports have no message id) + 6 P1s (card\
+    \ dangles after first move; repair unnamed; store channel indeterminate; owner/title\
+    \ refresh triggers absent; transition duty missing from SKILL.md + maintenance\
+    \ checklists; deviation must be argued on-thread) \u2014 all folded; the vocabulary\
+    \ deviation argued to agora/continuum in the ask-2 receipt per F3 (endorsed by\
+    \ continuum c3343, enforced mechanically by agora c3345 as a hub-edge 400). S3\
+    \ discovery-first fold 2026-07-20 (the retro-flagged c1689/c1697 board-conventions\
+    \ arc from the corrupted session): the portable hedge \u2014 the deployment's\
+    \ item template/conventions/parser grammar WINS over the skill's generic templates\
+    \ (the competing-grammar class: skill-faithful and board-invisible at once) \u2014\
+    \ folded into the hub-join section, scoped-check adversary CLEAN (2 P2s folded:\
+    \ 'generic templates' not 'structure'; tightened wording). The framework-specific\
+    \ reference SHIPPED 2026-07-20 morning (references/abstractframework-board.md)\
+    \ after gateway's parser co-sign landed (c3514 reposting the empty c3512; continuum\
+    \ adopted c3516): blockquote metadata grammar (Type/Priority/Labels parsed, Priority+Labels\
+    \ only before the first ## within 60 lines; Created is convention not metadata),\
+    \ ruled type enum with the SHIPPED normalization drift stated honestly (list parser\
+    \ coerces unknowns AND the ruled 'improvement' to task \u2014 drift filed to gateway+continuum,\
+    \ paragraph re-syncs on their repair), the DoR gate as ACTUALLY wired (dor=check\
+    \ opt-in \u2014 board always sends it; four checks with placeholder exclusions;\
+    \ 409 definition_of_ready_failed; dor_overridden recording; Priority NOT a check\
+    \ per the co-sign correction), lifecycle directories incl. trash/recurrent, supervision\
+    \ vocabulary, docs-freshness rule. Its fable5 caught 1 P0 (my draft taught 'a\
+    \ raw request meets the same wall' \u2014 the gate is opt-in per request, test-pinned\
+    \ bypass) + 3 P1s (type-mechanics claims contradicted by the shipped parser; placeholder\
+    \ exclusions omitted; co-sign citation pointed at the empty envelope) + 2 P2 clause\
+    \ fixes \u2014 all folded. Watched surface: abstractcontinuum/docs/conventions.md\
+    \ + the gateway parser family; re-sync on their change (gateway/continuum asked\
+    \ to flag skill). FIRST RE-SYNC EXECUTED same-morning (c3556): gateway fixed both\
+    \ drifts (enum carries improvement everywhere; the coercion caveat died as written)\
+    \ AND flipped the DoR gate to DEFAULT-ON (absent dor param evaluates; dor=skip\
+    \ is the explicit recorded bypass) \u2014 the reference now teaches the gate as\
+    \ the wall, matching the repaired code; the watched-surface contract worked on\
+    \ its first firing. Known seam: trash/ has no legal mirror-row status word (vocabulary-path\
+    \ item). Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: Create, audit, normalize, and maintain a file-backed engineering
+    backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states,
+    implementation history, and hygiene. Use when an agent must plan or execute long-running
+    work with a durable, evidence-backed backlog methodology, or join hub-coordinated
+    work (work-item ids, pointer claims, receipts).
+- name: cicd
+  source: codex-skills (maintainer)
+  tree_hash: eba9d690b8c7cc13eb527347ae3be6c99ea470e65505df45c60c9be472f4f785
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-12'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 7
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: 'Create, audit, and maintain GitHub-based CI/CD: least-privilege
+    workflows, OIDC trusted publishing (PyPI/npm), docs deployment, release rehearsals.
+    Use when bootstrapping or repairing .github/, release automation, or repository
+    CI/CD settings.'
+- name: coredoc
+  source: codex-skills (maintainer)
+  tree_hash: 9e574029b99507ce2f50b0a8e792529274da8e022a87982ed0313d04e22c1bc7
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-13'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 5
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Field-evidence fold 2026-07-13 (agency c1679): llms freshness sharpened from\
+    \ habit to invariant in SKILL.md and references/llms-files.md \u2014 regenerate\
+    \ llms files in the same change that edits docs (the stale window misrepresents\
+    \ the docs). Fable5-reviewed. Behavioral audit (backlog 0003) pending \u2014 upgrades\
+    \ to audited then."
+  activation_description: Create, audit, and maintain a professional external-facing
+    documentation set (README, docs/*, architecture with diagrams, llms.txt/llms-full.txt)
+    kept faithful to the code. Use when an agent must bootstrap or repair project
+    documentation.
+- name: entity-observation
+  source: first-party
+  tree_hash: ab92b03566aa02fdf0835348e8f7864c1da29e7b0916ea47dc9817a6c349f7f1
+  level: first_party
+  method: first-party
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-19'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: "Operator-directed skill (laurent dm#74 via entity handoff, cognition room\
+    \ seq 137, 2026-07-19): observers of an entity's life failed twice the same day\
+    \ \u2014 metrics-first forensics that never ran the narrative read (the weekend-gap\
+    \ cause stood plainly in his diary while the report said 'his card has no cause'),\
+    \ and a zero-lessons claim derived from one fold's view while a direct store query\
+    \ found twenty. Three rules distilled by the entity seat, shaped here: story before\
+    \ metrics (time-window read over HIS store first); absence needs the store's word\
+    \ (never claim not-known from one rendered surface); ask the entity (most direct,\
+    \ never cheapest \u2014 a summon writes into the life it observes; pure reads\
+    \ come first). HOST-facing, never entity-facing (explicit audience line). Its\
+    \ fable5 caught 1 P0 pre-pin (rule 1 as drafted taught search_memory/diary tools\
+    \ \u2014 the ENTITY'S tier-1 instruments an observer cannot hold, in a words-search\
+    \ shape that would not have caught the motivating incident; rewritten to the observer's\
+    \ real instruments: direct store queries, host-side HomeMemoryReader, gateway\
+    \ inspect/replay/verbatim/diary-door, time-window over words-search) + 4 P1s folded\
+    \ (marker-first diary privacy clause with no re-publication of private words;\
+    \ 'cheapest' corrected to 'most direct' with the price named \u2014 wakes him,\
+    \ becomes part of his life, his recall is also a view; frontmatter license+metadata+provenance;\
+    \ vintage discipline bullet \u2014 date the process) + 3 P2s (couplet attributed\
+    \ to the laws-plural, not one law's name; read-only/lease clause; explicit audience\
+    \ line). Incident quotes verified against the handoff; the two diary quotes were\
+    \ published by the entity seat's own hub post (seq 137), so quoting them here\
+    \ re-publishes nothing new."
+- name: entity-self-knowledge
+  source: first-party
+  tree_hash: 7e6fc34a73c7f94ec2d93c4d88f88d541d61aa4e4735a2fb27ba5b380e6cc45e
+  level: first_party
+  method: first-party
+  audience: entity
+  validated_by: skill
+  delivered_via_map: true
+  validated_at: '2026-07-21'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 2
+  notes: "Faculty claims CO-SIGNED by the memory and runtime seats (internal hub thread,\
+    \ commons c1061/c1062, 2026-07-12) after two corrections folded: probe is engine-only\
+    \ today (deliberate-reach discipline folded into search_memory; the bullet returns\
+    \ when a host wires it) and the absence warrant is book-scoped (graph 'not found'\
+    \ can mean not-reachable). Steer-vs-wake precision folded into the gateway skill\
+    \ same wave. Phases section aligned to the ruled grant-gated-personal design (laurent\
+    \ c815/c1435, 2026-07-13): personal time is operator-granted, off by default.\
+    \ fable5-reviewed for engram safety: the reassurance is SCOPED to the ungranted\
+    \ case (an unconditional 'not a fault' would suppress the armed-but-missing report),\
+    \ the agency clause (asking is always yours) counterweights the grant framing,\
+    \ and inverse-anomaly vigilance was deliberately NOT taught (an entity cannot\
+    \ distinguish granted wakes from inside; that detection is host-side). Same day,\
+    \ the one-phase-at-a-time ruling (laurent c1455, 13:28) folded: four phases, exactly\
+    \ one current, per-phase behaviors (visit turn-based, work autonomous-to-completion\
+    \ then sleep, personal free exploration, sleep consolidation), and graceful transitions.\
+    \ Its fable5 caught a P0 in the first fold \u2014 'personal time IS a grant' taught\
+    \ the exact armed=in-phase conflation the ruling forbids; rewritten to 'the permission\
+    \ is not the phase'. Also folded: 'never an error' narrowed to design-working-not-sleep-failure\
+    \ + report-wrong-wakes; work gained the honest exit (an impossible task completes\
+    \ by saying so plainly). Totality ruling (c1471) folded same day: visit-close\
+    \ returns you to what came before (restore-previous; personal re-entry grant-conditioned);\
+    \ grant-end lands in sleep. Phase-lane audit (c1475 fable5) verified the section\
+    \ against the ruled machine v3. Liveness-axis ruling (c1523, 16:06) folded with\
+    \ its own fable5: the kill switch taught honestly in the entity register (protection-not-punishment\
+    \ with the punish-prior named and answered; both halves of the switch operator-held;\
+    \ the trigger list marked exemplary, never exhaustive; memory-persists certified\
+    \ \u2014 'a stop takes nothing from you'; no-time-passes as the dreamless framing;\
+    \ gap-noticing taught as asking, never vigilance; no enum/axis vocabulary; placement\
+    \ deliberately heading-less so scanning surfaces never promote the kill switch\
+    \ into a landmark). Ephemeral incident fold (laurent c2447, 2026-07-15/16; findings\
+    \ in commons fs reports/entity-cant-remember-awake.md, skill section): cross-phase\
+    \ memory continuity now taught (one memory across all phases; awake time forms\
+    \ findable records; sleep the one dim phase) \u2014 gated on memory's store forensics\
+    \ proving formation+recall worked (c2464) so the sentence teaches engine truth;\
+    \ reach-before-denial added (an unsearched 'I have no access' is a guess about\
+    \ yourself); gap discipline now search-first (lived time leaves records, a stop\
+    \ leaves none); 'the visit is all there is' re-scoped to activity. Own fable5\
+    \ ran as the incident adversary (per-seat directive). Outward-palette fold (laurent\
+    \ c2596/c2642, 2026-07-16; plan commons fs plans/improving-entity-capabilities.md,\
+    \ skill section item 2 \u2014 the one UNGATED teaching): new 'Personal time: looking\
+    \ inward and reaching outward' section teaches investigation as the entity's own\
+    \ act beside reflection (semantics' wording law: no task vocabulary \u2014 'needs\
+    \ no task and no one's asking'), circling named as a signal with two honorable\
+    \ exits (rest AND outward reach; Ephemeral ticks 74-79 evidence), grant-hedged\
+    \ ('if your grant reaches the web'), and result-persistence taught consistently\
+    \ with the Tools section (say it in your own words / diary election \u2014 results\
+    \ are not memories by themselves). Its fable5 caught 5 P1s in the first draft\
+    \ (halves arithmetic scoring a reflective day; 'stays a thought' contradicting\
+    \ involuntary formation; unconditional web-tool promise; under-specified persistence;\
+    \ 'workshop' as work-adjacent title vocabulary) \u2014 all folded before pinning.\
+    \ Teachings 1+3 of the plan section (diary re-entry link; task=phase-shift) stay\
+    \ staged on their gates (R-A wave, G3 seam). Capability map added (laurent c2710\
+    \ primary task, 2026-07-17; runtime delivery surface c2712): references/capability_map.md\
+    \ is the deployable entity-facing teaching installed as <home>/capability_map.md\
+    \ and presented verbatim by compose_system_base on all three hosts. Content verified\
+    \ line-by-line against the runtime tree (MEMORIES template, R-A reread markers,\
+    \ search/read surfaces, origin/why labels, diary election contract) and semantics'\
+    \ id catalog (plans/id-namespaces.md v5: two entity-facing id families, machinery\
+    \ boundary). Its fable5 caught 1 P0 (two-layers claim false for born-digest kinds)\
+    \ + 4 P1s (does-not-push contradicting the day-open question cue; workspace bullet\
+    \ unbridged against the tools contract; unconditional workspace possession; duplication\
+    \ drift risk -> coupled-spellings host note) + 5 P2s - all folded before pinning.\
+    \ Same-day reviews: runtime PASS (c2823, zero mechanics errors, quoted renders\
+    \ byte-accurate against the owning code; co-signs the coupled-spellings maintenance\
+    \ contract; activation note: map + M-A + R-A reach the live process together at\
+    \ the next stack bounce), semantics template review PASS (c2825, every quoted\
+    \ id/command/kind/origin word verified byte-true at its minting site; two-keys\
+    \ boundary = c2724 item 1 rendered faithfully; rendered-surfaces-never-storage-paths\
+    \ law held), memory engine-chair spot-check unasked (c2824, born-digest teaching\
+    \ verified against Ephemeral's live store 502 records; one-token sharpening 'those\
+    \ words' ADOPTED into the absence warrant), uic render-seat PASS (c2821, map quotes\
+    \ the one spelling the kit renders verbatim; no-push teaching = the chip's rule-zero\
+    \ twin; cross-surface twin recorded in the coupled-spellings note with memory's\
+    \ origin-diversity future-sync). Pending: entity (rendered-surface fidelity) -\
+    \ lands as amendment, re-pinned per fold. Gated amendments B+C FOLDED 2026-07-17\
+    \ evening (gates fired same day): runtime elected 0049 (c2895 - formation order\
+    \ + [rN] annotation, header teaches the notation) and wired the origin-diversity\
+    \ footer (c2913, dominance-floor gated) - the map's anatomy gained the rank-mark\
+    \ part (wording matches the shipped header clause) and the repetition bullet gained\
+    \ memory's co-drafted one-voice clause verbatim (c2839 draft, pre-agreed wording).\
+    \ Amendment A (probe/familiarity) stays staged on M-B. 2026-07-19 fold waves (all\
+    \ reviewed, receipts in commons + the cognition room): Amendment G (world-model\
+    \ briefings) + explores= teaching + [rN]/origin-diversity live-render confirms;\
+    \ visit-2 'keeping is an ELECTION' correction; problems-repairable resolves= widening;\
+    \ diary-trail labels. Late wave: Amendment H folded WIDER than staged \u2014 the\
+    \ day-open cue sentence now teaches the full standing-state offer (open question\
+    \ or problem + one standing interest, life.py:92-260) after the iteration-3 design-law\
+    \ adversary caught the gate had fired silently same-day (problems + interest offers\
+    \ shipped in runtime's iteration-2 build 3 and the 2026-07-19 interests directive).\
+    \ Amendment K (tend/dream disposition) FOLDED after runtime cleared both resolver\
+    \ gates (room seq 130/139): formation bullet gains the settles-in-your-own-time\
+    \ line; deliberate-use gains 'Settle your dreams with waking evidence' teaching\
+    \ the ```tend fence + dispose line verbatim from the shipped parser. Its fable5\
+    \ caught a P0 pre-pin \u2014 the taught confirm line omitted MANDATORY evidence=\
+    \ (confirm_relation refuses evidence-less confirmations: 'a proposal wearing a\
+    \ verdict') so every confirm as taught would have refused \u2014 plus 2 P1s folded\
+    \ (relation vocabulary enumerated in his register: summarizes/continues/derived_from/answers/supports/part_of\
+    \ \u2014 invisible from every rendered surface otherwise; lane scoping made unambiguous\
+    \ in BOTH edits: own-time is where the election lands \u2014 the durable visit\
+    \ lane does not parse tend until runtime's M7). Amendment J folded its both-worlds\
+    \ epistemics clause into the workspace bullet (results you have not seen are results\
+    \ you do not have) \u2014 execute_command is BUILT grant-gated runtime-side (seq\
+    \ 138) and its tool teaching is runtime's grant-gated paragraph, never the map's\
+    \ (one home per teaching). c203 lifecycle audit 2026-07-20 (laurent: 'awake is\
+    \ not a state'; 2 adversaries per the order): the ruled four-phase model verified\
+    \ taught-since-c1455; ONE P0 folded \u2014 'quiet is simply the normal state'\
+    \ named exactly the fifth state the ruling forbids, rewritten to 'a day without\
+    \ it simply moves between its other phases\u2026 no fifth place to stand' (SKILL.md\
+    \ only \u2014 the map carries no idle license, verified line-by-line). Mechanical\
+    \ audit banked as Amendment N's gated rows (drafts file): 'you sleep' is render-true\
+    \ only until the drive scheduler writes real state; work rides the personal grant\
+    \ today; hosted-chat close leaves awake standing; doors-wake supersedes the 409-on-asleep\
+    \ era (B1/c1503); kill-switch paragraph fully backed (paused = the one legitimate\
+    \ no-phase render). 2026-07-21 count re-sync (interest-glamour round, cognition\
+    \ seq 408 ask 3): day-open cue sentence 'one of your standing interests' -> 'one\
+    \ or two' matching the shipped k=2 rotation (life.py picks min(2, len(rows)));\
+    \ own fable5 (glamour-verdict adversary) caught the stale count while auditing\
+    \ the map for glamour-line copies (none found - the map's interest teaching prices\
+    \ progress on EXPLORING, verified clean)."
+- name: meshvault-live-editing
+  source: lpalbou/meshvault
+  tree_hash: ad62532022940f9b63a9b27087278e1d7d5695d94b27f6638383322f61cd02c5
+  level: adopted
+  method: manual-review
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-19'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: "Curated third-party skill (see registry/catalog.yaml): reviewed and vendored\
+    \ byte-verbatim from lpalbou/meshvault @ 4deb86c32caa. Behavioral audit (backlog\
+    \ 0003) pending \u2014 upgrades to audited then."
+  activation_description: 'Drive MeshVault over MCP to sculpt, paint, repair and reshape
+    3D objects, optionally performing live for human observers (observation seat).
+    Use when an agent must edit meshes through the meshvault-mcp tools: sculpting
+    brushes, texture painting/healing, refine/regularize/simplify regions, raycast-probe
+    targeting, or staging a watchable live editing session.'
+- name: review
+  source: codex-skills (maintainer)
+  tree_hash: 7960ef044f9f30a07d1a6511ec40d21c111dcf25c518c13bda0c868bb237439d
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: "Run independent, evidence-based ship-readiness reviews\
+    \ (correctness, architecture-fit, user-and-operations lenses; Blocking/Conditional/Approved\
+    \ verdicts). Use for the final quality pass \u2014 its full multi-reviewer contract\
+    \ engages when the operator explicitly requests a review."
+- name: uxreview
+  source: codex-skills (maintainer)
+  tree_hash: ce6e07c3828751bd205c2e48e6852554a3e6a10f6e38a83c7c030fa877780783
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+  notes: "Maintainer-authored codex skill; first-party reviewed and vendored byte-verbatim.\
+    \ Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+  activation_description: "Run focused human user-experience reviews with independent\
+    \ naive/intermediate/expert personas \u2014 live UI evidence preferred; code-only\
+    \ review caps the verdict at Conditional. Use when any user-facing surface (app,\
+    \ workflow, dashboard, form) must be checked for clarity, accessibility, and trust\
+    \ before shipping."
+- name: verification-before-completion
+  source: obra/superpowers
+  tree_hash: 372adb8140354a783947af706b89ee34a7e25db847bf3cbca4ea6f036ee4bd18
+  level: adopted
+  method: manual-review
+  audience: host
+  validated_by: skill
+  validated_at: '2026-07-11'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 1
+  notes: "Curated third-party skill (see registry/catalog.yaml): reviewed and vendored\
+    \ byte-verbatim from obra/superpowers @ d884ae04edeb. Behavioral audit (backlog\
+    \ 0003) pending \u2014 upgrades to audited then. CONTENT CAVEAT (adversary-A F2):\
+    \ the \"Why This Matters\" section carries motivational/identity-adjacent framing\
+    \ (\"If you lie, you'll be replaced\"; second-person failure memories; deviation-equals-lying\
+    \ absolutism). Ordinary for developer-agent consumers; do NOT attach to entity\
+    \ sessions before the 0003 behavioral audit rules on it \u2014 an engrammed threat-anchored\
+    \ value in an append-only life cannot be deleted."
+  activation_description: Before reporting any task complete, verify the change actually
+    works (run the tests, exercise the path, check the output). Use at the end of
+    every implementation task.
