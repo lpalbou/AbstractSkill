@@ -40,15 +40,24 @@ docs/security.md
 *.pem
 secrets.json
 
-# Workspace agent wiring (holds live per-seat API keys)
-# Written by `agora setup` when this folder is wired as a seat — machine
-# -specific (absolute tool paths, seat id, hub URL) and never release content.
-.cursor/
+# ---------------------------------------------------------------------------
+# Agent harness and local tooling
+#
+# This repository is worked on with coding agents, and their configuration
+# embeds absolute local paths, hook commands, seat identities and API keys.
+# None of it belongs in a public repository.
+# ---------------------------------------------------------------------------
+.claude/
 .codex/
+.cursor/
 .agora/
 .abstractcode/
 .opencode/
-.claude/
-AGENTS.md
-CLAUDE.md
 .mcp.json
+CLAUDE.md
+AGENTS.md
+abstractcode-export-*.md
+
+# Local scratch space and virtual environments
+untracked/
+.venv/
