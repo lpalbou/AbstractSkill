@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -938,7 +938,8 @@
 <h2 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>FilesystemSkillLoader(roots)</code> — <code>discover(*, on_warning=None) -&gt; list[SkillMetadata]</code>
-  (metadata only; later roots win; broken folders skipped with <code>#FALLBACK</code>),
+  (metadata only; later roots win; broken folders and unreadable roots skipped
+  with <code>#FALLBACK</code>; an unreadable <code>SKILL.md</code> raises <code>SkillParseError</code>),
   <code>load(name, *, on_warning=None) -&gt; LoadedSkill</code> (full body; same resolution;
   name validated first).</li>
 </ul>
@@ -984,7 +985,9 @@
   — the primary (display) candidate for provenance rendering.</li>
 <li><code>DerivedSource</code> — source, binding ("hash" | "name"), ambiguous.</li>
 <li><code>ValidationRecord</code> — an attestation bound to a tree_hash (level, method,
-  evidence; method caps the grantable level).</li>
+  evidence; method caps the grantable level). <code>delivered_via_map</code> is parsed
+  strictly: booleans or <code>true</code>/<code>false</code>, <code>yes</code>/<code>no</code>, <code>1</code>/<code>0</code>, <code>on</code>/<code>off</code>;
+  anything else raises <code>SkillValidationError</code>.</li>
 <li><code>AdvisoryEntry</code> — a specific do-not-use notice (official_intent,
   hidden_issue, severity, reference; hash or name/source anchored). Names
   match case-insensitively (spec lowercase); sources match exactly
@@ -1005,7 +1008,8 @@
   catalog (<code>registry/catalog.yaml</code>); loud on every malformed entry.</li>
 <li><code>CatalogEntry</code> — one reviewed, pinned, vendor-able skill (owner/repo slug,
   40-hex commit pin, subdir, license, archetype/risk, <code>expected_tree_hash</code>
-  after first vendoring). Network-free contract; fetching lives in
+  after first vendoring; <code>vendored</code> is parsed strictly like other boolean
+  flags). Network-free contract; fetching lives in
   <code>scripts/vendor_skill.py</code>.</li>
 <li><code>lint_catalog(catalog, shelf_names) -&gt; tuple[str, ...]</code> — curator lint
   (vendored-but-absent, on-shelf-but-unlisted, risky-without-notes, unclear
@@ -1143,7 +1147,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

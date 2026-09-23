@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -831,14 +831,14 @@ with Agent Skills (<code>SKILL.md</code>) in AbstractFramework.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>abstractskill
 </code></pre></div>
 <p>For local development:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[test]&quot;</span>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[test]"</span>
 python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q
 </code></pre></div>
 <h2 id="parse-a-skill">Parse a skill<a class="headerlink" href="#parse-a-skill" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_skill_md</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">parse_skill_md</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;my-skill/SKILL.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">parse_skill_md</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">"my-skill/SKILL.md"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">content_hash</span><span class="p">)</span>
 </code></pre></div>
@@ -851,14 +851,14 @@ leading/trailing/consecutive hyphens), <code>description</code> (1-1024 chars), 
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilesystemSkillLoader</span>
 
-<span class="n">loader</span> <span class="o">=</span> <span class="n">FilesystemSkillLoader</span><span class="p">([</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.abstract&quot;</span> <span class="o">/</span> <span class="s2">&quot;skills&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.abstract/skills&quot;</span><span class="p">)])</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">FilesystemSkillLoader</span><span class="p">([</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">".abstract"</span> <span class="o">/</span> <span class="s2">"skills"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="s2">".abstract/skills"</span><span class="p">)])</span>
 
 <span class="c1"># Metadata only (progressive disclosure); later roots override earlier ones.</span>
 <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="n">loader</span><span class="o">.</span><span class="n">discover</span><span class="p">(</span><span class="n">on_warning</span><span class="o">=</span><span class="nb">print</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
 
 <span class="c1"># Full document on demand.</span>
-<span class="n">loaded</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my-skill&quot;</span><span class="p">)</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"my-skill"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">loaded</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
 </code></pre></div>
 <p><code>discover()</code> and <code>load()</code> resolve identically: a broken skill copy never
@@ -867,8 +867,8 @@ warning (delivered to <code>on_warning</code> and logged) rather than silently d
 <h2 id="hash-and-inspect-a-skill-folder">Hash and inspect a skill folder<a class="headerlink" href="#hash-and-inspect-a-skill-folder" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">hash_skill_tree</span><span class="p">,</span> <span class="n">inspect_skill_dir</span>
 
-<span class="n">tree_hash</span> <span class="o">=</span> <span class="n">hash_skill_tree</span><span class="p">(</span><span class="s2">&quot;my-skill&quot;</span><span class="p">)</span>            <span class="c1"># whole-tree tamper hash</span>
-<span class="n">inv</span> <span class="o">=</span> <span class="n">inspect_skill_dir</span><span class="p">(</span><span class="s2">&quot;my-skill&quot;</span><span class="p">)</span>
+<span class="n">tree_hash</span> <span class="o">=</span> <span class="n">hash_skill_tree</span><span class="p">(</span><span class="s2">"my-skill"</span><span class="p">)</span>            <span class="c1"># whole-tree tamper hash</span>
+<span class="n">inv</span> <span class="o">=</span> <span class="n">inspect_skill_dir</span><span class="p">(</span><span class="s2">"my-skill"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">inv</span><span class="o">.</span><span class="n">tree_hash</span><span class="p">,</span> <span class="n">inv</span><span class="o">.</span><span class="n">total_bytes</span><span class="p">,</span> <span class="n">inv</span><span class="o">.</span><span class="n">has_scripts</span><span class="p">)</span>
 </code></pre></div>
 <p><code>has_scripts</code> is a structural fact (any file under <code>scripts/</code>), not a
@@ -876,7 +876,7 @@ frontmatter claim — so a "requires enablement" badge cannot be lied to.</p>
 <h2 id="compose-tools-with-an-operator-grant">Compose tools with an operator grant<a class="headerlink" href="#compose-tools-with-an-operator-grant" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">effective_tools</span>
 
-<span class="n">grant</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;read_file&quot;</span><span class="p">,</span> <span class="s2">&quot;write_file&quot;</span><span class="p">,</span> <span class="s2">&quot;web_search&quot;</span><span class="p">]</span>
+<span class="n">grant</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"read_file"</span><span class="p">,</span> <span class="s2">"write_file"</span><span class="p">,</span> <span class="s2">"web_search"</span><span class="p">]</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">effective_tools</span><span class="p">(</span><span class="n">grant</span><span class="p">,</span> <span class="n">active_skills</span><span class="p">)</span>   <span class="c1"># active_skills: list[SkillMetadata]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">allowed</span><span class="p">)</span>              <span class="c1"># grant ∩ union(declared) — never wider than the grant</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">warnings</span><span class="p">)</span>             <span class="c1"># #FALLBACK for any dropped token</span>
@@ -888,18 +888,18 @@ least privilege use <code>effective_tools_for_skill</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustRegistry</span><span class="p">,</span> <span class="n">evaluate_trust</span><span class="p">,</span> <span class="n">inspect_skill_dir</span>
 
 <span class="n">registry</span> <span class="o">=</span> <span class="n">TrustRegistry</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-    <span class="n">validations_path</span><span class="o">=</span><span class="s2">&quot;registry/validations.yaml&quot;</span><span class="p">,</span>
-    <span class="n">advisories_path</span><span class="o">=</span><span class="s2">&quot;registry/advisories.yaml&quot;</span><span class="p">,</span>
-    <span class="n">guidance_path</span><span class="o">=</span><span class="s2">&quot;registry/guidance.yaml&quot;</span><span class="p">,</span>
+    <span class="n">validations_path</span><span class="o">=</span><span class="s2">"registry/validations.yaml"</span><span class="p">,</span>
+    <span class="n">advisories_path</span><span class="o">=</span><span class="s2">"registry/advisories.yaml"</span><span class="p">,</span>
+    <span class="n">guidance_path</span><span class="o">=</span><span class="s2">"registry/guidance.yaml"</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">inv</span> <span class="o">=</span> <span class="n">inspect_skill_dir</span><span class="p">(</span><span class="s2">&quot;my-skill&quot;</span><span class="p">)</span>
+<span class="n">inv</span> <span class="o">=</span> <span class="n">inspect_skill_dir</span><span class="p">(</span><span class="s2">"my-skill"</span><span class="p">)</span>
 <span class="n">verdict</span> <span class="o">=</span> <span class="n">evaluate_trust</span><span class="p">(</span>
-    <span class="n">registry</span><span class="p">,</span> <span class="n">tree_hash</span><span class="o">=</span><span class="n">inv</span><span class="o">.</span><span class="n">tree_hash</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my-skill&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;first-party&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="p">,</span> <span class="n">tree_hash</span><span class="o">=</span><span class="n">inv</span><span class="o">.</span><span class="n">tree_hash</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"my-skill"</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">"first-party"</span><span class="p">,</span>
     <span class="n">has_scripts</span><span class="o">=</span><span class="n">inv</span><span class="o">.</span><span class="n">has_scripts</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">verdict</span><span class="o">.</span><span class="n">level</span><span class="p">,</span> <span class="n">verdict</span><span class="o">.</span><span class="n">blocked</span><span class="p">,</span> <span class="n">verdict</span><span class="o">.</span><span class="n">requires_review</span><span class="p">,</span> <span class="n">verdict</span><span class="o">.</span><span class="n">attachable</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">reason</span> <span class="ow">in</span> <span class="n">verdict</span><span class="o">.</span><span class="n">reasons</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
 </code></pre></div>
 <p>The verdict is fail-closed: only a validated, advisory-free, script-free skill
 is <code>attachable</code>. See the <a href="../trust/">trust model</a> for the full semantics.</p>
@@ -911,12 +911,12 @@ reaches a prompt:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustRegistry</span><span class="p">,</span> <span class="n">format_available_skills_xml</span><span class="p">,</span> <span class="n">select_skills_for_context</span>
 
 <span class="n">registry</span> <span class="o">=</span> <span class="n">TrustRegistry</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-    <span class="n">validations_path</span><span class="o">=</span><span class="s2">&quot;registry/validations.yaml&quot;</span><span class="p">,</span>
-    <span class="n">advisories_path</span><span class="o">=</span><span class="s2">&quot;registry/advisories.yaml&quot;</span><span class="p">,</span>
+    <span class="n">validations_path</span><span class="o">=</span><span class="s2">"registry/validations.yaml"</span><span class="p">,</span>
+    <span class="n">advisories_path</span><span class="o">=</span><span class="s2">"registry/advisories.yaml"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">selection</span> <span class="o">=</span> <span class="n">select_skills_for_context</span><span class="p">(</span>
-    <span class="n">registry</span><span class="p">,</span> <span class="n">shelf_root</span><span class="o">=</span><span class="s2">&quot;registry/skills&quot;</span><span class="p">,</span>
-    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;coredoc&quot;</span><span class="p">,</span> <span class="s2">&quot;verification-before-completion&quot;</span><span class="p">],</span>  <span class="c1"># names-only is enough</span>
+    <span class="n">registry</span><span class="p">,</span> <span class="n">shelf_root</span><span class="o">=</span><span class="s2">"registry/skills"</span><span class="p">,</span>
+    <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">"coredoc"</span><span class="p">,</span> <span class="s2">"verification-before-completion"</span><span class="p">],</span>  <span class="c1"># names-only is enough</span>
     <span class="n">enabled</span><span class="o">=</span><span class="p">[],</span>  <span class="c1"># operator-enabled requires_review skills for THIS context</span>
 <span class="p">)</span>
 <span class="n">block</span> <span class="o">=</span> <span class="n">format_available_skills_xml</span><span class="p">(</span>
@@ -985,7 +985,7 @@ see the <a href="../skills-catalog/">curated skills catalog</a>.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
