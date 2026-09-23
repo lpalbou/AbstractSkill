@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "abstractskill"
-version = "0.2.0"
+version = "0.2.1"
 description = "Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework"
 readme = "README.md"
 requires-python = ">=3.10"

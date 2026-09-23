@@ -26,7 +26,8 @@ Everything below is exported from the top-level `abstractskill` package.
 ## Discovery
 
 - `FilesystemSkillLoader(roots)` — `discover(*, on_warning=None) -> list[SkillMetadata]`
-  (metadata only; later roots win; broken folders skipped with `#FALLBACK`),
+  (metadata only; later roots win; broken folders and unreadable roots skipped
+  with `#FALLBACK`; an unreadable `SKILL.md` raises `SkillParseError`),
   `load(name, *, on_warning=None) -> LoadedSkill` (full body; same resolution;
   name validated first).
 
@@ -72,7 +73,9 @@ Everything below is exported from the top-level `abstractskill` package.
   — the primary (display) candidate for provenance rendering.
 - `DerivedSource` — source, binding ("hash" | "name"), ambiguous.
 - `ValidationRecord` — an attestation bound to a tree_hash (level, method,
-  evidence; method caps the grantable level).
+  evidence; method caps the grantable level). `delivered_via_map` is parsed
+  strictly: booleans or `true`/`false`, `yes`/`no`, `1`/`0`, `on`/`off`;
+  anything else raises `SkillValidationError`.
 - `AdvisoryEntry` — a specific do-not-use notice (official_intent,
   hidden_issue, severity, reference; hash or name/source anchored). Names
   match case-insensitively (spec lowercase); sources match exactly
@@ -93,7 +96,8 @@ Everything below is exported from the top-level `abstractskill` package.
   catalog (`registry/catalog.yaml`); loud on every malformed entry.
 - `CatalogEntry` — one reviewed, pinned, vendor-able skill (owner/repo slug,
   40-hex commit pin, subdir, license, archetype/risk, `expected_tree_hash`
-  after first vendoring). Network-free contract; fetching lives in
+  after first vendoring; `vendored` is parsed strictly like other boolean
+  flags). Network-free contract; fetching lives in
   `scripts/vendor_skill.py`.
 - `lint_catalog(catalog, shelf_names) -> tuple[str, ...]` — curator lint
   (vendored-but-absent, on-shelf-but-unlisted, risky-without-notes, unclear

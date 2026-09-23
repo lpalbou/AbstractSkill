@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.1] - 2026-09-23
+
+### Fixed
+
+- Boolean flags in registry and catalog data (`ValidationRecord.delivered_via_map`,
+  `CatalogEntry.vendored`) are now parsed strictly: `"false"`, `"no"`, `"0"` and
+  `"off"` are false instead of being read as true, and unrecognised values raise
+  `SkillValidationError` instead of being silently coerced.
+- `FilesystemSkillLoader` skips a skill root it cannot list (with a `#FALLBACK`
+  warning) instead of aborting discovery, and an unreadable `SKILL.md` raises
+  `SkillParseError` instead of a raw `OSError`.
+
+### Changed
+
+- Documentation site moved to <https://www.lpalbou.info/AbstractSkill/>; the
+  project `Documentation` URL points there.
+- CI now builds the documentation site on every push and pull request, and the
+  release workflow publishes the docs after a successful release.
+
 ## [0.2.0] - 2026-08-06
 
 ### Added
