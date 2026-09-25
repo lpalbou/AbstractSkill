@@ -47,7 +47,7 @@ signal at all" toward standardized verification, but nothing is settled:
   lack version pinning, and skills change behavior after approval via mutable
   external URLs — one fake skill reached 26,000 users this way (CSO Online
   article/4188840). These are the guidance-registry references
-  (`registry/guidance.yaml`).
+  (`src/abstractskill/registry/guidance.yaml`).
 
 ## Position: LEVERAGE + BUILD now, JOIN (signing) when the spec stabilizes
 

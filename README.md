@@ -55,27 +55,50 @@ from abstractskill import bundled_registry_dir, bundled_registry_version, seed_r
 print(bundled_registry_dir(), bundled_registry_version())
 
 report = seed_registry(Path("/srv/my-host/skills-shelf"))
-print(report.added, report.updated, report.kept_user_modified, report.unchanged)
+print(report.added, report.updated, report.unchanged)
+print(report.kept)          # {item: reason} for everything left untouched
+print(report.not_in_bundle) # seeded earlier, no longer bundled
 ```
 
-`seed_registry` is safe to run on every start:
+`seed_registry` is safe to run on every start, and from several processes at
+once (the whole call holds an exclusive lock on `<dest>/.seed.lock`):
 
 - a skill folder or file missing at the destination is added;
-- one still byte-identical to what the previous seed wrote (recorded in
+- one byte-identical to the bundle is unchanged;
+- one still byte-identical to what an earlier seed wrote (recorded in
   `<dest>/.seeded.json`, compared by tree hash) is replaced by the newer
-  bundled content;
-- one that differs from both (an operator edit, or content the seed never
-  wrote) is kept as it is and reported in `kept_user_modified`;
-- anything at the destination that is not in the bundle is left alone.
+  bundled content — unless the installed bundle is older than that seed, in
+  which case it is kept (`kept_newer`);
+- anything else is kept as it is, with its reason: `kept_user_modified` (an
+  operator edit), `kept_foreign` (content no seed wrote),
+  `kept_unknown_provenance` (the destination has no seed manifest),
+  `kept_symlink`, `kept_unreadable`. `report.kept` maps every kept item to
+  its reason;
+- items an earlier seed wrote that the bundle no longer contains are
+  reported in `not_in_bundle` and left in place; removing them is the host's
+  decision. Nothing outside the bundle is ever deleted.
+
+Without a manifest (a first seed into a populated folder, or a lost
+`.seeded.json`), items byte-identical to the bundle are adopted and recorded;
+every other existing item is kept as `kept_unknown_provenance`, because the
+seed cannot tell an old seeded copy from an operator edit. Keep `.seeded.json`
+with the shelf when you back it up or move it.
 
 Seeding twice writes nothing. No network access is involved.
 
-The seeded directory has the layout a host reads as its shelf: `<dest>/skills`
-plus the three trust files. Trust records bind to content hashes, never to
-paths, so a seeded shelf verifies wherever it lives, and an edited skill
-honestly drops to unverified until it is re-validated. AbstractGateway seeds
-its shelf from this bundle; operators choose or change the shelf through the
-gateway console and CLI.
+The seeded directory has the layout a host reads as its shelf: `<dest>/skills`,
+`<dest>/licenses` and the four yaml files (`validations.yaml`,
+`advisories.yaml` and `guidance.yaml` drive the trust gate; `catalog.yaml`
+records the curated sources and the bundle version). Trust records bind to
+content hashes, never to paths, so a seeded shelf verifies wherever it lives,
+and an edited skill honestly drops to unverified until it is re-validated.
+
+A host such as AbstractGateway uses the API this way: call `seed_registry`
+on its own shelf directory at start-up, serve `<dest>/skills` through
+`select_skills_for_context` with the seeded trust files, and surface the
+report (in particular the kept items and `not_in_bundle`) to its operators.
+Where the shelf lives is host configuration, set through that host's own
+console or CLI.
 
 Maintainers: bump `version:` in `src/abstractskill/registry/catalog.yaml`
 whenever any bundled skill, license or yaml file changes. `tests/test_bundled.py`

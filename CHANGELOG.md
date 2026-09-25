@@ -12,8 +12,13 @@
 - `abstractskill.bundled`: `bundled_registry_dir()`, `bundled_registry_version()`
   and `seed_registry(dest) -> SeedReport`. Seeding copies the bundled registry
   into a host-owned directory, adds missing items, refreshes items still
-  byte-identical to the previous seed (tracked in `<dest>/.seeded.json`),
-  keeps operator edits, and writes nothing when run again.
+  byte-identical to an earlier seed (tracked in `<dest>/.seeded.json`) unless
+  the bundle is older than that seed, keeps everything else with a reason
+  (`kept_user_modified`, `kept_foreign`, `kept_unknown_provenance`,
+  `kept_symlink`, `kept_unreadable`, `kept_newer`), reports items no longer
+  bundled in `not_in_bundle` without deleting them, and writes nothing when
+  run again. Concurrent seeds of one directory serialise on an exclusive lock
+  (`<dest>/.seed.lock`); a failed folder swap restores the previous copy.
 - `catalog.yaml` declares a bundle `version` (`2026.09.25`); a test pins it to
   a digest of the bundled content so the version moves with the content.
 

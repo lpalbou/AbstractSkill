@@ -64,8 +64,10 @@ Package surface:
   `version`, validations.yaml, advisories.yaml, guidance.yaml). `seed_registry`
   copies it into a host-owned directory: missing items are added, items still
   byte-identical to the last seed (`<dest>/.seeded.json`, tree hash per skill)
-  are refreshed, operator edits are kept (`kept_user_modified`). Idempotent,
-  no network.
+  are refreshed (never by an older bundle: `kept_newer`), everything else is
+  kept with a reason (`report.kept`), items no longer bundled are reported in
+  `not_in_bundle` and never deleted. Serialised by a lock on
+  `<dest>/.seed.lock`; idempotent; no network.
 - `load_catalog`/`CatalogEntry`/`lint_catalog` — the curated vendoring
   catalog contract (src/abstractskill/registry/catalog.yaml: reviewed entries pinned to 40-hex
   upstream commits + whole-tree hashes; owner/repo slugs only). The install

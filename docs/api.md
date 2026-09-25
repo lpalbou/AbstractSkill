@@ -108,16 +108,24 @@ Everything below is exported from the top-level `abstractskill` package.
 - `bundled_registry_dir() -> Path` — the registry shipped as package data
   (`abstractskill/registry/`); works from a wheel and from a checkout. Treat
   it as read-only.
-- `bundled_registry_version() -> str` — the `version` declared in the bundled
-  `catalog.yaml`; it moves whenever bundled content moves.
+- `bundled_registry_version() -> str` — the dotted-numeric `version` declared
+  in the bundled `catalog.yaml`; it moves whenever bundled content moves.
 - `seed_registry(dest) -> SeedReport` — copy the bundled registry into `dest`
-  (created if missing). Per skill folder (tree hash) and per file (sha256):
-  missing → added; identical to the bundle → unchanged; identical to what the
-  previous seed wrote (`dest/.seeded.json`) → updated; otherwise kept
-  untouched. Items not in the bundle are left alone. Idempotent; no network.
-- `SeedReport` — `dest`, `bundled_version`, `previous_version` (`None` on the
-  first seed), `added`, `updated`, `kept_user_modified`, `unchanged` (paths
-  relative to `dest`, e.g. `skills/coredoc`, `validations.yaml`), `.changed`.
+  (created if missing) under an exclusive lock on `dest/.seed.lock`. Per
+  skill folder (tree hash) and per file (sha256): missing → added; identical
+  to the bundle → unchanged; identical to what an earlier seed wrote
+  (`dest/.seeded.json`) → updated, or `kept_newer` when the bundle is older
+  than that seed; otherwise kept with a reason. Without a manifest, identical
+  items are adopted and the rest are `kept_unknown_provenance`. Items no longer
+  bundled are reported, never deleted. Idempotent; no network. Raises
+  `SkillError` on an unreadable or unknown-schema manifest, a symlinked
+  staging entry, or a `dest` inside the bundle.
+- `SeedReport` — `dest`, `bundled_version`, `previous_version` (`None` when
+  `dest` has no manifest), `added`, `updated`, `unchanged`,
+  `kept_user_modified`, `kept_foreign`, `kept_unknown_provenance`,
+  `kept_symlink`, `kept_unreadable`, `kept_newer`, `not_in_bundle` (paths
+  relative to `dest`, e.g. `skills/coredoc`, `validations.yaml`); `.changed`
+  (anything written) and `.kept` (`{item: reason}`).
 
 ## Selection
 

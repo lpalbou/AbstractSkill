@@ -10,12 +10,13 @@ Keep the trust registry (advisories + validations) faithful: references stay
 live, findings stay accurate, validation records stay bound to current hashes.
 
 ## Run conditions
-- On any change to `registry/advisories.yaml` or `registry/validations.yaml`.
+- On any change to `src/abstractskill/registry/advisories.yaml` or
+  `src/abstractskill/registry/validations.yaml`.
 - On a periodic cadence once 0006 lands (host-scheduled, not agent-persisted).
 - Whenever a shelf skill's tree hash changes (re-validation required).
 
 ## Scope
-`registry/*.yaml`, shelf hashes, advisory reference liveness.
+`src/abstractskill/registry/*.yaml`, shelf hashes, advisory reference liveness.
 
 ## Checklist
 - [ ] Every advisory has all four mandated fields and a resolvable reference.

@@ -121,12 +121,17 @@ report = seed_registry(Path("/srv/my-host/skills-shelf"))
 print(report.bundled_version, report.previous_version)
 print("added:", report.added)
 print("updated:", report.updated)
-print("kept (operator edits):", report.kept_user_modified)
+print("kept, with reasons:", report.kept)
+print("no longer bundled:", report.not_in_bundle)
 ```
 
-Run it on every start. Missing items are added; items still byte-identical to
-what the previous seed wrote (tracked in `<dest>/.seeded.json`) are refreshed;
-anything an operator changed is kept and reported in `kept_user_modified`.
+Run it on every start; concurrent calls on the same destination serialise on
+`<dest>/.seed.lock`. Missing items are added; items still byte-identical to
+what an earlier seed wrote (tracked in `<dest>/.seeded.json`) are refreshed,
+unless the installed bundle is older than that seed (`kept_newer`); anything
+else is kept, with its reason in `report.kept`. Items no longer bundled are
+reported in `not_in_bundle` and never deleted. Without a manifest, only items
+identical to the bundle are adopted (`kept_unknown_provenance` for the rest).
 A second run with the same package writes nothing.
 
 ## Activate skills into a context (the composed pipeline)
