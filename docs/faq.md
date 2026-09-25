@@ -23,12 +23,12 @@ identically to its LF twin but hashes differently. Vendor skills from archives
 or byte-copies, not through EOL-rewriting checkouts (git `autocrlf`), or hash
 verification will honestly report the rewrite as a mismatch.
 
-## Why is `registry/advisories.yaml` empty?
+## Why is `advisories.yaml` empty?
 
 The do-not-use advisory registry names **specific** skills, and AbstractSkill
 does not assert a specific malicious skill on its own authority before its own
 behavioral audit or a leveraged external feed identifies a real one. Class-
-level protection is active now via `registry/guidance.yaml`, the fail-closed
+level protection is active now via `src/abstractskill/registry/guidance.yaml`, the fail-closed
 `unverified` default, and the `has_scripts` review gate. See the
 [trust model](trust.md).
 

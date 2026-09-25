@@ -39,9 +39,9 @@ See the [trust model](docs/trust.md) and
 
 ## Handling skills safely
 
-- Prefer the curated first-party shelf (`registry/skills/`) over marketplace
+- Prefer the curated first-party shelf (`src/abstractskill/registry/skills/`) over marketplace
   skills; the ecosystem's measured malware rates make unvetted marketplaces a
-  live attack surface (`registry/guidance.yaml`).
+  live attack surface (`src/abstractskill/registry/guidance.yaml`).
 - Vendor skills byte-verbatim and pin their tree hash; re-verify on load.
 - Treat a persona-steering or identity-directive skill body as grounds for a
   do-not-use advisory — for a summoned entity such a body can be engrammed

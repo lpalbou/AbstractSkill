@@ -26,39 +26,61 @@ Flows run; skills are activated. AbstractSkill owns the portable skill contract 
 pip install abstractskill
 ```
 
-Note: `pip install` delivers the LIBRARY only. The curated skills themselves
-(the shelf below) live in this repository under `registry/` and are consumed
-from a checkout — they are deliberately not packaged into the wheel today
-(a shelf you install should be a shelf you can byte-verify against the
-repository's validation records).
+The wheel carries the library and the curated skill registry (the shelf below).
 
-## Where the skills live — and how an agent uses them
+## The bundled skill registry
 
-The curated shelf is in this repository:
+`pip install abstractskill` installs the reviewed shelf as package data:
 
 ```
-registry/skills/            # 14 curated skills (one folder per SKILL.md)
-registry/validations.yaml   # trust records: byte pins per skill tree
-registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)
-registry/guidance.yaml      # class-level curation guidance
-registry/catalog.yaml       # the vendoring catalog (pinned upstream commits)
-docs/skills-catalog.md      # human-readable index: descriptions + links
+abstractskill/registry/skills/            # 14 curated skills (one folder per SKILL.md)
+abstractskill/registry/licenses/          # upstream licenses of catalog-vendored skills
+abstractskill/registry/validations.yaml   # trust records: byte pins per skill tree
+abstractskill/registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)
+abstractskill/registry/guidance.yaml      # class-level curation guidance
+abstractskill/registry/catalog.yaml       # vendoring catalog + the bundle `version`
 ```
 
-To point an **abstractcode** agent at this shelf (trust gate included), set
-three environment variables to the checkout's absolute paths:
+In this repository the same files live under `src/abstractskill/registry/`;
+[docs/skills-catalog.md](docs/skills-catalog.md) is the human-readable index.
 
-```bash
-export ABSTRACTCODE_SKILLS_ROOTS=/path/to/abstractskill/registry/skills
-export ABSTRACTCODE_SKILLS_VALIDATIONS=/path/to/abstractskill/registry/validations.yaml
-export ABSTRACTCODE_SKILLS_ADVISORIES=/path/to/abstractskill/registry/advisories.yaml
+Hosts do not serve the installed package directory (it is replaced on every
+upgrade). They copy it into a directory they own with `seed_registry`:
+
+```python
+from pathlib import Path
+
+from abstractskill import bundled_registry_dir, bundled_registry_version, seed_registry
+
+print(bundled_registry_dir(), bundled_registry_version())
+
+report = seed_registry(Path("/srv/my-host/skills-shelf"))
+print(report.added, report.updated, report.kept_user_modified, report.unchanged)
 ```
 
-then activate per session with `/skills use <name>` (discovery alone lists;
-activation composes). The trust gate is location-independent — records bind
-to content hashes, never paths — so the shelf works from any checkout
-location. Any other host consumes the same shelf through
-`select_skills_for_context` (see Quick start below).
+`seed_registry` is safe to run on every start:
+
+- a skill folder or file missing at the destination is added;
+- one still byte-identical to what the previous seed wrote (recorded in
+  `<dest>/.seeded.json`, compared by tree hash) is replaced by the newer
+  bundled content;
+- one that differs from both (an operator edit, or content the seed never
+  wrote) is kept as it is and reported in `kept_user_modified`;
+- anything at the destination that is not in the bundle is left alone.
+
+Seeding twice writes nothing. No network access is involved.
+
+The seeded directory has the layout a host reads as its shelf: `<dest>/skills`
+plus the three trust files. Trust records bind to content hashes, never to
+paths, so a seeded shelf verifies wherever it lives, and an edited skill
+honestly drops to unverified until it is re-validated. AbstractGateway seeds
+its shelf from this bundle; operators choose or change the shelf through the
+gateway console and CLI.
+
+Maintainers: bump `version:` in `src/abstractskill/registry/catalog.yaml`
+whenever any bundled skill, license or yaml file changes. `tests/test_bundled.py`
+pins the version to a digest of the bundled content and fails until both move
+together.
 
 ## Quick start
 
@@ -87,14 +109,17 @@ To ACTIVATE skills into a context, gate them through trust in one call so the
 order (load → hash → evaluate_trust → compose) cannot be skipped:
 
 ```python
+from pathlib import Path
+
 from abstractskill import TrustRegistry, select_skills_for_context, format_available_skills_xml
 
+shelf = Path("/srv/my-host/skills-shelf")  # a directory filled by seed_registry
 registry = TrustRegistry.load(
-    validations_path="registry/validations.yaml",
-    advisories_path="registry/advisories.yaml",
+    validations_path=shelf / "validations.yaml",
+    advisories_path=shelf / "advisories.yaml",
 )
 selection = select_skills_for_context(
-    registry, shelf_root="registry/skills",
+    registry, shelf_root=shelf / "skills",
     names=["coredoc", "backlog"],  # names-only is enough: sources derive from the registry
     enabled=[],  # names the operator explicitly review-enabled for this context
 )
@@ -123,13 +148,16 @@ block = format_available_skills_xml(
   `GuidanceEntry` — validated-skill attestations bound to tree hashes, a
   do-not-use advisory registry (four mandated fields, graded severity), and a
   fail-closed `TrustVerdict` (blocked / requires_review / attachable). The
-  curated shelf (first-party + catalog-vendored skills) lives under `registry/`. See the
+  curated shelf (first-party + catalog-vendored skills) ships in the package under
+  `abstractskill/registry/`. See the
   [trust model](docs/trust.md).
 - `select_skills_for_context` + `SkillSelection` — the one trust-gated activation
   pipeline (load → hash → evaluate → gate); hash-pinned enables; declared MCP/tool
   dependencies surfaced for host-side refusal.
 - `load_catalog` / `CatalogEntry` / `SkillCatalog` — curated vendoring catalog
   (pinned upstream commits, expected tree hashes).
+- `bundled_registry_dir` / `bundled_registry_version` / `seed_registry` + `SeedReport` —
+  the shelf shipped in the wheel and the policy-safe copy into a host directory.
 - `derive_demand` + `DemandReport` — derived demand tier from declared tool/MCP
   requirements joined against a host inventory (informational; hosts enforce grants).
 

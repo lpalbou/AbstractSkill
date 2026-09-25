@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.3.0] - Unreleased
+
+### Added
+
+- The curated skill registry ships in the wheel as package data under
+  `abstractskill/registry/`: 14 skills, the upstream licenses of
+  catalog-vendored skills, `catalog.yaml`, `validations.yaml`,
+  `advisories.yaml` and `guidance.yaml`. A plain `pip install abstractskill`
+  gives hosts a verifiable shelf.
+- `abstractskill.bundled`: `bundled_registry_dir()`, `bundled_registry_version()`
+  and `seed_registry(dest) -> SeedReport`. Seeding copies the bundled registry
+  into a host-owned directory, adds missing items, refreshes items still
+  byte-identical to the previous seed (tracked in `<dest>/.seeded.json`),
+  keeps operator edits, and writes nothing when run again.
+- `catalog.yaml` declares a bundle `version` (`2026.09.25`); a test pins it to
+  a digest of the bundled content so the version moves with the content.
+
+### Changed
+
+- The registry lives at `src/abstractskill/registry/` in the repository
+  (moved from `registry/`); scripts, tests and docs use the new path.
+- Curator working notes (`CANDIDATES.md`, staged capability-map amendments)
+  live under `docs/backlog/proposed/shelf-drafts/` and are not shipped.
+- The README describes the bundled registry and `seed_registry` in place of
+  per-host path configuration.
+- pytest skips `untracked/`, `build/`, `dist/`, `site/` and dot-directories
+  when collecting from the repository root.
+
 ## [0.2.1] - 2026-09-23
 
 ### Fixed

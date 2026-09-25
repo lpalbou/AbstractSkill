@@ -36,7 +36,7 @@ skill's current tree hash (it was edited or never validated — run
 ## A validation stopped applying after I edited a skill
 
 Trust binds to bytes. Any edit changes the tree hash and voids the old record.
-Re-validate: regenerate `registry/validations.yaml` with
+Re-validate: regenerate `src/abstractskill/registry/validations.yaml` with
 `scripts/refresh_shelf.py` (for shelf skills) and review the diff.
 
 ## `SkillValidationError: resource ... is N bytes, over the M-byte cap`

@@ -6,6 +6,12 @@ import logging
 # handler; hosts configure logging (or pass on_warning callbacks).
 logging.getLogger("abstractskill").addHandler(logging.NullHandler())
 
+from abstractskill.bundled import (
+    SeedReport,
+    bundled_registry_dir,
+    bundled_registry_version,
+    seed_registry,
+)
 from abstractskill.catalog import (
     CatalogEntry,
     SkillCatalog,
@@ -87,6 +93,7 @@ __all__ = [
     "RISK_RANK_MIN",
     "RISK_TIER_MAX",
     "RISK_TIER_MIN",
+    "SeedReport",
     "FilesystemSkillLoader",
     "GuidanceEntry",
     "LoadedSkill",
@@ -111,6 +118,8 @@ __all__ = [
     "TrustRegistry",
     "TrustVerdict",
     "ValidationRecord",
+    "bundled_registry_dir",
+    "bundled_registry_version",
     "content_hash",
     "derive_demand",
     "effective_tools",
@@ -124,10 +133,11 @@ __all__ = [
     "load_catalog",
     "parse_skill_md",
     "read_skill_resource",
+    "seed_registry",
     "select_skills_for_context",
     "validate_compatibility",
     "validate_description",
     "validate_skill_name",
 ]
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"

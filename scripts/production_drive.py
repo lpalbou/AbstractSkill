@@ -44,11 +44,11 @@ from abstractskill import (  # noqa: E402
     select_skills_for_context,
 )
 
-SHELF = REPO / "registry" / "skills"
-VALIDATIONS = REPO / "registry" / "validations.yaml"
-ADVISORIES = REPO / "registry" / "advisories.yaml"
-GUIDANCE = REPO / "registry" / "guidance.yaml"
-CATALOG = REPO / "registry" / "catalog.yaml"
+SHELF = REPO / "src" / "abstractskill" / "registry" / "skills"
+VALIDATIONS = REPO / "src" / "abstractskill" / "registry" / "validations.yaml"
+ADVISORIES = REPO / "src" / "abstractskill" / "registry" / "advisories.yaml"
+GUIDANCE = REPO / "src" / "abstractskill" / "registry" / "guidance.yaml"
+CATALOG = REPO / "src" / "abstractskill" / "registry" / "catalog.yaml"
 
 FAILURES: list[str] = []
 

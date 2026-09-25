@@ -18,10 +18,10 @@ from abstractskill import (
 )
 
 REPO = Path(__file__).resolve().parent.parent
-SHELF = REPO / "registry" / "skills"
-VALIDATIONS = REPO / "registry" / "validations.yaml"
-ADVISORIES = REPO / "registry" / "advisories.yaml"
-GUIDANCE = REPO / "registry" / "guidance.yaml"
+SHELF = REPO / "src" / "abstractskill" / "registry" / "skills"
+VALIDATIONS = REPO / "src" / "abstractskill" / "registry" / "validations.yaml"
+ADVISORIES = REPO / "src" / "abstractskill" / "registry" / "advisories.yaml"
+GUIDANCE = REPO / "src" / "abstractskill" / "registry" / "guidance.yaml"
 
 EXPECTED_SHELF = {
     "abstractframework-gateway",
@@ -44,7 +44,7 @@ EXPECTED_SHELF = {
 # review/uxreview added on the 2026-07-11 operator directive, architect with
 # two upstream improvements folded first); verification-before-completion is
 # the first catalog-curated third-party skill (obra/superpowers,
-# manual-review → adopted, pinned in registry/catalog.yaml).
+# manual-review → adopted, pinned in src/abstractskill/registry/catalog.yaml).
 EXPECTED_LEVELS = {
     "abstractframework-gateway": TrustLevel.FIRST_PARTY,
     "adversarial-iteration": TrustLevel.FIRST_PARTY,

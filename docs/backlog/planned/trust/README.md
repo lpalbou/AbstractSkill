@@ -158,6 +158,12 @@ findings folded same-day; these are the recorded deferrals):
   are the c1609 one-liner, config-file keys are the durable fix
   (abstractcode's lane, cross-seat); (c) `guidance.yaml` never reaches the
   CLI consumer (informational only; abstractcode's lane).
+  2026-09-25 (0.3.0): (a) DONE — the registry moved to
+  `src/abstractskill/registry/` and ships as package data;
+  `bundled_registry_dir()` / `seed_registry()` in `abstractskill.bundled`.
+  Verification story: the shipped `validations.yaml` pins the shipped skill
+  trees by hash (tests/test_bundled.py seeds and re-verifies every skill).
+  Curator drafts moved to `docs/backlog/proposed/shelf-drafts/` (not shipped).
 - 2026-07-13 feedback canvass (c1676) consolidation — shipped: backlog
   discovery-first + coredoc same-change invariant (c1712; fable5-reviewed,
   re-pinned, pushed). BATCHED, one re-pin when gateway's ask-1 drift check

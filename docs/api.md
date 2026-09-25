@@ -93,7 +93,7 @@ Everything below is exported from the top-level `abstractskill` package.
 ## Catalog
 
 - `load_catalog(path) -> SkillCatalog` — load + validate the curated vendoring
-  catalog (`registry/catalog.yaml`); loud on every malformed entry.
+  catalog (`src/abstractskill/registry/catalog.yaml`); loud on every malformed entry.
 - `CatalogEntry` — one reviewed, pinned, vendor-able skill (owner/repo slug,
   40-hex commit pin, subdir, license, archetype/risk, `expected_tree_hash`
   after first vendoring; `vendored` is parsed strictly like other boolean
@@ -102,6 +102,22 @@ Everything below is exported from the top-level `abstractskill` package.
 - `lint_catalog(catalog, shelf_names) -> tuple[str, ...]` — curator lint
   (vendored-but-absent, on-shelf-but-unlisted, risky-without-notes, unclear
   licenses). Warns, never refuses.
+
+## Bundled registry
+
+- `bundled_registry_dir() -> Path` — the registry shipped as package data
+  (`abstractskill/registry/`); works from a wheel and from a checkout. Treat
+  it as read-only.
+- `bundled_registry_version() -> str` — the `version` declared in the bundled
+  `catalog.yaml`; it moves whenever bundled content moves.
+- `seed_registry(dest) -> SeedReport` — copy the bundled registry into `dest`
+  (created if missing). Per skill folder (tree hash) and per file (sha256):
+  missing → added; identical to the bundle → unchanged; identical to what the
+  previous seed wrote (`dest/.seeded.json`) → updated; otherwise kept
+  untouched. Items not in the bundle are left alone. Idempotent; no network.
+- `SeedReport` — `dest`, `bundled_version`, `previous_version` (`None` on the
+  first seed), `added`, `updated`, `kept_user_modified`, `unchanged` (paths
+  relative to `dest`, e.g. `skills/coredoc`, `validations.yaml`), `.changed`.
 
 ## Selection
 

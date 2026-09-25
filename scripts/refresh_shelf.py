@@ -4,10 +4,10 @@
 Trust binds to bytes (see abstractskill.trust): whenever a shelf skill changes,
 its tree hash changes and its validation record must be regenerated, or the
 verdict silently lapses to UNVERIFIED. Run this after any change under
-``registry/skills/`` and review the diff.
+``src/abstractskill/registry/skills/`` and review the diff.
 
-This script is the SOURCE OF TRUTH for ``registry/validations.yaml``. It does
-not touch ``registry/advisories.yaml`` (advisories are curated by hand and
+This script is the SOURCE OF TRUTH for ``src/abstractskill/registry/validations.yaml``. It does
+not touch ``src/abstractskill/registry/advisories.yaml`` (advisories are curated by hand and
 corrected by withdrawal, never regenerated).
 """
 
@@ -21,8 +21,8 @@ from pathlib import Path
 import yaml
 
 REPO = Path(__file__).resolve().parent.parent
-SHELF = REPO / "registry" / "skills"
-VALIDATIONS = REPO / "registry" / "validations.yaml"
+SHELF = REPO / "src" / "abstractskill" / "registry" / "skills"
+VALIDATIONS = REPO / "src" / "abstractskill" / "registry" / "validations.yaml"
 
 # Per shelf skill: (method, source, level, activation_description_override).
 # first-party = authored here → may grant first_party. first-party-adoption =
@@ -537,7 +537,7 @@ def _catalog_policies() -> dict[str, dict]:
     """
     from abstractskill import load_catalog
 
-    catalog_path = REPO / "registry" / "catalog.yaml"
+    catalog_path = REPO / "src" / "abstractskill" / "registry" / "catalog.yaml"
     if not catalog_path.is_file():
         return {}
     policies: dict[str, dict] = {}
@@ -670,7 +670,7 @@ def main() -> int:
 
     # Curator lint: catch inert advisory spellings at refresh time, not at
     # incident time (advisories are hand-curated; a typo never matches).
-    advisories = REPO / "registry" / "advisories.yaml"
+    advisories = REPO / "src" / "abstractskill" / "registry" / "advisories.yaml"
     registry = TrustRegistry.load(
         validations_path=VALIDATIONS,
         advisories_path=advisories if advisories.is_file() else None,

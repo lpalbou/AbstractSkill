@@ -58,8 +58,16 @@ Package surface:
   `selection.requires[name]` for every resolved name — host information
   for refuse-with-reason on absent servers/tools, never a gate here and
   never an auto-install.
+- `bundled_registry_dir`/`bundled_registry_version`/`seed_registry` →
+  `SeedReport` — the curated registry ships in the wheel as package data
+  (`abstractskill/registry/`: skills/, licenses/, catalog.yaml with the bundle
+  `version`, validations.yaml, advisories.yaml, guidance.yaml). `seed_registry`
+  copies it into a host-owned directory: missing items are added, items still
+  byte-identical to the last seed (`<dest>/.seeded.json`, tree hash per skill)
+  are refreshed, operator edits are kept (`kept_user_modified`). Idempotent,
+  no network.
 - `load_catalog`/`CatalogEntry`/`lint_catalog` — the curated vendoring
-  catalog contract (registry/catalog.yaml: reviewed entries pinned to 40-hex
+  catalog contract (src/abstractskill/registry/catalog.yaml: reviewed entries pinned to 40-hex
   upstream commits + whole-tree hashes; owner/repo slugs only). The install
   path is CURATED-ONLY: `scripts/vendor_skill.py` fetches exactly the pinned
   commit, refuses symlinks/name-mismatches/byte drift, and validation records
@@ -85,11 +93,11 @@ caps the level it can grant, so "reviewed" cannot masquerade as "audited".
 A do-not-use `AdvisoryEntry` names a SPECIFIC skill with four mandated fields
 (official_intent, hidden_issue, severity, reference). Severity is graded:
 critical/high hard-block, hash-matched always blocks, low/medium force review.
-`registry/advisories.yaml` is empty at v1 — AbstractSkill does not self-assert
+The shipped `advisories.yaml` is empty at v1 — AbstractSkill does not self-assert
 a specific malicious skill before its own audit or a leveraged feed names one.
 
 A `GuidanceEntry` is a CATEGORY-level risk notice; it informs but never blocks
-a specific skill. `registry/guidance.yaml` ships three notices grounded in
+a specific skill. The shipped `guidance.yaml` ships three notices grounded in
 published 2026 research.
 
 `evaluate_trust(...)` returns a fail-closed `TrustVerdict` with three

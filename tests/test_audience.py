@@ -14,7 +14,7 @@ from abstractskill import TrustRegistry  # noqa: E402
 from abstractskill.errors import SkillValidationError  # noqa: E402
 from abstractskill.trust import ValidationRecord  # noqa: E402
 
-VALIDATIONS = REPO / "registry" / "validations.yaml"
+VALIDATIONS = REPO / "src" / "abstractskill" / "registry" / "validations.yaml"
 
 
 def _registry() -> TrustRegistry:

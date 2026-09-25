@@ -18,7 +18,7 @@ import pytest
 
 REPO = Path(__file__).resolve().parent.parent
 SCRIPT = REPO / "scripts" / "refresh_shelf.py"
-SHELF = REPO / "registry" / "skills"
+SHELF = REPO / "src" / "abstractskill" / "registry" / "skills"
 
 sys.path.insert(0, str(REPO / "src"))
 

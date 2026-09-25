@@ -12,6 +12,12 @@
 # licenses read from the actual trees, not READMEs). Curation rationale +
 # watch/excluded tiers: docs/skills-catalog.md.
 #
+# `version` names the bundled registry as a whole (skills, licenses and the
+# four yaml files shipped in the abstractskill wheel). Bump it whenever any
+# of that content changes; seed_registry() records it in <dest>/.seeded.json
+# and tests/test_bundled.py pins it to a content digest.
+version: "2026.09.25"
+
 skills:
 
 # ---- meshvault (lpalbou/meshvault, MIT; author = the meshvault agent seat,

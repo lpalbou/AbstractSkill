@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "abstractskill"
-version = "0.2.1"
+version = "0.3.0"
 description = "Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -61,8 +61,17 @@ where = ["src"]
 include = ["abstractskill*"]
 exclude = ["tests*"]
 
+# The curated registry (skills, licenses, trust yaml) ships as package data;
+# abstractskill.bundled exposes it and seeds host-owned copies.
+[tool.setuptools.package-data]
+abstractskill = ["registry/*.yaml", "registry/licenses/*", "registry/skills/**/*"]
+
+[tool.setuptools.exclude-package-data]
+abstractskill = ["registry/**/.DS_Store", "registry/**/Thumbs.db", "registry/**/desktop.ini"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+norecursedirs = [".*", "build", "dist", "site", "untracked"]
 markers = [
     "integration: tests that require external services or large fixtures",
 ]

@@ -28,7 +28,7 @@ pip install abstractskill
 - [Getting started](getting-started.md) — parse, discover, compose tools, evaluate trust
 - [Architecture](architecture.md) — components and data flow
 - [API reference](api.md) — public functions and types
-- [Curated skills catalog](skills-catalog.md) — the reviewed shelf under `registry/skills/`
+- [Curated skills catalog](skills-catalog.md) — the reviewed shelf under `src/abstractskill/registry/skills/`
 
 ## Project links
 

@@ -2,7 +2,7 @@
 
 The reviewed, pinned list of third-party skills AbstractFramework can vendor
 onto the shelf — and the reasons. Machine-readable half:
-[`registry/catalog.yaml`](../registry/catalog.yaml). Install path:
+[`src/abstractskill/registry/catalog.yaml`](../src/abstractskill/registry/catalog.yaml). Install path:
 `python scripts/vendor_skill.py <name>` (curated-only; see
 [Adding a curated skill](#adding-a-curated-skill)).
 
@@ -21,17 +21,17 @@ framework-facing activation lines; links point at the exact pinned source.
 
 | Skill | Status | Description | Link |
 |---|---|---|---|
-| `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [registry/skills/abstractframework-gateway](../registry/skills/abstractframework-gateway/SKILL.md) |
-| `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [registry/skills/adversarial-iteration](../registry/skills/adversarial-iteration/SKILL.md) |
-| `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [registry/skills/agora-collaboration](../registry/skills/agora-collaboration/SKILL.md) |
-| `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules. | [registry/skills/entity-self-knowledge](../registry/skills/entity-self-knowledge/SKILL.md) |
-| `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code. | [registry/skills/coredoc](../registry/skills/coredoc/SKILL.md) |
-| `backlog` | shelf (adopted) | Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene. | [registry/skills/backlog](../registry/skills/backlog/SKILL.md) |
-| `architect` | shelf (adopted) | Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix — now with premise verification + the engraving gate. | [registry/skills/architect](../registry/skills/architect/SKILL.md) |
-| `adr` | shelf (adopted) | Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with `backlog`. | [registry/skills/adr](../registry/skills/adr/SKILL.md) |
-| `cicd` | shelf (adopted) | GitHub-based CI/CD: least-privilege workflows, OIDC trusted publishing, docs deployment, release rehearsals, maintenance playbook. | [registry/skills/cicd](../registry/skills/cicd/SKILL.md) |
-| `review` | shelf (adopted) | Independent evidence-based ship-readiness reviews (correctness / architecture-fit / user-and-operations lenses; Blocking/Conditional/Approved). | [registry/skills/review](../registry/skills/review/SKILL.md) |
-| `uxreview` | shelf (adopted) | Human UX reviews with independent naive/intermediate/expert personas over live UI evidence; code-only review caps the verdict. | [registry/skills/uxreview](../registry/skills/uxreview/SKILL.md) |
+| `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [src/abstractskill/registry/skills/abstractframework-gateway](../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md) |
+| `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [src/abstractskill/registry/skills/adversarial-iteration](../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md) |
+| `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [src/abstractskill/registry/skills/agora-collaboration](../src/abstractskill/registry/skills/agora-collaboration/SKILL.md) |
+| `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules. | [src/abstractskill/registry/skills/entity-self-knowledge](../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md) |
+| `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code. | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |
+| `backlog` | shelf (adopted) | Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene. | [src/abstractskill/registry/skills/backlog](../src/abstractskill/registry/skills/backlog/SKILL.md) |
+| `architect` | shelf (adopted) | Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix — now with premise verification + the engraving gate. | [src/abstractskill/registry/skills/architect](../src/abstractskill/registry/skills/architect/SKILL.md) |
+| `adr` | shelf (adopted) | Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with `backlog`. | [src/abstractskill/registry/skills/adr](../src/abstractskill/registry/skills/adr/SKILL.md) |
+| `cicd` | shelf (adopted) | GitHub-based CI/CD: least-privilege workflows, OIDC trusted publishing, docs deployment, release rehearsals, maintenance playbook. | [src/abstractskill/registry/skills/cicd](../src/abstractskill/registry/skills/cicd/SKILL.md) |
+| `review` | shelf (adopted) | Independent evidence-based ship-readiness reviews (correctness / architecture-fit / user-and-operations lenses; Blocking/Conditional/Approved). | [src/abstractskill/registry/skills/review](../src/abstractskill/registry/skills/review/SKILL.md) |
+| `uxreview` | shelf (adopted) | Human UX reviews with independent naive/intermediate/expert personas over live UI evidence; code-only review caps the verdict. | [src/abstractskill/registry/skills/uxreview](../src/abstractskill/registry/skills/uxreview/SKILL.md) |
 | `verification-before-completion` | shelf (adopted) ⚠ content caveat | Evidence before claims: run the verification commands and read the output before any completion claim. Entity-lane hold until the 0003 audit. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/verification-before-completion) |
 | `test-driven-development` | catalog (vendorable) | Write a failing test before any implementation code, make it pass, then refactor — "test after" is grounds to restart. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/test-driven-development) |
 | `writing-plans` | catalog (vendorable) | Implementation plans detailed enough to execute without guessing: small tasks, named files, tests first. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/writing-plans) |
@@ -49,7 +49,7 @@ The 2026 skill ecosystem measures badly: Snyk's ToxicSkills audit found 36.8%
 of 3,984 registry skills flawed, 13.4% critical; a 98,380-skill behavioral
 study confirmed 157 malicious; the AIR incident shipped a post-approval URL
 swap to ~26,000 agents THROUGH three scanners (all figures with their
-references in [`registry/guidance.yaml`](../registry/guidance.yaml)). The
+references in [`src/abstractskill/registry/guidance.yaml`](../src/abstractskill/registry/guidance.yaml)). The
 ecosystem's standard installer (`npx skills add`) symlinks trees with no
 hash pinning, and its own documentation tells users to treat skills as
 unverified code and read them before installing. Curation, commit pins,
@@ -67,14 +67,14 @@ exactly this; see the watch tier.)
 
 ## Top curated skills (vendorable now)
 
-All entries are pinned in `registry/catalog.yaml`. Risk is the curator's
+All entries are pinned in `src/abstractskill/registry/catalog.yaml`. Risk is the curator's
 reviewed classification (`low` = text-only reviewed content; `moderate` =
 scripts present or comparable surface; `risky` = requires capabilities the
 gate withholds); the structural facts win at the gate regardless
 (scripts-present ⇒ `requires_review`, whatever the label says). Archetypes:
 `knowledge` = reference material; `procedure` = a working method the agent
 follows; `meta` = skills about skills. License text travels with every
-vendored copy (out-of-tree at `registry/licenses/<name>.LICENSE`, so the
+vendored copy (out-of-tree at `src/abstractskill/registry/licenses/<name>.LICENSE`, so the
 pinned tree hash covers only upstream bytes).
 
 ### Engineering process — `obra/superpowers` (MIT, ~251k stars as of 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026" per the cited blog)
@@ -250,7 +250,7 @@ python scripts/vendor_skill.py --list
 # 2. vendor a pinned entry (fetches the exact commit, validates, hashes)
 python scripts/vendor_skill.py <name>
 
-# 3. review the vendored diff, then pin it in registry/catalog.yaml
+# 3. review the vendored diff, then pin it in src/abstractskill/registry/catalog.yaml
 #    (expected_tree_hash + vendored: true — printed by step 2)
 
 # 4. regenerate the trust registry (validation records derive from the catalog)

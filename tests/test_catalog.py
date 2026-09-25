@@ -10,7 +10,7 @@ from abstractskill import CatalogEntry, SkillValidationError, lint_catalog, load
 from abstractskill.catalog import SkillCatalog
 
 REPO = Path(__file__).resolve().parent.parent
-SHIPPED_CATALOG = REPO / "registry" / "catalog.yaml"
+SHIPPED_CATALOG = REPO / "src" / "abstractskill" / "registry" / "catalog.yaml"
 
 SHA = "a" * 40
 TREE = "b" * 64
@@ -149,7 +149,7 @@ def test_shipped_catalog_loads_and_lints_clean() -> None:
     # either needs a human, so the test forces one).
     catalog = load_catalog(SHIPPED_CATALOG)
     assert len(catalog.entries) >= 8
-    shelf = REPO / "registry" / "skills"
+    shelf = REPO / "src" / "abstractskill" / "registry" / "skills"
     shelf_names = [p.name for p in shelf.iterdir() if p.is_dir()]
     assert lint_catalog(catalog, shelf_names) == ()
 
@@ -160,7 +160,7 @@ def test_vendored_catalog_pins_match_shelf_bytes() -> None:
     from abstractskill import inspect_skill_dir
 
     catalog = load_catalog(SHIPPED_CATALOG)
-    shelf = REPO / "registry" / "skills"
+    shelf = REPO / "src" / "abstractskill" / "registry" / "skills"
     for entry in catalog.entries:
         if not entry.vendored:
             continue

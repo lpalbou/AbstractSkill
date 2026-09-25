@@ -2,11 +2,11 @@
 """Vendor a CURATED skill onto the shelf — the only install path.
 
 Usage:
-    python scripts/vendor_skill.py <name> [--catalog registry/catalog.yaml]
+    python scripts/vendor_skill.py <name> [--catalog src/abstractskill/registry/catalog.yaml]
     python scripts/vendor_skill.py --list
 
 Curated-only by construction: the skill must have a reviewed entry in
-``registry/catalog.yaml`` (pinned owner/repo + 40-hex commit). Anything else
+``src/abstractskill/registry/catalog.yaml`` (pinned owner/repo + 40-hex commit). Anything else
 is refused — there is no URL argument to smuggle a source through.
 
 What it does, in order (fail-closed at every step):
@@ -21,7 +21,7 @@ What it does, in order (fail-closed at every step):
    ``expected_tree_hash`` when present (re-vendor must be byte-identical —
    an upstream force-push cannot silently change the shelf). First vendoring
    prints the hash for the curator to pin after human diff review;
-6. move the staged tree into ``registry/skills/<name>/`` (refuses to
+6. move the staged tree into ``src/abstractskill/registry/skills/<name>/`` (refuses to
    overwrite unless the bytes are identical or --force is given);
 7. print the SHELF_POLICY / validations line the curator adds, then run
    ``refresh_shelf.py`` guidance. Trust stays fail-closed: third-party
@@ -43,8 +43,8 @@ import tempfile
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-SHELF = REPO / "registry" / "skills"
-DEFAULT_CATALOG = REPO / "registry" / "catalog.yaml"
+SHELF = REPO / "src" / "abstractskill" / "registry" / "skills"
+DEFAULT_CATALOG = REPO / "src" / "abstractskill" / "registry" / "catalog.yaml"
 
 sys.path.insert(0, str(REPO / "src"))
 
@@ -144,13 +144,13 @@ def _trees_identical(a: Path, b: Path) -> bool:
 
 
 def _vendor_license(entry: CatalogEntry, skill_src: Path, repo_root: Path) -> None:
-    """Copy the upstream license text to registry/licenses/<name>.LICENSE.
+    """Copy the upstream license text to src/abstractskill/registry/licenses/<name>.LICENSE.
 
     Per-skill license files (Anthropic's per-dir LICENSE.txt) win over the
     repo-root license. Out-of-tree deliberately: adding a license INSIDE the
     vendored dir would change the pinned tree hash.
     """
-    licenses_dir = REPO / "registry" / "licenses"
+    licenses_dir = REPO / "src" / "abstractskill" / "registry" / "licenses"
     candidates = [
         skill_src / "LICENSE.txt", skill_src / "LICENSE",
         repo_root / "LICENSE", repo_root / "LICENSE.txt", repo_root / "LICENSE.md",
@@ -165,7 +165,7 @@ def _vendor_license(entry: CatalogEntry, skill_src: Path, repo_root: Path) -> No
                 f"# Source file: {candidate.relative_to(repo_root)}\n\n"
             )
             target.write_text(header + candidate.read_text(encoding="utf-8"), encoding="utf-8")
-            print(f"  license:     registry/licenses/{entry.name}.LICENSE ({candidate.name})")
+            print(f"  license:     src/abstractskill/registry/licenses/{entry.name}.LICENSE ({candidate.name})")
             return
     print(
         f"  #FALLBACK: no LICENSE file found upstream for {entry.name!r} — "
@@ -244,7 +244,7 @@ def vendor(entry: CatalogEntry, *, force: bool = False) -> int:
         if not entry.expected_tree_hash:
             print(
                 "\nFIRST VENDORING — after reviewing the vendored diff, pin it in "
-                "registry/catalog.yaml:\n"
+                "src/abstractskill/registry/catalog.yaml:\n"
                 f"  [{entry.name}] expected_tree_hash: {tree_hash}\n"
                 f"  [{entry.name}] vendored: true"
             )
@@ -284,7 +284,7 @@ def main() -> int:
     if entry is None:
         raise SystemExit(
             f"{args.name!r} is not in the curated catalog — curated-only is structural; "
-            "add a reviewed entry to registry/catalog.yaml first"
+            "add a reviewed entry to src/abstractskill/registry/catalog.yaml first"
         )
     return vendor(entry, force=args.force)
 

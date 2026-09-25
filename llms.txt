@@ -13,7 +13,7 @@ identical semantics without duplicating parsers.
 ## Documentation
 
 - [README](README.md): overview, package scope, hashing contract, install.
-- [Getting started](docs/getting-started.md): parse, discover, hash, compose, evaluate trust.
+- [Getting started](docs/getting-started.md): parse, discover, hash, compose, evaluate trust, seed the bundled shelf.
 - [Architecture](docs/architecture.md): components, data flow, verdict precedence (Mermaid diagrams).
 - [API reference](docs/api.md): all public functions and types.
 - [FAQ](docs/faq.md): common questions and limitations.
@@ -33,6 +33,7 @@ identical semantics without duplicating parsers.
 - `effective_tools(grant, skills)` (grant ∩ declared; never widens).
 - `evaluate_trust(registry, tree_hash=..., has_scripts=...)` → `TrustVerdict` (blocked / requires_review / attachable).
 - `select_skills_for_context(registry, shelf_root, names)` → `SkillSelection` (the ONE trust-gated activation pipeline; names-only calls derive sources from the registry).
+- `bundled_registry_dir()`, `bundled_registry_version()`, `seed_registry(dest)` → `SeedReport` (the curated shelf shipped in the wheel; seeding adds missing items, refreshes items unchanged since the last seed, keeps operator edits).
 - `derive_demand(requires=..., inventory=..., granted=...)` → `DemandReport` (derived demand tier from declared tool/MCP requirements; hosts enforce grants separately).
 
 ## Planning

@@ -85,12 +85,13 @@ least privilege use `effective_tools_for_skill`.
 ## Evaluate trust
 
 ```python
-from abstractskill import TrustRegistry, evaluate_trust, inspect_skill_dir
+from abstractskill import TrustRegistry, bundled_registry_dir, evaluate_trust, inspect_skill_dir
 
+shelf = bundled_registry_dir()  # the registry shipped in the wheel (read-only)
 registry = TrustRegistry.load(
-    validations_path="registry/validations.yaml",
-    advisories_path="registry/advisories.yaml",
-    guidance_path="registry/guidance.yaml",
+    validations_path=shelf / "validations.yaml",
+    advisories_path=shelf / "advisories.yaml",
+    guidance_path=shelf / "guidance.yaml",
 )
 inv = inspect_skill_dir("my-skill")
 verdict = evaluate_trust(
@@ -105,6 +106,29 @@ for reason in verdict.reasons:
 The verdict is fail-closed: only a validated, advisory-free, script-free skill
 is `attachable`. See the [trust model](trust.md) for the full semantics.
 
+## Seed the bundled shelf into a host directory
+
+The wheel ships the curated registry (`abstractskill/registry/`: `skills/`,
+`licenses/`, `catalog.yaml`, `validations.yaml`, `advisories.yaml`,
+`guidance.yaml`). A host copies it into a directory it owns:
+
+```python
+from pathlib import Path
+
+from abstractskill import seed_registry
+
+report = seed_registry(Path("/srv/my-host/skills-shelf"))
+print(report.bundled_version, report.previous_version)
+print("added:", report.added)
+print("updated:", report.updated)
+print("kept (operator edits):", report.kept_user_modified)
+```
+
+Run it on every start. Missing items are added; items still byte-identical to
+what the previous seed wrote (tracked in `<dest>/.seeded.json`) are refreshed;
+anything an operator changed is kept and reported in `kept_user_modified`.
+A second run with the same package writes nothing.
+
 ## Activate skills into a context (the composed pipeline)
 
 For activation, do not wire the primitives by hand — use the ONE pipeline so
@@ -113,14 +137,17 @@ the activation-description overrides so upstream wrong-audience text never
 reaches a prompt:
 
 ```python
+from pathlib import Path
+
 from abstractskill import TrustRegistry, format_available_skills_xml, select_skills_for_context
 
+shelf = Path("/srv/my-host/skills-shelf")  # filled by seed_registry (next section)
 registry = TrustRegistry.load(
-    validations_path="registry/validations.yaml",
-    advisories_path="registry/advisories.yaml",
+    validations_path=shelf / "validations.yaml",
+    advisories_path=shelf / "advisories.yaml",
 )
 selection = select_skills_for_context(
-    registry, shelf_root="registry/skills",
+    registry, shelf_root=shelf / "skills",
     names=["coredoc", "verification-before-completion"],  # names-only is enough
     enabled=[],  # operator-enabled requires_review skills for THIS context
 )

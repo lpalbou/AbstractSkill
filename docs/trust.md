@@ -54,7 +54,7 @@ that surfaces a warning. Severity is graded: critical/high hard-block; a
 hash-matched advisory always blocks; low/medium force review. Advisories are
 corrected by **withdrawal** (status + reason + date), never deletion.
 
-The shipped `registry/advisories.yaml` is intentionally empty at v1:
+The shipped `src/abstractskill/registry/advisories.yaml` is intentionally empty at v1:
 AbstractSkill does not assert a specific malicious skill on its own authority
 before its own audit (0003) or a leveraged external feed (0004) identifies a
 real one. Asserting a specific skill wrongly is itself harmful.
@@ -65,7 +65,7 @@ A `GuidanceEntry` is a **category-level** risk notice (e.g. "unvetted
 marketplace skills are a supply-chain surface"). Guidance informs a picker or
 operator and carries a reference, but never produces a blocked verdict on an
 individual skill — a class label cannot honestly forbid a specific skill.
-`registry/guidance.yaml` ships three notices grounded in published 2026
+`src/abstractskill/registry/guidance.yaml` ships three notices grounded in published 2026
 research (Snyk ToxicSkills, the 98,380-skill behavioral study, the SkillScan
 script-bundling finding).
 
