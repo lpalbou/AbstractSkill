@@ -489,6 +489,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#bundled-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bundled registry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#selection" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -860,6 +871,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#bundled-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bundled registry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#selection" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1005,7 +1027,7 @@
 <h2 id="catalog">Catalog<a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>load_catalog(path) -&gt; SkillCatalog</code> — load + validate the curated vendoring
-  catalog (<code>registry/catalog.yaml</code>); loud on every malformed entry.</li>
+  catalog (<code>src/abstractskill/registry/catalog.yaml</code>); loud on every malformed entry.</li>
 <li><code>CatalogEntry</code> — one reviewed, pinned, vendor-able skill (owner/repo slug,
   40-hex commit pin, subdir, license, archetype/risk, <code>expected_tree_hash</code>
   after first vendoring; <code>vendored</code> is parsed strictly like other boolean
@@ -1014,6 +1036,39 @@
 <li><code>lint_catalog(catalog, shelf_names) -&gt; tuple[str, ...]</code> — curator lint
   (vendored-but-absent, on-shelf-but-unlisted, risky-without-notes, unclear
   licenses). Warns, never refuses.</li>
+</ul>
+<h2 id="bundled-registry">Bundled registry<a class="headerlink" href="#bundled-registry" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>bundled_registry_dir() -&gt; Path</code> — the registry shipped as package data
+  (<code>abstractskill/registry/</code>); works from a wheel and from a checkout. Treat
+  it as read-only. Raises <code>SkillError</code> when the package is installed zipped
+  (not on the filesystem) or the registry is missing.</li>
+<li><code>bundled_registry_version() -&gt; str</code> — the dotted-numeric <code>version</code> declared
+  in the bundled <code>catalog.yaml</code> (e.g. <code>2026.09.25</code>); it moves whenever
+  bundled content moves. Raises <code>SkillValidationError</code> when the version is
+  absent or not dotted-numeric.</li>
+<li><code>SEED_MANIFEST</code> (<code>.seeded.json</code>) and <code>SEED_LOCK</code> (<code>.seed.lock</code>) — the file
+  names <code>seed_registry</code> uses inside <code>dest</code> (module constants of
+  <code>abstractskill.bundled</code>).</li>
+<li><code>seed_registry(dest) -&gt; SeedReport</code> — copy the bundled registry into <code>dest</code>
+  (created if missing) under an exclusive lock on <code>dest/.seed.lock</code>. Per
+  skill folder (tree hash) and per file (sha256): missing → added; identical
+  to the bundle → unchanged; identical to what an earlier seed wrote
+  (<code>dest/.seeded.json</code>) → updated, or <code>kept_newer</code> when the bundle is older
+  than that seed; otherwise kept with a reason. Without a manifest, identical
+  items are adopted and the rest are <code>kept_unknown_provenance</code>. Items no longer
+  bundled are reported, never deleted. Idempotent; no network. If a folder
+  swap fails, the previous copy is restored before the error propagates.
+  Raises <code>SkillError</code> on an unreadable, malformed or unknown-schema
+  manifest, a symlinked staging entry, or a <code>dest</code> inside the bundle. See
+  <a href="../troubleshooting/#seeding-the-bundled-registry">Troubleshooting</a> for each
+  case.</li>
+<li><code>SeedReport</code> — <code>dest</code>, <code>bundled_version</code>, <code>previous_version</code> (<code>None</code> when
+  <code>dest</code> has no manifest), <code>added</code>, <code>updated</code>, <code>unchanged</code>,
+  <code>kept_user_modified</code>, <code>kept_foreign</code>, <code>kept_unknown_provenance</code>,
+  <code>kept_symlink</code>, <code>kept_unreadable</code>, <code>kept_newer</code>, <code>not_in_bundle</code> (paths
+  relative to <code>dest</code>, e.g. <code>skills/coredoc</code>, <code>validations.yaml</code>); <code>.changed</code>
+  (anything written) and <code>.kept</code> (<code>{item: reason}</code>).</li>
 </ul>
 <h2 id="selection">Selection<a class="headerlink" href="#selection" title="Permanent link">&para;</a></h2>
 <ul>

@@ -2,98 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/KnowledgeBase/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/api/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/architecture/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/changelog/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/faq/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/getting-started/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/security/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/skills-catalog/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/skills-flows-mcp/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/troubleshooting/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/trust-network-position/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/trust/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/overview/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/completed/0008_skill_tool_dependency_declaration/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/planned/trust/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/planned/trust/0001_trust_contract_layer/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/planned/trust/0002_advisory_registry/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/planned/trust/0003_simulated_execution_audit_harness/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/planned/trust/0004_trust_network_research/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/planned/trust/0005_first_party_shelf/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/proposed/0006_automated_periodic_reviews/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/proposed/0007_admission_lint/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://www.lpalbou.info/AbstractSkill/backlog/proposed/shelf-drafts/CANDIDATES/</loc>
+         <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+         <loc>https://www.lpalbou.info/AbstractSkill/backlog/proposed/shelf-drafts/capability_map_staged_amendments/</loc>
+         <lastmod>2026-09-26</lastmod>
     </url>
     <url>
          <loc>https://www.lpalbou.info/AbstractSkill/backlog/recurrent/advisory-registry-review/</loc>
-         <lastmod>2026-09-23</lastmod>
+         <lastmod>2026-09-26</lastmod>
     </url>
 </urlset>

@@ -708,12 +708,13 @@
 live, findings stay accurate, validation records stay bound to current hashes.</p>
 <h2 id="run-conditions">Run conditions<a class="headerlink" href="#run-conditions" title="Permanent link">&para;</a></h2>
 <ul>
-<li>On any change to <code>registry/advisories.yaml</code> or <code>registry/validations.yaml</code>.</li>
+<li>On any change to <code>src/abstractskill/registry/advisories.yaml</code> or
+  <code>src/abstractskill/registry/validations.yaml</code>.</li>
 <li>On a periodic cadence once 0006 lands (host-scheduled, not agent-persisted).</li>
 <li>Whenever a shelf skill's tree hash changes (re-validation required).</li>
 </ul>
 <h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">&para;</a></h2>
-<p><code>registry/*.yaml</code>, shelf hashes, advisory reference liveness.</p>
+<p><code>src/abstractskill/registry/*.yaml</code>, shelf hashes, advisory reference liveness.</p>
 <h2 id="checklist">Checklist<a class="headerlink" href="#checklist" title="Permanent link">&para;</a></h2>
 <ul>
 <li>[ ] Every advisory has all four mandated fields and a resolvable reference.</li>

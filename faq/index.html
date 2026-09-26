@@ -461,10 +461,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-is-registryadvisoriesyaml-empty" class="md-nav__link">
+  <a href="#why-is-advisoriesyaml-empty" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why is registry/advisories.yaml empty?
+        Why is advisories.yaml empty?
       
     </span>
   </a>
@@ -498,6 +498,50 @@
     <span class="md-ellipsis">
       
         What are coredoc and backlog in the shelf?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-skills-ship-with-the-package-and-how-does-a-host-use-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which skills ship with the package, and how does a host use them?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#will-seeding-overwrite-my-edits-to-a-shelf-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Will seeding overwrite my edits to a shelf skill?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#does-seeding-remove-skills-that-leave-the-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does seeding remove skills that leave the bundle?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#does-the-tree-hash-cover-file-permissions-and-empty-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does the tree hash cover file permissions and empty folders?
       
     </span>
   </a>
@@ -761,10 +805,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-is-registryadvisoriesyaml-empty" class="md-nav__link">
+  <a href="#why-is-advisoriesyaml-empty" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why is registry/advisories.yaml empty?
+        Why is advisories.yaml empty?
       
     </span>
   </a>
@@ -798,6 +842,50 @@
     <span class="md-ellipsis">
       
         What are coredoc and backlog in the shelf?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-skills-ship-with-the-package-and-how-does-a-host-use-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which skills ship with the package, and how does a host use them?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#will-seeding-overwrite-my-edits-to-a-shelf-skill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Will seeding overwrite my edits to a shelf skill?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#does-seeding-remove-skills-that-leave-the-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does seeding remove skills that leave the bundle?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#does-the-tree-hash-cover-file-permissions-and-empty-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does the tree hash cover file permissions and empty folders?
       
     </span>
   </a>
@@ -842,11 +930,11 @@ never calls two different byte-trees "the same". A CRLF-authored skill parses
 identically to its LF twin but hashes differently. Vendor skills from archives
 or byte-copies, not through EOL-rewriting checkouts (git <code>autocrlf</code>), or hash
 verification will honestly report the rewrite as a mismatch.</p>
-<h2 id="why-is-registryadvisoriesyaml-empty">Why is <code>registry/advisories.yaml</code> empty?<a class="headerlink" href="#why-is-registryadvisoriesyaml-empty" title="Permanent link">&para;</a></h2>
+<h2 id="why-is-advisoriesyaml-empty">Why is <code>advisories.yaml</code> empty?<a class="headerlink" href="#why-is-advisoriesyaml-empty" title="Permanent link">&para;</a></h2>
 <p>The do-not-use advisory registry names <strong>specific</strong> skills, and AbstractSkill
 does not assert a specific malicious skill on its own authority before its own
 behavioral audit or a leveraged external feed identifies a real one. Class-
-level protection is active now via <code>registry/guidance.yaml</code>, the fail-closed
+level protection comes from the bundled <code>guidance.yaml</code>, the fail-closed
 <code>unverified</code> default, and the <code>has_scripts</code> review gate. See the
 <a href="../trust/">trust model</a>.</p>
 <h2 id="can-a-skill-grant-an-agent-more-tools-than-the-operator-allowed">Can a skill grant an agent more tools than the operator allowed?<a class="headerlink" href="#can-a-skill-grant-an-agent-more-tools-than-the-operator-allowed" title="Permanent link">&para;</a></h2>
@@ -865,6 +953,29 @@ backlog planning), vendored byte-verbatim and first-party reviewed. They are
 <code>adopted</code> (reviewed, not yet behaviorally audited). <code>adversarial-iteration</code>
 is the framework's first-party skill for the "one adversarial reviewer plus at
 least three improvement cycles" method.</p>
+<h2 id="which-skills-ship-with-the-package-and-how-does-a-host-use-them">Which skills ship with the package, and how does a host use them?<a class="headerlink" href="#which-skills-ship-with-the-package-and-how-does-a-host-use-them" title="Permanent link">&para;</a></h2>
+<p>The wheel carries the curated registry: 14 skills, the upstream licenses of
+vendored third-party skills, and four yaml files (<code>catalog.yaml</code>,
+<code>validations.yaml</code>, <code>advisories.yaml</code>, <code>guidance.yaml</code>). A host copies it
+into a directory it owns with <code>seed_registry</code> and serves that copy; the
+<a href="../skills-catalog/">curated skills catalog</a> lists the skills, and
+<a href="../getting-started/#seed-the-bundled-shelf-into-a-host-directory">Getting started</a>
+shows the call.</p>
+<h2 id="will-seeding-overwrite-my-edits-to-a-shelf-skill">Will seeding overwrite my edits to a shelf skill?<a class="headerlink" href="#will-seeding-overwrite-my-edits-to-a-shelf-skill" title="Permanent link">&para;</a></h2>
+<p>No. An item is refreshed only while it is byte-identical to what an earlier
+seed wrote. An edited item is kept and reported as <code>kept_user_modified</code>.
+Because trust binds to bytes, an edited skill no longer matches its
+validation record and evaluates as <code>unverified</code> until it is re-validated.
+To go back to the bundled version, see
+<a href="../troubleshooting/#a-bundled-skill-is-not-refreshed-after-an-upgrade">Troubleshooting</a>.</p>
+<h2 id="does-seeding-remove-skills-that-leave-the-bundle">Does seeding remove skills that leave the bundle?<a class="headerlink" href="#does-seeding-remove-skills-that-leave-the-bundle" title="Permanent link">&para;</a></h2>
+<p>No. Seeding never deletes. Items an earlier seed wrote that the bundle no
+longer contains are reported in <code>SeedReport.not_in_bundle</code>; removing them is
+the host's or operator's decision.</p>
+<h2 id="does-the-tree-hash-cover-file-permissions-and-empty-folders">Does the tree hash cover file permissions and empty folders?<a class="headerlink" href="#does-the-tree-hash-cover-file-permissions-and-empty-folders" title="Permanent link">&para;</a></h2>
+<p>No. <code>hash_skill_tree</code> covers file paths and bytes only. A seed refresh of an
+unmodified skill therefore does not preserve a changed executable bit or an
+empty folder you added.</p>
 
 
 

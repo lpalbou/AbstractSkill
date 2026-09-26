@@ -531,15 +531,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#top-curated-skills-vendorable-now" class="md-nav__link">
+  <a href="#top-curated-skills-vendorable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Top curated skills (vendorable now)
+        Top curated skills (vendorable)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Top curated skills (vendorable now)">
+    <nav class="md-nav" aria-label="Top curated skills (vendorable)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -586,28 +586,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#3d-tooling-lpalboumeshvault-mit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D tooling — lpalbou/meshvault (MIT)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#maintainer-skills-wave-operator-directive-2026-07-11-evening" class="md-nav__link">
+  <a href="#maintainer-authored-skills" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Maintainer skills wave (operator directive, 2026-07-11 evening)
+        Maintainer-authored skills
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Maintainer skills wave (operator directive, 2026-07-11 evening)">
+    <nav class="md-nav" aria-label="Maintainer-authored skills">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#review-uxreview-as-is-improved-or-merged" class="md-nav__link">
+  <a href="#how-the-reviewer-skills-compose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        review / uxreview: as-is, improved, or merged?
+        How the reviewer skills compose
       
     </span>
   </a>
@@ -828,15 +839,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#top-curated-skills-vendorable-now" class="md-nav__link">
+  <a href="#top-curated-skills-vendorable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Top curated skills (vendorable now)
+        Top curated skills (vendorable)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Top curated skills (vendorable now)">
+    <nav class="md-nav" aria-label="Top curated skills (vendorable)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -883,28 +894,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#3d-tooling-lpalboumeshvault-mit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D tooling — lpalbou/meshvault (MIT)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#maintainer-skills-wave-operator-directive-2026-07-11-evening" class="md-nav__link">
+  <a href="#maintainer-authored-skills" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Maintainer skills wave (operator directive, 2026-07-11 evening)
+        Maintainer-authored skills
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Maintainer skills wave (operator directive, 2026-07-11 evening)">
+    <nav class="md-nav" aria-label="Maintainer-authored skills">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#review-uxreview-as-is-improved-or-merged" class="md-nav__link">
+  <a href="#how-the-reviewer-skills-compose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        review / uxreview: as-is, improved, or merged?
+        How the reviewer skills compose
       
     </span>
   </a>
@@ -983,7 +1005,7 @@
 <h1 id="curated-skills-catalog">Curated skills catalog<a class="headerlink" href="#curated-skills-catalog" title="Permanent link">&para;</a></h1>
 <p>The reviewed, pinned list of third-party skills AbstractFramework can vendor
 onto the shelf — and the reasons. Machine-readable half:
-<a href="../registry/catalog.yaml"><code>registry/catalog.yaml</code></a>. Install path:
+<a href="../src/abstractskill/registry/catalog.yaml"><code>src/abstractskill/registry/catalog.yaml</code></a>. Install path:
 <code>python scripts/vendor_skill.py &lt;name&gt;</code> (curated-only; see
 <a href="#adding-a-curated-skill">Adding a curated skill</a>).</p>
 <p>Curation date: 2026-07-11. Structural facts (paths, frontmatter names,
@@ -993,8 +1015,9 @@ was read for the vendored entries; an adversarial review additionally
 content-read every top entry and its findings are folded below (one entry
 was pulled for a time-of-use fetch; one carries a content caveat).</p>
 <h2 id="all-skills-at-a-glance">All skills at a glance<a class="headerlink" href="#all-skills-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>Everything the skill seat manages: the vendored shelf (active today) plus
-the curated catalog (vendorable on demand). Descriptions are the
+<p>The vendored shelf (the 14 skills shipped in the package under
+<code>abstractskill/registry/skills/</code>) plus the curated catalog (vendorable on
+demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.</p>
 <table>
 <thead>
@@ -1010,67 +1033,79 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <td><code>abstractframework-gateway</code></td>
 <td>shelf (first_party)</td>
 <td>Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent.</td>
-<td><a href="../registry/skills/abstractframework-gateway/SKILL.md">registry/skills/abstractframework-gateway</a></td>
+<td><a href="../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md">src/abstractskill/registry/skills/abstractframework-gateway</a></td>
 </tr>
 <tr>
 <td><code>adversarial-iteration</code></td>
 <td>shelf (first_party)</td>
 <td>Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record.</td>
-<td><a href="../registry/skills/adversarial-iteration/SKILL.md">registry/skills/adversarial-iteration</a></td>
+<td><a href="../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md">src/abstractskill/registry/skills/adversarial-iteration</a></td>
 </tr>
 <tr>
 <td><code>agora-collaboration</code></td>
 <td>shelf (first_party)</td>
 <td>Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0).</td>
-<td><a href="../registry/skills/agora-collaboration/SKILL.md">registry/skills/agora-collaboration</a></td>
+<td><a href="../src/abstractskill/registry/skills/agora-collaboration/SKILL.md">src/abstractskill/registry/skills/agora-collaboration</a></td>
 </tr>
 <tr>
 <td><code>entity-self-knowledge</code></td>
 <td>shelf (first_party)</td>
 <td>A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules.</td>
-<td><a href="../registry/skills/entity-self-knowledge/SKILL.md">registry/skills/entity-self-knowledge</a></td>
+<td><a href="../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md">src/abstractskill/registry/skills/entity-self-knowledge</a></td>
+</tr>
+<tr>
+<td><code>entity-observation</code></td>
+<td>shelf (first_party)</td>
+<td>Read an entity's life correctly before reporting on it: the entity's own store is the primary source for any claim about what it knows, remembers, or lacks. For agent seats and operators observing a summoned entity.</td>
+<td><a href="../src/abstractskill/registry/skills/entity-observation/SKILL.md">src/abstractskill/registry/skills/entity-observation</a></td>
+</tr>
+<tr>
+<td><code>meshvault-live-editing</code></td>
+<td>shelf (adopted)</td>
+<td>Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects, optionally performing live for human observers. Declares <code>requires_mcp: [meshvault-mcp]</code>.</td>
+<td><a href="https://github.com/lpalbou/meshvault/tree/4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4/.cursor/skills/meshvault-live-editing">lpalbou/meshvault @ 4deb86c</a></td>
 </tr>
 <tr>
 <td><code>coredoc</code></td>
 <td>shelf (adopted)</td>
 <td>Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code.</td>
-<td><a href="../registry/skills/coredoc/SKILL.md">registry/skills/coredoc</a></td>
+<td><a href="../src/abstractskill/registry/skills/coredoc/SKILL.md">src/abstractskill/registry/skills/coredoc</a></td>
 </tr>
 <tr>
 <td><code>backlog</code></td>
 <td>shelf (adopted)</td>
 <td>Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene.</td>
-<td><a href="../registry/skills/backlog/SKILL.md">registry/skills/backlog</a></td>
+<td><a href="../src/abstractskill/registry/skills/backlog/SKILL.md">src/abstractskill/registry/skills/backlog</a></td>
 </tr>
 <tr>
 <td><code>architect</code></td>
 <td>shelf (adopted)</td>
-<td>Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix — now with premise verification + the engraving gate.</td>
-<td><a href="../registry/skills/architect/SKILL.md">registry/skills/architect</a></td>
+<td>Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix, premise verification, and an engraving gate for names that reach append-only state.</td>
+<td><a href="../src/abstractskill/registry/skills/architect/SKILL.md">src/abstractskill/registry/skills/architect</a></td>
 </tr>
 <tr>
 <td><code>adr</code></td>
 <td>shelf (adopted)</td>
 <td>Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with <code>backlog</code>.</td>
-<td><a href="../registry/skills/adr/SKILL.md">registry/skills/adr</a></td>
+<td><a href="../src/abstractskill/registry/skills/adr/SKILL.md">src/abstractskill/registry/skills/adr</a></td>
 </tr>
 <tr>
 <td><code>cicd</code></td>
 <td>shelf (adopted)</td>
 <td>GitHub-based CI/CD: least-privilege workflows, OIDC trusted publishing, docs deployment, release rehearsals, maintenance playbook.</td>
-<td><a href="../registry/skills/cicd/SKILL.md">registry/skills/cicd</a></td>
+<td><a href="../src/abstractskill/registry/skills/cicd/SKILL.md">src/abstractskill/registry/skills/cicd</a></td>
 </tr>
 <tr>
 <td><code>review</code></td>
 <td>shelf (adopted)</td>
 <td>Independent evidence-based ship-readiness reviews (correctness / architecture-fit / user-and-operations lenses; Blocking/Conditional/Approved).</td>
-<td><a href="../registry/skills/review/SKILL.md">registry/skills/review</a></td>
+<td><a href="../src/abstractskill/registry/skills/review/SKILL.md">src/abstractskill/registry/skills/review</a></td>
 </tr>
 <tr>
 <td><code>uxreview</code></td>
 <td>shelf (adopted)</td>
 <td>Human UX reviews with independent naive/intermediate/expert personas over live UI evidence; code-only review caps the verdict.</td>
-<td><a href="../registry/skills/uxreview/SKILL.md">registry/skills/uxreview</a></td>
+<td><a href="../src/abstractskill/registry/skills/uxreview/SKILL.md">src/abstractskill/registry/skills/uxreview</a></td>
 </tr>
 <tr>
 <td><code>verification-before-completion</code></td>
@@ -1139,7 +1174,7 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 of 3,984 registry skills flawed, 13.4% critical; a 98,380-skill behavioral
 study confirmed 157 malicious; the AIR incident shipped a post-approval URL
 swap to ~26,000 agents THROUGH three scanners (all figures with their
-references in <a href="../registry/guidance.yaml"><code>registry/guidance.yaml</code></a>). The
+references in <a href="../src/abstractskill/registry/guidance.yaml"><code>src/abstractskill/registry/guidance.yaml</code></a>). The
 ecosystem's standard installer (<code>npx skills add</code>) symlinks trees with no
 hash pinning, and its own documentation tells users to treat skills as
 unverified code and read them before installing. Curation, commit pins,
@@ -1147,24 +1182,23 @@ whole-tree hashes, and a fail-closed trust gate are the response — not
 because they certify safety (nothing does; see
 <a href="#what-curation-does-not-guarantee">What curation does NOT guarantee</a>) but
 because they make every admission a reviewed, reproducible, revocable act.</p>
-<p>A finding from this catalog's own adversarial review, now a standing
-curation rule: <strong>a skill body that instructs fetching external instructions
+<p>A standing curation rule: <strong>a skill body that instructs fetching external instructions
 at use time is a time-of-use fetch — pinning its tree pins a pointer, not
 the rules; it can never be risk-labeled <code>low</code> and must carry an explicit
 note.</strong> (<code>web-design-guidelines</code> was pulled from the vendorable list for
 exactly this; see the watch tier.)</p>
-<h2 id="top-curated-skills-vendorable-now">Top curated skills (vendorable now)<a class="headerlink" href="#top-curated-skills-vendorable-now" title="Permanent link">&para;</a></h2>
-<p>All entries are pinned in <code>registry/catalog.yaml</code>. Risk is the curator's
+<h2 id="top-curated-skills-vendorable">Top curated skills (vendorable)<a class="headerlink" href="#top-curated-skills-vendorable" title="Permanent link">&para;</a></h2>
+<p>All entries are pinned in <code>src/abstractskill/registry/catalog.yaml</code>. Risk is the curator's
 reviewed classification (<code>low</code> = text-only reviewed content; <code>moderate</code> =
 scripts present or comparable surface; <code>risky</code> = requires capabilities the
 gate withholds); the structural facts win at the gate regardless
 (scripts-present ⇒ <code>requires_review</code>, whatever the label says). Archetypes:
 <code>knowledge</code> = reference material; <code>procedure</code> = a working method the agent
 follows; <code>meta</code> = skills about skills. License text travels with every
-vendored copy (out-of-tree at <code>registry/licenses/&lt;name&gt;.LICENSE</code>, so the
+vendored copy (out-of-tree at <code>src/abstractskill/registry/licenses/&lt;name&gt;.LICENSE</code>, so the
 pinned tree hash covers only upstream bytes).</p>
 <h3 id="engineering-process-obrasuperpowers-mit-251k-stars-as-of-2026-07-11-shipped-as-an-anthropic-marketplace-plugin-in-early-2026-per-the-cited-blog">Engineering process — <code>obra/superpowers</code> (MIT, ~251k stars as of 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026" per the cited blog)<a class="headerlink" href="#engineering-process-obrasuperpowers-mit-251k-stars-as-of-2026-07-11-shipped-as-an-anthropic-marketplace-plugin-in-early-2026-per-the-cited-blog" title="Permanent link">&para;</a></h3>
-<p>CONCENTRATION, stated as an accepted risk: 4 of the 8 vendorable entries
+<p>CONCENTRATION, stated as an accepted risk: 4 of the 9 catalog entries
 share this one source. One compromised maintainer account poisons half the
 list at the next re-pin — mitigations: pins never auto-follow, every re-pin
 is a fresh review, and a cross-reference inventory (superpowers skills
@@ -1192,7 +1226,7 @@ squatting surfaces) runs before any re-pin.</p>
 <tr>
 <td><code>verification-before-completion</code></td>
 <td>low</td>
-<td>Evidence before claims — the anti-self-declared-success rule made procedural. <strong>Vendored</strong> (the catalog's first live entry). CONTENT CAVEAT: its "Why This Matters" section carries identity-adjacent framing ("If you lie, you'll be replaced"; second-person failure memories) — fine for developer agents, <strong>not for entity sessions</strong> before the 0003 audit rules on it; the caveat travels in the validation record.</td>
+<td>Evidence before claims — the anti-self-declared-success rule made procedural. <strong>Vendored</strong>. CONTENT CAVEAT: its "Why This Matters" section carries identity-adjacent framing ("If you lie, you'll be replaced"; second-person failure memories) — fine for developer agents, <strong>not for entity sessions</strong> before the 0003 audit rules on it; the caveat travels in the validation record.</td>
 </tr>
 <tr>
 <td><code>systematic-debugging</code></td>
@@ -1257,92 +1291,72 @@ squatting surfaces) runs before any re-pin.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="maintainer-skills-wave-operator-directive-2026-07-11-evening">Maintainer skills wave (operator directive, 2026-07-11 evening)<a class="headerlink" href="#maintainer-skills-wave-operator-directive-2026-07-11-evening" title="Permanent link">&para;</a></h2>
-<p>Five of the maintainer's own codex skills were evaluated and vendored
-(source <code>codex-skills (maintainer)</code>, <code>first-party-adoption</code> → adopted, same
-path as coredoc/backlog):</p>
+<h3 id="3d-tooling-lpalboumeshvault-mit">3D tooling — <code>lpalbou/meshvault</code> (MIT)<a class="headerlink" href="#3d-tooling-lpalboumeshvault-mit" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Risk</th>
+<th>What it improves here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>meshvault-live-editing</code></td>
+<td>moderate</td>
+<td>Field-tested recipes for driving MeshVault over MCP (sculpt, paint, repair, reshape, live-performance etiquette) with strong anti-fabrication teaching. <strong>Vendored.</strong> Requires the <code>meshvault-mcp</code> server, which the operator installs (agents never self-install it). The body is about 37 KB (~9k tokens), so avoid activating it on small-context models. Re-verify against each MeshVault release before any re-pin.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="maintainer-authored-skills">Maintainer-authored skills<a class="headerlink" href="#maintainer-authored-skills" title="Permanent link">&para;</a></h2>
+<p>Seven shelf skills come from the maintainer's own skill collection (source
+<code>codex-skills (maintainer)</code>, method <code>first-party-adoption</code>, level <code>adopted</code>):
+<code>coredoc</code>, <code>backlog</code>, <code>architect</code>, <code>adr</code>, <code>cicd</code>, <code>review</code> and <code>uxreview</code>.
+They are vendored byte-verbatim; improvements are made upstream, then
+re-vendored and re-pinned.</p>
 <ul>
-<li><strong><code>architect</code></strong> — vendored WITH two upstream improvements first (operator
-  asked for improvement based on this seat's findings): (1) an Evidence
-  Contract rule — verify each load-bearing premise against the current
-  tree/running state before arguing from it (premise decay is the most
-  recurrent architecture failure in this workspace's record: the phantom
-  run-store premise, stale-envelope answers, this catalog's own structural-
-  not-content P0); (2) an "engraving" Architecture Gate + one-concept-one-name
-  anti-pattern (names that reach append-only state are effectively
-  irreversible — the phase-rename and personal_grant lessons). Two matching
-  distilled principles landed in its <code>reviewer-memory.md</code>.</li>
-<li><strong><code>adr</code></strong> — vendored as-is: complements the already-vendored <code>backlog</code>
-  (the two texts cross-own their boundary explicitly), and most framework
-  repos have no ADR system yet — this seat's own backlog notes the gap.</li>
-<li><strong><code>cicd</code></strong> — vendored WITH upstream repairs first (its adversary found the
-  copy-paste examples had rotted): the npm trusted-publishing job shipped
-  broken (Node 22's bundled npm predates the ≥ 11.5.1 OIDC floor — silent
-  no-handshake, confusing E404; now Node 24 + the floor stated), stale
-  hardcoded action majors replaced with <code>&lt;current-major&gt;</code> placeholders + a
-  version-policy line per reference (the node20 runner cutover would have
-  hard-broken them by 2026-09), the build/publish artifact-name mismatch
-  unified, <code>npm trust</code> gained the now-required <code>--allow-publish</code> + the
-  11.10.0 floor, the audit checklist gained the two dominant Actions
-  vulnerability classes (untrusted <code>${{ github.event.* }}</code> interpolation;
-  <code>pull_request_target</code> misuse) + SHA-pinning of third-party actions, and an
-  unused <code>attestations: write</code> permission was dropped (least-privilege).
-  Note: references the <code>release</code> skill, which is NOT on the shelf (dangling
-  cross-skill references are inert in our loader; they are also squatting
-  surfaces, so they are inventoried — the <code>references_skills</code> admission item
-  queued in the trust backlog). Its adversary's fleet-consistency suggestion
-  (reusable <code>workflow_call</code> shapes + cross-repo drift audit) is recorded as
-  an upstream candidate.</li>
-<li><strong><code>review</code> + <code>uxreview</code></strong> — EVALUATED: keep BOTH, separate, as-is (verdict
-  argued below).</li>
+<li><strong><code>architect</code></strong> — carries an Evidence Contract (verify each load-bearing
+  premise against the current tree or running state before arguing from it)
+  and an "engraving" gate: names, keys or formats that reach append-only or
+  at-rest state are effectively irreversible and get extra scrutiny.</li>
+<li><strong><code>adr</code></strong> — complements <code>backlog</code>; the two skills state their boundary
+  explicitly.</li>
+<li><strong><code>cicd</code></strong> — GitHub-based CI/CD: least-privilege workflows, PyPI and npm
+  trusted publishing (including the <code>npm trust ... --allow-publish</code> setup and
+  its npm &gt;= 11.10.0 floor), docs deployment, SHA-pinned third-party
+  actions, and audit items for untrusted <code>${{ github.event.* }}</code>
+  interpolation and <code>pull_request_target</code> misuse. It refers to a <code>release</code>
+  skill that is not on the shelf; dangling cross-skill references are inert
+  in the loader and are inventoried as a squatting surface.</li>
+<li><strong><code>review</code></strong> and <strong><code>uxreview</code></strong> — kept as two separate skills; see below.</li>
 </ul>
-<h3 id="review-uxreview-as-is-improved-or-merged">review / uxreview: as-is, improved, or merged?<a class="headerlink" href="#review-uxreview-as-is-improved-or-merged" title="Permanent link">&para;</a></h3>
-<p><strong>Keep both, separate.</strong> They occupy different phases and compose by
-explicit contract rather than overlapping:</p>
+<h3 id="how-the-reviewer-skills-compose">How the reviewer skills compose<a class="headerlink" href="#how-the-reviewer-skills-compose" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>adversarial-iteration</code> (first-party) is FORMATIVE — the improvement loop
-  DURING work (attack, fold, iterate).</li>
+  during work (attack, fold, iterate). Its body names <code>review</code> as the owner
+  of ship-readiness.</li>
 <li><code>review</code> is SUMMATIVE — the final ship-readiness gate (Blocking /
   Conditional Approval / Approved), with an evidence cap (uninspectable
   artifact ⇒ at best Conditional).</li>
-<li><code>uxreview</code> is the SPECIALIST persona swarm (naive/intermediate/expert;
+<li><code>uxreview</code> is the SPECIALIST persona review (naive/intermediate/expert;
   live UI evidence preferred, code-only review caps the verdict at
-  Conditional) — and <code>review</code>'s own text already delegates to it ("uxreview
-  owns specialist human-usable verdicts") while <code>uxreview</code> refuses to be
-  silently replaced.</li>
-<li>Why NOT merge (the load-bearing reasons, adversary-sharpened): a merged
-  skill would FORK the maintainer's upstream — the re-vendor path and
-  <code>codex-skills (maintainer)</code> provenance die and maintenance transfers to
-  this seat; and activation precision is lost — the two descriptions trigger
-  on disjoint task shapes, so a merged body pays uxreview's persona charters
-  on every pure-backend review and vice versa. (A merged body COULD keep the
-  persona-independence text as a section — that alone would not have decided
-  it.)</li>
-<li>Framework interest is HIGH for both: three user-facing apps (abstractflow,
-  abstractobserver, abstractassistant) plus the shared UI kit (abstractuic)
-  get a repeatable UX gate; the room's review culture gets ship-verdict
-  vocabulary distinct from the formative loop — and <code>adversarial-iteration</code>
-  now carries the composition note in its own body (formative loop → review
-  owns ship-readiness; explicit-request idiom translated), so the system
-  contract reaches consumers at activation time, not just in this document.</li>
-<li>Considered and rejected: extracting the shared reviewer machinery
-  (fallback rules, output-format scaffolding, reviewer-memory pattern) into a
-  common reference. Skills are independently vendorable trees — a shared
-  dependency would be unreachable (<code>read_skill_resource</code> refuses paths
-  outside the tree) and unpinned (<code>hash_skill_tree</code> covers only the skill
-  dir); duplication across independently distributable skills is the right
-  trade.</li>
-<li>Field-memory caveat (all three reviewer skills ship a
-  <code>references/reviewer-memory.md</code> that says "update it during
-  skill-maintenance work"): on THIS shelf those are byte-frozen vendored
-  copies — updates happen UPSTREAM, then re-vendor + re-pin; never edit the
-  vendored tree (the byte pins in <code>scripts/refresh_shelf.py</code> now refuse
-  exactly that).</li>
+  Conditional). <code>review</code> delegates specialist human-usability verdicts to it.</li>
+<li>They stay separate because their descriptions trigger on disjoint task
+  shapes (a merged body would load the persona charters on every backend
+  review), and because each remains an independently re-vendorable upstream
+  tree. Shared reviewer machinery is duplicated rather than extracted: a
+  skill cannot read resources outside its own tree (<code>read_skill_resource</code>)
+  and <code>hash_skill_tree</code> covers only the skill folder.</li>
+<li>The reviewer skills ship a <code>references/reviewer-memory.md</code> that asks to be
+  updated during skill maintenance. On this shelf those files are
+  byte-frozen vendored copies: update them upstream, then re-vendor and
+  re-pin. The byte pins in <code>scripts/refresh_shelf.py</code> refuse an in-place
+  edit of a vendored tree.</li>
 </ul>
 <h2 id="watch-tier-not-yet-catalog-pinned">Watch tier (not yet catalog-pinned)<a class="headerlink" href="#watch-tier-not-yet-catalog-pinned" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>web-design-guidelines</code></strong> (vercel-labs, PULLED from the top list —
-  adversary finding, P0): at the pinned commit the body is a time-of-use
+<li><strong><code>web-design-guidelines</code></strong> (vercel-labs, pulled from the top list): at
+  the pinned commit the body is a time-of-use
   fetch stub ("fetch fresh guidelines before each review" from
   <code>web-interface-guidelines@main</code>) — the tree hash pins a pointer, not
   rules. Re-scope path: pin <code>vercel-labs/web-interface-guidelines</code> at a
@@ -1352,8 +1366,7 @@ explicit contract rather than overlapping:</p>
   operator already runs an <code>architect</code> skill covering pre-code design
   exploration.</li>
 <li><strong>Python-lane candidates (named gap)</strong>: the framework is Python-dominant
-  (five packages, FastAPI, pytest-heavy) and the catalog currently gives
-  Python nothing. Research targets: pytest discipline packs, FastAPI/API
+  (FastAPI, pytest-heavy) and the catalog has no Python-specific entry yet. Research targets: pytest discipline packs, FastAPI/API
   design guidance, and superpowers <code>requesting-code-review</code> /
   <code>receiving-code-review</code> for the adversarial-review culture — noting the
   latter deepen the single-source concentration.</li>
@@ -1375,7 +1388,7 @@ explicit contract rather than overlapping:</p>
   (NOT open source — redistribution unclear for vendored byte-copies) and
   script-execution-dependent; decorative without script enablement.</li>
 <li><strong><code>webapp-testing</code></strong>: requires browser + script execution; the gate
-  deliberately withholds both today.</li>
+  deliberately withholds both.</li>
 <li><strong>Deep-research packs</strong> (8-phase research pipelines, scholar tools):
   network + scripts by design; admit only when script/network enablement
   exists so they are not decorative.</li>
@@ -1391,7 +1404,7 @@ python scripts/vendor_skill.py --list
 # 2. vendor a pinned entry (fetches the exact commit, validates, hashes)
 python scripts/vendor_skill.py &lt;name&gt;
 
-# 3. review the vendored diff, then pin it in registry/catalog.yaml
+# 3. review the vendored diff, then pin it in src/abstractskill/registry/catalog.yaml
 #    (expected_tree_hash + vendored: true — printed by step 2)
 
 # 4. regenerate the trust registry (validation records derive from the catalog)
@@ -1421,7 +1434,7 @@ then byte-verified end to end.
 Scripts-bearing skills surface as <code>requires_review</code> at
 <code>select_skills_for_context</code> until an operator explicitly enables them —
 enablement is the approval act, and script EXECUTION additionally requires
-a tool grant that simply does not exist today.</p>
+a tool grant that the framework does not provide.</p>
 <h2 id="what-curation-does-not-guarantee">What curation does NOT guarantee<a class="headerlink" href="#what-curation-does-not-guarantee" title="Permanent link">&para;</a></h2>
 <p>A catalog entry attests that a named reviewer read the tree at a pinned
 commit and recorded why it helps this framework. It does not certify the

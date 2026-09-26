@@ -892,7 +892,7 @@ decision guide.</p>
 <tr>
 <td>Composition</td>
 <td>Skills can only narrow the operator's tool grant, never widen beyond it (multi-skill bound is shared: <code>grant ∩ union(declared)</code>)</td>
-<td>Calls tools, spawns subflows/agents; skill activation inside runs is the designed composition (hosts adopt it progressively)</td>
+<td>Calls tools, spawns subflows/agents; a run can request skills, which the host resolves through the trust gate (AbstractGateway does this at run start)</td>
 <td>Its tools enter the SAME grant/approval lanes as native tools</td>
 </tr>
 <tr>
@@ -933,13 +933,14 @@ script execution additionally requires an explicit tool grant.</p>
 <li><strong>Mixed?</strong> Compose. The common shapes:</li>
 <li>An external agent reads the <code>abstractframework-gateway</code> skill and
      drives flows over HTTP — the skill is the bridge INTO the framework;
-     the flow does the durable work once inside. This pattern is fully
-     live today.</li>
+     the flow does the durable work once inside.</li>
 <li>A skill instructs the agent to use MCP-served tools well — the skill
      provides judgment, MCP provides reach.</li>
 <li>A flow's agent node activates skills for judgment inside a durable
-     run — the DESIGNED pairing (the flow provides durability, the skill
-     provides method); hosts adopt it progressively, abstractcode first.
+     run — the flow provides durability, the skill provides method.
+     AbstractGateway resolves a run's requested skills through the trust
+     gate at run start and renders the active ones into the agent's
+     prompt.
      A live in-framework example of the same pattern: AbstractFlow's
      authoring assistant rides a 600+-line method document (its
      workflow-authoring skill) on the planner prompt of a gateway-hosted
@@ -982,13 +983,12 @@ layer with tools outside the process.</p>
 <li><strong>MCP integration</strong> is served at the boundary that executes tools: MCP
   tools are declared and gated beside native tools (grant lanes, approval
   policies), never as a separate privilege system.</li>
-<li>Hosts (abstractcode, gateway-served agents, entity runtimes) are where
-  the three MEET: a host selects skills through the trust gate, runs flows
+<li>Hosts (gateway-served agents and runs, summoned entities) are where the
+  three MEET: a host selects skills through the trust gate, runs flows
   through the runtime, and reaches MCP tools through its tool executor.
-  Honest adoption state: skill selection ships in abstractskill today and
-  abstractcode consumes it (its <code>/skills</code> command); the gateway-served and
-  entity-runtime activation lanes are designed and being adopted
-  progressively.</li>
+  AbstractGateway seeds its shelf from the registry bundled in
+  abstractskill and resolves skills for runs, spawned agents and summoned
+  entities through <code>select_skills_for_context</code>.</li>
 </ul>
 <h2 id="getting-started-with-each">Getting started with each<a class="headerlink" href="#getting-started-with-each" title="Permanent link">&para;</a></h2>
 <ul>

@@ -413,10 +413,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#seed-the-bundled-shelf-into-a-host-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seed the bundled shelf into a host directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#activate-skills-into-a-context-the-composed-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
         Activate skills into a context (the composed pipeline)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
       
     </span>
   </a>
@@ -794,10 +816,32 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#seed-the-bundled-shelf-into-a-host-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seed the bundled shelf into a host directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#activate-skills-into-a-context-the-composed-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
         Activate skills into a context (the composed pipeline)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
       
     </span>
   </a>
@@ -826,7 +870,9 @@
 
 <h1 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
 <p>AbstractSkill is a small, dependency-light library (PyYAML only) for working
-with Agent Skills (<code>SKILL.md</code>) in AbstractFramework.</p>
+with Agent Skills (<code>SKILL.md</code>) in AbstractFramework. This page walks through
+the main tasks in order; the <a href="../README.md">README</a> gives the overview, and
+<a href="../troubleshooting/">Troubleshooting</a> covers common errors.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>abstractskill
 </code></pre></div>
@@ -885,12 +931,13 @@ frontmatter claim — so a "requires enablement" badge cannot be lied to.</p>
 with no <code>allowed-tools</code> contributes nothing (pure knowledge). For per-skill
 least privilege use <code>effective_tools_for_skill</code>.</p>
 <h2 id="evaluate-trust">Evaluate trust<a class="headerlink" href="#evaluate-trust" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustRegistry</span><span class="p">,</span> <span class="n">evaluate_trust</span><span class="p">,</span> <span class="n">inspect_skill_dir</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustRegistry</span><span class="p">,</span> <span class="n">bundled_registry_dir</span><span class="p">,</span> <span class="n">evaluate_trust</span><span class="p">,</span> <span class="n">inspect_skill_dir</span>
 
+<span class="n">shelf</span> <span class="o">=</span> <span class="n">bundled_registry_dir</span><span class="p">()</span>  <span class="c1"># the registry shipped in the wheel (read-only)</span>
 <span class="n">registry</span> <span class="o">=</span> <span class="n">TrustRegistry</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-    <span class="n">validations_path</span><span class="o">=</span><span class="s2">"registry/validations.yaml"</span><span class="p">,</span>
-    <span class="n">advisories_path</span><span class="o">=</span><span class="s2">"registry/advisories.yaml"</span><span class="p">,</span>
-    <span class="n">guidance_path</span><span class="o">=</span><span class="s2">"registry/guidance.yaml"</span><span class="p">,</span>
+    <span class="n">validations_path</span><span class="o">=</span><span class="n">shelf</span> <span class="o">/</span> <span class="s2">"validations.yaml"</span><span class="p">,</span>
+    <span class="n">advisories_path</span><span class="o">=</span><span class="n">shelf</span> <span class="o">/</span> <span class="s2">"advisories.yaml"</span><span class="p">,</span>
+    <span class="n">guidance_path</span><span class="o">=</span><span class="n">shelf</span> <span class="o">/</span> <span class="s2">"guidance.yaml"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">inv</span> <span class="o">=</span> <span class="n">inspect_skill_dir</span><span class="p">(</span><span class="s2">"my-skill"</span><span class="p">)</span>
 <span class="n">verdict</span> <span class="o">=</span> <span class="n">evaluate_trust</span><span class="p">(</span>
@@ -903,19 +950,47 @@ least privilege use <code>effective_tools_for_skill</code>.</p>
 </code></pre></div>
 <p>The verdict is fail-closed: only a validated, advisory-free, script-free skill
 is <code>attachable</code>. See the <a href="../trust/">trust model</a> for the full semantics.</p>
+<h2 id="seed-the-bundled-shelf-into-a-host-directory">Seed the bundled shelf into a host directory<a class="headerlink" href="#seed-the-bundled-shelf-into-a-host-directory" title="Permanent link">&para;</a></h2>
+<p>The wheel ships the curated registry (<code>abstractskill/registry/</code>: <code>skills/</code>,
+<code>licenses/</code>, <code>catalog.yaml</code>, <code>validations.yaml</code>, <code>advisories.yaml</code>,
+<code>guidance.yaml</code>). A host copies it into a directory it owns:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">seed_registry</span>
+
+<span class="n">report</span> <span class="o">=</span> <span class="n">seed_registry</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">"/srv/my-host/skills-shelf"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">bundled_version</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">previous_version</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"added:"</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">added</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"updated:"</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">updated</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"kept, with reasons:"</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">kept</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"no longer bundled:"</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">not_in_bundle</span><span class="p">)</span>
+</code></pre></div>
+<p>Run it on every start; concurrent calls on the same destination serialise on
+<code>&lt;dest&gt;/.seed.lock</code>. Missing items are added; items still byte-identical to
+what an earlier seed wrote (tracked in <code>&lt;dest&gt;/.seeded.json</code>) are refreshed,
+unless the installed bundle is older than that seed (<code>kept_newer</code>); anything
+else is kept, with its reason in <code>report.kept</code>. Items no longer bundled are
+reported in <code>not_in_bundle</code> and never deleted. Without a manifest, only items
+identical to the bundle are adopted (<code>kept_unknown_provenance</code> for the rest).
+A second run with the same package writes nothing. See
+<a href="../troubleshooting/#a-bundled-skill-is-not-refreshed-after-an-upgrade">Troubleshooting</a>
+when an item stays kept after an upgrade.</p>
 <h2 id="activate-skills-into-a-context-the-composed-pipeline">Activate skills into a context (the composed pipeline)<a class="headerlink" href="#activate-skills-into-a-context-the-composed-pipeline" title="Permanent link">&para;</a></h2>
 <p>For activation, do not wire the primitives by hand — use the ONE pipeline so
 the ordering (load → hash → trust-gate → compose) cannot be skipped, and pass
 the activation-description overrides so upstream wrong-audience text never
 reaches a prompt:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustRegistry</span><span class="p">,</span> <span class="n">format_available_skills_xml</span><span class="p">,</span> <span class="n">select_skills_for_context</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">abstractskill</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrustRegistry</span><span class="p">,</span> <span class="n">format_available_skills_xml</span><span class="p">,</span> <span class="n">select_skills_for_context</span>
+
+<span class="n">shelf</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"/srv/my-host/skills-shelf"</span><span class="p">)</span>  <span class="c1"># filled by seed_registry (previous section)</span>
 <span class="n">registry</span> <span class="o">=</span> <span class="n">TrustRegistry</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-    <span class="n">validations_path</span><span class="o">=</span><span class="s2">"registry/validations.yaml"</span><span class="p">,</span>
-    <span class="n">advisories_path</span><span class="o">=</span><span class="s2">"registry/advisories.yaml"</span><span class="p">,</span>
+    <span class="n">validations_path</span><span class="o">=</span><span class="n">shelf</span> <span class="o">/</span> <span class="s2">"validations.yaml"</span><span class="p">,</span>
+    <span class="n">advisories_path</span><span class="o">=</span><span class="n">shelf</span> <span class="o">/</span> <span class="s2">"advisories.yaml"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">selection</span> <span class="o">=</span> <span class="n">select_skills_for_context</span><span class="p">(</span>
-    <span class="n">registry</span><span class="p">,</span> <span class="n">shelf_root</span><span class="o">=</span><span class="s2">"registry/skills"</span><span class="p">,</span>
+    <span class="n">registry</span><span class="p">,</span> <span class="n">shelf_root</span><span class="o">=</span><span class="n">shelf</span> <span class="o">/</span> <span class="s2">"skills"</span><span class="p">,</span>
     <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s2">"coredoc"</span><span class="p">,</span> <span class="s2">"verification-before-completion"</span><span class="p">],</span>  <span class="c1"># names-only is enough</span>
     <span class="n">enabled</span><span class="o">=</span><span class="p">[],</span>  <span class="c1"># operator-enabled requires_review skills for THIS context</span>
 <span class="p">)</span>
@@ -927,6 +1002,12 @@ reaches a prompt:</p>
 </code></pre></div>
 <p>To add new third-party skills to the shelf, use the curated catalog path —
 see the <a href="../skills-catalog/">curated skills catalog</a>.</p>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../architecture/">Architecture</a> — how the components connect, with diagrams.</li>
+<li><a href="../api/">API reference</a> — every public function and type.</li>
+<li><a href="../trust/">Trust model</a> — what a verdict means and what it does not guarantee.</li>
+</ul>
 
 
 

@@ -570,6 +570,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#seeded-shelves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seeded shelves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maintaining-the-registries" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -838,6 +849,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#seeded-shelves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seeded shelves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#maintaining-the-registries" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -915,7 +937,7 @@ carries four mandated fields:</p>
 that surfaces a warning. Severity is graded: critical/high hard-block; a
 hash-matched advisory always blocks; low/medium force review. Advisories are
 corrected by <strong>withdrawal</strong> (status + reason + date), never deletion.</p>
-<p>The shipped <code>registry/advisories.yaml</code> is intentionally empty at v1:
+<p>The shipped <code>src/abstractskill/registry/advisories.yaml</code> is intentionally empty at v1:
 AbstractSkill does not assert a specific malicious skill on its own authority
 before its own audit (0003) or a leveraged external feed (0004) identifies a
 real one. Asserting a specific skill wrongly is itself harmful.</p>
@@ -924,7 +946,7 @@ real one. Asserting a specific skill wrongly is itself harmful.</p>
 marketplace skills are a supply-chain surface"). Guidance informs a picker or
 operator and carries a reference, but never produces a blocked verdict on an
 individual skill — a class label cannot honestly forbid a specific skill.
-<code>registry/guidance.yaml</code> ships three notices grounded in published 2026
+<code>src/abstractskill/registry/guidance.yaml</code> ships three notices grounded in published 2026
 research (Snyk ToxicSkills, the 98,380-skill behavioral study, the SkillScan
 script-bundling finding).</p>
 <h2 id="the-verdict">The verdict<a class="headerlink" href="#the-verdict" title="Permanent link">&para;</a></h2>
@@ -971,6 +993,14 @@ attests a review or an audit happened, not that the skill is provably benign
 proves authenticity and integrity, not safety. Curation, behavioral audit
 (0003), and the fail-closed default remain the real gate; the registries make
 the judgment explicit, explainable, and byte-bound.</p>
+<h2 id="seeded-shelves">Seeded shelves<a class="headerlink" href="#seeded-shelves" title="Permanent link">&para;</a></h2>
+<p>The registries ship in the package with the curated skills, and hosts copy
+them into a directory they own with <code>seed_registry</code> (see
+<a href="../getting-started/#seed-the-bundled-shelf-into-a-host-directory">Getting started</a>).
+Because records bind to tree hashes, never to paths, a seeded shelf verifies
+wherever it lives, and a skill an operator edits on the seeded shelf drops to
+<code>unverified</code> until it is re-validated. Seeding keeps such edits rather than
+overwriting them.</p>
 <h2 id="maintaining-the-registries">Maintaining the registries<a class="headerlink" href="#maintaining-the-registries" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>scripts/refresh_shelf.py</code> regenerates <code>validations.yaml</code> from the vendored

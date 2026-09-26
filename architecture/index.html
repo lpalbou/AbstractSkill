@@ -385,10 +385,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-flow-skill-selection-through-trust-and-composition" class="md-nav__link">
+  <a href="#data-flow-activating-skills-through-the-trust-gate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data flow: skill selection through trust and composition
+        Data flow: activating skills through the trust gate
       
     </span>
   </a>
@@ -425,6 +425,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Registries (data, not code)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#seeding-a-host-shelf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seeding a host shelf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -717,10 +745,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-flow-skill-selection-through-trust-and-composition" class="md-nav__link">
+  <a href="#data-flow-activating-skills-through-the-trust-gate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data flow: skill selection through trust and composition
+        Data flow: activating skills through the trust gate
       
     </span>
   </a>
@@ -758,6 +786,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Registries (data, not code)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#seeding-a-host-shelf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Seeding a host shelf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry files
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -783,20 +839,29 @@
 <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
 <p>AbstractSkill is a passive contract library: it parses, validates, hashes,
 discovers, composes, and classifies skills. It executes nothing and imposes no
-runtime limits — hosts (the gateway console, the runtime activation path)
-consume its contracts and enforce policy.</p>
+runtime limits — hosts such as AbstractGateway consume its contracts and
+enforce policy. It uses no network. See the <a href="../api/">API reference</a> for the
+public surface and the <a href="../trust/">trust model</a> for verdict semantics.</p>
 <h2 id="components">Components<a class="headerlink" href="#components" title="Permanent link">&para;</a></h2>
+<p>Arrows point from a module to the modules it uses. Hosts such as
+AbstractGateway call the public API; they never reach into the package
+directory itself.</p>
 <div class="highlight"><pre><span></span><code>graph TD
-    subgraph abstractskill
+    subgraph pkg[abstractskill package]
         parser[parser.py&lt;br/&gt;parse_skill_md]
-        validation[validation.py&lt;br/&gt;name/description/compatibility]
+        validation[validation.py&lt;br/&gt;name / description / compatibility]
         models[models.py&lt;br/&gt;SkillMetadata / SkillDocument]
-        loader[loader.py&lt;br/&gt;FilesystemSkillLoader]
         hash[hash.py&lt;br/&gt;content_hash]
+        loader[loader.py&lt;br/&gt;FilesystemSkillLoader]
         tree[tree.py&lt;br/&gt;hash_skill_tree / inspect_skill_dir]
+        trust[trust.py&lt;br/&gt;TrustRegistry / evaluate_trust]
+        selection[selection.py&lt;br/&gt;select_skills_for_context]
         prompt[prompt.py&lt;br/&gt;format_available_skills_xml]
         policy[policy.py&lt;br/&gt;effective_tools]
-        trust[trust.py&lt;br/&gt;evaluate_trust + registries]
+        demand[demand.py&lt;br/&gt;derive_demand]
+        catalog[catalog.py&lt;br/&gt;load_catalog]
+        bundled[bundled.py&lt;br/&gt;bundled_registry_dir / seed_registry]
+        registry[(registry/&lt;br/&gt;14 skills, licenses,&lt;br/&gt;4 yaml files)]
     end
 
     parser --&gt; validation
@@ -805,30 +870,43 @@ consume its contracts and enforce policy.</p>
     loader --&gt; parser
     loader --&gt; models
     tree --&gt; validation
+    trust --&gt; validation
+    catalog --&gt; validation
+    selection --&gt; loader
+    selection --&gt; tree
+    selection --&gt; trust
+    demand --&gt; selection
     policy --&gt; models
     prompt --&gt; models
+    bundled --&gt; tree
+    bundled --&gt; registry
 
-    subgraph consumers
-        console[gateway console&lt;br/&gt;skill picker]
-        runtime[runtime&lt;br/&gt;activation + tool gate]
-    end
+    host[Host, e.g. AbstractGateway&lt;br/&gt;seeds a shelf at start,&lt;br/&gt;skill picker, activation]
+    shelf[(host-owned shelf&lt;br/&gt;seeded copy of registry/)]
 
-    loader --&gt; console
-    trust --&gt; console
-    policy --&gt; runtime
-    trust --&gt; runtime
-    prompt --&gt; runtime
+    host --&gt; bundled
+    bundled --&gt;|seed_registry| shelf
+    host --&gt; selection
+    selection --&gt;|reads| shelf
+    host --&gt; prompt
+    host --&gt; loader
+    host --&gt; trust
 </code></pre></div>
-<h2 id="data-flow-skill-selection-through-trust-and-composition">Data flow: skill selection through trust and composition<a class="headerlink" href="#data-flow-skill-selection-through-trust-and-composition" title="Permanent link">&para;</a></h2>
+<h2 id="data-flow-activating-skills-through-the-trust-gate">Data flow: activating skills through the trust gate<a class="headerlink" href="#data-flow-activating-skills-through-the-trust-gate" title="Permanent link">&para;</a></h2>
+<p><code>select_skills_for_context</code> runs the whole pipeline in one call, so the order
+cannot be skipped. The host then renders the active skills into the prompt.</p>
 <div class="highlight"><pre><span></span><code>flowchart LR
-    A[skill folder on disk] --&gt; B[discover: metadata only]
+    A[skill names&lt;br/&gt;from host config] --&gt; B[load SKILL.md&lt;br/&gt;from shelf roots]
     B --&gt; C[inspect_skill_dir&lt;br/&gt;tree_hash + has_scripts]
-    C --&gt; D[evaluate_trust&lt;br/&gt;vs registries]
-    D --&gt;|blocked| E[refuse]
-    D --&gt;|requires_review| F[operator decides]
-    D --&gt;|attachable| G[load full body]
-    G --&gt; H[effective_tools&lt;br/&gt;grant ∩ declared]
-    H --&gt; I[format_available_skills_xml&lt;br/&gt;into prompt head]
+    C --&gt; D[derive sources&lt;br/&gt;from registry]
+    D --&gt; E[evaluate_trust&lt;br/&gt;per candidate,&lt;br/&gt;worst verdict wins]
+    E --&gt;|blocked| F[blocked: never active]
+    E --&gt;|requires_review| G{operator enabled&lt;br/&gt;name or name@hash?}
+    G --&gt;|no| H[held]
+    G --&gt;|yes| I[active]
+    E --&gt;|attachable| I
+    I --&gt; J[format_available_skills_xml&lt;br/&gt;with activation_descriptions]
+    I -.optional.-&gt; K[effective_tools&lt;br/&gt;grant ∩ declared]
 </code></pre></div>
 <h2 id="trust-verdict-precedence">Trust verdict precedence<a class="headerlink" href="#trust-verdict-precedence" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>flowchart TD
@@ -858,19 +936,61 @@ consume its contracts and enforce policy.</p>
   keeping the framework's agency in the hosts, not the contract library.</li>
 </ul>
 <h2 id="registries-data-not-code">Registries (data, not code)<a class="headerlink" href="#registries-data-not-code" title="Permanent link">&para;</a></h2>
+<p>The registry ships in the wheel as package data (<code>abstractskill/registry/</code>).
+<code>abstractskill.bundled</code> locates it and seeds host-owned copies;
+<code>catalog.yaml</code> carries the bundle <code>version</code> (dotted numbers, for example
+<code>2026.09.25</code>), which increases whenever bundled content changes.</p>
+<h3 id="seeding-a-host-shelf">Seeding a host shelf<a class="headerlink" href="#seeding-a-host-shelf" title="Permanent link">&para;</a></h3>
+<p><code>seed_registry(dest)</code> decides per item (each skill folder by tree hash, each
+file by sha256), holding an exclusive lock on <code>&lt;dest&gt;/.seed.lock</code> for the
+whole call. <code>&lt;dest&gt;/.seeded.json</code> records the hash of every item a seed
+wrote and the bundle version.</p>
+<div class="highlight"><pre><span></span><code>flowchart TD
+    S[bundled item] --&gt; SYM{symlink at dest?}
+    SYM --&gt;|yes| KS[kept_symlink]
+    SYM --&gt;|no| EX{exists at dest?}
+    EX --&gt;|no| ADD[added]
+    EX --&gt;|yes| RD{hashable?}
+    RD --&gt;|no| KU[kept_unreadable]
+    RD --&gt;|yes| SAME{identical&lt;br/&gt;to bundle?}
+    SAME --&gt;|yes| UN[unchanged&lt;br/&gt;recorded as seeded]
+    SAME --&gt;|no| MAN{manifest&lt;br/&gt;present?}
+    MAN --&gt;|no| KP[kept_unknown_provenance]
+    MAN --&gt;|yes| REC{recorded&lt;br/&gt;in manifest?}
+    REC --&gt;|no| KF[kept_foreign]
+    REC --&gt;|yes| PRIS{identical to what&lt;br/&gt;the last seed wrote?}
+    PRIS --&gt;|no| KM[kept_user_modified]
+    PRIS --&gt;|yes| OLD{bundle older&lt;br/&gt;than last seed?}
+    OLD --&gt;|yes| KN[kept_newer]
+    OLD --&gt;|no| UPD[updated]
+</code></pre></div>
+<p>Items are written through a staging folder and renamed into place; if a
+folder swap fails, the previous copy is restored. Items a previous seed
+wrote that the bundle no longer contains are reported as <code>not_in_bundle</code>
+and never deleted. A second seed with the same bundle writes nothing. The
+manifest is rewritten only when it changes.</p>
+<p>AbstractGateway seeds <code>&lt;data dir&gt;/skills/registry</code> when it starts and serves
+that copy unless the operator sets its <code>skills.shelf</code> setting to another
+folder.</p>
+<h3 id="registry-files">Registry files<a class="headerlink" href="#registry-files" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>registry/skills/&lt;name&gt;/</code> — the vendored curated shelf (byte-verbatim; first-party + catalog-vendored).</li>
-<li><code>registry/catalog.yaml</code> — the curated vendoring catalog: reviewed entries
+<li><code>src/abstractskill/registry/skills/&lt;name&gt;/</code> — the vendored curated shelf (byte-verbatim; first-party + catalog-vendored).</li>
+<li><code>src/abstractskill/registry/catalog.yaml</code> — the curated vendoring catalog: reviewed entries
   pinned to upstream commits + whole-tree hashes; the ONLY admissible source
   list for <code>scripts/vendor_skill.py</code> (validated by <code>abstractskill.catalog</code>).</li>
-<li><code>registry/validations.yaml</code> — trust attestations bound to tree hashes
+<li><code>src/abstractskill/registry/validations.yaml</code> — trust attestations bound to tree hashes
   (regenerated by <code>scripts/refresh_shelf.py</code>; catalog-vendored skills derive
   their policy from the catalog entry).</li>
-<li><code>registry/advisories.yaml</code> — specific do-not-use skills (four mandated
+<li><code>src/abstractskill/registry/advisories.yaml</code> — specific do-not-use skills (four mandated
   fields; empty at v1 until an audit or feed names a real one).</li>
-<li><code>registry/guidance.yaml</code> — category-level risk notices (never block a
+<li><code>src/abstractskill/registry/licenses/</code> — upstream licenses of vendored
+  third-party skills, kept outside the skill trees so the tree hash covers
+  only upstream bytes.</li>
+<li><code>src/abstractskill/registry/guidance.yaml</code> — category-level risk notices (never block a
   specific skill).</li>
 </ul>
+<p>For the design history and planned trust work, see the
+<a href="../backlog/overview/">backlog overview</a>.</p>
 
 
 

@@ -793,9 +793,13 @@ See the <a href="../trust/">trust model</a> and
 <a href="../trust-network-position/">trust-network position</a>.</p>
 <h2 id="handling-skills-safely">Handling skills safely<a class="headerlink" href="#handling-skills-safely" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Prefer the curated first-party shelf (<code>registry/skills/</code>) over marketplace
-  skills; the ecosystem's measured malware rates make unvetted marketplaces a
-  live attack surface (<code>registry/guidance.yaml</code>).</li>
+<li>Prefer the curated shelf shipped in the package (<code>abstractskill/registry/skills/</code>,
+  copied into a host directory with <code>seed_registry</code>) over marketplace skills;
+  the ecosystem's measured malware rates make unvetted marketplaces a live
+  attack surface (see the bundled <code>guidance.yaml</code>).</li>
+<li>Seeding never overwrites an edited shelf item, and an edited skill no longer
+  matches its validation record: it evaluates as <code>unverified</code> until it is
+  re-validated.</li>
 <li>Vendor skills byte-verbatim and pin their tree hash; re-verify on load.</li>
 <li>Treat a persona-steering or identity-directive skill body as grounds for a
   do-not-use advisory — for a summoned entity such a body can be engrammed

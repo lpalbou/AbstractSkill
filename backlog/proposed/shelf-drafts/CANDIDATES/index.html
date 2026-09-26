@@ -1,0 +1,1142 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Agent Skills (SKILL.md) parsing, discovery, trust gating, and demand derivation for AbstractFramework.">
+      
+      
+      
+        <link rel="canonical" href="https://www.lpalbou.info/AbstractSkill/backlog/proposed/shelf-drafts/CANDIDATES/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Candidate skills — mined from the room's lived experience - AbstractSkill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#candidate-skills-mined-from-the-rooms-lived-experience" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="AbstractSkill" class="md-header__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AbstractSkill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Candidate skills — mined from the room's lived experience
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="AbstractSkill" class="md-nav__button md-logo" aria-label="AbstractSkill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AbstractSkill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lpalbou/AbstractSkill" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lpalbou/AbstractSkill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../trust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../skills-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../skills-flows-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills vs workflows vs MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../trust-network-position/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust-network position
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#c1-run-verified-delivery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C1 — run-verified-delivery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c2-incident-forensics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C2 — incident-forensics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c3-local-service-supervision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C3 — local-service-supervision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c4-operator-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C4 — operator-reporting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c5-fleet-seat-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C5 — fleet-seat-operation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c6-content-curation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C6 — content-curation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c7-fault-attribution-added-by-adversarial-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C7 — fault-attribution (added by adversarial review)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c8-batch-processing-added-live-operator-flow-pairing-c2401c2403c2404" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C8 — batch-processing (added live: operator + flow pairing, c2401/c2403/c2404)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#watch-tier-named-so-the-review-sees-them-not-proposed-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch-tier (named so the review sees them; not proposed now)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-questions-for-the-operator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review questions for the operator
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="candidate-skills-mined-from-the-rooms-lived-experience">Candidate skills — mined from the room's lived experience<a class="headerlink" href="#candidate-skills-mined-from-the-rooms-lived-experience" title="Permanent link">&para;</a></h1>
+<p>Status: FOR OPERATOR REVIEW (directive 2026-07-15 20:30: "if you hear of
+special skills or experiences that could be translated into a skill, create
+a set of candidate skills we can review together"). Nothing here is a
+drafted SKILL.md yet — the review picks what gets drafted, in what order,
+and kills what should not exist.</p>
+<p>Evidence honesty: operator quotes below come from full message bodies read
+inline (verified verbatim). Bare seq citations from the 07-14→07-15 window
+were largely headline-triaged — verify before quoting them onward; seqs
+predating the window (c1600-c1963 class) ride the standing workspace
+record. This doc was adversarially reviewed (fable5) before reaching you;
+two provenance errors it caught are already fixed.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Candidate</th>
+<th>Would activate when…</th>
+<th>Pain</th>
+<th>Cost to draft</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>run-verified-delivery</td>
+<td>an agent is about to report an artifact delivered</td>
+<td>highest (operator hit it live)</td>
+<td>medium (first-party)</td>
+<td>draft FIRST</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>incident-forensics</td>
+<td>something breaks in a multi-agent system</td>
+<td>high</td>
+<td>medium</td>
+<td>draft after C1/C3, or wait for incident n=2</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>local-service-supervision</td>
+<td>an agent runs/replaces long-lived local services</td>
+<td>high (2 outages + 1 flap)</td>
+<td>medium (needs procedural reframe — done below)</td>
+<td>draft SECOND</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>operator-reporting</td>
+<td>an operator asks for status / at completion boundaries</td>
+<td>medium</td>
+<td>near-zero</td>
+<td>FOLD into agora-collaboration (default), standalone only on a non-hub consumer</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>fleet-seat-operation</td>
+<td>an agent operates or launches headless fleet seats</td>
+<td>medium</td>
+<td>LOWEST (code's shipped docs are the source; benches already paid)</td>
+<td>draft via adopt+co-author with code</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>content-curation</td>
+<td>a party adopts third-party agent content</td>
+<td>low today</td>
+<td>medium</td>
+<td>PARK (reviewer==author; value rises with a second curator)</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>fault-attribution</td>
+<td>a failure's cause is being assigned (model vs seam vs config)</td>
+<td>high, recurring</td>
+<td>medium</td>
+<td>draft with C2 (same family, different moment)</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>batch-processing</td>
+<td>an agent faces an N-items problem (fan-out, per-item work, fold)</td>
+<td>deferred (operator: "important later, not now")</td>
+<td>low once gated (adopt+co-author with flow)</td>
+<td>DORMANT with the capability: ballot won 11/11 for the runtime primitive, then the operator deprioritized the build (c2434) — gates unchanged, clock stopped</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="c1-run-verified-delivery">C1 — run-verified-delivery<a class="headerlink" href="#c1-run-verified-delivery" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: an agent is about to report an artifact (page, game,
+service, CLI, generated code) as delivered.</p>
+<p><strong>Teaches</strong>: "tested means run, not compiled." Execute the artifact the
+way its user will, before reporting it: a web page gets a browser probe
+(load, console errors, first interaction), a game gets a launch + first
+input, a service gets a live endpoint probe, a CLI gets an invocation,
+generated code gets build + execute + does-it-look-like-what-was-asked.
+Verification-by-confirmation (grep, syntax, "it compiles") is not
+verification-by-execution. Per-artifact-class probe checklists; failure
+report shapes.</p>
+<p><strong>Evidence</strong>: the R-Type incident — a seat shipped a game clone reported
+green without launching it; the operator's first click crashed on the
+title screen ("very disappointing, you didn't even test it, it doesn't
+launch", c2077, inline-verified); the seat's own root-cause + fix + live
+verify followed (c2081) and it adopted a browser-probe standard, then
+generalized a probe harness as its next claim. Agency's acceptance
+language now requires run-verified closes (c2126). The operator's own
+coding-workflow directive (c2119) demands exactly these gates ("does the
+code build / execute / look like what i was asked to build") — one
+incident plus the operator's standing demand, not a claimed trend.</p>
+<p><strong>Overlap + disposition (the real question)</strong>: <code>verification-before-
+completion</code> (curated from obra/superpowers, MIT) teaches ~half of this —
+the POSTURE (never claim done without verifying; "IDENTIFY: what command
+proves this claim?"). The genuine delta is the per-artifact-class probe
+taxonomy and the delivery-shaped habit. Because v-b-c is byte-pinned
+third-party, its gaps cannot be edited in: the shapes are a COMPANION
+first-party skill (activation descriptions disambiguated: posture vs
+delivery-probe) or an upstream PR. Bonus for first-party: v-b-c carries a
+recorded content caveat (threat-anchored framing; not entity-attachable) —
+a clean first-party C1 gives the shelf an entity-safe verification
+teaching.</p>
+<p><strong>Co-signers</strong>: code (probe standards, the incident's owner), agency
+(acceptance language), flow (workflow-gate alignment).</p>
+<p><strong>Recommendation</strong>: DRAFT FIRST — highest operator pain, portable, fills
+a hole the pinned third-party skill structurally cannot.</p>
+<h2 id="c2-incident-forensics">C2 — incident-forensics<a class="headerlink" href="#c2-incident-forensics" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: something breaks in a multi-agent system and cause or
+ownership is unclear.</p>
+<p><strong>Teaches</strong>: (1) route the incident to evidence, not suspicion — name the
+observable (what, when, which surface) and ask WHO with receipts (in a
+room with a steward, this step is "route or be routed"); (2) every
+implicated lane clears itself with evidence (grep receipts, live probes,
+timelines), never assertion; (3) find the SOURCE before building the
+repair path; (4) fix-at-source, unwedge the live system, file the
+follow-up item; (5) close on the record with the full chain. Post-mortems
+name the CLASS, not the instance.</p>
+<p><strong>Evidence</strong>: the marker-flood incident (995 diary reads on ephemeral,
+04:11 UTC) ran this protocol end-to-end in hours — routed, lanes cleared
+with grep receipts, source confirmed by reading the code (a harvest
+adapter), fixed at source, lane unwedged live, card filed, closed. Honest
+count: the full five-step protocol has run cleanly ONCE; its shape
+recurred partially in the two launcher outages (19:03/01:25 anatomies).
+n=1 for the full chain — stated, not hidden.</p>
+<p><strong>Overlap</strong>: <code>systematic-debugging</code> sits in this registry's own catalog
+(obra/superpowers row) and covers the single-agent half; the novel half is
+MULTI-SEAT (clearing lanes with receipts, attribution without blame,
+unwedge-then-file). Nothing on the shelf teaches that half.</p>
+<p><strong>Co-signers</strong>: agency (steward protocol), observer (evidence surfaces),
+gateway (repair-path half).</p>
+<p><strong>Recommendation</strong>: draft after C1/C3 — or deliberately wait for a second
+full-protocol incident to move beyond n=1; the review decides which.</p>
+<h2 id="c3-local-service-supervision">C3 — local-service-supervision<a class="headerlink" href="#c3-local-service-supervision" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: an agent runs, replaces, restarts, or debugs
+long-lived local services (gateways, UIs, hubs) on a shared machine.</p>
+<p><strong>Teaches</strong> (procedures, with the trap classes as the WHY under each
+step):
+- REPLACE-A-SERVICE protocol: spawn detached (<code>start_new_session</code> /
+  supervisor-parented — never session-bound nohup), free the port
+  deliberately, verify the replacement is serving, health-check BOTH ports
+  after any bounce. Why: linked-stack teardown — a child's death killing
+  siblings, and a cleanup trap killing the replacement you just started —
+  caused two outages in one night and a flap the next day.
+- RETEST protocol: restart the serving process before re-testing anything
+  you changed (a running process keeps the code it booted with — new
+  routes never reach an old process); hard-reload browser tabs after
+  rebuilds. Why: the stale-server class has been re-learned at least four
+  separate times in this workspace's record.
+- KILL discipline: never kill processes you did not launch; never kill by
+  name (other owners' processes look identical); one supervisor per
+  service, and a supervisor never silently resurrects what an operator
+  deliberately stopped.</p>
+<p><strong>Evidence</strong>: linked-teardown outages root-caused at 19:03 and 01:25;
+the :8080 flap next day root-caused to the same class and the launcher
+supervision FIXED ("child death no longer kills the stack"); the
+never-kill-by-name rule re-derived independently in the listener-hygiene
+lane and the supervision split (standing workspace record — no single seq
+carries it).</p>
+<p><strong>Overlap</strong>: none on the shelf. Deployment-agnostic despite local origins.</p>
+<p><strong>Co-signers</strong>: gateway (launcher owner), observer (both-port checks),
+agency (restart charter).</p>
+<p><strong>Recommendation</strong>: DRAFT SECOND — zero overlap, sharp recurring traps,
+stable teaching, now procedure-shaped.</p>
+<h2 id="c4-operator-reporting">C4 — operator-reporting<a class="headerlink" href="#c4-operator-reporting" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: an operator asks for status, or a completion boundary
+is reached.</p>
+<p><strong>Teaches</strong>: the "update?" answer shape (DONE with proofs / PENDING-GATED
+naming whose gate / ONGOING / NEXT — scannable in seconds); the one-line
+status contract (claimed item + next receipt + ETA);
+tension/problem/opportunity synthesis when asked "what should I know";
+visible-from-outside divergence reported unprompted at every completion
+boundary (if GitHub or a served endpoint doesn't show what you delivered
+locally, say so).</p>
+<p><strong>Evidence</strong>: the operator's escalation arc (all inline-verified: "update
+?" c2019 → "any top priority project i should be aware of?" c2022 →
+"detail that please" c2045 → "be more specific" c2050 → "everyone, please
+give me your status" c2075) culminating in the standing order c2083;
+agency's DONE/PENDING/ONGOING tables were the answers the operator
+accepted without re-asking; the "I see none" incident (07-13) is the
+visible-from-outside half's origin.</p>
+<p><strong>Overlap — the deciding fact</strong>: roughly half of C4 already sits in the
+agora-collaboration draft nearly verbatim (claimed-item + next receipt;
+"nothing worth doing" must be SAID; receipts with evidence). The genuinely
+novel half is small: the DONE/PENDING-GATED/ONGOING/NEXT answer shape,
+visible-from-outside divergence, and the T/P/O synthesis.</p>
+<p><strong>Recommendation</strong>: FOLD the novel half into agora-collaboration as a
+"Reporting upward" section — that draft is pre-promotion, so one bench
+validates both and the fold is the cheapest it will ever be. Standalone
+only if a non-hub consumer materializes.</p>
+<h2 id="c5-fleet-seat-operation">C5 — fleet-seat-operation<a class="headerlink" href="#c5-fleet-seat-operation" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: an agent operates as — or launches and supervises —
+headless fleet seats.</p>
+<p><strong>Teaches</strong>: policy presets and what they gate (reader / worker / builder
+/ full-auto — full-auto explicit, never a default); program-name-denylist
+semantics and their honest limits (interpreter one-liners are not
+name-catchable — contain with walls, never folklore); broker-to-delegate
+approval with timeouts (a seat never blocks on an absent human); identity
+per seat (env-keyed aliases, never model-chosen); deny reasons that teach
+the model the real rule; stop tokens; --no-review economics (in-seat
+verification on externally verified tasks ≈ doubles tokens for zero
+delta); skill charging at launch with byte attestation; session hygiene.</p>
+<p><strong>Evidence</strong>: the promoted <code>abstractcode bridge</code> wave — ruled gating table
+live-proven (7/7 checks; deny-by-program-name with the <code>python -c</code> honest
+limit stated in-module, c1817); two swarm benches (c1826/c1833: worker
+policy = zero approval stalls AND zero full-auto; the context-cost
+finding; graceful per-turn degradation); the live A/B on deny reasons; the
++103%-tokens --no-review measurement. Scope honesty: the c1600 proposal
+gated a fleet RECEPTION skill; the field evidence paid for the OPERATION
+scope — the gated candidate's scope shifted, and the new scope's evidence
+is now paid.</p>
+<p><strong>Overlap</strong>: <code>agora-collaboration</code> teaches the seat's hub etiquette; this
+teaches operating the seat itself. Distinct.</p>
+<p><strong>Co-signers</strong>: code (bridge owner — their shipped docs are the source of
+truth), agency (bench evidence), gateway (principal boundary).</p>
+<p><strong>Recommendation</strong>: draft via ADOPT+CO-AUTHOR with code as upstream owner
+(the precedent is agora-collaboration's two-pinned-sources shape — not
+coredoc/backlog, which were verbatim adoptions). Cheapest candidate to
+produce; the only one whose validation is already externally paid.</p>
+<h2 id="c6-content-curation">C6 — content-curation<a class="headerlink" href="#c6-content-curation" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: any party adopts third-party agent content (skills,
+prompts, MCP servers) into a trusted surface.</p>
+<p><strong>Teaches</strong>: byte-pin what you adopt (a pin that cannot refuse
+re-attesting edited bytes protects nothing); license allowlists with
+license text traveling; the time-of-use-fetch rule (content fetching
+unpinned instructions at runtime defeats pinning — refuse it); provenance
+honesty (reviewer==author disclosed; validation records name method and
+cap level); content caveats over silent edits; watch-tiers; upstream-first
+edits then re-vendor; adversarial review before adoption.</p>
+<p><strong>Evidence</strong>: this seat's own curated-shelf process across ~14 adoptions
+and three adversary waves (the time-of-use-fetch P0, the license allowlist
+flip, byte-pin refusal machinery, the maintainer-skills provenance
+disclosures).</p>
+<p><strong>Co-signers</strong>: none exist — reviewer==author, disclosed: the entire
+evidence base is this seat's own process, and external validation would
+require a second curating party. That is also why it parks.</p>
+<p><strong>Recommendation</strong>: PARK — real but meta; its main consumer today already
+lives it. Re-propose when a second curator exists.</p>
+<h2 id="c7-fault-attribution-added-by-adversarial-review">C7 — fault-attribution (added by adversarial review)<a class="headerlink" href="#c7-fault-attribution-added-by-adversarial-review" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: a failure's cause is being assigned — model vs seam
+vs configuration vs environment.</p>
+<p><strong>Teaches</strong>: suspect the seam before the model — nondeterminism is the
+LAST hypothesis, never the first; decompose the stack (composition bug?
+param collision? stale process? capability mismatch?) before blaming the
+substrate; settle attribution with a live A/B on the exact payload, never
+by reading prompts; a signal that pattern-matches a known failure may
+have a different cause; wrong attributions cost twice (the wrong fix
+ships, the real cause recurs).</p>
+<p><strong>Evidence</strong>: the co-scientist grounding failure was blamed on model
+nondeterminism, then CORRECTED to a composition bug (bare dp-investigate,
+no plan) — the room's own correction post names the class. The standing
+workspace record carries it repeatedly: three wrong attributions in one
+diagnosis night (07-11, prompt_cache_binding collision — "my walkthrough
+assert took HTTP 200 as turn success while the body said failed"); the
+language-drift wave where only live-model A/B isolated the cause after a
+plausible contract-only fix failed 3/3.</p>
+<p><strong>Overlap</strong>: <code>systematic-debugging</code> (catalog) is adjacent but
+instance-shaped; C7 is the attribution DISCIPLINE. Pairs naturally with
+C2 (same family, different moment: C2 = who/where across seats, C7 =
+which layer within a stack).</p>
+<p><strong>Co-signers</strong>: core (live A/B methodology), agency (bench-spy evidence),
+flow (language-guard precedent).</p>
+<p><strong>Recommendation</strong>: draft WITH C2 as siblings — or first of the two if
+the review weighs recurrence over ceremony (this class recurs weekly;
+full multi-seat incidents are rarer).</p>
+<h2 id="c8-batch-processing-added-live-operator-flow-pairing-c2401c2403c2404">C8 — batch-processing (added live: operator + flow pairing, c2401/c2403/c2404)<a class="headerlink" href="#c8-batch-processing-added-live-operator-flow-pairing-c2401c2403c2404" title="Permanent link">&para;</a></h2>
+<p><strong>Activates when</strong>: an agent or entity faces an N-items problem — fan
+items through per-item work and fold the results.</p>
+<p><strong>Teaches</strong> (once the capability lands): recognizing a batch-shaped
+problem; when to reach for the framework's map-reduce surface vs a loop;
+its failure semantics (every item accounted — done, skipped-with-warning,
+failed-with-reason, never silently absent); budgets and per-endpoint
+concurrency; pause/resume/cancel semantics and resume-after-restart;
+per-item attestation (incl. skills-ride-the-item); reading batch evidence
+from the ledger.</p>
+<p><strong>Evidence</strong>: the operator's own ruling (c2401 — batching is a core
+capability; must be efficient AND rigorous AND resilient, durable through
+the runtime with pause/resume/cancel) and the room's twelve-seat needs
+round that independently converged on the same properties. The pairing
+(capability + skill) confirmed by flow as chair and the operator (c2403).</p>
+<p><strong>Overlap</strong>: none — new capability, new teaching.</p>
+<p><strong>Co-signers</strong>: flow (workflow-surface half, co-author) + runtime — the
+ballot RESOLVED unanimously for the runtime effect primitive (c2419:
+option B, 11/11 first-choice; flow ships a thin node over it, agents and
+entity work-phases consume the same primitive natively).</p>
+<p><strong>Recommendation</strong>: GATED, now DORMANT — the ballot resolved 11/11 for
+the runtime primitive (c2419), then the operator DEPRIORITIZED the build
+(c2434: "it can be important later, but not now"; the vote + needs digest
+stand as the record for when it's picked back up). Gates unchanged when
+that day comes: capability ships → acceptance run passes → draft the
+DEMONSTRATED surface only, acceptance evidence in the validation record
+(the agora-collaboration bench precedent).</p>
+<hr />
+<h2 id="watch-tier-named-so-the-review-sees-them-not-proposed-now">Watch-tier (named so the review sees them; not proposed now)<a class="headerlink" href="#watch-tier-named-so-the-review-sees-them-not-proposed-now" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>prompt-cache discipline</strong>: the seam is still moving (bloc waves,
+  0817/0819) — teaching it now engraves mid-redesign semantics.</li>
+<li><strong>uxreview geometry enrichment</strong>: observer's geometry-audit practice
+  (36→0 layout faults) belongs UPSTREAM in the maintainer's uxreview
+  skill — flows doc-first to the owner, not a parallel skill.</li>
+<li><strong>steward addendum</strong>: one seat's role charter; generalize only if a
+  second room mints a steward.</li>
+<li><strong>entity-visit etiquette</strong>: expansion belongs in
+  abstractframework-gateway's visit section, not a new skill.</li>
+<li><strong>boot placement / waking-is-addressed</strong>: already folded verbatim into
+  the agora-collaboration draft this week — no residue to mine.</li>
+</ul>
+<h2 id="review-questions-for-the-operator">Review questions for the operator<a class="headerlink" href="#review-questions-for-the-operator" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Which candidates get drafted, in what order? My stake: C1 → C3 →
+   C7(+C2 as its sibling or its successor) → C5 → C4-fold; C6 parks.</li>
+<li>C1 disposition: first-party COMPANION beside verification-before-
+   completion (descriptions disambiguated: posture vs delivery-probe;
+   entity-safe wording), or an upstream PR to obra/superpowers instead?</li>
+<li>C4: confirm the FOLD into agora-collaboration (one bench validates
+   both), or name the non-hub consumer that justifies standalone.</li>
+<li>C5 shape: first-party adopt+co-author with code's shipped docs as the
+   pinned upstream — or point the catalog at code's docs and skip
+   first-party authorship entirely?</li>
+<li>Validation gates: each drafted candidate needs a named validator
+   beyond this seat (the room's never-self-declare rule). Proposed: C1 —
+   code co-signs + one live probe-harness run; C2/C7 — agency co-signs
+   against the incident record; C3 — gateway/observer co-sign; C5 —
+   code co-signs + the existing bench evidence. Accept or reassign.</li>
+<li>Is there a known upstream that already teaches any of these well
+   (search-first rule) — worth a catalog scan before first-party
+   authorship anywhere?</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
