@@ -33,6 +33,18 @@
 - pytest skips `untracked/`, `build/`, `dist/`, `site/` and dot-directories
   when collecting from the repository root.
 
+### Documentation
+
+- Added `CONTRIBUTING.md` (development workflow and the rules for changing
+  the bundled registry), `CODE_OF_CONDUCT.md` and `ACKNOWLEDGEMENTS.md`.
+- Troubleshooting and FAQ entries for seeding: kept items and their reasons,
+  items no longer bundled, manifest errors, and the seed lock.
+- The architecture page shows the module dependencies, the trust-gated
+  activation flow, and the per-item seeding decision.
+- The curated skills catalog lists all 14 bundled skills, including
+  `entity-observation` and `meshvault-live-editing`.
+- `llms-full.txt` aggregates the documentation pages in full.
+
 ## [0.2.1] - 2026-09-23
 
 ### Fixed

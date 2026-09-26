@@ -1,7 +1,9 @@
 # Getting started
 
 AbstractSkill is a small, dependency-light library (PyYAML only) for working
-with Agent Skills (`SKILL.md`) in AbstractFramework.
+with Agent Skills (`SKILL.md`) in AbstractFramework. This page walks through
+the main tasks in order; the [README](../README.md) gives the overview, and
+[Troubleshooting](troubleshooting.md) covers common errors.
 
 ## Install
 
@@ -132,7 +134,9 @@ unless the installed bundle is older than that seed (`kept_newer`); anything
 else is kept, with its reason in `report.kept`. Items no longer bundled are
 reported in `not_in_bundle` and never deleted. Without a manifest, only items
 identical to the bundle are adopted (`kept_unknown_provenance` for the rest).
-A second run with the same package writes nothing.
+A second run with the same package writes nothing. See
+[Troubleshooting](troubleshooting.md#a-bundled-skill-is-not-refreshed-after-an-upgrade)
+when an item stays kept after an upgrade.
 
 ## Activate skills into a context (the composed pipeline)
 
@@ -146,7 +150,7 @@ from pathlib import Path
 
 from abstractskill import TrustRegistry, format_available_skills_xml, select_skills_for_context
 
-shelf = Path("/srv/my-host/skills-shelf")  # filled by seed_registry (next section)
+shelf = Path("/srv/my-host/skills-shelf")  # filled by seed_registry (previous section)
 registry = TrustRegistry.load(
     validations_path=shelf / "validations.yaml",
     advisories_path=shelf / "advisories.yaml",
@@ -165,3 +169,9 @@ block = format_available_skills_xml(
 
 To add new third-party skills to the shelf, use the curated catalog path —
 see the [curated skills catalog](skills-catalog.md).
+
+## Next steps
+
+- [Architecture](architecture.md) — how the components connect, with diagrams.
+- [API reference](api.md) — every public function and type.
+- [Trust model](trust.md) — what a verdict means and what it does not guarantee.

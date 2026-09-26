@@ -107,9 +107,15 @@ Everything below is exported from the top-level `abstractskill` package.
 
 - `bundled_registry_dir() -> Path` — the registry shipped as package data
   (`abstractskill/registry/`); works from a wheel and from a checkout. Treat
-  it as read-only.
+  it as read-only. Raises `SkillError` when the package is installed zipped
+  (not on the filesystem) or the registry is missing.
 - `bundled_registry_version() -> str` — the dotted-numeric `version` declared
-  in the bundled `catalog.yaml`; it moves whenever bundled content moves.
+  in the bundled `catalog.yaml` (e.g. `2026.09.25`); it moves whenever
+  bundled content moves. Raises `SkillValidationError` when the version is
+  absent or not dotted-numeric.
+- `SEED_MANIFEST` (`.seeded.json`) and `SEED_LOCK` (`.seed.lock`) — the file
+  names `seed_registry` uses inside `dest` (module constants of
+  `abstractskill.bundled`).
 - `seed_registry(dest) -> SeedReport` — copy the bundled registry into `dest`
   (created if missing) under an exclusive lock on `dest/.seed.lock`. Per
   skill folder (tree hash) and per file (sha256): missing → added; identical
@@ -117,9 +123,12 @@ Everything below is exported from the top-level `abstractskill` package.
   (`dest/.seeded.json`) → updated, or `kept_newer` when the bundle is older
   than that seed; otherwise kept with a reason. Without a manifest, identical
   items are adopted and the rest are `kept_unknown_provenance`. Items no longer
-  bundled are reported, never deleted. Idempotent; no network. Raises
-  `SkillError` on an unreadable or unknown-schema manifest, a symlinked
-  staging entry, or a `dest` inside the bundle.
+  bundled are reported, never deleted. Idempotent; no network. If a folder
+  swap fails, the previous copy is restored before the error propagates.
+  Raises `SkillError` on an unreadable, malformed or unknown-schema
+  manifest, a symlinked staging entry, or a `dest` inside the bundle. See
+  [Troubleshooting](troubleshooting.md#seeding-the-bundled-registry) for each
+  case.
 - `SeedReport` — `dest`, `bundled_version`, `previous_version` (`None` when
   `dest` has no manifest), `added`, `updated`, `unchanged`,
   `kept_user_modified`, `kept_foreign`, `kept_unknown_provenance`,

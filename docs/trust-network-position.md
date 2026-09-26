@@ -1,8 +1,9 @@
 # Skill trust-network position (2026-07-11)
 
-Answer to the maintainer's question: "is there already a nascent network of
-trust for skills? evaluate how to join it or leverage it; if not, it could
-become abstractskill's role." Backlog: `docs/backlog/planned/trust/0004`.
+This page answers: is there a network of trust for Agent Skills that
+AbstractSkill should join or leverage, or should AbstractSkill provide one?
+It records the ecosystem as surveyed in July 2026. Backlog:
+[`docs/backlog/planned/trust/0004`](backlog/planned/trust/0004_trust_network_research.md).
 
 ## Finding: a trust network is FORMING, but immature
 

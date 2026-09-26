@@ -93,17 +93,13 @@ records the curated sources and the bundle version). Trust records bind to
 content hashes, never to paths, so a seeded shelf verifies wherever it lives,
 and an edited skill honestly drops to unverified until it is re-validated.
 
-A host such as AbstractGateway uses the API this way: call `seed_registry`
-on its own shelf directory at start-up, serve `<dest>/skills` through
+A host uses the API this way: call `seed_registry` on its own shelf
+directory at start-up, serve `<dest>/skills` through
 `select_skills_for_context` with the seeded trust files, and surface the
 report (in particular the kept items and `not_in_bundle`) to its operators.
-Where the shelf lives is host configuration, set through that host's own
-console or CLI.
-
-Maintainers: bump `version:` in `src/abstractskill/registry/catalog.yaml`
-whenever any bundled skill, license or yaml file changes. `tests/test_bundled.py`
-pins the version to a digest of the bundled content and fails until both move
-together.
+AbstractGateway, for example, seeds `<data dir>/skills/registry` when it
+starts and lets operators point it at another shelf with its `skills.shelf`
+setting (console or `abstractgateway config set skills.shelf <folder>`).
 
 ## Quick start
 
@@ -192,27 +188,33 @@ LF twin parse identically but hash differently: vendor skills from archives or
 byte-copies, never through EOL-rewriting checkouts (e.g. git `autocrlf`), or hash
 verification will honestly report the rewrite as a mismatch.
 
-Out of scope for this release: gateway registry APIs, zip `.skill` packaging, and runtime activation handlers.
+Out of scope: gateway registry APIs, zip `.skill` packaging, and runtime activation handlers.
 Those layers live in `abstractgateway` and `abstractruntime` and consume this library.
 
 ## Documentation
 
 Full documentation is in [`docs/`](docs/README.md) and on
-[GitHub Pages](https://www.lpalbou.info/AbstractSkill/): getting started,
-architecture (with diagrams), the API reference, the trust model, and the
-trust-network position. See also [SECURITY.md](SECURITY.md) for the trust
-guarantees this library does and does not make.
+[GitHub Pages](https://www.lpalbou.info/AbstractSkill/):
+
+- [Getting started](docs/getting-started.md) — install, parse, discover, trust, seed, activate
+- [Architecture](docs/architecture.md) — components, data flow and seeding (with diagrams)
+- [API reference](docs/api.md) — every public function and type
+- [FAQ](docs/faq.md) and [Troubleshooting](docs/troubleshooting.md)
+- [Trust model](docs/trust.md) and [curated skills catalog](docs/skills-catalog.md)
+
+See also [SECURITY.md](SECURITY.md) for the trust guarantees this library does
+and does not make, [CONTRIBUTING.md](CONTRIBUTING.md) for the development
+workflow, and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Development
 
 ```bash
 python -m pip install -e ".[test]"
 python -m pytest -q
-python -m build
-python -m pip install "mkdocs>=1.6.0" "mkdocs-material>=9.0.0"
-bash .github/scripts/prepare_mkdocs.sh
-mkdocs build -q
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for building the package and the docs
+site, and for the rules that keep the bundled registry verifiable.
 
 ## License
 

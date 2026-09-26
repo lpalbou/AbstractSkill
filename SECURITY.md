@@ -39,9 +39,13 @@ See the [trust model](docs/trust.md) and
 
 ## Handling skills safely
 
-- Prefer the curated first-party shelf (`src/abstractskill/registry/skills/`) over marketplace
-  skills; the ecosystem's measured malware rates make unvetted marketplaces a
-  live attack surface (`src/abstractskill/registry/guidance.yaml`).
+- Prefer the curated shelf shipped in the package (`abstractskill/registry/skills/`,
+  copied into a host directory with `seed_registry`) over marketplace skills;
+  the ecosystem's measured malware rates make unvetted marketplaces a live
+  attack surface (see the bundled `guidance.yaml`).
+- Seeding never overwrites an edited shelf item, and an edited skill no longer
+  matches its validation record: it evaluates as `unverified` until it is
+  re-validated.
 - Vendor skills byte-verbatim and pin their tree hash; re-verify on load.
 - Treat a persona-steering or identity-directive skill body as grounds for a
   do-not-use advisory — for a summoned entity such a body can be engrammed

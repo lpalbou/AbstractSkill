@@ -36,7 +36,7 @@ One sentence each:
 | Enforcement | None — the model may ignore or misread it | Structural — the framework guarantees the steps, order, and typed data; LLM/tool outputs inside nodes still vary | Per-call — the protocol is precise; the server's behavior is its own |
 | State | Stateless content (byte-pinned, hash-verified) | Durable run state (vars, waits, artifacts) | Server-side — treat as outside your trust boundary, even for local servers (a separate process you must gate) |
 | Trust model | Content trust: tree hash + validation records + advisories (the abstractskill gate) | Code trust: immutable published bundle versions, tool grants + approval policies at run time | Boundary trust: authentication, allowlists, per-tool approval; treat as external |
-| Composition | Skills can only narrow the operator's tool grant, never widen beyond it (multi-skill bound is shared: `grant ∩ union(declared)`) | Calls tools, spawns subflows/agents; skill activation inside runs is the designed composition (hosts adopt it progressively) | Its tools enter the SAME grant/approval lanes as native tools |
+| Composition | Skills can only narrow the operator's tool grant, never widen beyond it (multi-skill bound is shared: `grant ∩ union(declared)`) | Calls tools, spawns subflows/agents; a run can request skills, which the host resolves through the trust gate (AbstractGateway does this at run start) | Its tools enter the SAME grant/approval lanes as native tools |
 | Fails by | Being ignored or misread by the model | A failed or waiting run, visible in the ledger | Network/server errors, or a lying tool result |
 | Cost of adding one | Write markdown, curate, pin to exact bytes | Author a graph, test, publish a bundle | Stand up/point at a server, declare and gate its tools |
 
@@ -65,13 +65,14 @@ script execution additionally requires an explicit tool grant.
 4. **Mixed?** Compose. The common shapes:
    - An external agent reads the `abstractframework-gateway` skill and
      drives flows over HTTP — the skill is the bridge INTO the framework;
-     the flow does the durable work once inside. This pattern is fully
-     live today.
+     the flow does the durable work once inside.
    - A skill instructs the agent to use MCP-served tools well — the skill
      provides judgment, MCP provides reach.
    - A flow's agent node activates skills for judgment inside a durable
-     run — the DESIGNED pairing (the flow provides durability, the skill
-     provides method); hosts adopt it progressively, abstractcode first.
+     run — the flow provides durability, the skill provides method.
+     AbstractGateway resolves a run's requested skills through the trust
+     gate at run start and renders the active ones into the agent's
+     prompt.
      A live in-framework example of the same pattern: AbstractFlow's
      authoring assistant rides a 600+-line method document (its
      workflow-authoring skill) on the planner prompt of a gateway-hosted
@@ -118,13 +119,12 @@ layer with tools outside the process.
 - **MCP integration** is served at the boundary that executes tools: MCP
   tools are declared and gated beside native tools (grant lanes, approval
   policies), never as a separate privilege system.
-- Hosts (abstractcode, gateway-served agents, entity runtimes) are where
-  the three MEET: a host selects skills through the trust gate, runs flows
+- Hosts (gateway-served agents and runs, summoned entities) are where the
+  three MEET: a host selects skills through the trust gate, runs flows
   through the runtime, and reaches MCP tools through its tool executor.
-  Honest adoption state: skill selection ships in abstractskill today and
-  abstractcode consumes it (its `/skills` command); the gateway-served and
-  entity-runtime activation lanes are designed and being adopted
-  progressively.
+  AbstractGateway seeds its shelf from the registry bundled in
+  abstractskill and resolves skills for runs, spawned agents and summoned
+  entities through `select_skills_for_context`.
 
 ## Getting started with each
 

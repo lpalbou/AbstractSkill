@@ -3,39 +3,54 @@
 > The Agent Skills (`SKILL.md`) contract library for AbstractFramework: parse
 > and validate skills, discover them on disk with progressive disclosure, hash
 > them for evolution and tamper detection, compose their tool declarations with
-> an operator grant, and classify their trust. Dependency-light (PyYAML only);
-> executes nothing and imposes no runtime limits — hosts consume its contracts.
+> an operator grant, and classify their trust. The wheel also ships the curated
+> skill registry (14 skills and their trust files), which hosts copy into a
+> directory they own with `seed_registry`. Dependency-light (PyYAML only);
+> executes nothing, uses no network, and imposes no runtime limits — hosts
+> consume its contracts.
 
 "Flows run; skills are activated." AbstractSkill owns the portable skill
-contract so `abstractruntime`, `abstractgateway`, and thin clients share
-identical semantics without duplicating parsers.
+contract so `abstractgateway`, `abstractruntime`, and thin clients share
+identical semantics without duplicating parsers. `llms-full.txt` holds the
+full text of the pages below.
 
-## Documentation
+## Core Docs
 
-- [README](README.md): overview, package scope, hashing contract, install.
-- [Getting started](docs/getting-started.md): parse, discover, hash, compose, evaluate trust, seed the bundled shelf.
-- [Architecture](docs/architecture.md): components, data flow, verdict precedence (Mermaid diagrams).
-- [API reference](docs/api.md): all public functions and types.
-- [FAQ](docs/faq.md): common questions and limitations.
-- [Troubleshooting](docs/troubleshooting.md): symptoms, diagnostics, and fixes.
-- [Trust model](docs/trust.md): validated skills, do-not-use advisories, guidance, fail-closed verdict.
-- [Curated skills catalog](docs/skills-catalog.md): reviewed+pinned third-party skills, tiers, curated-only vendoring.
-- [Skills vs workflows vs MCP](docs/skills-flows-mcp.md): which extension mechanism when — comparison table, decision rules, package responsibilities.
-- [Trust-network position](docs/trust-network-position.md): join / leverage / build.
-- [Security policy](SECURITY.md): what the library does and does not guarantee.
-- [Changelog](CHANGELOG.md): release history.
+- [README.md](README.md): overview, the bundled registry and `seed_registry`, quick start, hashing contract.
+- [docs/getting-started.md](docs/getting-started.md): parse, discover, hash, compose tools, evaluate trust, seed the bundled shelf, activate through the trust gate.
+- [docs/architecture.md](docs/architecture.md): module dependencies, activation data flow, verdict precedence, per-item seeding decision (Mermaid diagrams).
+- [docs/api.md](docs/api.md): every public function and type, including `bundled_registry_dir`, `bundled_registry_version`, `seed_registry` and `SeedReport`.
+- [docs/faq.md](docs/faq.md): common questions and limitations, including what seeding keeps and never deletes.
+- [docs/troubleshooting.md](docs/troubleshooting.md): symptoms, diagnostics, and fixes, including kept seed items and manifest errors.
+
+## Topic Deep Dives
+
+- [docs/trust.md](docs/trust.md): validated skills, do-not-use advisories, guidance, the fail-closed verdict, seeded shelves.
+- [docs/skills-catalog.md](docs/skills-catalog.md): the 14 bundled skills, reviewed and pinned third-party skills, tiers, curated-only vendoring.
+- [docs/skills-flows-mcp.md](docs/skills-flows-mcp.md): which extension mechanism when — skills vs workflows vs MCP.
+- [docs/trust-network-position.md](docs/trust-network-position.md): how AbstractSkill relates to the wider skill-trust ecosystem (join / leverage / build).
 
 ## Key APIs
 
 - `parse_skill_md(text)` → `SkillDocument` (spec-validated; LF/CRLF/CR).
-- `FilesystemSkillLoader(roots).discover()/.load(name)` (progressive; loud on broken skills).
+- `FilesystemSkillLoader(roots).discover()/.load(name)` (progressive; loud on broken skills; no trust gate).
 - `hash_skill_tree(dir)`, `inspect_skill_dir(dir)` (tamper hash + `has_scripts`).
-- `effective_tools(grant, skills)` (grant ∩ declared; never widens).
 - `evaluate_trust(registry, tree_hash=..., has_scripts=...)` → `TrustVerdict` (blocked / requires_review / attachable).
-- `select_skills_for_context(registry, shelf_root, names)` → `SkillSelection` (the ONE trust-gated activation pipeline; names-only calls derive sources from the registry).
-- `bundled_registry_dir()`, `bundled_registry_version()`, `seed_registry(dest)` → `SeedReport` (the curated shelf shipped in the wheel; seeding adds missing items, refreshes items unchanged since the last seed, keeps operator edits).
-- `derive_demand(requires=..., inventory=..., granted=...)` → `DemandReport` (derived demand tier from declared tool/MCP requirements; hosts enforce grants separately).
+- `select_skills_for_context(registry, shelf_root, names)` → `SkillSelection` (the one trust-gated activation pipeline; names-only calls derive sources from the registry).
+- `format_available_skills_xml(skills, descriptions=selection.activation_descriptions)` (prompt block).
+- `effective_tools(grant, skills)` (grant ∩ declared; never widens).
+- `bundled_registry_dir()`, `bundled_registry_version()`, `seed_registry(dest)` → `SeedReport` (adds missing items, refreshes items unchanged since the last seed, keeps everything else with a reason, never deletes; lock `<dest>/.seed.lock`, manifest `<dest>/.seeded.json`).
+- `derive_demand(requires=..., inventory=..., granted=...)` → `DemandReport` (informational demand tier; hosts enforce grants).
 
-## Planning
+## Contributing
 
-- [Backlog overview](docs/backlog/overview.md) and the skill-trust track (`docs/backlog/planned/trust/`).
+- [CONTRIBUTING.md](CONTRIBUTING.md): development workflow and the rules for changing the bundled registry.
+- [SECURITY.md](SECURITY.md): vulnerability reporting and what the library does and does not guarantee.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): conduct expectations.
+
+## Optional
+
+- [CHANGELOG.md](CHANGELOG.md): release history.
+- [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md): upstream work and vendored skill sources.
+- [docs/README.md](docs/README.md): documentation index.
+- [docs/backlog/overview.md](docs/backlog/overview.md): planning and the skill-trust track.

@@ -119,6 +119,16 @@ proves authenticity and integrity, not safety. Curation, behavioral audit
 (0003), and the fail-closed default remain the real gate; the registries make
 the judgment explicit, explainable, and byte-bound.
 
+## Seeded shelves
+
+The registries ship in the package with the curated skills, and hosts copy
+them into a directory they own with `seed_registry` (see
+[Getting started](getting-started.md#seed-the-bundled-shelf-into-a-host-directory)).
+Because records bind to tree hashes, never to paths, a seeded shelf verifies
+wherever it lives, and a skill an operator edits on the seeded shelf drops to
+`unverified` until it is re-validated. Seeding keeps such edits rather than
+overwriting them.
+
 ## Maintaining the registries
 
 - `scripts/refresh_shelf.py` regenerates `validations.yaml` from the vendored

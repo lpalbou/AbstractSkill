@@ -28,7 +28,7 @@ verification will honestly report the rewrite as a mismatch.
 The do-not-use advisory registry names **specific** skills, and AbstractSkill
 does not assert a specific malicious skill on its own authority before its own
 behavioral audit or a leveraged external feed identifies a real one. Class-
-level protection is active now via `src/abstractskill/registry/guidance.yaml`, the fail-closed
+level protection comes from the bundled `guidance.yaml`, the fail-closed
 `unverified` default, and the `has_scripts` review gate. See the
 [trust model](trust.md).
 
@@ -53,3 +53,34 @@ backlog planning), vendored byte-verbatim and first-party reviewed. They are
 `adopted` (reviewed, not yet behaviorally audited). `adversarial-iteration`
 is the framework's first-party skill for the "one adversarial reviewer plus at
 least three improvement cycles" method.
+
+## Which skills ship with the package, and how does a host use them?
+
+The wheel carries the curated registry: 14 skills, the upstream licenses of
+vendored third-party skills, and four yaml files (`catalog.yaml`,
+`validations.yaml`, `advisories.yaml`, `guidance.yaml`). A host copies it
+into a directory it owns with `seed_registry` and serves that copy; the
+[curated skills catalog](skills-catalog.md) lists the skills, and
+[Getting started](getting-started.md#seed-the-bundled-shelf-into-a-host-directory)
+shows the call.
+
+## Will seeding overwrite my edits to a shelf skill?
+
+No. An item is refreshed only while it is byte-identical to what an earlier
+seed wrote. An edited item is kept and reported as `kept_user_modified`.
+Because trust binds to bytes, an edited skill no longer matches its
+validation record and evaluates as `unverified` until it is re-validated.
+To go back to the bundled version, see
+[Troubleshooting](troubleshooting.md#a-bundled-skill-is-not-refreshed-after-an-upgrade).
+
+## Does seeding remove skills that leave the bundle?
+
+No. Seeding never deletes. Items an earlier seed wrote that the bundle no
+longer contains are reported in `SeedReport.not_in_bundle`; removing them is
+the host's or operator's decision.
+
+## Does the tree hash cover file permissions and empty folders?
+
+No. `hash_skill_tree` covers file paths and bytes only. A seed refresh of an
+unmodified skill therefore does not preserve a changed executable bit or an
+empty folder you added.

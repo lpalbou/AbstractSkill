@@ -23,12 +23,17 @@ without duplicating parsers.
 pip install abstractskill
 ```
 
+The wheel also carries the curated skill registry (14 reviewed skills and
+their trust files). Hosts copy it into a directory they own with
+`seed_registry`.
+
 ## Next steps
 
 - [Getting started](getting-started.md) — parse, discover, compose tools, evaluate trust
 - [Architecture](architecture.md) — components and data flow
 - [API reference](api.md) — public functions and types
-- [Curated skills catalog](skills-catalog.md) — the reviewed shelf under `src/abstractskill/registry/skills/`
+- [FAQ](faq.md) and [Troubleshooting](troubleshooting.md) — common questions and fixes
+- [Curated skills catalog](skills-catalog.md) — the reviewed shelf shipped in the package
 
 ## Project links
 

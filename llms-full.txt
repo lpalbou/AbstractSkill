@@ -1,140 +1,1951 @@
-# AbstractSkill
+# AbstractSkill — full documentation
 
 > The Agent Skills (`SKILL.md`) contract library for AbstractFramework: parse
-> and validate skills, discover them on disk with progressive disclosure, hash
-> them for evolution and tamper detection, compose their tool declarations with
-> an operator grant, and classify their trust. Dependency-light (PyYAML only);
-> executes nothing and imposes no runtime limits — hosts consume its contracts.
+> and validate skills, discover them on disk, hash them for tamper detection,
+> compose their tool declarations with an operator grant, classify their
+> trust, and seed the curated skill registry shipped in the wheel into a
+> host-owned directory. PyYAML only; executes nothing; no network.
+
+This file concatenates the documentation pages listed below, in full. It
+contains no source code; the repository's code and tests are the source of
+truth. See llms.txt for the linked index.
 
 ## Document index
 
-- README.md — overview, package scope, hashing contract
-- docs/getting-started.md — parse, discover, hash, compose, evaluate trust
-- docs/architecture.md — components, data flow, verdict precedence
-- docs/api.md — public functions and types
-- docs/faq.md — common questions and limitations
-- docs/troubleshooting.md — symptoms, diagnostics, and fixes
-- docs/trust.md — trust model
-- docs/trust-network-position.md — join / leverage / build
-- SECURITY.md — guarantees and non-guarantees
+- README.md
+- docs/getting-started.md
+- docs/architecture.md
+- docs/api.md
+- docs/faq.md
+- docs/troubleshooting.md
+- docs/trust.md
+- docs/skills-catalog.md
+- docs/skills-flows-mcp.md
+- docs/trust-network-position.md
+- SECURITY.md
+- CONTRIBUTING.md
+- docs/README.md
 
----
 
-## Overview
+==============================================================================
+# FILE: README.md
+==============================================================================
 
-"Flows run; skills are activated." AbstractSkill owns the portable skill
-contract so `abstractruntime`, `abstractgateway`, and thin clients share
-identical semantics without duplicating parsers.
+# AbstractSkill
 
-Install with `pip install abstractskill`. Python ≥3.10, PyYAML only.
+[![PyPI version](https://img.shields.io/pypi/v/abstractskill.svg)](https://pypi.org/project/abstractskill/)
+[![CI](https://github.com/lpalbou/AbstractSkill/actions/workflows/ci.yml/badge.svg)](https://github.com/lpalbou/AbstractSkill/actions/workflows/ci.yml)
+[![Tested Python](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Flpalbou%2FAbstractSkill%2Fmain%2F.github%2Fworkflows%2Fci.yml&query=%24.jobs.test.strategy.matrix%5B%22python-version%22%5D&label=tested%20python&color=blue)](https://github.com/lpalbou/AbstractSkill/actions/workflows/ci.yml)
 
-Package surface:
+AbstractSkill is the shared Python library for [Agent Skills](https://agentskills.io/) (`SKILL.md`) in the
+[AbstractFramework](https://github.com/lpalbou/AbstractFramework) ecosystem.
 
-- `parse_skill_md` — YAML frontmatter + markdown body (LF/CRLF/CR;
-  spec-validated name/description/compatibility).
-- `FilesystemSkillLoader` — metadata-only discovery and full-document loading;
-  `discover()` and `load()` resolve identically (a broken copy never shadows a
-  valid one) and degrade loudly (`#FALLBACK`).
-- `content_hash` — SHA-256 of one document.
+It provides a small, dependency-light foundation for:
+
+- parsing and validating `SKILL.md` frontmatter and instructions
+- discovering skills on disk (progressive disclosure: metadata first)
+- computing stable content hashes for skill evolution and replay safety
+- formatting compact `<available_skills>` prompt blocks for hosts and agents
+- composing a skill's tool declarations with an operator grant (never widening)
+- classifying skill trust: validated skills, do-not-use advisories, and a
+  fail-closed verdict ([trust model](docs/trust.md))
+
+Flows run; skills are activated. AbstractSkill owns the portable skill contract so `abstractruntime`,
+`abstractgateway`, and thin clients can share identical semantics without duplicating parsers.
+
+## Install
+
+```bash
+pip install abstractskill
+```
+
+The wheel carries the library and the curated skill registry (the shelf below).
+
+## The bundled skill registry
+
+`pip install abstractskill` installs the reviewed shelf as package data:
+
+```
+abstractskill/registry/skills/            # 14 curated skills (one folder per SKILL.md)
+abstractskill/registry/licenses/          # upstream licenses of catalog-vendored skills
+abstractskill/registry/validations.yaml   # trust records: byte pins per skill tree
+abstractskill/registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)
+abstractskill/registry/guidance.yaml      # class-level curation guidance
+abstractskill/registry/catalog.yaml       # vendoring catalog + the bundle `version`
+```
+
+In this repository the same files live under `src/abstractskill/registry/`;
+[docs/skills-catalog.md](docs/skills-catalog.md) is the human-readable index.
+
+Hosts do not serve the installed package directory (it is replaced on every
+upgrade). They copy it into a directory they own with `seed_registry`:
+
+```python
+from pathlib import Path
+
+from abstractskill import bundled_registry_dir, bundled_registry_version, seed_registry
+
+print(bundled_registry_dir(), bundled_registry_version())
+
+report = seed_registry(Path("/srv/my-host/skills-shelf"))
+print(report.added, report.updated, report.unchanged)
+print(report.kept)          # {item: reason} for everything left untouched
+print(report.not_in_bundle) # seeded earlier, no longer bundled
+```
+
+`seed_registry` is safe to run on every start, and from several processes at
+once (the whole call holds an exclusive lock on `<dest>/.seed.lock`):
+
+- a skill folder or file missing at the destination is added;
+- one byte-identical to the bundle is unchanged;
+- one still byte-identical to what an earlier seed wrote (recorded in
+  `<dest>/.seeded.json`, compared by tree hash) is replaced by the newer
+  bundled content — unless the installed bundle is older than that seed, in
+  which case it is kept (`kept_newer`);
+- anything else is kept as it is, with its reason: `kept_user_modified` (an
+  operator edit), `kept_foreign` (content no seed wrote),
+  `kept_unknown_provenance` (the destination has no seed manifest),
+  `kept_symlink`, `kept_unreadable`. `report.kept` maps every kept item to
+  its reason;
+- items an earlier seed wrote that the bundle no longer contains are
+  reported in `not_in_bundle` and left in place; removing them is the host's
+  decision. Nothing outside the bundle is ever deleted.
+
+Without a manifest (a first seed into a populated folder, or a lost
+`.seeded.json`), items byte-identical to the bundle are adopted and recorded;
+every other existing item is kept as `kept_unknown_provenance`, because the
+seed cannot tell an old seeded copy from an operator edit. Keep `.seeded.json`
+with the shelf when you back it up or move it.
+
+Seeding twice writes nothing. No network access is involved.
+
+The seeded directory has the layout a host reads as its shelf: `<dest>/skills`,
+`<dest>/licenses` and the four yaml files (`validations.yaml`,
+`advisories.yaml` and `guidance.yaml` drive the trust gate; `catalog.yaml`
+records the curated sources and the bundle version). Trust records bind to
+content hashes, never to paths, so a seeded shelf verifies wherever it lives,
+and an edited skill honestly drops to unverified until it is re-validated.
+
+A host uses the API this way: call `seed_registry` on its own shelf
+directory at start-up, serve `<dest>/skills` through
+`select_skills_for_context` with the seeded trust files, and surface the
+report (in particular the kept items and `not_in_bundle`) to its operators.
+AbstractGateway, for example, seeds `<data dir>/skills/registry` when it
+starts and lets operators point it at another shelf with its `skills.shelf`
+setting (console or `abstractgateway config set skills.shelf <folder>`).
+
+## Quick start
+
+```python
+from pathlib import Path
+
+from abstractskill import FilesystemSkillLoader, format_available_skills_xml, parse_skill_md
+
+# Parse a SKILL.md file
+doc = parse_skill_md(Path("my-skill/SKILL.md").read_text(encoding="utf-8"))
+print(doc.metadata.name, doc.metadata.description)
+
+# Discover skills under one or more roots (later roots override earlier ones).
+# NOTE: discovery is for LISTING only — it applies no trust gate. Do not pipe
+# discover() straight into activation.
+loader = FilesystemSkillLoader([Path.home() / ".abstract" / "skills", Path(".abstract/skills")])
+skills = loader.discover()
+print(format_available_skills_xml(skills))
+
+# Load full instructions when a skill is activated
+loaded = loader.load("my-skill")
+print(loaded.document.content_hash)
+```
+
+To ACTIVATE skills into a context, gate them through trust in one call so the
+order (load → hash → evaluate_trust → compose) cannot be skipped:
+
+```python
+from pathlib import Path
+
+from abstractskill import TrustRegistry, select_skills_for_context, format_available_skills_xml
+
+shelf = Path("/srv/my-host/skills-shelf")  # a directory filled by seed_registry
+registry = TrustRegistry.load(
+    validations_path=shelf / "validations.yaml",
+    advisories_path=shelf / "advisories.yaml",
+)
+selection = select_skills_for_context(
+    registry, shelf_root=shelf / "skills",
+    names=["coredoc", "backlog"],  # names-only is enough: sources derive from the registry
+    enabled=[],  # names the operator explicitly review-enabled for this context
+)
+# Only trust-gated skills reach the prompt; blocked skills never appear.
+block = format_available_skills_xml(
+    list(selection.active), descriptions=selection.activation_descriptions
+)
+```
+
+## Package scope
+
+- `parse_skill_md` — YAML frontmatter + markdown body (LF/CRLF/CR; spec-validated
+  name/description/compatibility)
+- `FilesystemSkillLoader` — list metadata and load full documents; `discover()` and
+  `load()` resolve identically (a broken copy never shadows a valid one) and degrade
+  loudly (`#FALLBACK` warnings via logging and optional `on_warning`)
+- `content_hash` — SHA-256 digest of one document for evolution tracking
 - `hash_skill_tree` / `inspect_skill_dir` / `read_skill_resource` — whole-tree
   tamper hash (injective manifest), structural inventory (`has_scripts` is a
-  structural fact), bounded in-tree resource reads.
+  structural fact), bounded in-tree resource reads
 - `effective_tools` / `effective_tools_for_skill` — grant ∩ allowed-tools
-  composition (narrows below the grant, never widens; absence implies nothing).
-- `format_available_skills_xml` — deterministic `<available_skills>` block.
+  composition (skills can narrow below the grant, never widen beyond it;
+  absence of `allowed-tools` implies nothing)
+- `format_available_skills_xml` — deterministic discovery prompt block
 - `evaluate_trust` + `TrustRegistry` / `ValidationRecord` / `AdvisoryEntry` /
-  `GuidanceEntry` / `TrustVerdict` — trust classification.
-- `select_skills_for_context` → `SkillSelection` — the ONE trust-gated
-  activation pipeline (load → hash → derive sources → worst verdict → gate);
-  names-only calls derive provenance from the registry
-  (`TrustRegistry.source_candidates_for`; advisories checked against EVERY
-  candidate source so a losing record or wrong caller string cannot evade).
-  Operator `enabled` entries may be hash-pinned (`name@tree_hash`, full
-  sha256) so a standing enable attests bytes, not a claimable name; the
-  parsed SKILL.md is byte-cross-checked against the hashed tree (TOCTOU);
-  `resolved_paths`/`resolved_tree_hashes` name the winning copy per name.
-  Declared tool dependencies (`SkillRequires`): frontmatter
-  `metadata.requires_mcp`/`metadata.requires_tools` surface as
-  `selection.requires[name]` for every resolved name — host information
-  for refuse-with-reason on absent servers/tools, never a gate here and
-  never an auto-install.
-- `bundled_registry_dir`/`bundled_registry_version`/`seed_registry` →
-  `SeedReport` — the curated registry ships in the wheel as package data
-  (`abstractskill/registry/`: skills/, licenses/, catalog.yaml with the bundle
-  `version`, validations.yaml, advisories.yaml, guidance.yaml). `seed_registry`
-  copies it into a host-owned directory: missing items are added, items still
-  byte-identical to the last seed (`<dest>/.seeded.json`, tree hash per skill)
-  are refreshed (never by an older bundle: `kept_newer`), everything else is
-  kept with a reason (`report.kept`), items no longer bundled are reported in
-  `not_in_bundle` and never deleted. Serialised by a lock on
-  `<dest>/.seed.lock`; idempotent; no network.
-- `load_catalog`/`CatalogEntry`/`lint_catalog` — the curated vendoring
-  catalog contract (src/abstractskill/registry/catalog.yaml: reviewed entries pinned to 40-hex
-  upstream commits + whole-tree hashes; owner/repo slugs only). The install
-  path is CURATED-ONLY: `scripts/vendor_skill.py` fetches exactly the pinned
-  commit, refuses symlinks/name-mismatches/byte drift, and validation records
-  derive from the catalog (manual-review → adopted; scripts-bearing skills
-  stay requires_review). Curation list + tiers: docs/skills-catalog.md.
+  `GuidanceEntry` — validated-skill attestations bound to tree hashes, a
+  do-not-use advisory registry (four mandated fields, graded severity), and a
+  fail-closed `TrustVerdict` (blocked / requires_review / attachable). The
+  curated shelf (first-party + catalog-vendored skills) ships in the package under
+  `abstractskill/registry/`. See the
+  [trust model](docs/trust.md).
+- `select_skills_for_context` + `SkillSelection` — the one trust-gated activation
+  pipeline (load → hash → evaluate → gate); hash-pinned enables; declared MCP/tool
+  dependencies surfaced for host-side refusal.
+- `load_catalog` / `CatalogEntry` / `SkillCatalog` — curated vendoring catalog
+  (pinned upstream commits, expected tree hashes).
+- `bundled_registry_dir` / `bundled_registry_version` / `seed_registry` + `SeedReport` —
+  the shelf shipped in the wheel and the policy-safe copy into a host directory.
+- `derive_demand` + `DemandReport` — derived demand tier from declared tool/MCP
+  requirements joined against a host inventory (informational; hosts enforce grants).
 
 ### Hashing contract: hash = bytes, parse = meaning
 
-`content_hash` and `hash_skill_tree` are byte-exact deliberately — tamper
-detection must never call two byte-different trees "the same". A CRLF-authored
-skill and its LF twin parse identically but hash differently: vendor skills
-from archives or byte-copies, never through EOL-rewriting checkouts.
+`content_hash` and `hash_skill_tree` are byte-exact deliberately — tamper detection
+must never call two byte-different trees "the same". A CRLF-authored skill and its
+LF twin parse identically but hash differently: vendor skills from archives or
+byte-copies, never through EOL-rewriting checkouts (e.g. git `autocrlf`), or hash
+verification will honestly report the rewrite as a mismatch.
 
----
+Out of scope: gateway registry APIs, zip `.skill` packaging, and runtime activation handlers.
+Those layers live in `abstractgateway` and `abstractruntime` and consume this library.
 
-## Trust model (summary)
+## Documentation
 
-Trust binds to the tree hash, never the name — any byte change voids a
-validation. Levels: unverified < community < adopted (reviewed) < audited <
-first_party; `blocked` is a verdict an advisory forces. A validation method
-caps the level it can grant, so "reviewed" cannot masquerade as "audited".
+Full documentation is in [`docs/`](docs/README.md) and on
+[GitHub Pages](https://www.lpalbou.info/AbstractSkill/):
 
-A do-not-use `AdvisoryEntry` names a SPECIFIC skill with four mandated fields
-(official_intent, hidden_issue, severity, reference). Severity is graded:
-critical/high hard-block, hash-matched always blocks, low/medium force review.
-The shipped `advisories.yaml` is empty at v1 — AbstractSkill does not self-assert
-a specific malicious skill before its own audit or a leveraged feed names one.
+- [Getting started](docs/getting-started.md) — install, parse, discover, trust, seed, activate
+- [Architecture](docs/architecture.md) — components, data flow and seeding (with diagrams)
+- [API reference](docs/api.md) — every public function and type
+- [FAQ](docs/faq.md) and [Troubleshooting](docs/troubleshooting.md)
+- [Trust model](docs/trust.md) and [curated skills catalog](docs/skills-catalog.md)
 
-A `GuidanceEntry` is a CATEGORY-level risk notice; it informs but never blocks
-a specific skill. The shipped `guidance.yaml` ships three notices grounded in
-published 2026 research.
+See also [SECURITY.md](SECURITY.md) for the trust guarantees this library does
+and does not make, [CONTRIBUTING.md](CONTRIBUTING.md) for the development
+workflow, and [CHANGELOG.md](CHANGELOG.md) for release history.
 
-`evaluate_trust(...)` returns a fail-closed `TrustVerdict` with three
-orthogonal signals: `blocked` (never attach), `requires_review` (operator
-decides — unverified, scripts present, or low/medium advisory), and
-`attachable` (green path only: validated, advisory-free, script-free). Every
-verdict lists the reasons it rests on.
+## Development
 
-Name-anchored advisories match on `(name, source)` pairs — names
-case-insensitively (spec-lowercase, normalized at construction and query
-boundaries), sources exactly (stripped, case-sensitive; `lint_registry`
-flags case-only near-misses and unknown sources at refresh time, warns
-never refuses). Names-only context configs still match them:
-`select_skills_for_context` derives candidate sources from validation records
-(hash-bound = exact provenance, name-bound = prior-tree claim, warned) and
-checks every candidate, keeping the worst verdict.
+```bash
+python -m pip install -e ".[test]"
+python -m pytest -q
+```
 
-Trust classification raises the bar; it does not certify safety. Curation,
-behavioral audit (backlog 0003), and the fail-closed default remain the real
-gate.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for building the package and the docs
+site, and for the rules that keep the bundled registry verifiable.
 
----
+## License
 
-## Trust-network position (summary)
+MIT — see [LICENSE](LICENSE).
 
-A skill trust network is forming but immature (the agentskills.io signature
-RFC, AgentGuard's attest/revoke registry, OWASP's Agentic Skills Top 10).
-Position: BUILD now (the curated hash-pinned registry is the framework's trust
-root), LEVERAGE next (consume external findings as advisory inputs with
-provenance, human-merge), JOIN signing when the RFC stabilizes (the whole-tree
-hash already gives integrity; a verified signature becomes evidence for a
-validation). Federated signing proves authenticity, not safety, so it
-corroborates the audit; it does not replace it.
 
----
+==============================================================================
+# FILE: docs/getting-started.md
+==============================================================================
 
-For the full text of each document, read the linked files in the repository.
-These indexes are discoverability aids, not canonical documentation.
+# Getting started
+
+AbstractSkill is a small, dependency-light library (PyYAML only) for working
+with Agent Skills (`SKILL.md`) in AbstractFramework. This page walks through
+the main tasks in order; the [README](../README.md) gives the overview, and
+[Troubleshooting](troubleshooting.md) covers common errors.
+
+## Install
+
+```bash
+pip install abstractskill
+```
+
+For local development:
+
+```bash
+python -m pip install -e ".[test]"
+python -m pytest -q
+```
+
+## Parse a skill
+
+```python
+from pathlib import Path
+from abstractskill import parse_skill_md
+
+doc = parse_skill_md(Path("my-skill/SKILL.md").read_text(encoding="utf-8"))
+print(doc.metadata.name, doc.metadata.description)
+print(doc.content_hash)
+```
+
+The parser accepts LF, CRLF, and CR line endings and enforces the Agent Skills
+spec: `name` (1-64 chars, lowercase alphanumeric and single hyphens, no
+leading/trailing/consecutive hyphens), `description` (1-1024 chars), and
+`compatibility` (≤500 chars). Invalid input raises `SkillValidationError` or
+`SkillParseError` with a message naming the problem.
+
+## Discover skills on disk
+
+```python
+from pathlib import Path
+from abstractskill import FilesystemSkillLoader
+
+loader = FilesystemSkillLoader([Path.home() / ".abstract" / "skills", Path(".abstract/skills")])
+
+# Metadata only (progressive disclosure); later roots override earlier ones.
+for meta in loader.discover(on_warning=print):
+    print(meta.name, "-", meta.description)
+
+# Full document on demand.
+loaded = loader.load("my-skill")
+print(loaded.document.body)
+```
+
+`discover()` and `load()` resolve identically: a broken skill copy never
+shadows a valid one, and invalid folders are skipped with a `#FALLBACK`
+warning (delivered to `on_warning` and logged) rather than silently dropped.
+
+## Hash and inspect a skill folder
+
+```python
+from abstractskill import hash_skill_tree, inspect_skill_dir
+
+tree_hash = hash_skill_tree("my-skill")            # whole-tree tamper hash
+inv = inspect_skill_dir("my-skill")
+print(inv.tree_hash, inv.total_bytes, inv.has_scripts)
+```
+
+`has_scripts` is a structural fact (any file under `scripts/`), not a
+frontmatter claim — so a "requires enablement" badge cannot be lied to.
+
+## Compose tools with an operator grant
+
+```python
+from abstractskill import effective_tools
+
+grant = ["read_file", "write_file", "web_search"]
+result = effective_tools(grant, active_skills)   # active_skills: list[SkillMetadata]
+print(result.allowed)              # grant ∩ union(declared) — never wider than the grant
+print(result.warnings)             # #FALLBACK for any dropped token
+```
+
+Skills can only narrow the toolset below the grant, never widen it. A skill
+with no `allowed-tools` contributes nothing (pure knowledge). For per-skill
+least privilege use `effective_tools_for_skill`.
+
+## Evaluate trust
+
+```python
+from abstractskill import TrustRegistry, bundled_registry_dir, evaluate_trust, inspect_skill_dir
+
+shelf = bundled_registry_dir()  # the registry shipped in the wheel (read-only)
+registry = TrustRegistry.load(
+    validations_path=shelf / "validations.yaml",
+    advisories_path=shelf / "advisories.yaml",
+    guidance_path=shelf / "guidance.yaml",
+)
+inv = inspect_skill_dir("my-skill")
+verdict = evaluate_trust(
+    registry, tree_hash=inv.tree_hash, name="my-skill", source="first-party",
+    has_scripts=inv.has_scripts,
+)
+print(verdict.level, verdict.blocked, verdict.requires_review, verdict.attachable)
+for reason in verdict.reasons:
+    print("-", reason)
+```
+
+The verdict is fail-closed: only a validated, advisory-free, script-free skill
+is `attachable`. See the [trust model](trust.md) for the full semantics.
+
+## Seed the bundled shelf into a host directory
+
+The wheel ships the curated registry (`abstractskill/registry/`: `skills/`,
+`licenses/`, `catalog.yaml`, `validations.yaml`, `advisories.yaml`,
+`guidance.yaml`). A host copies it into a directory it owns:
+
+```python
+from pathlib import Path
+
+from abstractskill import seed_registry
+
+report = seed_registry(Path("/srv/my-host/skills-shelf"))
+print(report.bundled_version, report.previous_version)
+print("added:", report.added)
+print("updated:", report.updated)
+print("kept, with reasons:", report.kept)
+print("no longer bundled:", report.not_in_bundle)
+```
+
+Run it on every start; concurrent calls on the same destination serialise on
+`<dest>/.seed.lock`. Missing items are added; items still byte-identical to
+what an earlier seed wrote (tracked in `<dest>/.seeded.json`) are refreshed,
+unless the installed bundle is older than that seed (`kept_newer`); anything
+else is kept, with its reason in `report.kept`. Items no longer bundled are
+reported in `not_in_bundle` and never deleted. Without a manifest, only items
+identical to the bundle are adopted (`kept_unknown_provenance` for the rest).
+A second run with the same package writes nothing. See
+[Troubleshooting](troubleshooting.md#a-bundled-skill-is-not-refreshed-after-an-upgrade)
+when an item stays kept after an upgrade.
+
+## Activate skills into a context (the composed pipeline)
+
+For activation, do not wire the primitives by hand — use the ONE pipeline so
+the ordering (load → hash → trust-gate → compose) cannot be skipped, and pass
+the activation-description overrides so upstream wrong-audience text never
+reaches a prompt:
+
+```python
+from pathlib import Path
+
+from abstractskill import TrustRegistry, format_available_skills_xml, select_skills_for_context
+
+shelf = Path("/srv/my-host/skills-shelf")  # filled by seed_registry (previous section)
+registry = TrustRegistry.load(
+    validations_path=shelf / "validations.yaml",
+    advisories_path=shelf / "advisories.yaml",
+)
+selection = select_skills_for_context(
+    registry, shelf_root=shelf / "skills",
+    names=["coredoc", "verification-before-completion"],  # names-only is enough
+    enabled=[],  # operator-enabled requires_review skills for THIS context
+)
+block = format_available_skills_xml(
+    list(selection.active),
+    descriptions=selection.activation_descriptions,  # REQUIRED for honest prompts:
+    # without it the UPSTREAM description renders verbatim (wrong-audience leak)
+)
+```
+
+To add new third-party skills to the shelf, use the curated catalog path —
+see the [curated skills catalog](skills-catalog.md).
+
+## Next steps
+
+- [Architecture](architecture.md) — how the components connect, with diagrams.
+- [API reference](api.md) — every public function and type.
+- [Trust model](trust.md) — what a verdict means and what it does not guarantee.
+
+
+==============================================================================
+# FILE: docs/architecture.md
+==============================================================================
+
+# Architecture
+
+AbstractSkill is a passive contract library: it parses, validates, hashes,
+discovers, composes, and classifies skills. It executes nothing and imposes no
+runtime limits — hosts such as AbstractGateway consume its contracts and
+enforce policy. It uses no network. See the [API reference](api.md) for the
+public surface and the [trust model](trust.md) for verdict semantics.
+
+## Components
+
+Arrows point from a module to the modules it uses. Hosts such as
+AbstractGateway call the public API; they never reach into the package
+directory itself.
+
+```mermaid
+graph TD
+    subgraph pkg[abstractskill package]
+        parser[parser.py<br/>parse_skill_md]
+        validation[validation.py<br/>name / description / compatibility]
+        models[models.py<br/>SkillMetadata / SkillDocument]
+        hash[hash.py<br/>content_hash]
+        loader[loader.py<br/>FilesystemSkillLoader]
+        tree[tree.py<br/>hash_skill_tree / inspect_skill_dir]
+        trust[trust.py<br/>TrustRegistry / evaluate_trust]
+        selection[selection.py<br/>select_skills_for_context]
+        prompt[prompt.py<br/>format_available_skills_xml]
+        policy[policy.py<br/>effective_tools]
+        demand[demand.py<br/>derive_demand]
+        catalog[catalog.py<br/>load_catalog]
+        bundled[bundled.py<br/>bundled_registry_dir / seed_registry]
+        registry[(registry/<br/>14 skills, licenses,<br/>4 yaml files)]
+    end
+
+    parser --> validation
+    parser --> models
+    parser --> hash
+    loader --> parser
+    loader --> models
+    tree --> validation
+    trust --> validation
+    catalog --> validation
+    selection --> loader
+    selection --> tree
+    selection --> trust
+    demand --> selection
+    policy --> models
+    prompt --> models
+    bundled --> tree
+    bundled --> registry
+
+    host[Host, e.g. AbstractGateway<br/>seeds a shelf at start,<br/>skill picker, activation]
+    shelf[(host-owned shelf<br/>seeded copy of registry/)]
+
+    host --> bundled
+    bundled -->|seed_registry| shelf
+    host --> selection
+    selection -->|reads| shelf
+    host --> prompt
+    host --> loader
+    host --> trust
+```
+
+## Data flow: activating skills through the trust gate
+
+`select_skills_for_context` runs the whole pipeline in one call, so the order
+cannot be skipped. The host then renders the active skills into the prompt.
+
+```mermaid
+flowchart LR
+    A[skill names<br/>from host config] --> B[load SKILL.md<br/>from shelf roots]
+    B --> C[inspect_skill_dir<br/>tree_hash + has_scripts]
+    C --> D[derive sources<br/>from registry]
+    D --> E[evaluate_trust<br/>per candidate,<br/>worst verdict wins]
+    E -->|blocked| F[blocked: never active]
+    E -->|requires_review| G{operator enabled<br/>name or name@hash?}
+    G -->|no| H[held]
+    G -->|yes| I[active]
+    E -->|attachable| I
+    I --> J[format_available_skills_xml<br/>with activation_descriptions]
+    I -.optional.-> K[effective_tools<br/>grant ∩ declared]
+```
+
+## Trust verdict precedence
+
+```mermaid
+flowchart TD
+    S[skill: tree_hash, name, source, has_scripts] --> ADV{active blocking<br/>advisory match?}
+    ADV -->|critical/high or hash match| BLOCK[BLOCKED<br/>never attach]
+    ADV -->|no| VAL{validation<br/>for this hash?}
+    VAL -->|no| UNV[UNVERIFIED<br/>requires_review]
+    VAL -->|yes| LVL[level = strongest record]
+    LVL --> REV{low/medium advisory<br/>OR has_scripts?}
+    REV -->|yes| RR[requires_review]
+    REV -->|no| ATT[attachable]
+```
+
+## Key design decisions
+
+- **Hash = bytes, parse = meaning.** `content_hash` (one document) and
+  `hash_skill_tree` (whole folder, length-prefixed injective manifest) are
+  byte-exact. Trust binds to the tree hash; any byte change voids a validation
+  and a post-approval tamper is detected. See [trust model](trust.md).
+- **Progressive disclosure.** `discover()` reads only frontmatter;
+  `load()`/`read_skill_resource` fetch bodies and resources on demand with
+  size bounds.
+- **Grant is the only tool authority.** `effective_tools` narrows below the
+  operator grant, never widens; absence of `allowed-tools` implies nothing.
+- **Fail closed.** Unknown, script-bearing, or low/medium-advisory skills
+  require review; only a validated, clean skill is `attachable`.
+- **Passive by design.** No execution, no scheduling, no runtime caps —
+  keeping the framework's agency in the hosts, not the contract library.
+
+## Registries (data, not code)
+
+The registry ships in the wheel as package data (`abstractskill/registry/`).
+`abstractskill.bundled` locates it and seeds host-owned copies;
+`catalog.yaml` carries the bundle `version` (dotted numbers, for example
+`2026.09.25`), which increases whenever bundled content changes.
+
+### Seeding a host shelf
+
+`seed_registry(dest)` decides per item (each skill folder by tree hash, each
+file by sha256), holding an exclusive lock on `<dest>/.seed.lock` for the
+whole call. `<dest>/.seeded.json` records the hash of every item a seed
+wrote and the bundle version.
+
+```mermaid
+flowchart TD
+    S[bundled item] --> SYM{symlink at dest?}
+    SYM -->|yes| KS[kept_symlink]
+    SYM -->|no| EX{exists at dest?}
+    EX -->|no| ADD[added]
+    EX -->|yes| RD{hashable?}
+    RD -->|no| KU[kept_unreadable]
+    RD -->|yes| SAME{identical<br/>to bundle?}
+    SAME -->|yes| UN[unchanged<br/>recorded as seeded]
+    SAME -->|no| MAN{manifest<br/>present?}
+    MAN -->|no| KP[kept_unknown_provenance]
+    MAN -->|yes| REC{recorded<br/>in manifest?}
+    REC -->|no| KF[kept_foreign]
+    REC -->|yes| PRIS{identical to what<br/>the last seed wrote?}
+    PRIS -->|no| KM[kept_user_modified]
+    PRIS -->|yes| OLD{bundle older<br/>than last seed?}
+    OLD -->|yes| KN[kept_newer]
+    OLD -->|no| UPD[updated]
+```
+
+Items are written through a staging folder and renamed into place; if a
+folder swap fails, the previous copy is restored. Items a previous seed
+wrote that the bundle no longer contains are reported as `not_in_bundle`
+and never deleted. A second seed with the same bundle writes nothing. The
+manifest is rewritten only when it changes.
+
+AbstractGateway seeds `<data dir>/skills/registry` when it starts and serves
+that copy unless the operator sets its `skills.shelf` setting to another
+folder.
+
+### Registry files
+
+- `src/abstractskill/registry/skills/<name>/` — the vendored curated shelf (byte-verbatim; first-party + catalog-vendored).
+- `src/abstractskill/registry/catalog.yaml` — the curated vendoring catalog: reviewed entries
+  pinned to upstream commits + whole-tree hashes; the ONLY admissible source
+  list for `scripts/vendor_skill.py` (validated by `abstractskill.catalog`).
+- `src/abstractskill/registry/validations.yaml` — trust attestations bound to tree hashes
+  (regenerated by `scripts/refresh_shelf.py`; catalog-vendored skills derive
+  their policy from the catalog entry).
+- `src/abstractskill/registry/advisories.yaml` — specific do-not-use skills (four mandated
+  fields; empty at v1 until an audit or feed names a real one).
+- `src/abstractskill/registry/licenses/` — upstream licenses of vendored
+  third-party skills, kept outside the skill trees so the tree hash covers
+  only upstream bytes.
+- `src/abstractskill/registry/guidance.yaml` — category-level risk notices (never block a
+  specific skill).
+
+For the design history and planned trust work, see the
+[backlog overview](backlog/overview.md).
+
+
+==============================================================================
+# FILE: docs/api.md
+==============================================================================
+
+# API reference
+
+Everything below is exported from the top-level `abstractskill` package.
+
+## Parsing
+
+- `parse_skill_md(text, *, source_path=None, directory_name=None) -> SkillDocument`
+  — parse `SKILL.md` text (LF/CRLF/CR) into metadata + body; validates the
+  spec fields; optionally checks the name matches its directory.
+- `validate_skill_name(name) -> str`, `validate_description(text) -> str`,
+  `validate_compatibility(text) -> str` — spec validators (used by the parser;
+  also callable directly).
+- `content_hash(content) -> str` — SHA-256 of one document's bytes.
+- Constants: `SKILL_FILENAME`, `SKILL_NAME_RE`, `MAX_NAME_LENGTH` (64),
+  `MAX_DESCRIPTION_LENGTH` (1024), `MAX_COMPATIBILITY_LENGTH` (500).
+
+## Models
+
+- `SkillMetadata` — name, description, license, compatibility, allowed_tools,
+  metadata, source_path. `.to_dict()`. `metadata` is a free mapping; the
+  `requires_mcp`/`requires_tools` dependency convention rides here (see
+  Selection).
+- `SkillDocument` — metadata, body, raw, content_hash. `.name`.
+- `LoadedSkill` — document + root_dir.
+
+## Discovery
+
+- `FilesystemSkillLoader(roots)` — `discover(*, on_warning=None) -> list[SkillMetadata]`
+  (metadata only; later roots win; broken folders and unreadable roots skipped
+  with `#FALLBACK`; an unreadable `SKILL.md` raises `SkillParseError`),
+  `load(name, *, on_warning=None) -> LoadedSkill` (full body; same resolution;
+  name validated first).
+
+## Tree hashing and resources
+
+- `hash_skill_tree(dir) -> str` — deterministic whole-tree SHA-256
+  (length-prefixed injective manifest; OS junk excluded; symlinks refused).
+- `inspect_skill_dir(dir) -> SkillInventory` — files, sizes, tree_hash,
+  total_bytes, `has_scripts`.
+- `read_skill_resource(dir, rel_path, *, max_bytes) -> bytes` — in-tree read;
+  traversal/symlink refused; honest oversize refusal.
+- `SkillInventory`, `SkillResource`.
+
+## Tool composition
+
+- `effective_tools(grant, skills, *, name_map=None) -> EffectiveTools` — the
+  shared grant ∩ union(declared) view.
+- `effective_tools_for_skill(grant, skill, *, name_map=None) -> EffectiveTools`
+  — the per-skill least-privilege view (the enforcement primitive).
+- `EffectiveTools` — allowed, declared_bound_active, narrowed_by_skills,
+  declared_skills, undeclared_skills, out_of_grant_names, unresolved_tokens,
+  warnings.
+
+## Prompt
+
+- `format_available_skills_xml(skills, *, descriptions=None) -> str` —
+  deterministic, html-escaped `<available_skills>` block. Pass
+  `descriptions=SkillSelection.activation_descriptions` (or
+  `TrustRegistry.activation_descriptions()`): without it the UPSTREAM
+  description renders verbatim, which leaks wrong-audience text (e.g. a
+  vendored skill's "Use when Codex needs to…") into the prompt.
+
+## Trust
+
+- `evaluate_trust(registry, *, tree_hash, name=None, source=None, has_scripts=False) -> TrustVerdict`
+  — fail-closed, explainable verdict.
+- `TrustRegistry(validations, advisories, guidance)` /
+  `TrustRegistry.load(validations_path, advisories_path, guidance_path)`.
+- `TrustRegistry.source_candidates_for(*, name, tree_hash=None) -> tuple[DerivedSource, ...]`
+  — ALL registry-derived provenance candidates (hash-bound supersedes
+  name-bound; gates check advisories against every candidate).
+- `TrustRegistry.source_for(*, name, tree_hash=None) -> DerivedSource | None`
+  — the primary (display) candidate for provenance rendering.
+- `DerivedSource` — source, binding ("hash" | "name"), ambiguous.
+- `ValidationRecord` — an attestation bound to a tree_hash (level, method,
+  evidence; method caps the grantable level). `delivered_via_map` is parsed
+  strictly: booleans or `true`/`false`, `yes`/`no`, `1`/`0`, `on`/`off`;
+  anything else raises `SkillValidationError`.
+- `AdvisoryEntry` — a specific do-not-use notice (official_intent,
+  hidden_issue, severity, reference; hash or name/source anchored). Names
+  match case-insensitively (spec lowercase); sources match exactly
+  (stripped, case-sensitive).
+- `lint_registry(registry) -> tuple[str, ...]` — curator lint surfacing
+  inert advisory spellings (spec-invalid names, case-only or unknown source
+  mismatches); warns, never refuses. Run by `scripts/refresh_shelf.py`.
+- `GuidanceEntry` — a category-level risk notice (never blocks a specific
+  skill).
+- `TrustVerdict` — level, blocked, requires_review, attachable, do_not_use,
+  reasons, advisories, validation, warnings.
+- Enums: `TrustLevel` (blocked/unverified/community/adopted/audited/first_party),
+  `Severity` (critical/high/medium/low).
+
+## Catalog
+
+- `load_catalog(path) -> SkillCatalog` — load + validate the curated vendoring
+  catalog (`src/abstractskill/registry/catalog.yaml`); loud on every malformed entry.
+- `CatalogEntry` — one reviewed, pinned, vendor-able skill (owner/repo slug,
+  40-hex commit pin, subdir, license, archetype/risk, `expected_tree_hash`
+  after first vendoring; `vendored` is parsed strictly like other boolean
+  flags). Network-free contract; fetching lives in
+  `scripts/vendor_skill.py`.
+- `lint_catalog(catalog, shelf_names) -> tuple[str, ...]` — curator lint
+  (vendored-but-absent, on-shelf-but-unlisted, risky-without-notes, unclear
+  licenses). Warns, never refuses.
+
+## Bundled registry
+
+- `bundled_registry_dir() -> Path` — the registry shipped as package data
+  (`abstractskill/registry/`); works from a wheel and from a checkout. Treat
+  it as read-only. Raises `SkillError` when the package is installed zipped
+  (not on the filesystem) or the registry is missing.
+- `bundled_registry_version() -> str` — the dotted-numeric `version` declared
+  in the bundled `catalog.yaml` (e.g. `2026.09.25`); it moves whenever
+  bundled content moves. Raises `SkillValidationError` when the version is
+  absent or not dotted-numeric.
+- `SEED_MANIFEST` (`.seeded.json`) and `SEED_LOCK` (`.seed.lock`) — the file
+  names `seed_registry` uses inside `dest` (module constants of
+  `abstractskill.bundled`).
+- `seed_registry(dest) -> SeedReport` — copy the bundled registry into `dest`
+  (created if missing) under an exclusive lock on `dest/.seed.lock`. Per
+  skill folder (tree hash) and per file (sha256): missing → added; identical
+  to the bundle → unchanged; identical to what an earlier seed wrote
+  (`dest/.seeded.json`) → updated, or `kept_newer` when the bundle is older
+  than that seed; otherwise kept with a reason. Without a manifest, identical
+  items are adopted and the rest are `kept_unknown_provenance`. Items no longer
+  bundled are reported, never deleted. Idempotent; no network. If a folder
+  swap fails, the previous copy is restored before the error propagates.
+  Raises `SkillError` on an unreadable, malformed or unknown-schema
+  manifest, a symlinked staging entry, or a `dest` inside the bundle. See
+  [Troubleshooting](troubleshooting.md#seeding-the-bundled-registry) for each
+  case.
+- `SeedReport` — `dest`, `bundled_version`, `previous_version` (`None` when
+  `dest` has no manifest), `added`, `updated`, `unchanged`,
+  `kept_user_modified`, `kept_foreign`, `kept_unknown_provenance`,
+  `kept_symlink`, `kept_unreadable`, `kept_newer`, `not_in_bundle` (paths
+  relative to `dest`, e.g. `skills/coredoc`, `validations.yaml`); `.changed`
+  (anything written) and `.kept` (`{item: reason}`).
+
+## Selection
+
+- `select_skills_for_context(registry, shelf_root, names, *, sources=None,
+  enabled=(), on_warning=None) -> SkillSelection` — the ONE trust-gated
+  pipeline (load → hash → derive sources → evaluate_trust per candidate →
+  worst verdict → gate). Names-only calls derive provenance from the
+  registry; blocked never activates; requires_review activates only when
+  operator-enabled; a bad tree holds one skill, never the phase.
+  `shelf_root` also accepts a LIST of roots (curated shelf + user skills
+  dir): the later VALID copy wins on name collision (a broken later copy
+  falls back loudly), and the gate evaluates the winning copy's own bytes —
+  a user shadow of a curated name never inherits the curated validation
+  record (different hash ⇒ unverified ⇒ held), while byte-identical copies
+  activate on the record regardless of root (trust binds to content, not
+  location). `enabled` entries may be bare names or HASH-PINNED as
+  `name@tree_hash` (full sha256): a pin grants exactly the reviewed bytes —
+  the durable form for standing enables. Pins govern over a bare entry for
+  the same name; malformed pins grant nothing (fail-closed); a pin that no
+  longer matches holds the skill with a note naming both hashes; pins never
+  constrain attachable skills. A requires_review skill activated via a BARE
+  enable is always loudly noted with the winning copy's path + hash (the
+  bare grant is name-bound; the note keeps a standing enable from silently
+  activating a shadow). The pipeline also cross-checks the SKILL.md bytes
+  it parsed against the hashed tree's own per-file digest — a swap between
+  load and hash (TOCTOU on user-writable roots) refuses the skill loudly.
+- `SkillSelection` — active, held, blocked, missing, activation_descriptions
+  (current-hash only), warnings, plus `resolved_paths` and
+  `resolved_tree_hashes` naming the winning copy for every attested name
+  (the tree hash is the exact value to pin in an `enabled` entry), and
+  `requires` (declared dependencies per resolved name — see below).
+- Declared tool dependencies (`SkillRequires`): a skill whose recipes
+  presuppose an MCP server or specific tools declares them in frontmatter —
+  `metadata.requires_mcp: [server-names]` and/or
+  `metadata.requires_tools: [tool-names]` (a bare string coerces to a
+  one-item list; malformed values are dropped LOUDLY, never silently). The
+  selection surfaces the declaration as `selection.requires[name]`
+  (`.mcp_servers` / `.tools`; only declaring skills get a row) for every
+  resolved name — active, held, and blocked alike, so renders can gray an
+  absent dependency regardless of verdict. The declaration is HOST
+  information, never a gate here: the host checks it against its own
+  inventory before composing and refuses activation WITH THE REASON —
+  worded to what the host actually CHECKED (the blessed template from the
+  first consumer: "requires MCP server 'x' — not declared on this
+  gateway"; a declared-only inventory must never overclaim "not
+  reachable") — instead of an agent discovering absent tools mid-task.
+  Auto-install is out of scope by design — the declaration names, it
+  never executes.
+  First declaring skill on the shelf: `meshvault-live-editing`
+  (`requires_mcp: [meshvault-mcp]`).
+- `read_skill_resource(skill_dir, rel_path, *, max_bytes, expected_sha256=None)`
+  — progressive-disclosure read, strictly inside the tree; pass the
+  inventory's `SkillResource.sha256` as `expected_sha256` to refuse a
+  resource swapped after selection (post-verdict TOCTOU half).
+
+## Demand
+
+- `derive_demand(*, requires, has_scripts=False, inventory=None, granted=None) -> DemandReport`
+  — derive the demand tier from declared tool/MCP requirements joined against a
+  host inventory. Informational only: hosts enforce grants separately; this
+  library never widens or auto-grants tools.
+- `DemandReport` — `tier` (derived max risk rank), `rows` (per-declaration
+  coverage), `warnings`, `notes`.
+- `DemandRow` — one declared requirement with `rank`, `band`, `presentation`,
+  coverage bucket, and resolved tool names.
+- Coverage buckets: `COVERED`, `NOT_GRANTED`, `NOT_AVAILABLE`, `DISABLED`.
+- Rank constants: `RISK_RANK_MIN`, `RISK_RANK_MAX`, `EXECUTION_FLOOR_RANK`.
+- One-release aliases (deprecated names, still exported): `RISK_TIER_MIN`,
+  `RISK_TIER_MAX`, `EXECUTION_FLOOR_TIER`.
+
+## Errors
+
+- `SkillError` (base), `SkillParseError`, `SkillValidationError`,
+  `SkillNotFoundError`.
+
+
+==============================================================================
+# FILE: docs/faq.md
+==============================================================================
+
+# FAQ
+
+## What is a skill, and how does it differ from a flow?
+
+A skill is a portable procedure/knowledge pack (`SKILL.md` + optional
+resources). Flows run; skills are activated/loaded. AbstractSkill owns the
+skill contract so `abstractruntime`, `abstractgateway`, and thin clients share
+identical semantics.
+
+## Does AbstractSkill run skill scripts?
+
+No. It parses, validates, hashes, discovers, composes, and classifies. It
+executes nothing. `inspect_skill_dir().has_scripts` reports whether a folder
+contains `scripts/`, so a host can badge "requires enablement" honestly, but
+enablement and execution are the host's concern, and the v1 shelf ships
+knowledge/procedure packs only.
+
+## Why do CRLF and LF copies of the same skill hash differently?
+
+Hash = bytes, parse = meaning. The hashes are byte-exact so tamper detection
+never calls two different byte-trees "the same". A CRLF-authored skill parses
+identically to its LF twin but hashes differently. Vendor skills from archives
+or byte-copies, not through EOL-rewriting checkouts (git `autocrlf`), or hash
+verification will honestly report the rewrite as a mismatch.
+
+## Why is `advisories.yaml` empty?
+
+The do-not-use advisory registry names **specific** skills, and AbstractSkill
+does not assert a specific malicious skill on its own authority before its own
+behavioral audit or a leveraged external feed identifies a real one. Class-
+level protection comes from the bundled `guidance.yaml`, the fail-closed
+`unverified` default, and the `has_scripts` review gate. See the
+[trust model](trust.md).
+
+## Can a skill grant an agent more tools than the operator allowed?
+
+No. `effective_tools` intersects a skill's `allowed-tools` with the operator
+grant and can only narrow it. A skill with no `allowed-tools` contributes
+nothing. Ecosystem-flavored tokens map to framework tool names through a
+host-owned table; unmapped or ungranted tokens drop with a `#FALLBACK`
+warning and never relax policy.
+
+## Is a `first_party` or `attachable` verdict a safety guarantee?
+
+No. Trust classification raises the bar and makes the judgment explicit; it
+does not certify safety. See "What trust does NOT guarantee" in the
+[trust model](trust.md).
+
+## What are `coredoc` and `backlog` in the shelf?
+
+Two maintainer-authored methodology skills (documentation maintenance and
+backlog planning), vendored byte-verbatim and first-party reviewed. They are
+`adopted` (reviewed, not yet behaviorally audited). `adversarial-iteration`
+is the framework's first-party skill for the "one adversarial reviewer plus at
+least three improvement cycles" method.
+
+## Which skills ship with the package, and how does a host use them?
+
+The wheel carries the curated registry: 14 skills, the upstream licenses of
+vendored third-party skills, and four yaml files (`catalog.yaml`,
+`validations.yaml`, `advisories.yaml`, `guidance.yaml`). A host copies it
+into a directory it owns with `seed_registry` and serves that copy; the
+[curated skills catalog](skills-catalog.md) lists the skills, and
+[Getting started](getting-started.md#seed-the-bundled-shelf-into-a-host-directory)
+shows the call.
+
+## Will seeding overwrite my edits to a shelf skill?
+
+No. An item is refreshed only while it is byte-identical to what an earlier
+seed wrote. An edited item is kept and reported as `kept_user_modified`.
+Because trust binds to bytes, an edited skill no longer matches its
+validation record and evaluates as `unverified` until it is re-validated.
+To go back to the bundled version, see
+[Troubleshooting](troubleshooting.md#a-bundled-skill-is-not-refreshed-after-an-upgrade).
+
+## Does seeding remove skills that leave the bundle?
+
+No. Seeding never deletes. Items an earlier seed wrote that the bundle no
+longer contains are reported in `SeedReport.not_in_bundle`; removing them is
+the host's or operator's decision.
+
+## Does the tree hash cover file permissions and empty folders?
+
+No. `hash_skill_tree` covers file paths and bytes only. A seed refresh of an
+unmodified skill therefore does not preserve a changed executable bit or an
+empty folder you added.
+
+
+==============================================================================
+# FILE: docs/troubleshooting.md
+==============================================================================
+
+# Troubleshooting
+
+Each entry names a symptom, its likely cause, and the fix. For setup, see
+[Getting started](getting-started.md); for concepts and limits, see the
+[FAQ](faq.md).
+
+## `SkillParseError: SKILL.md must start with YAML frontmatter`
+
+The file does not begin with a `---` frontmatter delimiter at column 0. A
+byte-order mark is tolerated, but the first non-BOM line must be `---`. An
+indented `---` is treated as YAML content, not a delimiter.
+
+## `SkillValidationError: skill name must use lowercase letters, digits, and single hyphens`
+
+The `name` violates the spec: use 1-64 lowercase alphanumeric characters and
+single hyphens, with no leading, trailing, or consecutive hyphens (`pdf-tools`
+is valid; `pdf--tools`, `-pdf`, `PDF` are not). The name must also match the
+skill's directory name.
+
+## `SkillValidationError: skill description must be at most 1024 characters`
+
+Trim the `description` to the spec ceiling (1024). `compatibility` has a 500
+ceiling.
+
+## A skill I can see in `discover()` fails to `load()`
+
+They resolve identically, so this should not happen for a valid skill. If a
+higher-precedence root holds a broken copy, both surface a `#FALLBACK` warning
+and fall back to the valid lower-precedence copy. Pass `on_warning=print` to
+see the warnings.
+
+## A trust verdict says `requires_review` for a skill I trust
+
+The verdict is fail-closed. Common causes: no `ValidationRecord` matches the
+skill's current tree hash (it was edited or never validated — run
+`scripts/refresh_shelf.py` for shelf skills), the skill contains `scripts/`
+(`has_scripts` forces review), or a low/medium advisory matched. The verdict's
+`reasons` name the exact cause.
+
+## A validation stopped applying after I edited a skill
+
+Trust binds to bytes. Any edit changes the tree hash and voids the old record.
+Re-validate: regenerate `src/abstractskill/registry/validations.yaml` with
+`scripts/refresh_shelf.py` (for shelf skills) and review the diff.
+
+## `SkillValidationError: resource ... is N bytes, over the M-byte cap`
+
+`read_skill_resource` refuses oversize reads rather than truncating. Raise
+`max_bytes` if the larger read is intended.
+
+## Registry load returned zero advisories unexpectedly
+
+Check you passed the right file to the right parameter. Loading an advisories
+file into `validations_path` (or vice versa) logs a `#FALLBACK` warning on the
+`abstractskill` logger and returns zero entries rather than crashing.
+
+## Seeding the bundled registry
+
+These entries cover `seed_registry` (see
+[Getting started](getting-started.md#seed-the-bundled-shelf-into-a-host-directory)
+and the [API reference](api.md#bundled-registry)).
+
+### A bundled skill is not refreshed after an upgrade
+
+`seed_registry` refreshes an item only while it is byte-identical to what an
+earlier seed wrote. Everything else is kept, with its reason:
+
+```python
+report = seed_registry(shelf)
+print(report.bundled_version, report.previous_version)
+for item, reason in report.kept.items():
+    print(item, reason)
+```
+
+- `kept_user_modified` or `kept_foreign` — the copy at the destination
+  differs from anything a seed wrote. Compare it with the bundled copy under
+  `bundled_registry_dir()`. To take the bundled version, move your copy out
+  of the shelf and seed again; the item is then `added`.
+- `kept_unknown_provenance` — the destination has no `.seeded.json`, so the
+  seed cannot tell an old seeded copy from an edit. Restore `.seeded.json`
+  from a backup, or move the item out and seed again.
+- `kept_newer` — the installed abstractskill carries an older bundle than the
+  one that last seeded this shelf (`bundled_version < previous_version`).
+  Upgrade abstractskill.
+- `kept_symlink` — the item is a symlink, which seeding never follows. Replace
+  it with a real folder or file if you want the bundled content.
+- `kept_unreadable` — the item cannot be hashed (for example an unreadable
+  file, or a symlink inside a skill folder). Fix the permissions or remove the
+  symlink.
+
+Verify: seed again; the item is listed in `added`, `updated` or `unchanged`.
+
+### A skill removed from the bundle is still on the shelf
+
+Seeding never deletes. Items an earlier seed wrote that the bundle no longer
+contains are listed in `report.not_in_bundle` and stay where they are. Remove
+them yourself if you no longer want them served; the next seed drops them
+from `.seeded.json`.
+
+### `SkillError: cannot read seed manifest ...` or `seed manifest ... is malformed`
+
+`<dest>/.seeded.json` is damaged. Restore it from a backup of the shelf. If
+you have no backup, move the file aside: the next seed adopts items that are
+byte-identical to the bundle and reports every other existing item as
+`kept_unknown_provenance`.
+
+### `SkillError: seed manifest ... has schema N`
+
+A newer abstractskill wrote the manifest. Upgrade abstractskill to the
+version that seeded the shelf, or later.
+
+### `SkillError: ... is a symlink; seed staging must be a real folder`
+
+An entry named `.seed-staging*` in the destination is a symlink. Remove it
+and seed again. Real staging folders left by an interrupted seed are cleaned
+up automatically.
+
+### `SkillError: refusing to seed into the bundled registry itself`
+
+`dest` points inside the installed package. Seed into a directory your host
+owns instead; the package directory is replaced on every upgrade.
+
+### `SkillError: the bundled skill registry is not on the filesystem`
+
+abstractskill was installed in a zipped form. Reinstall it as a regular
+package (`pip install abstractskill`).
+
+### `seed_registry` does not return
+
+Seeds of one destination run one at a time under an exclusive lock on
+`<dest>/.seed.lock`, so a call waits while another process seeds the same
+directory. If it waits indefinitely, find the process holding the lock
+(`lsof <dest>/.seed.lock` on macOS and Linux) and let it finish or stop it.
+
+
+==============================================================================
+# FILE: docs/trust.md
+==============================================================================
+
+# Trust model
+
+AbstractSkill classifies how much a specific skill should be trusted, whether
+it is forbidden, and whether it needs review before use. This supports a
+system of validated skills and a do-not-use notice for skills that should not
+be used.
+
+## What trust binds to
+
+Trust binds to the **tree hash**, never the name. A name is claimable; the
+bytes are not. A validation of one tree hash says nothing about a different
+one — any byte change (an edit, a tampered vendored copy, an upstream update)
+voids the validation and demands re-validation. `hash_skill_tree` provides a
+byte-exact, injective whole-tree hash for this.
+
+## Trust levels
+
+`TrustLevel`, from least to most trusted:
+
+- `unverified` — no validation record for this tree hash. Requires review.
+- `community` — validated by a community process.
+- `adopted` — externally authored, first-party reviewed (not behaviorally
+  audited). Granted by `first-party-adoption`/`manual-review`.
+- `audited` — passed a behavioral/simulation audit or a named external audit.
+- `first_party` — authored and owned by the framework.
+
+`blocked` is not a level a validation grants; it is a verdict an advisory
+forces. A validation method can only grant up to its cap (adoption can never
+claim `first_party`), so "reviewed" can never masquerade as "audited".
+
+## Validation records
+
+A `ValidationRecord` attests that a tree hash earned a level, by a method,
+with evidence:
+
+- `simulated-execution` requires real evidence (`epochs ≥ 1`, non-empty
+  `models`) — see the [audit methodology](backlog/planned/trust/0003_simulated_execution_audit_harness.md).
+- `external-audit` requires a reference URL.
+- Provenance fields (name, source, validated_by, validated_at) must be
+  non-empty; the tree hash must be valid hex.
+
+## Do-not-use advisories
+
+An `AdvisoryEntry` names a **specific** skill that should not be used and
+carries four mandated fields:
+
+- **official_intent** — what the skill claims to do;
+- **hidden_issue** — the actual problem;
+- **severity** — `critical`/`high`/`medium`/`low`;
+- **reference** — a link to understand the problem.
+
+Identification prefers the tree hash (exact); name+source is a weaker fallback
+that surfaces a warning. Severity is graded: critical/high hard-block; a
+hash-matched advisory always blocks; low/medium force review. Advisories are
+corrected by **withdrawal** (status + reason + date), never deletion.
+
+The shipped `src/abstractskill/registry/advisories.yaml` is intentionally empty at v1:
+AbstractSkill does not assert a specific malicious skill on its own authority
+before its own audit (0003) or a leveraged external feed (0004) identifies a
+real one. Asserting a specific skill wrongly is itself harmful.
+
+## Guidance
+
+A `GuidanceEntry` is a **category-level** risk notice (e.g. "unvetted
+marketplace skills are a supply-chain surface"). Guidance informs a picker or
+operator and carries a reference, but never produces a blocked verdict on an
+individual skill — a class label cannot honestly forbid a specific skill.
+`src/abstractskill/registry/guidance.yaml` ships three notices grounded in published 2026
+research (Snyk ToxicSkills, the 98,380-skill behavioral study, the SkillScan
+script-bundling finding).
+
+## The verdict
+
+`evaluate_trust(...)` returns a `TrustVerdict` with three orthogonal,
+fail-closed signals:
+
+- `blocked` — never attach (a blocking advisory matched);
+- `requires_review` — an operator must decide (unverified, scripts present, or
+  a low/medium advisory);
+- `attachable` — the green path only: positively validated, advisory-free,
+  script-free.
+
+A consumer that reads only `attachable` therefore attaches nothing unvetted.
+Every verdict lists `reasons` naming the records it rests on, so a UI shows
+**why**, not just a colored badge.
+
+## Source derivation (names-only configs)
+
+Name-anchored advisories match on the `(name, source)` pair — names
+case-insensitively (normalized to the spec's lowercase at construction and
+at query boundaries; an uppercase spelling can never match a loadable
+skill), sources by **exact string equality** after whitespace stripping
+(`lint_registry` flags case-only near-misses and unknown sources at refresh
+time). A per-phase config stores skill NAMES only; provenance lives in the
+registry's validation records. `select_skills_for_context` therefore derives
+each skill's candidate sources when the caller supplies none:
+
+- **hash-bound** records (records for THESE exact bytes) are exact provenance
+  and supersede everything;
+- **name-bound** records (same name, other bytes) are prior-tree claims —
+  used, but loudly `#FALLBACK`-warned;
+- advisories are checked against **every** candidate (a caller-supplied
+  source included) and the WORST verdict wins — neither a wrong caller
+  string nor a losing registry record can evade an advisory;
+- blank/non-string caller sources demote to derivation with a loud note;
+- with no source anywhere and a same-name name-anchored advisory active, the
+  pipeline warns that name/source matching is disabled for that skill
+  (hash-anchored advisories always apply regardless).
+
+`TrustRegistry.source_for` returns the primary (display) candidate for
+picker/provenance rendering; gate paths always use the full candidate set.
+
+## What trust does NOT guarantee
+
+Trust classification raises the bar; it does not certify safety. A validation
+attests a review or an audit happened, not that the skill is provably benign
+(semantic evasion beats any finite battery). A signature (when JOIN lands)
+proves authenticity and integrity, not safety. Curation, behavioral audit
+(0003), and the fail-closed default remain the real gate; the registries make
+the judgment explicit, explainable, and byte-bound.
+
+## Seeded shelves
+
+The registries ship in the package with the curated skills, and hosts copy
+them into a directory they own with `seed_registry` (see
+[Getting started](getting-started.md#seed-the-bundled-shelf-into-a-host-directory)).
+Because records bind to tree hashes, never to paths, a seeded shelf verifies
+wherever it lives, and a skill an operator edits on the seeded shelf drops to
+`unverified` until it is re-validated. Seeding keeps such edits rather than
+overwriting them.
+
+## Maintaining the registries
+
+- `scripts/refresh_shelf.py` regenerates `validations.yaml` from the vendored
+  shelf's real hashes; a test fails if a checked-in record drifts from the
+  bytes.
+- The same script runs `lint_registry` after regeneration: inert advisory
+  spellings (spec-invalid names, sources that match no known validation
+  source or match only by case) surface at refresh time, not incident time.
+  Lint warns, never refuses — an advisory may legitimately name a
+  marketplace we never validated from; the curator judges.
+- The [advisory-registry review](backlog/recurrent/advisory-registry-review.md)
+  recurrent task keeps references live and hashes current.
+
+
+==============================================================================
+# FILE: docs/skills-catalog.md
+==============================================================================
+
+# Curated skills catalog
+
+The reviewed, pinned list of third-party skills AbstractFramework can vendor
+onto the shelf — and the reasons. Machine-readable half:
+[`src/abstractskill/registry/catalog.yaml`](../src/abstractskill/registry/catalog.yaml). Install path:
+`python scripts/vendor_skill.py <name>` (curated-only; see
+[Adding a curated skill](#adding-a-curated-skill)).
+
+Curation date: 2026-07-11. Structural facts (paths, frontmatter names,
+licenses, file trees, script presence) were verified against the pinned
+commits directly — never from READMEs or aggregator listings. Body CONTENT
+was read for the vendored entries; an adversarial review additionally
+content-read every top entry and its findings are folded below (one entry
+was pulled for a time-of-use fetch; one carries a content caveat).
+
+## All skills at a glance
+
+The vendored shelf (the 14 skills shipped in the package under
+`abstractskill/registry/skills/`) plus the curated catalog (vendorable on
+demand). Descriptions are the
+framework-facing activation lines; links point at the exact pinned source.
+
+| Skill | Status | Description | Link |
+|---|---|---|---|
+| `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [src/abstractskill/registry/skills/abstractframework-gateway](../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md) |
+| `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [src/abstractskill/registry/skills/adversarial-iteration](../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md) |
+| `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [src/abstractskill/registry/skills/agora-collaboration](../src/abstractskill/registry/skills/agora-collaboration/SKILL.md) |
+| `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules. | [src/abstractskill/registry/skills/entity-self-knowledge](../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md) |
+| `entity-observation` | shelf (first_party) | Read an entity's life correctly before reporting on it: the entity's own store is the primary source for any claim about what it knows, remembers, or lacks. For agent seats and operators observing a summoned entity. | [src/abstractskill/registry/skills/entity-observation](../src/abstractskill/registry/skills/entity-observation/SKILL.md) |
+| `meshvault-live-editing` | shelf (adopted) | Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects, optionally performing live for human observers. Declares `requires_mcp: [meshvault-mcp]`. | [lpalbou/meshvault @ 4deb86c](https://github.com/lpalbou/meshvault/tree/4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4/.cursor/skills/meshvault-live-editing) |
+| `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code. | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |
+| `backlog` | shelf (adopted) | Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene. | [src/abstractskill/registry/skills/backlog](../src/abstractskill/registry/skills/backlog/SKILL.md) |
+| `architect` | shelf (adopted) | Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix, premise verification, and an engraving gate for names that reach append-only state. | [src/abstractskill/registry/skills/architect](../src/abstractskill/registry/skills/architect/SKILL.md) |
+| `adr` | shelf (adopted) | Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with `backlog`. | [src/abstractskill/registry/skills/adr](../src/abstractskill/registry/skills/adr/SKILL.md) |
+| `cicd` | shelf (adopted) | GitHub-based CI/CD: least-privilege workflows, OIDC trusted publishing, docs deployment, release rehearsals, maintenance playbook. | [src/abstractskill/registry/skills/cicd](../src/abstractskill/registry/skills/cicd/SKILL.md) |
+| `review` | shelf (adopted) | Independent evidence-based ship-readiness reviews (correctness / architecture-fit / user-and-operations lenses; Blocking/Conditional/Approved). | [src/abstractskill/registry/skills/review](../src/abstractskill/registry/skills/review/SKILL.md) |
+| `uxreview` | shelf (adopted) | Human UX reviews with independent naive/intermediate/expert personas over live UI evidence; code-only review caps the verdict. | [src/abstractskill/registry/skills/uxreview](../src/abstractskill/registry/skills/uxreview/SKILL.md) |
+| `verification-before-completion` | shelf (adopted) ⚠ content caveat | Evidence before claims: run the verification commands and read the output before any completion claim. Entity-lane hold until the 0003 audit. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/verification-before-completion) |
+| `test-driven-development` | catalog (vendorable) | Write a failing test before any implementation code, make it pass, then refactor — "test after" is grounds to restart. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/test-driven-development) |
+| `writing-plans` | catalog (vendorable) | Implementation plans detailed enough to execute without guessing: small tasks, named files, tests first. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/writing-plans) |
+| `systematic-debugging` | catalog (vendorable, scripts → review) | Four-phase root-cause process — investigate, pattern analysis, hypothesis testing, then implementation; never fix what you have not understood. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/systematic-debugging) |
+| `vercel-react-best-practices` | catalog (vendorable) | 70 impact-prioritized React/Next.js performance rules (waterfalls, bundle size, rendering) for our React UIs. | [vercel-labs/agent-skills @ f8a72b9](https://github.com/vercel-labs/agent-skills/tree/f8a72b9603728bb92a217a879b7e62e43ad76c81/skills/react-best-practices) |
+| `owasp-security` | catalog (vendorable) | OWASP Top 10:2025 + ASVS 5.0 + LLM/agentic-AI review checklists with per-language unsafe/safe pattern examples. | [agamm/claude-code-owasp @ f5dfa3d](https://github.com/agamm/claude-code-owasp/tree/f5dfa3d66da1fdfeb36b7428c35b17abaff6465b/.claude/skills/owasp-security) |
+| `skill-creator` | catalog (vendorable, scripts → review) | Create, improve, and evaluate agent skills (authoring patterns, eval design, description optimization). | [anthropics/skills @ 9d2f1ae](https://github.com/anthropics/skills/tree/9d2f1ae187231d8199c64b5b762e1bdf2244733d/skills/skill-creator) |
+| `mcp-builder` | catalog (vendorable, scripts → review) | Guide for building high-quality MCP servers (tool design, Python FastMCP + TypeScript SDK, evaluation). | [anthropics/skills @ 9d2f1ae](https://github.com/anthropics/skills/tree/9d2f1ae187231d8199c64b5b762e1bdf2244733d/skills/mcp-builder) |
+| `web-design-guidelines` | watch (PULLED — time-of-use fetch) | 100+ UI review rules upstream, but the pinned body fetches unpinned rules at use time; re-scope before any vendor. | [vercel-labs/agent-skills @ f8a72b9](https://github.com/vercel-labs/agent-skills/tree/f8a72b9603728bb92a217a879b7e62e43ad76c81/skills/web-design-guidelines) |
+| `brainstorming` | watch (demoted) | Socratic design refinement before code; interactive-session shaped, overlaps the operator's architect skill. | [obra/superpowers @ d884ae0](https://github.com/obra/superpowers/tree/d884ae04edebef577e82ff7c4e143debd0bbec99/skills/brainstorming) |
+
+## Why curated-only
+
+The 2026 skill ecosystem measures badly: Snyk's ToxicSkills audit found 36.8%
+of 3,984 registry skills flawed, 13.4% critical; a 98,380-skill behavioral
+study confirmed 157 malicious; the AIR incident shipped a post-approval URL
+swap to ~26,000 agents THROUGH three scanners (all figures with their
+references in [`src/abstractskill/registry/guidance.yaml`](../src/abstractskill/registry/guidance.yaml)). The
+ecosystem's standard installer (`npx skills add`) symlinks trees with no
+hash pinning, and its own documentation tells users to treat skills as
+unverified code and read them before installing. Curation, commit pins,
+whole-tree hashes, and a fail-closed trust gate are the response — not
+because they certify safety (nothing does; see
+[What curation does NOT guarantee](#what-curation-does-not-guarantee)) but
+because they make every admission a reviewed, reproducible, revocable act.
+
+A standing curation rule: **a skill body that instructs fetching external instructions
+at use time is a time-of-use fetch — pinning its tree pins a pointer, not
+the rules; it can never be risk-labeled `low` and must carry an explicit
+note.** (`web-design-guidelines` was pulled from the vendorable list for
+exactly this; see the watch tier.)
+
+## Top curated skills (vendorable)
+
+All entries are pinned in `src/abstractskill/registry/catalog.yaml`. Risk is the curator's
+reviewed classification (`low` = text-only reviewed content; `moderate` =
+scripts present or comparable surface; `risky` = requires capabilities the
+gate withholds); the structural facts win at the gate regardless
+(scripts-present ⇒ `requires_review`, whatever the label says). Archetypes:
+`knowledge` = reference material; `procedure` = a working method the agent
+follows; `meta` = skills about skills. License text travels with every
+vendored copy (out-of-tree at `src/abstractskill/registry/licenses/<name>.LICENSE`, so the
+pinned tree hash covers only upstream bytes).
+
+### Engineering process — `obra/superpowers` (MIT, ~251k stars as of 2026-07-11; "shipped as an Anthropic marketplace plugin in early 2026" per the cited blog)
+
+CONCENTRATION, stated as an accepted risk: 4 of the 9 catalog entries
+share this one source. One compromised maintainer account poisons half the
+list at the next re-pin — mitigations: pins never auto-follow, every re-pin
+is a fresh review, and a cross-reference inventory (superpowers skills
+reference sibling skills that are NOT on our shelf — dangling references are
+squatting surfaces) runs before any re-pin.
+
+| Skill | Risk | What it improves here |
+|---|---|---|
+| `test-driven-development` | low | Red/green/refactor discipline for package work; "test after" is grounds to restart. |
+| `writing-plans` | low | Small verifiable tasks, files and tests named before code; complements the vendored `backlog` skill. |
+| `verification-before-completion` | low | Evidence before claims — the anti-self-declared-success rule made procedural. **Vendored**. CONTENT CAVEAT: its "Why This Matters" section carries identity-adjacent framing ("If you lie, you'll be replaced"; second-person failure memories) — fine for developer agents, **not for entity sessions** before the 0003 audit rules on it; the caveat travels in the validation record. |
+| `systematic-debugging` | moderate | Four-phase root-cause process that forbids fixing what is not understood. Ships one helper script → `requires_review`. |
+
+### Frontend/UI — `vercel-labs/agent-skills` (MIT, Vercel Engineering)
+
+| Skill | Risk | What it improves here |
+|---|---|---|
+| `vercel-react-best-practices` | low | 70 rules at the pin (the cited blog describes an earlier 40+ snapshot), impact-prioritized React/Next.js performance guidance for our React UIs. Next.js-heavy — a portion won't apply to our Vite apps; the React/JS rules do. Note: upstream dir is `react-best-practices`; the frontmatter name (the shelf key) is `vercel-react-best-practices`. |
+
+### Security — `agamm/claude-code-owasp` (MIT)
+
+| Skill | Risk | What it improves here |
+|---|---|---|
+| `owasp-security` | low | OWASP Top 10:2025 + ASVS 5.0 + LLM/Agentic top-10 checklists with per-language unsafe/safe pattern EXAMPLES (20+ languages at ~half a KB each — pointers, not depth). Single-author provenance: reviewed at the pin; re-review on every re-pin. Persuasive-content risk is invisible to `has_scripts` — a poisoned security checklist steers reviews wrong; that is exactly why re-pin review is mandatory. |
+
+### Meta / integration — `anthropics/skills` (Apache-2.0, per-dir LICENSE.txt verified)
+
+| Skill | Risk | What it improves here |
+|---|---|---|
+| `skill-creator` | moderate | Anthropic's skill authoring + eval methodology; feeds our first-party authoring and the 0003 behavioral-audit harness design. Python eval scripts present → `requires_review`. |
+| `mcp-builder` | moderate | MCP server design guidance (FastMCP/TS SDK, tool design, evaluation) — we build and consume MCP integrations. Helper scripts present → `requires_review`. |
+
+### 3D tooling — `lpalbou/meshvault` (MIT)
+
+| Skill | Risk | What it improves here |
+|---|---|---|
+| `meshvault-live-editing` | moderate | Field-tested recipes for driving MeshVault over MCP (sculpt, paint, repair, reshape, live-performance etiquette) with strong anti-fabrication teaching. **Vendored.** Requires the `meshvault-mcp` server, which the operator installs (agents never self-install it). The body is about 37 KB (~9k tokens), so avoid activating it on small-context models. Re-verify against each MeshVault release before any re-pin. |
+
+## Maintainer-authored skills
+
+Seven shelf skills come from the maintainer's own skill collection (source
+`codex-skills (maintainer)`, method `first-party-adoption`, level `adopted`):
+`coredoc`, `backlog`, `architect`, `adr`, `cicd`, `review` and `uxreview`.
+They are vendored byte-verbatim; improvements are made upstream, then
+re-vendored and re-pinned.
+
+- **`architect`** — carries an Evidence Contract (verify each load-bearing
+  premise against the current tree or running state before arguing from it)
+  and an "engraving" gate: names, keys or formats that reach append-only or
+  at-rest state are effectively irreversible and get extra scrutiny.
+- **`adr`** — complements `backlog`; the two skills state their boundary
+  explicitly.
+- **`cicd`** — GitHub-based CI/CD: least-privilege workflows, PyPI and npm
+  trusted publishing (including the `npm trust ... --allow-publish` setup and
+  its npm >= 11.10.0 floor), docs deployment, SHA-pinned third-party
+  actions, and audit items for untrusted `${{ github.event.* }}`
+  interpolation and `pull_request_target` misuse. It refers to a `release`
+  skill that is not on the shelf; dangling cross-skill references are inert
+  in the loader and are inventoried as a squatting surface.
+- **`review`** and **`uxreview`** — kept as two separate skills; see below.
+
+### How the reviewer skills compose
+
+- `adversarial-iteration` (first-party) is FORMATIVE — the improvement loop
+  during work (attack, fold, iterate). Its body names `review` as the owner
+  of ship-readiness.
+- `review` is SUMMATIVE — the final ship-readiness gate (Blocking /
+  Conditional Approval / Approved), with an evidence cap (uninspectable
+  artifact ⇒ at best Conditional).
+- `uxreview` is the SPECIALIST persona review (naive/intermediate/expert;
+  live UI evidence preferred, code-only review caps the verdict at
+  Conditional). `review` delegates specialist human-usability verdicts to it.
+- They stay separate because their descriptions trigger on disjoint task
+  shapes (a merged body would load the persona charters on every backend
+  review), and because each remains an independently re-vendorable upstream
+  tree. Shared reviewer machinery is duplicated rather than extracted: a
+  skill cannot read resources outside its own tree (`read_skill_resource`)
+  and `hash_skill_tree` covers only the skill folder.
+- The reviewer skills ship a `references/reviewer-memory.md` that asks to be
+  updated during skill maintenance. On this shelf those files are
+  byte-frozen vendored copies: update them upstream, then re-vendor and
+  re-pin. The byte pins in `scripts/refresh_shelf.py` refuse an in-place
+  edit of a vendored tree.
+
+## Watch tier (not yet catalog-pinned)
+
+- **`web-design-guidelines`** (vercel-labs, pulled from the top list): at
+  the pinned commit the body is a time-of-use
+  fetch stub ("fetch fresh guidelines before each review" from
+  `web-interface-guidelines@main`) — the tree hash pins a pointer, not
+  rules. Re-scope path: pin `vercel-labs/web-interface-guidelines` at a
+  commit and vendor the actual rules document (license check first).
+- **`brainstorming`** (obra/superpowers, demoted): thinnest improves case;
+  interactive-session shaped (ships a local visual-companion server); the
+  operator already runs an `architect` skill covering pre-code design
+  exploration.
+- **Python-lane candidates (named gap)**: the framework is Python-dominant
+  (FastAPI, pytest-heavy) and the catalog has no Python-specific entry yet. Research targets: pytest discipline packs, FastAPI/API
+  design guidance, and superpowers `requesting-code-review` /
+  `receiving-code-review` for the adversarial-review culture — noting the
+  latter deepen the single-source concentration.
+- **Trail of Bits skills** (`trailofbits/skills`, CC-BY-SA-4.0):
+  `differential-review`, `audit-context-building` are procedure packs aligned
+  with our adversarial process; most others run scanners. Plugin-shaped
+  layout needs per-skill path verification before pinning; share-alike
+  license noted.
+- **`hashicorp/agent-skills`** (MPL-2.0): `terraform-style-guide` is a clean
+  knowledge pack — admit when the framework actually touches IaC.
+- **`anthropics/skills` extras**: `frontend-design` (aesthetic direction —
+  NOTE: its per-dir LICENSE.txt differs from the Apache text in
+  skill-creator/mcp-builder; verify before pinning) and `doc-coauthoring` —
+  candidates after the first wave proves the usage loop.
+
+## Excluded (with reasons on the record)
+
+- **Anthropic document skills** (`docx`/`pdf`/`pptx`/`xlsx`): source-available
+  (NOT open source — redistribution unclear for vendored byte-copies) and
+  script-execution-dependent; decorative without script enablement.
+- **`webapp-testing`**: requires browser + script execution; the gate
+  deliberately withholds both.
+- **Deep-research packs** (8-phase research pipelines, scholar tools):
+  network + scripts by design; admit only when script/network enablement
+  exists so they are not decorative.
+- **Aggregators** (`VoltAgent/awesome-agent-skills` and similar): discovery
+  surfaces, not vendoring sources — every admission pins the ORIGINAL
+  author's repo. An aggregator in the middle is a supply-chain hop that adds
+  nothing but risk.
+
+## Adding a curated skill
+
+```
+# 1. list what the catalog offers
+python scripts/vendor_skill.py --list
+
+# 2. vendor a pinned entry (fetches the exact commit, validates, hashes)
+python scripts/vendor_skill.py <name>
+
+# 3. review the vendored diff, then pin it in src/abstractskill/registry/catalog.yaml
+#    (expected_tree_hash + vendored: true — printed by step 2)
+
+# 4. regenerate the trust registry (validation records derive from the catalog)
+python scripts/refresh_shelf.py
+
+# 5. update the admission pins in tests/test_shelf.py — EXPECTED_SHELF,
+#    EXPECTED_LEVELS, EXPECTED_SOURCES (and EXPECTED_SCRIPTS_BEARING for a
+#    scripts-bearing skill). The pins are the review's second signature:
+#    a red suite here is the gate asking for your deliberate sign-off.
+python -m pytest -q
+```
+
+Never add a `SHELF_POLICY` entry for a catalog skill — the validation record
+derives from the catalog entry, and `refresh_shelf.py` refuses the collision
+(a hand-written policy would silently drop the byte-pin cross-check).
+
+The vendor script refuses: names not in the catalog (curated-only is
+structural), symlinked upstream trees, frontmatter/catalog name mismatches,
+spec-invalid skills, and — after first pinning — any byte drift from
+`expected_tree_hash`. Git runs with ambient config neutralized (no user
+hooks/filters can act during fetch), and VCS/OS-junk files never reach the
+shelf (the copy set equals the hash set). New skills enter as
+`manual-review` → `adopted` (the method caps the level; `audited` requires
+the 0003 behavioral harness).
+
+Trust floor, stated honestly: the FIRST vendoring of an entry trusts git's
+commit-hash verification (SHA-1DC) plus the curator's human diff review — the
+SHA-256 whole-tree pin exists only from that point on. Every re-vendor is
+then byte-verified end to end.
+Scripts-bearing skills surface as `requires_review` at
+`select_skills_for_context` until an operator explicitly enables them —
+enablement is the approval act, and script EXECUTION additionally requires
+a tool grant that the framework does not provide.
+
+## What curation does NOT guarantee
+
+A catalog entry attests that a named reviewer read the tree at a pinned
+commit and recorded why it helps this framework. It does not certify the
+skill is benign (semantic evasion beats any review), does not cover upstream
+behavior outside the pinned bytes, and says nothing about conditional
+triggers a reading cannot see. The trust ladder's honest-limits contract
+travels with every badge: never render the word "safe" (the risk column
+deliberately says `low`, not `safe`, for the same reason).
+
+Independence disclosure: at v1, curation, vendoring, and validation are the
+same seat's single review (`validated_by: skill`) — the method cap makes
+"reviewed ≠ audited" structural, and independent signal arrives with the
+0003 behavioral-audit harness and external-audit records.
+
+
+==============================================================================
+# FILE: docs/skills-flows-mcp.md
+==============================================================================
+
+# Skills, Workflows, and MCP — which one, when
+
+AbstractFramework has three ways to extend what an agent can do. They look
+similar from a distance ("all three add capabilities") but they live at
+different layers, travel differently, and fail differently. This page is the
+decision guide.
+
+**TL;DR: skills for judgment, flows for execution, MCP for reach.**
+
+One sentence each:
+
+- A **skill** is a portable procedure pack — versioned expertise (a folder
+  with a `SKILL.md`) that any agent, in any agentic framework, can load into
+  its context and follow. Skills ACTIVATE: they shape how an agent thinks
+  and works. A skill is a higher-level view over capabilities and tools — a
+  subpart of a cognition.
+- A **workflow (flow)** is a durable executable graph — nodes, edges, waits,
+  and effects that AbstractRuntime executes and AbstractGateway serves, with
+  an append-only ledger, resumability, and replay. Flows RUN: they are the
+  execution unit of this framework, and only this framework.
+- **MCP (Model Context Protocol)** is a wire protocol for tool servers —
+  a standard way to reach tools that live in another process or on a remote
+  machine, from this framework or any MCP-speaking client. MCP CONNECTS:
+  it is transport for capabilities, not the capability's logic or judgment.
+
+## The comparison
+
+| | Skill | Workflow (flow) | MCP server |
+|---|---|---|---|
+| Reach for it when | The agent needs judgment, method, or knowledge — or must work outside AbstractFramework | The work must survive crashes, wait for humans, or be audited step by step | The tool lives behind a network/process boundary you connect to |
+| What it is | Markdown procedure pack (`SKILL.md` + optional resources) | Executable graph in a versioned bundle (`.flow`) | Protocol endpoint exposing tools/resources |
+| Unit of | Expertise / method | Execution / orchestration | Tool transport |
+| Runs where | Inside the agent's own reasoning (prompt context) | On AbstractRuntime, served by AbstractGateway | On the server that hosts it (local or remote) |
+| Portability | Any agent, any framework (the ecosystem compatibility layer — Claude Code, Codex, abstractcode, others) | AbstractFramework only | Any MCP client, any framework |
+| Durability | None of its own — the hosting agent's run is durable, not the skill | Native: ledger, waits, resume, crash-replay | None of its own — calls are request/response |
+| Enforcement | None — the model may ignore or misread it | Structural — the framework guarantees the steps, order, and typed data; LLM/tool outputs inside nodes still vary | Per-call — the protocol is precise; the server's behavior is its own |
+| State | Stateless content (byte-pinned, hash-verified) | Durable run state (vars, waits, artifacts) | Server-side — treat as outside your trust boundary, even for local servers (a separate process you must gate) |
+| Trust model | Content trust: tree hash + validation records + advisories (the abstractskill gate) | Code trust: immutable published bundle versions, tool grants + approval policies at run time | Boundary trust: authentication, allowlists, per-tool approval; treat as external |
+| Composition | Skills can only narrow the operator's tool grant, never widen beyond it (multi-skill bound is shared: `grant ∩ union(declared)`) | Calls tools, spawns subflows/agents; a run can request skills, which the host resolves through the trust gate (AbstractGateway does this at run start) | Its tools enter the SAME grant/approval lanes as native tools |
+| Fails by | Being ignored or misread by the model | A failed or waiting run, visible in the ledger | Network/server errors, or a lying tool result |
+| Cost of adding one | Write markdown, curate, pin to exact bytes | Author a graph, test, publish a bundle | Stand up/point at a server, declare and gate its tools |
+
+One boundary note: skills may ship `scripts/`, but scripts never run
+implicitly — script-bearing skills require operator review at the gate, and
+script execution additionally requires an explicit tool grant.
+
+## Decision rules
+
+1. **Is it knowledge or method — "how to think about X"?** Skill. Review
+   checklists, API usage patterns, process discipline, teaching an entity
+   its own faculties: none of these need an executor; they need to be READ
+   at the right moment. If it must also work outside AbstractFramework
+   (Claude Code, Codex, any SKILL.md-aware agent), it can only be a skill.
+2. **Must it survive a crash, wait for a human, run for hours, or be
+   audited step by step?** Workflow. Durability, waits, approvals, replay,
+   and per-step ledgers are flow properties; no amount of skill prose gives
+   you them.
+3. **Does the capability live in another service or on another machine —
+   something you connect to rather than spawn?** MCP. Remote browsers,
+   corporate databases, third-party SaaS tools — protocol first, then gate
+   its tools like any other grant. (A capability in your own process, or a
+   program the host can simply run, is a NATIVE TOOL — none of the three;
+   this page only arbitrates the three extension mechanisms above the
+   native tool baseline.)
+4. **Mixed?** Compose. The common shapes:
+   - An external agent reads the `abstractframework-gateway` skill and
+     drives flows over HTTP — the skill is the bridge INTO the framework;
+     the flow does the durable work once inside.
+   - A skill instructs the agent to use MCP-served tools well — the skill
+     provides judgment, MCP provides reach.
+   - A flow's agent node activates skills for judgment inside a durable
+     run — the flow provides durability, the skill provides method.
+     AbstractGateway resolves a run's requested skills through the trust
+     gate at run start and renders the active ones into the agent's
+     prompt.
+     A live in-framework example of the same pattern: AbstractFlow's
+     authoring assistant rides a 600+-line method document (its
+     workflow-authoring skill) on the planner prompt of a gateway-hosted
+     durable run — the skill teaches how to think about workflow
+     structure, the run executes the authoring cycles.
+
+One vocabulary neighbor worth separating: flows also declare INTERFACES
+(e.g. `abstractcode.agent.v1`) — a skill declares METHOD to models, while
+an interface declares a flow's CONTRACT to hosts (which inputs/outputs make
+it runnable in a given slot). Interface declarations are self-declared and
+not yet machine-validated (the governance registry is designed, not built),
+so treat them as claims a host checks, not guarantees.
+
+Rule of thumb: **skills for judgment, flows for execution, MCP for reach.**
+When someone proposes a new capability, ask which of the three failure
+modes you can least afford — misreading (skill), losing progress (flow), or
+crossing a network boundary blind (MCP) — and anchor the design there.
+
+## Why a workflow is not "a better skill" everywhere
+
+A workflow encodes procedure as executable structure: the framework, not the
+model, guarantees the steps happen, in order, with typed data and durable
+waits. That is strictly stronger *inside* AbstractFramework — and worthless
+outside it, because nothing else executes the graph. A skill encodes
+procedure as language: any capable agent anywhere can follow it, but nothing
+enforces it. They are the same intent at two trust levels, and the
+portability/enforcement trade is exactly why both exist. Skills are
+necessary regardless of how good flows get: they are the compatibility layer
+with the ecosystem outside the framework, the way MCP is the compatibility
+layer with tools outside the process.
+
+## Responsibilities by package
+
+- **abstractskill** owns the skill contract: parsing/validation of
+  `SKILL.md`, filesystem discovery with progressive disclosure, byte-exact
+  tree hashing, the trust registry (validations, advisories, the
+  activation gate `select_skills_for_context`), the curated catalog +
+  vendoring pipeline, and `allowed-tools` composition semantics.
+- **abstractflow** owns workflow authoring (editor + assistant) and the
+  VisualFlow format; **abstractruntime** owns the compiler + the `.flow`
+  bundle format and executes flows durably; **abstractgateway** serves them
+  (bundles, runs, ledgers, waits, commands) and is the one HTTP door —
+  including for external agents.
+- **MCP integration** is served at the boundary that executes tools: MCP
+  tools are declared and gated beside native tools (grant lanes, approval
+  policies), never as a separate privilege system.
+- Hosts (gateway-served agents and runs, summoned entities) are where the
+  three MEET: a host selects skills through the trust gate, runs flows
+  through the runtime, and reaches MCP tools through its tool executor.
+  AbstractGateway seeds its shelf from the registry bundled in
+  abstractskill and resolves skills for runs, spawned agents and summoned
+  entities through `select_skills_for_context`.
+
+## Getting started with each
+
+- Skills: [getting-started.md](getting-started.md) for the library,
+  [skills-catalog.md](skills-catalog.md) for what to vendor and why.
+- Workflows: author in the AbstractFlow editor, publish bundles through the
+  gateway (see the AbstractGateway repository's `docs/api.md`).
+- MCP: configure servers at the tool-executing boundary (see the
+  AbstractRuntime repository's MCP worker documentation); their tools then
+  gate like any native tool.
+
+## See also
+
+- The shelf's `abstractframework-gateway` skill — the practical entrance
+  guide this page's theory points at.
+- [skills-catalog.md](skills-catalog.md) — every curated skill, with trust
+  rationale.
+
+
+==============================================================================
+# FILE: docs/trust-network-position.md
+==============================================================================
+
+# Skill trust-network position (2026-07-11)
+
+This page answers: is there a network of trust for Agent Skills that
+AbstractSkill should join or leverage, or should AbstractSkill provide one?
+It records the ecosystem as surveyed in July 2026. Backlog:
+[`docs/backlog/planned/trust/0004`](backlog/planned/trust/0004_trust_network_research.md).
+
+## Finding: a trust network is FORMING, but immature
+
+As of July 2026 the Agent Skills ecosystem has moved from "no integrity
+signal at all" toward standardized verification, but nothing is settled:
+
+- **Signature RFC (agentskills.io).** An open proposal adds an optional
+  `signature` block to `SKILL.md` frontmatter: `algorithm` (ed25519-sha256),
+  `signer` (a domain hosting `.well-known/skills-pubkey`), `content_hash`
+  (SHA-256 of the body), `sig`. Verification = recompute hash, fetch the
+  signer's key, check the signature. Revocation via a companion
+  `.well-known/skills-revoked` endpoint. Federated: the `signer` field routes
+  trust to any registry (skills.sh, an org's private registry).
+  Refs: agentskills/agentskills discussions/252, issues/418; vercel-labs/skills
+  issue/617.
+- **Trust registries + scanners (verified 2026-07-11).** Snyk Labs ships
+  "Agent Scan - Skill Inspector", a free scanner grounded in the ToxicSkills
+  research (labs.snyk.io/resources/agent-scan-skill-inspector). GoPlusSecurity
+  maintains AgentGuard (MIT), an open skill scanner + trust registry
+  (attest/revoke/lookup) conforming to the SKILL.md format
+  (agentskills/agentskills issue/418) — but it auto-converts its own scan
+  verdict into a trust verdict, so consume its FINDINGS, never its VERDICTS.
+  OWASP published an Agentic Skills Top 10 (April 2026) recommending
+  Merkle-root signing + registry scanning.
+- **Signing tools diverge, no shared root.** STSS uses Merkle trees +
+  ed25519 + an LLM audit; Haldir uses sigstore keyless signing + a signed
+  revocation list; skillsign does local ed25519. None cross-recognize.
+  OpenSSF Model Signing (OMS) is the strongest candidate FORMAT
+  (foundation-governed, sigstore bundles, in-toto multi-file manifest —
+  directly applicable to a whole skill tree). Anthropic explicitly does not
+  verify third-party skill content.
+- **A proposed trust-state vocabulary** — `unverified` / `attested` /
+  `revoked` — that hosts surface or enforce. This maps almost exactly onto
+  abstractskill's `TrustLevel` (unverified) + `ValidationRecord` (attested)
+  + `AdvisoryEntry`/DO_NOT_USE (revoked).
+- **The threat that motivates it (verified 2026-07-11).** SkillScan analyzed
+  31,132 of 42,447 collected skills and found 26.1% carried ≥1 vulnerability
+  across 14 patterns; script-bundling skills are 2.12x more likely to be
+  vulnerable (arxiv 2602.12430). A behavioral study verified 98,380 skills and
+  confirmed 157 malicious (Data Thieves + Agent Hijackers), with shadow
+  features in 100% of advanced attacks (arxiv 2602.06547). Registries still
+  lack version pinning, and skills change behavior after approval via mutable
+  external URLs — one fake skill reached 26,000 users this way (CSO Online
+  article/4188840). These are the guidance-registry references
+  (`src/abstractskill/registry/guidance.yaml`).
+
+## Position: LEVERAGE + BUILD now, JOIN (signing) when the spec stabilizes
+
+Not a single choice — a sequenced one, because the network is real enough to
+learn from and too immature to depend on.
+
+1. **BUILD (shipped).** abstractskill's registry is the framework's trust
+   root: curated, hash-pinned, network-free, with an explainable fail-closed
+   verdict and a do-not-use advisory registry. This is the right default —
+   the ecosystem's own lesson is "treat unsigned/unvetted as untrusted, fail
+   closed," which is exactly our curated-only v1.
+
+2. **LEVERAGE (next, backlog 0006).** Consume external findings as ADVISORY
+   INPUTS with provenance, never as automatic trust. AgentGuard's revoke
+   list and the scanner outputs become candidate `AdvisoryEntry` rows whose
+   `reference` field cites the source; a human reviews before merge
+   (auto-research, human-merge). Their scanners are a cheap first filter that
+   feeds our advisory registry, not a replacement for our own audit (0003).
+
+3. **JOIN (deferred, tracked).** Adopt the `signature` block when the
+   agentskills.io RFC (discussion #252) merges into the spec. Our
+   `hash_skill_tree` already gives the integrity half, and it is strictly
+   stronger than the RFC's `content_hash`, which covers only the `SKILL.md`
+   body — helper files, references, and scripts are uncovered. Contribute the
+   whole-tree manifest argument upstream. The delta to join is the
+   AUTHENTICITY half: verify a `signer`'s ed25519 signature and honor a
+   revocation endpoint. When we join, a verified signature becomes evidence
+   for a `ValidationRecord` (method `external-audit`) and a revocation becomes
+   an `AdvisoryEntry` — the existing contract absorbs it with no model change.
+   OMS/OpenSSF is the format to track for the multi-file manifest.
+
+## Why not JOIN now
+
+- The signature block is an RFC, not the spec; adopting an unstable format
+  risks churn and a false sense of safety.
+- Federated signing moves trust to whoever controls a `signer` domain — a
+  compromised or lax registry signs malware that then verifies cleanly. A
+  signature proves authenticity and integrity, NOT safety. Our own audit
+  (0003) and curated admission stay the real gate; signing is corroboration.
+
+## What this means for the framework
+
+- Our verdict model is already spec-shaped (unverified/attested/revoked), so
+  joining is additive, not a rewrite.
+- The advisory registry is the natural home for leveraged external findings.
+- abstractskill can credibly BE a trust root for framework entities/agents
+  while consuming the wider network as one input among several.
+
+
+==============================================================================
+# FILE: SECURITY.md
+==============================================================================
+
+# Security policy
+
+## Reporting
+
+Report suspected vulnerabilities in AbstractSkill, or a malicious skill you
+believe should carry a do-not-use advisory, to the AbstractFramework
+maintainer (contact@abstractcore.ai). Include the skill's source, its tree
+hash (`hash_skill_tree`), the observed behavior, and a reference where the
+problem can be understood.
+
+## What AbstractSkill protects
+
+- **Integrity.** `content_hash` and `hash_skill_tree` are byte-exact. The
+  whole-tree hash uses a length-prefixed injective manifest, so a crafted
+  filename cannot forge a collision, and any post-approval byte change is
+  detected.
+- **Containment.** `read_skill_resource` reads strictly inside a skill tree
+  (traversal and symlink crossings are refused); tree hashing refuses
+  symlinks.
+- **Tool confinement.** `effective_tools` can only narrow the operator's tool
+  grant; a skill can never widen it.
+- **Explicit trust.** `evaluate_trust` is fail-closed — unknown, script-
+  bearing, and advisory-flagged skills require review; only a validated,
+  clean skill is `attachable` — and every verdict is explainable.
+
+## What AbstractSkill does NOT guarantee
+
+- Trust classification raises the bar; it does **not** certify a skill is
+  safe. A validation attests that a review or audit occurred, not that the
+  skill is provably benign.
+- The behavioral audit (backlog 0003) catches classes of malicious behavior
+  over epochs; semantic evasion can defeat any finite battery.
+- A future signature (spec JOIN) proves authenticity and integrity, not
+  safety.
+
+Curation, behavioral audit, and the fail-closed default remain the real gate.
+See the [trust model](docs/trust.md) and
+[trust-network position](docs/trust-network-position.md).
+
+## Handling skills safely
+
+- Prefer the curated shelf shipped in the package (`abstractskill/registry/skills/`,
+  copied into a host directory with `seed_registry`) over marketplace skills;
+  the ecosystem's measured malware rates make unvetted marketplaces a live
+  attack surface (see the bundled `guidance.yaml`).
+- Seeding never overwrites an edited shelf item, and an edited skill no longer
+  matches its validation record: it evaluates as `unverified` until it is
+  re-validated.
+- Vendor skills byte-verbatim and pin their tree hash; re-verify on load.
+- Treat a persona-steering or identity-directive skill body as grounds for a
+  do-not-use advisory — for a summoned entity such a body can be engrammed
+  into an append-only life.
+
+
+==============================================================================
+# FILE: CONTRIBUTING.md
+==============================================================================
+
+# Contributing to AbstractSkill
+
+Thank you for helping improve AbstractSkill. This guide covers the
+development workflow and the rules that keep the bundled skill registry
+verifiable.
+
+## Development setup
+
+```bash
+python -m pip install -e ".[test]"
+python -m pytest -q
+```
+
+CI runs the suite on Python 3.10, 3.11 and 3.12 (`python -m pytest -q -m "not integration"`),
+builds the package, and builds the documentation site.
+
+Build the package and check its metadata:
+
+```bash
+python -m pip install build twine
+python -m build
+python -m twine check dist/*
+```
+
+Build the documentation site:
+
+```bash
+python -m pip install "mkdocs>=1.6.0" "mkdocs-material>=9.0.0"
+bash .github/scripts/prepare_mkdocs.sh
+mkdocs build -q
+```
+
+## Code expectations
+
+- Keep the library passive: it parses, validates, hashes, discovers, composes
+  and classifies. It executes nothing, uses no network, and imposes no runtime
+  limits. See [docs/architecture.md](docs/architecture.md).
+- Fail loudly. Invalid input raises a `SkillError` subclass or surfaces a
+  `#FALLBACK` warning; nothing degrades silently.
+- Keep PyYAML the only runtime dependency.
+- Export every public name from `abstractskill/__init__.py` and document it in
+  [docs/api.md](docs/api.md).
+- Add tests with every behavior change.
+
+## Changing the bundled registry
+
+The curated registry lives in `src/abstractskill/registry/` and ships in the
+wheel. Trust records bind to content hashes, so every change is deliberate:
+
+- Add third-party skills only through the curated catalog and
+  `scripts/vendor_skill.py`; see
+  [Adding a curated skill](docs/skills-catalog.md#adding-a-curated-skill).
+- Never edit a vendored skill tree in place. Change it upstream, re-vendor,
+  and re-pin.
+- Regenerate `validations.yaml` with `python scripts/refresh_shelf.py` after
+  any skill change, and review the diff.
+- Update the admission pins in `tests/test_shelf.py` when the shelf changes.
+- Bump `version:` in `src/abstractskill/registry/catalog.yaml` whenever any
+  bundled skill, license or yaml file changes. `tests/test_bundled.py` pins
+  that version to a digest of the bundled content and fails until both move
+  together; update `PINNED_VERSION` and `PINNED_DIGEST` in the same change.
+  The version must only increase: `seed_registry` never replaces seeded
+  content with a bundle older than the last seed (`kept_newer`).
+
+## Documentation
+
+- Keep `README.md` and `docs/` faithful to the code; when they disagree, the
+  code wins and the docs are repaired.
+- List every `docs/*.md` page in [docs/README.md](docs/README.md).
+- Regenerate `llms.txt` and `llms-full.txt` in the same change as the
+  documentation they index.
+- Record user-visible changes in [CHANGELOG.md](CHANGELOG.md).
+
+## Security
+
+Report vulnerabilities or malicious skills privately as described in
+[SECURITY.md](SECURITY.md), not in public issues.
+
+## Conduct
+
+Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+
+==============================================================================
+# FILE: docs/README.md
+==============================================================================
+
+# AbstractSkill documentation
+
+AbstractSkill is the Agent Skills (`SKILL.md`) contract library for the
+AbstractFramework ecosystem: parse and validate skills, discover them on disk
+with progressive disclosure, hash them for evolution and tamper detection,
+compose their tool declarations with an operator grant, and classify their
+trust.
+
+## Start here
+
+- [Getting started](getting-started.md) — install, parse a skill, discover a
+  directory, compose tools, evaluate trust, seed the bundled shelf into a host
+  directory, and activate skills through the trust gate.
+- [Architecture](architecture.md) — the components, how they connect, the
+  activation data flow, and how the bundled registry is seeded (with
+  diagrams).
+- [API reference](api.md) — the public functions and types.
+- [FAQ](faq.md) — common questions and limitations.
+- [Troubleshooting](troubleshooting.md) — symptoms, diagnostics, and fixes,
+  including seeding the bundled registry.
+
+## Deep dives
+
+- [Trust model](trust.md) — validated skills, the do-not-use advisory registry,
+  guidance, and the fail-closed verdict.
+- [Curated skills catalog](skills-catalog.md) — the 14 skills shipped in the
+  package, the reviewed, pinned list of third-party skills worth vendoring,
+  the tiers (top/watch/excluded with reasons), and the curated-only install
+  path.
+- [Skills vs workflows vs MCP](skills-flows-mcp.md) — the decision guide for
+  the framework's three extension mechanisms: comparison table, when to use
+  which, composition patterns, and package responsibilities.
+- [Trust-network position](trust-network-position.md) — how AbstractSkill
+  relates to the wider skill-trust ecosystem (join / leverage / build).
+
+## Project docs
+
+- [Project README](../README.md) — overview, the bundled registry, quick start.
+- [Security policy](../SECURITY.md) — reporting and the trust guarantees this
+  library does and does not make.
+- [Contributing](../CONTRIBUTING.md) — development workflow and the rules for
+  changing the bundled registry.
+- [Code of conduct](../CODE_OF_CONDUCT.md) and
+  [acknowledgements](../ACKNOWLEDGEMENTS.md).
+- [Changelog](../CHANGELOG.md) — release history.
+- [Documentation site home](index.md) — the landing page of the published
+  site (MkDocs); `changelog.md` and `security.md` are copied into `docs/` at
+  site build time and are not edited here.
+
+## For maintainers
+
+- [Backlog](backlog/overview.md) — planning memory and the skill-trust track.
+- [Knowledge base](KnowledgeBase.md) — durable contract decisions and lessons
+  recorded by maintainers.
