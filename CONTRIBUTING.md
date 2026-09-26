@@ -67,8 +67,12 @@ wheel. Trust records bind to content hashes, so every change is deliberate:
 - Keep `README.md` and `docs/` faithful to the code; when they disagree, the
   code wins and the docs are repaired.
 - List every `docs/*.md` page in [docs/README.md](docs/README.md).
-- Regenerate `llms.txt` and `llms-full.txt` in the same change as the
-  documentation they index.
+- Keep `llms.txt` (the hand-curated index) and `llms-full.txt` in step with
+  the documentation in the same change. `llms-full.txt` is generated:
+  run `python scripts/generate_llms_full.py` after editing any page it
+  includes, and `python scripts/generate_llms_full.py --check` to confirm it
+  is current (it exits 1 when the file is stale). Add a page to the script's
+  `DOCUMENTS` list when it joins the core set.
 - Record user-visible changes in [CHANGELOG.md](CHANGELOG.md).
 
 ## Security
