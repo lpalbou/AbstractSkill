@@ -352,7 +352,7 @@
 
 All notable changes to this package are documented in this file.
 
-## [Unreleased]
+## [0.3.1] - 2026-10-18
 
 ### Added
 
