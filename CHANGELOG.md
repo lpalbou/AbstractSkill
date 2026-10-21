@@ -1,17 +1,19 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.2] - 2026-10-21
 
 ### Changed
 
 - The bundled `coredoc` skill also creates and maintains a package agent
   skill (`skills/<name>/SKILL.md`) for repositories with something an agent
   can operate (a library API, CLI, service, config format, or plugin
-  contract): it decides from repository evidence whether one is needed,
-  teaches verified recipes and sharp edges, and points agents to the skill
-  from `README.md`, `docs/README.md` and `llms.txt`. The rules live in the
-  new `references/agent-skill.md`. The bundled registry version moves to
-  `2026.10.21`.
+  contract) when an agent with only the README would likely misuse it. It
+  decides from repository evidence on every pass, and creates none for
+  documentation, content, or GUI-only repositories. The skill teaches the
+  package's limits, a capability map, verified recipes and sharp edges, and
+  the docs point agents to it from `README.md`, `docs/README.md` and
+  `llms.txt`. The rules live in the new `references/agent-skill.md`. The
+  bundled registry version moves to `2026.10.21`.
 
 ## [0.3.0] - 2026-09-26
 
