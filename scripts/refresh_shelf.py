@@ -103,7 +103,7 @@ SHELF_POLICY = {
         ),
     },
     "entity-self-knowledge": {
-        "expected_tree_hash": "08cdb23cc907c44b7f276989bd680a978db2a91190f2d14bc4634eb6ff438b07",
+        "expected_tree_hash": "7e6fc34a73c7f94ec2d93c4d88f88d541d61aa4e4735a2fb27ba5b380e6cc45e",
         "method": "first-party",
         "source": "first-party",
         "level": "first_party",
@@ -269,7 +269,13 @@ SHELF_POLICY = {
             "grant today; hosted-chat close leaves awake standing; "
             "doors-wake supersedes the 409-on-asleep era (B1/c1503); "
             "kill-switch paragraph fully backed (paused = the one "
-            "legitimate no-phase render)."
+            "legitimate no-phase render). 2026-07-21 count re-sync "
+            "(interest-glamour round, cognition seq 408 ask 3): day-open cue "
+            "sentence 'one of your standing interests' -> 'one or two' matching "
+            "the shipped k=2 rotation (life.py picks min(2, len(rows))); own "
+            "fable5 (glamour-verdict adversary) caught the stale count while "
+            "auditing the map for glamour-line copies (none found - the map's "
+            "interest teaching prices progress on EXPLORING, verified clean)."
         ),
     },
     "entity-observation": {
@@ -403,15 +409,16 @@ SHELF_POLICY = {
         ),
     },
     "coredoc": {
-        "expected_tree_hash": "9e574029b99507ce2f50b0a8e792529274da8e022a87982ed0313d04e22c1bc7",
+        "expected_tree_hash": "2a6d6f46cfa504f6ca2b178f9d98e193eb0f12a6099bb5a0a0b0adbf3f43a185",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
         "activation_description": (
             "Create, audit, and maintain a professional external-facing documentation set "
             "(README, docs/*, architecture with diagrams, llms.txt/llms-full.txt) kept "
-            "faithful to the code. Use when an agent must bootstrap or repair project "
-            "documentation."
+            "faithful to the code and, when the package is something an agent can operate, "
+            "a package agent skill at skills/<name>/ that teaches other agents to use it. "
+            "Use when an agent must bootstrap or repair project documentation."
         ),
         "notes": (
             "Maintainer-authored codex skill; first-party reviewed and vendored "
@@ -419,6 +426,10 @@ SHELF_POLICY = {
             "freshness sharpened from habit to invariant in SKILL.md and "
             "references/llms-files.md — regenerate llms files in the same change "
             "that edits docs (the stale window misrepresents the docs). "
+            "Operator-requested fold 2026-10-21: package agent skill "
+            "(references/agent-skill.md) — relevance decision from repository "
+            "evidence, skills/<name>/ layout, verified recipes, docs pointers; "
+            "adversarially reviewed (two rounds) and field-trialled on RAGNAROK and AbstractCore (author, A/B consumer and adversary agents, four rounds). "
             "Fable5-reviewed. Behavioral audit (backlog 0003) pending — upgrades "
             "to audited then."
         ),

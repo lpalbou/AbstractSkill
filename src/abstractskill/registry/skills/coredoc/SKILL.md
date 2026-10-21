@@ -1,13 +1,15 @@
 ---
 name: coredoc
-description: Create, audit, normalize, and maintain a professional external-facing repository documentation system for users, contributors, and tools, including the core doc set, cross-linked topic deep dives, and faithful AI-readable `llms.txt` and `llms-full.txt` files. Use when Codex needs to bootstrap docs for a new repo, repair stale or missing project docs, add or revise `docs/*.md` pages, keep root and `docs/` documents coherent, or regenerate AI-actionable documentation indexes for LLMs and tooling.
+description: Create, audit, normalize, and maintain a professional external-facing repository documentation system for users, contributors, and tools, including the core doc set, cross-linked topic deep dives, faithful AI-readable `llms.txt` and `llms-full.txt` files, and, when the package is something an agent can operate, a package agent skill at `skills/<name>/SKILL.md` that teaches other agents to use it. Use when Codex needs to bootstrap docs for a new repo, repair stale or missing project docs, add or revise `docs/*.md` pages, keep root and `docs/` documents coherent, regenerate AI-actionable documentation indexes for LLMs and tooling, or create and maintain the agent skill that lets other agents use the package like experts.
 ---
 
 # Core Doc
 
 Use this skill to make a repository explain itself clearly to external users, contributors, and
 tools. Core docs should teach what the package is, how it works, how to use it, and what current
-limits matter. Write in a professional, positive tone that addresses external readers directly.
+limits matter. When the package is something an agent can operate, the docs also ship an agent
+skill that turns them into an operating procedure for other agents. Write in a professional,
+positive tone that addresses external readers directly.
 Prefer faithful, maintainable docs over aspirational prose. If the code and docs disagree, the
 code wins and the docs must be repaired.
 
@@ -19,6 +21,8 @@ code wins and the docs must be repaired.
   `references/core-doc-set.md`.
 - If the task is mainly about creating or repairing `llms.txt` or `llms-full.txt`, read
   `references/llms-files.md` before editing.
+- On every pass, read `references/agent-skill.md` to decide whether the repository ships a
+  package agent skill, and to create, audit, or update it.
 - If the task is broad documentation maintenance, read
   `references/maintenance-playbook.md` and work through the audit flow.
 - If the user is preparing or publishing a specific release, prefer the `release` skill when
@@ -59,11 +63,11 @@ code wins and the docs must be repaired.
   measured, and what limits still matter.
 - Every core documentation page must answer stable user or contributor needs, not internal
   incidents. This applies to `README.md`, `CHANGELOG.md`, root policy docs, `docs/*.md`,
-  `docs/examples/*.md`, `llms.txt`, and `llms-full.txt`, not only FAQ pages. Do not add headings,
-  callouts, notes, tables, captions, changelog entries, or example prose like "Why did our previous
-  result...", "What went wrong...", "we discovered...", or "this failed before..." to end-user
-  docs. Convert them into neutral usage guidance such as "How to compare memory measurements" or
-  put the analysis in backlog, ADRs, reports, or `untracked/comments/`.
+  `docs/examples/*.md`, `llms.txt`, `llms-full.txt`, and `skills/<name>/`, not only FAQ pages. Do
+  not add headings, callouts, notes, tables, captions, changelog entries, or example prose like "Why
+  did our previous result...", "What went wrong...", "we discovered...", or "this failed before..."
+  to end-user docs. Convert them into neutral usage guidance such as "How to compare memory
+  measurements" or put the analysis in backlog, ADRs, reports, or `untracked/comments/`.
 - Benchmark, quantization, and performance docs may include exact settings, hardware, command
   profiles, and metric definitions. They must not include personal commentary, blame, forensic
   narratives, release-gate drama, or explanations of documentation mistakes. If unrelated benchmark
@@ -73,7 +77,7 @@ code wins and the docs must be repaired.
   smoke-test instructions, "real model caveat" blocks, debugging narratives, or notes about how
   the documentation was generated. If that information matters only to the owner, maintainer, or
   developer, write it in `untracked/comments/<timestamp>_<topic>.md` instead, and keep it out of
-  `README.md`, `CHANGELOG.md`, `docs/*.md`, `llms.txt`, and `llms-full.txt`.
+  `README.md`, `CHANGELOG.md`, `docs/*.md`, `llms.txt`, `llms-full.txt`, and `skills/<name>/`.
 - Keep the core doc set present even when a section is currently thin. If a doc is not yet
   applicable, say so explicitly instead of omitting it.
 - `docs/architecture.md` MUST contain at least one diagram that represents the system
@@ -104,10 +108,10 @@ code wins and the docs must be repaired.
 - Verify claims against repository evidence where possible: manifests, package metadata, entry
   points, CLI help, config files, schemas, examples, tests, and working commands.
 - Before finishing any core-doc update, scan the external-facing corpus (`README.md`,
-  `CHANGELOG.md`, root policy docs, `docs/*.md`, `docs/examples/*.md`, `llms.txt`, and
-  `llms-full.txt`) for incident/postmortem language, including headings, callouts, table notes,
-  image captions, changelog bullets, and examples. Remove or move anything that reads as maintainer
-  memory rather than user guidance.
+  `CHANGELOG.md`, root policy docs, `docs/*.md`, `docs/examples/*.md`, `llms.txt`, `llms-full.txt`,
+  and the package agent skill) for incident/postmortem language, including headings, callouts, table
+  notes, image captions, changelog bullets, and examples. Remove or move anything that reads as
+  maintainer memory rather than user guidance.
 
 ## Maintain The Core Set
 
@@ -129,6 +133,9 @@ code wins and the docs must be repaired.
   starter set or the repo is clearly internal and intentionally minimal.
 - For an existing project, normalize missing or stale files incrementally instead of rewriting
   everything at once.
+- The package agent skill (`skills/<name>/SKILL.md`) is conditional, not part of the
+  always-present set. Create it only when the package passes the decision in
+  `references/agent-skill.md`.
 
 ## Maintain `llms.txt` And `llms-full.txt`
 
@@ -158,6 +165,24 @@ code wins and the docs must be repaired.
   caveats must live in the real docs first.
 - Follow the format and usage notes in `references/llms-files.md`.
 
+## Maintain The Package Agent Skill
+
+- On every pass, make the agent-skill decision in `references/agent-skill.md` from repository
+  evidence, and state it with its evidence in your final report. Ship a skill when the repository
+  contains something an agent can operate and an agent with only the README would likely misuse
+  it. No skill is the default: never create one for documentation, content, or GUI-only
+  repositories, where reading the docs is the whole use.
+- The skill lives at `skills/<name>/SKILL.md` and teaches agents to use the package, not to
+  develop it: its limits, the settings and defaults that cost time or money, its error contract,
+  a capability map (what exists, what does not, what it writes), an end-to-end workflow, verified
+  recipes, sharp edges, and failure fixes. It must work with no link reachable.
+- Keep it faithful: every fact the skill states is also in the docs (when docs and code disagree,
+  fix the docs; mark defects as known issues), every snippet is verified at the highest safe
+  tier in an isolated run (never write or paid calls against a deployment you do not own), and it
+  changes in the same change as the API, CLI, or doc edits it describes.
+- When the skill exists, `README.md` gets a "For AI agents" section inviting agents to register and
+  use it to become experts on the package, and `docs/README.md` and `llms.txt` link to it.
+
 ## Add Deep Dives When Relevant
 
 - Create `docs/<topic>.md` when a topic is too important or too detailed to live only inside
@@ -175,3 +200,5 @@ code wins and the docs must be repaired.
 - Read `references/core-doc-set.md` when creating or repairing the canonical doc set.
 - Read `references/maintenance-playbook.md` when doing broad documentation audits or cleanup.
 - Read `references/llms-files.md` when creating or updating `llms.txt` or `llms-full.txt`.
+- Read `references/agent-skill.md` when deciding whether to ship a package agent skill, and when
+  creating, auditing, or updating one.

@@ -53,6 +53,13 @@ preferred baseline, not a universal law for every tiny or internal repo.
 - `llms-full.txt`
   - expanded aggregate of the core docs when this profile is adopted
 
+## Conditional Agent Skill
+
+- `skills/<name>/SKILL.md`
+  - an agent skill that teaches other AI agents to use the package, shipped only when the
+    repository passes the decision in `agent-skill.md`, which also owns its layout, content, and
+    verification rules
+
 ## Default Layout
 
 ```text
@@ -73,6 +80,11 @@ docs/
   faq.md
   troubleshooting.md
   <topic>.md
+skills/                 # only when the package passes the agent-skill decision
+  <name>/
+    SKILL.md
+    references/         # optional
+    scripts/            # optional
 ```
 
 ## Cross-Link Expectations
@@ -92,6 +104,10 @@ docs/
 - `docs/troubleshooting.md` should link back to the relevant setup, API, architecture, FAQ, or
   topic page for each symptom.
 - `CONTRIBUTING.md` should point contributors to architecture, API, changelog, and security docs.
+- When `skills/<name>/SKILL.md` exists, `README.md` should have a short "For AI agents" section
+  inviting agents to register and use the skill, and `docs/README.md` and `llms.txt` should link
+  to it. The skill links back to the docs with absolute URLs, because it is copied out of the
+  repository when installed.
 
 ## Canonical Ownership Matrix
 
@@ -112,6 +128,10 @@ docs/
     paths
 - `docs/<topic>.md`
   - owns reusable deep dives that would otherwise bloat the core docs
+- `skills/<name>/`
+  - owns the agent-facing operating procedure: task recipes, sharp edges, and runnable examples
+    distilled from the docs. It owns no facts of its own; every behavior it states must also be in
+    the docs or the code
 
 Backlog, ADRs, reports, and incident notes own internal reasoning history, rejected approaches,
 postmortems, and root-cause narratives. Core docs are not project memory. They may link to ADRs or
@@ -133,7 +153,8 @@ If a file is required but a topic is currently not mature, write the truthful mi
 
 ## Front-Facing Content Filter
 
-Before adding a sentence to `README.md`, `docs/*.md`, `llms.txt`, or `llms-full.txt`, ask whether an
+Before adding a sentence to `README.md`, `docs/*.md`, `llms.txt`, `llms-full.txt`, or the agent
+skill, ask whether an
 external user, contributor, or tool needs it to understand what the package is, how it works, how to
 install it, how to use it, how to configure it, how to debug it, how to migrate, or how to
 contribute.

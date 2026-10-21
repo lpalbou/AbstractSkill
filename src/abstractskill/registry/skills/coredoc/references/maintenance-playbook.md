@@ -19,13 +19,15 @@ Use this file for broad repository documentation work.
    - broken links;
    - orphan `docs/<topic>.md` pages;
    - missing `llms.txt` / `llms-full.txt`;
+   - a missing agent skill for a package with an actionable surface, a stale one (renamed calls,
+     changed flags, broken links), or one that should not exist (see `agent-skill.md`);
    - docs that should exist but are crammed into README only.
 5. Fix the highest-value inconsistencies first:
    - installation and first-run instructions;
    - missing or stale troubleshooting for common user-facing failures;
    - architecture or API drift;
    - missing contributor/security/license basics;
-   - broken AI-readable indexes.
+   - broken AI-readable indexes and stale agent skill recipes.
 
 ## Writing Rules
 
@@ -96,6 +98,8 @@ need it to interpret logs, migration impact, or compatibility boundaries.
 - `docs/README.md` lists every topic deep dive with a short explanation.
 - `README.md` points readers into the docs tree.
 - `llms.txt` and `llms-full.txt` match the current docs corpus.
+- The agent-skill decision was made from repository evidence and stated in the final report. When
+  the skill exists, it follows `agent-skill.md` and its verification tiers are in the report.
 - Links resolve and point to the canonical target.
 - Front-facing docs do not contain internal mistake narratives. Changelog entries, when needed,
   state only user-visible changes and migration impact.
@@ -112,6 +116,10 @@ need it to interpret logs, migration impact, or compatibility boundaries.
   troubleshooting page.
 - `llms.txt` lists docs that no longer exist or no longer matter.
 - `llms-full.txt` contains stale or duplicated material instead of a faithful aggregate.
+- the agent skill tours the API instead of teaching a workflow, omits the package's limits, ships
+  snippets that crash on failure cases, or depends on links that are unreachable once installed.
+- an agent skill is created for a documentation-only repository, or teaches contributing instead
+  of using the package.
 - topic docs include ephemeral repair commentary instead of stable current behavior.
 - generated docs leak maintainer-only notes, test recipes, or internal caveats into external
   documentation.

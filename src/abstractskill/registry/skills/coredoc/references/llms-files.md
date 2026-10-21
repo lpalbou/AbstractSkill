@@ -62,6 +62,9 @@ Optional guidance paragraphs.
 ## Topic Deep Dives
 - [docs/<topic>.md](docs/<topic>.md): why this topic matters
 
+## Agent Skill
+- [skills/<name>/SKILL.md](skills/<name>/SKILL.md): agent skill that teaches agents to use this package
+
 ## Optional
 - [CHANGELOG.md](CHANGELOG.md): release history
 - [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md): credits and lineage
@@ -76,6 +79,8 @@ Rules:
 - Keep the same professional, positive, external-facing tone as the tracked source docs.
 - Do not include maintainer-only notes, internal validation commands, or content copied from
   `untracked/comments/`.
+- Include the `Agent Skill` section only when `skills/<name>/SKILL.md` exists. See
+  `agent-skill.md`.
 
 ## `llms-full.txt` Requirements
 
@@ -114,6 +119,9 @@ Rules:
 - Do not aggregate maintainer-only notes from `untracked/comments/`, internal smoke-test blocks, or
   documentation-generation commentary.
 - Prefer document separators so tools and humans can navigate the aggregate.
+- Do not aggregate the agent skill. It is distilled from the docs that `llms-full.txt` already
+  contains. Agents reach it through the `Agent Skill` entry in `llms.txt` and through the "For AI
+  agents" section of the aggregated `README.md`.
 - Keep duplicated content low; if two docs repeat heavily, consolidate the real docs first.
 - Do not blindly concatenate huge, repetitive, or sensitive material. Link out when a bounded
   aggregate is more useful than a giant dump.
@@ -128,7 +136,7 @@ Rules:
   topic deep dives included by the file.
 - If a doc says a feature is absent or unstable, `llms.txt` and `llms-full.txt` must say the same.
 - If an API, CLI, or integration changed, update the core docs together with the LLM index
-  files in the same change.
+  files, and the agent skill when one exists, in the same change.
 - If the source docs intentionally omit internal mistake history, do not reintroduce that history
   in the LLM index files.
 - If maintainers need extra internal guidance, keep it in `untracked/comments/<timestamp>_<topic>.md`
