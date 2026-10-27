@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1015,7 +1015,7 @@ was read for the vendored entries; an adversarial review additionally
 content-read every top entry and its findings are folded below (one entry
 was pulled for a time-of-use fetch; one carries a content caveat).</p>
 <h2 id="all-skills-at-a-glance">All skills at a glance<a class="headerlink" href="#all-skills-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>The vendored shelf (the 14 skills shipped in the package under
+<p>The vendored shelf (the 15 skills shipped in the package under
 <code>abstractskill/registry/skills/</code>) plus the curated catalog (vendorable on
 demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.</p>
@@ -1068,8 +1068,14 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <tr>
 <td><code>coredoc</code></td>
 <td>shelf (adopted)</td>
-<td>Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (<code>skills/&lt;name&gt;/</code>) when the package is something an agent can operate.</td>
+<td>Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (<code>skills/&lt;name&gt;/</code>) when the package is something an agent can operate, and a release checklist (version source, README badges, package metadata, llms files, backlog/ADR trace).</td>
 <td><a href="../src/abstractskill/registry/skills/coredoc/SKILL.md">src/abstractskill/registry/skills/coredoc</a></td>
+</tr>
+<tr>
+<td><code>abstract-release</code></td>
+<td>shelf (adopted, scripts → review)</td>
+<td>Plan and run an AbstractFramework release wave in dependency order: per-package mechanics, gates (adversarial review, real end-to-end proof, all-green merge, registry visibility, floor propagation), and the wave report. Ships a read-only planner and a registry visibility gate.</td>
+<td><a href="../src/abstractskill/registry/skills/abstract-release/SKILL.md">src/abstractskill/registry/skills/abstract-release</a></td>
 </tr>
 <tr>
 <td><code>backlog</code></td>
@@ -1309,9 +1315,10 @@ squatting surfaces) runs before any re-pin.</p>
 </tbody>
 </table>
 <h2 id="maintainer-authored-skills">Maintainer-authored skills<a class="headerlink" href="#maintainer-authored-skills" title="Permanent link">&para;</a></h2>
-<p>Seven shelf skills come from the maintainer's own skill collection (source
+<p>Eight shelf skills come from the maintainer's own skill collection (source
 <code>codex-skills (maintainer)</code>, method <code>first-party-adoption</code>, level <code>adopted</code>):
-<code>coredoc</code>, <code>backlog</code>, <code>architect</code>, <code>adr</code>, <code>cicd</code>, <code>review</code> and <code>uxreview</code>.
+<code>coredoc</code>, <code>backlog</code>, <code>architect</code>, <code>adr</code>, <code>cicd</code>, <code>review</code>, <code>uxreview</code> and
+<code>abstract-release</code>.
 They are vendored byte-verbatim; improvements are made upstream, then
 re-vendored and re-pinned.</p>
 <ul>
@@ -1329,6 +1336,15 @@ re-vendored and re-pinned.</p>
   skill that is not on the shelf; dangling cross-skill references are inert
   in the loader and are inventoried as a squatting surface.</li>
 <li><strong><code>review</code></strong> and <strong><code>uxreview</code></strong> — kept as two separate skills; see below.</li>
+<li><strong><code>abstract-release</code></strong> — the AbstractFramework release-wave procedure (order,
+  per-package mechanics, gates, floor propagation, final report). It is the
+  only shelf skill that ships scripts: a read-only release planner and a
+  registry visibility gate (standard library; HTTPS reads of pypi.org and
+  registry.npmjs.org). Scripts present ⇒ <code>requires_review</code> at the gate until
+  an operator enables it.</li>
+<li><strong><code>coredoc</code></strong> — also carries the release checklist: the package's version
+  source, README badges and install snippets, registry and GitHub package
+  metadata, regenerated llms files and docs index, and the backlog/ADR trace.</li>
 </ul>
 <h3 id="how-the-reviewer-skills-compose">How the reviewer skills compose<a class="headerlink" href="#how-the-reviewer-skills-compose" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1502,10 +1518,10 @@ same seat's single review (<code>validated_by: skill</code>) — the method cap 
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
