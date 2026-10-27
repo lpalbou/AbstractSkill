@@ -16,7 +16,7 @@
 # four yaml files shipped in the abstractskill wheel). Bump it whenever any
 # of that content changes; seed_registry() records it in <dest>/.seeded.json
 # and tests/test_bundled.py pins it to a content digest.
-version: "2026.10.21"
+version: "2026.10.27"
 
 skills:
 

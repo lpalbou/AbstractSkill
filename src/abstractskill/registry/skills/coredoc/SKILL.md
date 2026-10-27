@@ -27,7 +27,8 @@ code wins and the docs must be repaired.
   `references/maintenance-playbook.md` and work through the audit flow.
 - If the user is preparing or publishing a specific release, prefer the `release` skill when
   available. Use this skill for the release's user-facing documentation, changelog, and LLM index
-  updates.
+  updates, and run "Run The Release Checklist" below in full: a release pass is not done until
+  every box is checked or marked not applicable with a reason.
 
 ## Apply The Operating Rules
 
@@ -182,6 +183,72 @@ code wins and the docs must be repaired.
   changes in the same change as the API, CLI, or doc edits it describes.
 - When the skill exists, `README.md` gets a "For AI agents" section inviting agents to register and
   use it to become experts on the package, and `docs/README.md` and `llms.txt` link to it.
+
+## Run The Release Checklist
+
+At release time the docs must describe the version being published, and the package metadata that
+registries and GitHub show must agree with them. Do these steps in order, in the release change
+itself (not in a follow-up), and report the checklist with its result.
+
+1. **Update the centralized version source.** Find where the version is defined before editing:
+   `[project].version` in `pyproject.toml`, or the module that `[tool.setuptools.dynamic]`,
+   `[tool.hatch.version]` or the build backend reads; `package.json` `version` (plus every
+   workspace package and the lockfile); `Cargo.toml` `[package].version`. When a package keeps the
+   version in two places, update both and check that a test or the release workflow compares them.
+   Never write a version file with a tool that truncates it before reading it back. In
+   AbstractFramework the sources are:
+
+   | Package | Version source |
+   |---|---|
+   | abstractvoice | `abstractvoice/_version.py` (single source; pyproject reads it) |
+   | abstractcore | `abstractcore/utils/version.py` |
+   | abstractvision, abstractcamera | `src/<package>/__init__.py` (pyproject reads it) |
+   | abstractmusic | `src/abstractmusic/_version.py` (pyproject reads it) |
+   | abstractruntime, abstractagent, abstractmemory, abstractsemantics | `pyproject.toml` |
+   | abstractgateway | `pyproject.toml` and `src/abstractgateway/__init__.py` |
+   | abstractskill, abstract3d | `pyproject.toml` and `src/<package>/__init__.py` |
+   | abstractassistant | `pyproject.toml` and `abstractassistant/_version.py` (a test keeps them equal) |
+   | abstractnote | `pyproject.toml`, `src/abstractnote/__init__.py` and `web/package.json` |
+   | abstractuic | root `package.json` (the release tag), each `<package>/package.json`, and `package-lock.json` (`npm install --package-lock-only`) |
+   | npm apps (flow, observer, entity, continuum, code/web) | `package.json` and `package-lock.json` |
+   | abstractframework (root) | `pyproject.toml` and `abstractframework/__init__.py` (`__version__`, `RELEASE_VERSIONS`, `NPM_RELEASE_VERSIONS`, `CRATE_RELEASE_VERSIONS`) |
+
+   For a multi-package release wave, the `abstract-release` skill's package inventory carries the
+   same sources with each package's release trigger; when a version source moves, update both.
+
+2. **Update the front-facing README.** Version and registry badges (PyPI or npm version), the CI
+   badge (pointing at the workflow that gates the default branch), and the docs badge or link
+   resolve and match the release. Install snippets name the published package, extras and
+   minimum versions that this release needs (no pins to an older version). Add or refresh a short
+   "What's new" pointer to the release's `CHANGELOG.md` section. Never claim a version the
+   registry does not have yet; badges that read the registry update on their own.
+3. **Update the package metadata the registries and GitHub show, when the repository has it.**
+   `pyproject.toml` `[project]` `description`, `keywords`, `classifiers` (Python versions,
+   development status) and `[project.urls]` (homepage, docs, changelog, issues);
+   `package.json` `description`, `keywords`, `homepage`, `repository`, `bugs`; the release notes
+   the release workflow publishes (usually the `CHANGELOG.md` section for the version). They must
+   describe the package as the docs describe it.
+4. **Regenerate `llms.txt`, `llms-full.txt` and the docs index.** Update `docs/README.md` for any
+   page added, renamed or removed; update `llms.txt` links and descriptions; regenerate
+   `llms-full.txt` with the repository's generator (`scripts/*llms*`) and run its `--check` when it
+   has one. Commit the regenerated files with the release.
+5. **Record the backlog and ADR trace.** The release's changelog section is dated
+   (`## [X.Y.Z] - YYYY-MM-DD`) and `Unreleased` is folded into it. The backlog items the release
+   ships are completed with evidence and referenced briefly from release metadata where useful;
+   a durable rule decided during the work is an ADR linked from its backlog item. Keep the public
+   changelog user-facing (see the operating rules above).
+
+Checklist (copy it into the release report):
+
+```markdown
+- [ ] Version source(s) updated and equal: <files>
+- [ ] README: version/registry badges, CI badge, docs link, install snippet, what's-new pointer
+- [ ] Package metadata: pyproject [project] / package.json description, keywords, classifiers, URLs; release notes
+- [ ] docs/README.md index current; llms.txt updated; llms-full.txt regenerated (generator --check passes)
+- [ ] CHANGELOG.md dated section for X.Y.Z; Unreleased folded
+- [ ] Backlog items completed with evidence; ADRs recorded and linked
+- [ ] Package agent skill (if shipped) matches the released API
+```
 
 ## Add Deep Dives When Relevant
 

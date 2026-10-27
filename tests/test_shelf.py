@@ -24,6 +24,7 @@ ADVISORIES = REPO / "src" / "abstractskill" / "registry" / "advisories.yaml"
 GUIDANCE = REPO / "src" / "abstractskill" / "registry" / "guidance.yaml"
 
 EXPECTED_SHELF = {
+    "abstract-release",
     "abstractframework-gateway",
     "adversarial-iteration",
     "adr",
@@ -46,6 +47,7 @@ EXPECTED_SHELF = {
 # the first catalog-curated third-party skill (obra/superpowers,
 # manual-review → adopted, pinned in src/abstractskill/registry/catalog.yaml).
 EXPECTED_LEVELS = {
+    "abstract-release": TrustLevel.ADOPTED,
     "abstractframework-gateway": TrustLevel.FIRST_PARTY,
     "adversarial-iteration": TrustLevel.FIRST_PARTY,
     "agora-collaboration": TrustLevel.FIRST_PARTY,
@@ -62,6 +64,7 @@ EXPECTED_LEVELS = {
     "verification-before-completion": TrustLevel.ADOPTED,
 }
 EXPECTED_SOURCES = {
+    "abstract-release": "codex-skills (maintainer)",
     "abstractframework-gateway": "first-party",
     "adversarial-iteration": "first-party",
     "agora-collaboration": "first-party",
@@ -80,7 +83,9 @@ EXPECTED_SOURCES = {
 # Skills allowed to carry scripts/ (requires_review at the gate until the
 # operator enables them). Vendoring a scripts-bearing catalog entry adds its
 # name HERE — the admission review's explicit signature, never a silent pass.
-EXPECTED_SCRIPTS_BEARING: set[str] = set()
+# abstract-release (2026-10-27): a read-only release planner and a registry
+# visibility gate (stdlib, HTTPS GETs to pypi.org / registry.npmjs.org only).
+EXPECTED_SCRIPTS_BEARING: set[str] = {"abstract-release"}
 
 
 def test_shelf_discovers_exactly_the_expected_skills() -> None:

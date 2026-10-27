@@ -4,7 +4,7 @@
 > and validate skills, discover them on disk with progressive disclosure, hash
 > them for evolution and tamper detection, compose their tool declarations with
 > an operator grant, and classify their trust. The wheel also ships the curated
-> skill registry (14 skills and their trust files), which hosts copy into a
+> skill registry (15 skills and their trust files), which hosts copy into a
 > directory they own with `seed_registry`. Dependency-light (PyYAML only);
 > executes nothing, uses no network, and imposes no runtime limits — hosts
 > consume its contracts.
@@ -26,7 +26,7 @@ full text of the pages below.
 ## Topic Deep Dives
 
 - [docs/trust.md](docs/trust.md): validated skills, do-not-use advisories, guidance, the fail-closed verdict, seeded shelves.
-- [docs/skills-catalog.md](docs/skills-catalog.md): the 14 bundled skills, reviewed and pinned third-party skills, tiers, curated-only vendoring.
+- [docs/skills-catalog.md](docs/skills-catalog.md): the 15 bundled skills, reviewed and pinned third-party skills, tiers, curated-only vendoring.
 - [docs/skills-flows-mcp.md](docs/skills-flows-mcp.md): which extension mechanism when — skills vs workflows vs MCP.
 - [docs/trust-network-position.md](docs/trust-network-position.md): how AbstractSkill relates to the wider skill-trust ecosystem (join / leverage / build).
 

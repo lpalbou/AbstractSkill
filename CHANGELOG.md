@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.3] - 2026-10-27
+
+### Added
+
+- The bundled registry ships the `abstract-release` skill: plan and run an
+  AbstractFramework release wave in dependency order, with the per-package
+  release mechanics (tag push or workflow dispatch, publishing-environment
+  policies), the gates (adversarial review before merge, real end-to-end
+  proof, merge only on all-green, registry visibility, dependency-floor
+  propagation) and a final report template. It ships two scripts, a
+  read-only release planner and a PyPI/npm visibility gate, so the trust gate
+  marks it `requires_review` until an operator enables it.
+
+### Changed
+
+- The bundled `coredoc` skill carries a release checklist: update the
+  package's version source, the README badges, install snippets and
+  what's-new pointer, the registry and GitHub package metadata, regenerate
+  the llms files and docs index, and record the backlog and ADR trace.
+- The bundled registry holds 15 skills; its version moves to `2026.10.27`.
+
 ## [0.3.2] - 2026-10-21
 
 ### Changed

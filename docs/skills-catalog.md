@@ -15,7 +15,7 @@ was pulled for a time-of-use fetch; one carries a content caveat).
 
 ## All skills at a glance
 
-The vendored shelf (the 14 skills shipped in the package under
+The vendored shelf (the 15 skills shipped in the package under
 `abstractskill/registry/skills/`) plus the curated catalog (vendorable on
 demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.
@@ -28,7 +28,8 @@ framework-facing activation lines; links point at the exact pinned source.
 | `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules. | [src/abstractskill/registry/skills/entity-self-knowledge](../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md) |
 | `entity-observation` | shelf (first_party) | Read an entity's life correctly before reporting on it: the entity's own store is the primary source for any claim about what it knows, remembers, or lacks. For agent seats and operators observing a summoned entity. | [src/abstractskill/registry/skills/entity-observation](../src/abstractskill/registry/skills/entity-observation/SKILL.md) |
 | `meshvault-live-editing` | shelf (adopted) | Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects, optionally performing live for human observers. Declares `requires_mcp: [meshvault-mcp]`. | [lpalbou/meshvault @ 4deb86c](https://github.com/lpalbou/meshvault/tree/4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4/.cursor/skills/meshvault-live-editing) |
-| `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (`skills/<name>/`) when the package is something an agent can operate. | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |
+| `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (`skills/<name>/`) when the package is something an agent can operate, and a release checklist (version source, README badges, package metadata, llms files, backlog/ADR trace). | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |
+| `abstract-release` | shelf (adopted, scripts → review) | Plan and run an AbstractFramework release wave in dependency order: per-package mechanics, gates (adversarial review, real end-to-end proof, all-green merge, registry visibility, floor propagation), and the wave report. Ships a read-only planner and a registry visibility gate. | [src/abstractskill/registry/skills/abstract-release](../src/abstractskill/registry/skills/abstract-release/SKILL.md) |
 | `backlog` | shelf (adopted) | Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene. | [src/abstractskill/registry/skills/backlog](../src/abstractskill/registry/skills/backlog/SKILL.md) |
 | `architect` | shelf (adopted) | Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix, premise verification, and an engraving gate for names that reach append-only state. | [src/abstractskill/registry/skills/architect](../src/abstractskill/registry/skills/architect/SKILL.md) |
 | `adr` | shelf (adopted) | Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with `backlog`. | [src/abstractskill/registry/skills/adr](../src/abstractskill/registry/skills/adr/SKILL.md) |
@@ -122,9 +123,10 @@ squatting surfaces) runs before any re-pin.
 
 ## Maintainer-authored skills
 
-Seven shelf skills come from the maintainer's own skill collection (source
+Eight shelf skills come from the maintainer's own skill collection (source
 `codex-skills (maintainer)`, method `first-party-adoption`, level `adopted`):
-`coredoc`, `backlog`, `architect`, `adr`, `cicd`, `review` and `uxreview`.
+`coredoc`, `backlog`, `architect`, `adr`, `cicd`, `review`, `uxreview` and
+`abstract-release`.
 They are vendored byte-verbatim; improvements are made upstream, then
 re-vendored and re-pinned.
 
@@ -142,6 +144,15 @@ re-vendored and re-pinned.
   skill that is not on the shelf; dangling cross-skill references are inert
   in the loader and are inventoried as a squatting surface.
 - **`review`** and **`uxreview`** — kept as two separate skills; see below.
+- **`abstract-release`** — the AbstractFramework release-wave procedure (order,
+  per-package mechanics, gates, floor propagation, final report). It is the
+  only shelf skill that ships scripts: a read-only release planner and a
+  registry visibility gate (standard library; HTTPS reads of pypi.org and
+  registry.npmjs.org). Scripts present ⇒ `requires_review` at the gate until
+  an operator enables it.
+- **`coredoc`** — also carries the release checklist: the package's version
+  source, README badges and install snippets, registry and GitHub package
+  metadata, regenerated llms files and docs index, and the backlog/ADR trace.
 
 ### How the reviewer skills compose
 
