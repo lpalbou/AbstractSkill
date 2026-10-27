@@ -23,7 +23,7 @@ without duplicating parsers.
 pip install abstractskill
 ```
 
-The wheel also carries the curated skill registry (14 reviewed skills and
+The wheel also carries the curated skill registry (15 reviewed skills and
 their trust files). Hosts copy it into a directory they own with
 `seed_registry`.
 

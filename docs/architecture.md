@@ -28,7 +28,7 @@ graph TD
         demand[demand.py<br/>derive_demand]
         catalog[catalog.py<br/>load_catalog]
         bundled[bundled.py<br/>bundled_registry_dir / seed_registry]
-        registry[(registry/<br/>14 skills, licenses,<br/>4 yaml files)]
+        registry[(registry/<br/>15 skills, licenses,<br/>4 yaml files)]
     end
 
     parser --> validation

@@ -23,7 +23,7 @@ trust.
 
 - [Trust model](trust.md) — validated skills, the do-not-use advisory registry,
   guidance, and the fail-closed verdict.
-- [Curated skills catalog](skills-catalog.md) — the 14 skills shipped in the
+- [Curated skills catalog](skills-catalog.md) — the 15 skills shipped in the
   package, the reviewed, pinned list of third-party skills worth vendoring,
   the tiers (top/watch/excluded with reasons), and the curated-only install
   path.

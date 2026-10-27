@@ -409,7 +409,7 @@ SHELF_POLICY = {
         ),
     },
     "coredoc": {
-        "expected_tree_hash": "2a6d6f46cfa504f6ca2b178f9d98e193eb0f12a6099bb5a0a0b0adbf3f43a185",
+        "expected_tree_hash": "bb8862237cd4dd234ed6a666e66830a90521ccd65215cdc9769a1e1ddbe5d38c",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -430,8 +430,39 @@ SHELF_POLICY = {
             "(references/agent-skill.md) — relevance decision from repository "
             "evidence, skills/<name>/ layout, verified recipes, docs pointers; "
             "adversarially reviewed (two rounds) and field-trialled on RAGNAROK and AbstractCore (author, A/B consumer and adversary agents, four rounds). "
-            "Fable5-reviewed. Behavioral audit (backlog 0003) pending — upgrades "
-            "to audited then."
+            "Fable5-reviewed. Operator-requested fold 2026-10-27: a release checklist "
+            "(SKILL.md 'Run The Release Checklist') — centralized version source named "
+            "per AbstractFramework package, front-facing README (badges, install "
+            "snippets, what's-new pointer), registry/GitHub package metadata, llms files "
+            "and docs index regenerated, backlog/ADR trace. Behavioral audit (backlog "
+            "0003) pending — upgrades to audited then."
+        ),
+    },
+    "abstract-release": {
+        "expected_tree_hash": "f03e111097d8a8e1b8c39cb1e7c63bb9ad116e909b8b54478929274995c0b41b",
+        "method": "first-party-adoption",
+        "source": "codex-skills (maintainer)",
+        "level": "adopted",
+        # The frontmatter description is agent-neutral; no override needed.
+        "activation_description": None,
+        "notes": (
+            "Maintainer-authored skill (AbstractFramework release waves), rewritten "
+            "2026-10-27 from the release wave of that day: dependency order with "
+            "AbstractNote after the gateway, per-package mechanics (tag push vs "
+            "workflow_dispatch, GitHub publishing-environment policies), gates "
+            "(adversarial review before merge, real-weights / scratch-gateway E2E, "
+            "merge only on all-green, registry visibility, floor propagation with the "
+            "install-profile pin tests), changelog/llms/backlog/ADR duties, pitfalls "
+            "and the wave report. SCRIPTS-BEARING: scripts/abstract_release_plan.py "
+            "(read-only workspace planner: reads manifests, runs git status/ls-files) "
+            "and scripts/pypi_visibility_gate.py (read-only HTTPS GETs to pypi.org, "
+            "registry.npmjs.org and crates.io; the planner too with --registry); stdlib "
+            "only, no writes outside an explicit -o path, so requires_review at the gate "
+            "until the operator enables them. Adversarially reviewed before pinning "
+            "(3 P0 / 6 P1 / 5 P2 folded: committed-but-unpublished detection, "
+            "per-workflow dispatch inputs, AbstractCode/Abstract3D triggers, scratch-gateway "
+            "recipe verified live). "
+            "Behavioral audit (backlog 0003) pending — upgrades to audited then."
         ),
     },
     "architect": {

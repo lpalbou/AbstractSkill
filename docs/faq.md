@@ -56,7 +56,7 @@ least three improvement cycles" method.
 
 ## Which skills ship with the package, and how does a host use them?
 
-The wheel carries the curated registry: 14 skills, the upstream licenses of
+The wheel carries the curated registry: 15 skills, the upstream licenses of
 vendored third-party skills, and four yaml files (`catalog.yaml`,
 `validations.yaml`, `advisories.yaml`, `guidance.yaml`). A host copies it
 into a directory it owns with `seed_registry` and serves that copy; the

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Abstract Release"
+  short_description: "Release AbstractFramework packages in dependency order, with gates."
+  default_prompt: "Use $abstract-release to plan an AbstractFramework release wave from the changed packages upward, run each package through review, end-to-end proof, all-green merge, publish and registry visibility, propagate dependency floors, and end with the wave report."
