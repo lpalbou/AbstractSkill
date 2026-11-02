@@ -439,7 +439,7 @@ SHELF_POLICY = {
         ),
     },
     "abstract-release": {
-        "expected_tree_hash": "f03e111097d8a8e1b8c39cb1e7c63bb9ad116e909b8b54478929274995c0b41b",
+        "expected_tree_hash": "e8c297c3c8a73d54a68fd754f789a54095ee701a8e36049de433342425e741a5",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -462,7 +462,41 @@ SHELF_POLICY = {
             "(3 P0 / 6 P1 / 5 P2 folded: committed-but-unpublished detection, "
             "per-workflow dispatch inputs, AbstractCode/Abstract3D triggers, scratch-gateway "
             "recipe verified live). "
+            "Re-reviewed and re-pinned 2026-11-02 from the maintainer copy: abstractavatar "
+            "(crate first, then the Python package) in the order, AbstractAssistant's four "
+            "lanes (PyPI, web, iPhone, watch; Apple lanes through the app-store environment), "
+            "a gated step 9 handing the website to abstractframework-website (never pushes "
+            "gh-pages), the operator's release-execution and repo-sync rules, the final "
+            "local-build gate and 'show me your work' report, changelog fragments; NEW "
+            "references/readiness-audit.md (read-only audit evidence contract); "
+            "package-inventory rows for AbstractAvatar and the Assistant lanes. PLANNER "
+            "PATCHED: a crate and a Python package sharing a name (abstractavatar) no longer "
+            "abort with 'duplicate package' — the crate keys as <name>-crate, a crate "
+            "dependent's edge resolves to it, CRATE_RELEASE_VERSIONS pins map to it (verified "
+            "on the live workspace: 36 packages, abstractavatar-crate ordered before "
+            "abstracttui; the previous planner aborts). Still read-only, stdlib only. "
             "Behavioral audit (backlog 0003) pending — upgrades to audited then."
+        ),
+    },
+    "abstractframework-website": {
+        "expected_tree_hash": "b91fe3fb6d167fee6f535c5d9004669233b978c822b6ccd8054b2382eae5d0d5",
+        "method": "first-party",
+        "source": "first-party",
+        "level": "first_party",
+        # First-party: the frontmatter description IS the activation text.
+        "activation_description": None,
+        "notes": (
+            "First-party skill (2026-11-02): update the abstractframework.ai site (the "
+            "gh-pages branch of lpalbou/AbstractFramework) after a release wave — inventory "
+            "what is published, diff the site against reality, a claims ledger before any "
+            "copy change, apply on a site-<root version> branch, check, adversarial pass, "
+            "serve locally and hand the operator a preview URL. GATED: the skill never "
+            "pushes, force-pushes, rebases or merges gh-pages; the operator validates the "
+            "preview and publishes. SCRIPTS-BEARING (two read-only stdlib helpers under "
+            "references/): preview_server.py (static server with HTTP Range support, binds "
+            "127.0.0.1 by default, no writes) and check_site.py (static link/asset/title/"
+            "marker/version-floor checker, no writes, no network), so requires_review at the "
+            "gate until the operator enables them. Paths name the maintainer's workspace."
         ),
     },
     "architect": {

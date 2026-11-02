@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.3.4] - 2026-11-02
+
+### Added
+
+- The bundled registry ships the first-party `abstractframework-website`
+  skill: update the abstractframework.ai website after a release wave so it
+  describes the published framework (versions, install commands, apps,
+  capabilities, screenshots and llms mirrors), verify every claim against
+  code and registries, serve the result locally and hand the operator a
+  preview URL. The skill never pushes the `gh-pages` branch; the operator
+  validates the preview and publishes. It ships two read-only helpers (a
+  local preview server with HTTP Range support and a static site checker),
+  so the trust gate marks it `requires_review` until an operator enables it.
+
+### Changed
+
+- The bundled `abstract-release` skill covers AbstractAvatar (its crate
+  releases before the Python package and before AbstractTUI), the four
+  AbstractAssistant lanes (PyPI, web, iPhone and watch), read-only release
+  readiness audits (new `references/readiness-audit.md`), the release
+  execution and repository sync rules, the final local build gate, the
+  "show me your work" report, and a last, gated website step handled by
+  `abstractframework-website`.
+- The `abstract-release` planner handles a crate and a Python package that
+  share a name: the crate is keyed `<name>-crate`, a crate dependent's
+  requirement resolves to it, and `CRATE_RELEASE_VERSIONS` pins map to it.
+  The planner previously stopped with a duplicate-package error on such a
+  workspace.
+- The bundled registry holds 16 skills; its version moves to `2026.11.02`.
+
 ## [0.3.3] - 2026-10-27
 
 ### Added

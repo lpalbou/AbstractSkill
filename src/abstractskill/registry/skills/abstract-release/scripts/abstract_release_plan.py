@@ -608,7 +608,12 @@ def collect_requirements(
         for group, raw in raw_groups:
             req = parse_requirement(raw, group, known)
             # A crate only depends on crates; a Python/npm name that compacts to a
-            # crate name (or the reverse) is a different package.
+            # crate name (or the reverse) is a different package. A name shared by a
+            # crate and a Python package resolves to the crate for a crate dependent.
+            if req and pkg.ecosystem == "crates" and by_key_ecosystem(packages, req.target) != "crates":
+                alt = known.get(req.target + "-crate")
+                if alt is not None:
+                    req.target = alt
             if req and (pkg.ecosystem == "crates") != (by_key_ecosystem(packages, req.target) == "crates"):
                 continue
             add_internal_requirement(pkg, req)
@@ -623,6 +628,8 @@ def collect_requirements(
         by_key = {p.key: p for p in packages}
         for var in ("NPM_RELEASE_VERSIONS", "CRATE_RELEASE_VERSIONS"):
             for key, version in parse_version_dict(init_path, var).items():
+                if var == "CRATE_RELEASE_VERSIONS" and key + "-crate" in by_key:
+                    key = key + "-crate"
                 if key in by_key:
                     add_internal_requirement(
                         framework, InternalRequirement(key, f"{by_key[key].name}=={version}", var, "==", version)
@@ -778,6 +785,18 @@ def discover(root: Path) -> Tuple[List[Package], List[Dict[str, Any]], str]:
     keys: Dict[str, Package] = {}
     for pkg in packages:
         if pkg.key in keys:
+            # One repository can publish a crate AND a Python package under the same
+            # name (AbstractAvatar: crates.io `abstractavatar` + PyPI `abstractavatar`).
+            # They are different packages on different registries: the crate keys as
+            # `<name>-crate` so requirements and pins can tell them apart.
+            other = keys[pkg.key]
+            crate = pkg if pkg.ecosystem == "crates" else other if other.ecosystem == "crates" else None
+            if crate is not None and {pkg.ecosystem, other.ecosystem} != {"crates"}:
+                keys.pop(crate.key, None)
+                crate.key = crate.key + "-crate"
+                for remaining in (pkg, other):
+                    keys.setdefault(remaining.key, remaining)
+                continue
             raise PlanError(f"duplicate package {pkg.name}: {keys[pkg.key].path} and {pkg.path}")
         keys[pkg.key] = pkg
     collect_git_status(packages)

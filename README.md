@@ -28,12 +28,16 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
+What's new in 0.3.4: the `abstractframework-website` skill joins the shelf and
+`abstract-release` covers AbstractAvatar and the AbstractAssistant lanes; see
+the [changelog](CHANGELOG.md#034---2026-11-02).
+
 ## The bundled skill registry
 
 `pip install abstractskill` installs the reviewed shelf as package data:
 
 ```
-abstractskill/registry/skills/            # 15 curated skills (one folder per SKILL.md)
+abstractskill/registry/skills/            # 16 curated skills (one folder per SKILL.md)
 abstractskill/registry/licenses/          # upstream licenses of catalog-vendored skills
 abstractskill/registry/validations.yaml   # trust records: byte pins per skill tree
 abstractskill/registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)

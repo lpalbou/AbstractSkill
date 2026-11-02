@@ -38,8 +38,8 @@ LICENSES = (
 # The bundle version must move whenever the bundled content moves. When this
 # test fails: bump `version:` in src/abstractskill/registry/catalog.yaml, then
 # update BOTH values below (the digest printed in the failure message).
-PINNED_VERSION = "2026.10.27"
-PINNED_DIGEST = "8e1930494cc8ab8e7ac28c4ccf2b96e6714f72a84f3b71d09b78ce2b2392bb8c"
+PINNED_VERSION = "2026.11.02"
+PINNED_DIGEST = "1486aef6fd33341f74a7d2310a45a3c4c930b40de740fa203b1fcd83935fd687"
 
 
 def _bundle_digest(root: Path) -> str:
@@ -70,11 +70,11 @@ def _all_items() -> set[str]:
     return skills | set(TRUST_FILES) | set(LICENSES)
 
 
-def test_bundled_dir_is_the_package_registry_with_15_skills() -> None:
+def test_bundled_dir_is_the_package_registry_with_16_skills() -> None:
     root = bundled_registry_dir()
     assert root == REPO / "src" / "abstractskill" / "registry"
     skills = sorted(p.name for p in (root / "skills").iterdir() if p.is_dir())
-    assert len(skills) == 15
+    assert len(skills) == 16
     assert all((root / "skills" / name / "SKILL.md").is_file() for name in skills)
     for name in TRUST_FILES:
         assert (root / name).is_file()

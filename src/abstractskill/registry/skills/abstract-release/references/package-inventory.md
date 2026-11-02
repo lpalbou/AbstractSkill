@@ -4,7 +4,7 @@ What exists, in which order it releases, and how each package releases. The work
 `scripts/lib/packages.txt` is the machine-readable inventory (`./scripts/deps.sh` prints the tiers,
 `./scripts/deps.sh check` verifies them against the real manifests, `./scripts/deps.sh rdeps <id>`
 lists what must follow a bump). This page adds the release mechanics. Facts were read from the
-repositories and their GitHub settings on 2026-10-27; re-check a row before relying on it for an
+repositories and their GitHub settings on 2026-10-27 (AbstractAvatar and AbstractAssistant lanes: 2026-11-02); re-check a row before relying on it for an
 irreversible step.
 
 ## Tiers
@@ -14,8 +14,8 @@ depends on is published and visible.
 
 | Tier | Python (PyPI) | npm | Rust (crates.io) |
 |---|---|---|---|
-| 0 | abstractskill, abstractsemantics, AbstractMemory, abstractvision, abstractvoice, abstractmusic, abstractcamera | ui-kit, app-server, monitor-flow, monitor-gpu, monitor-memory, monitor-active-memory | abstracttui |
-| 1 | abstract3d (needs abstractvision) | panel-chat (peer of ui-kit) | abstracttui-graph, abstractcore-console, abstractcode (CLI) |
+| 0 | abstractskill, abstractsemantics, AbstractMemory, abstractvision, abstractvoice, abstractmusic, abstractcamera, abstractavatar (Python) | ui-kit, app-server, monitor-flow, monitor-gpu, monitor-memory, monitor-active-memory | abstractavatar (crate) |
+| 1 | abstract3d (needs abstractvision) | panel-chat (peer of ui-kit) | abstracttui (its `avatar` feature needs the abstractavatar crate), abstracttui-graph, abstractcore-console, abstractcode (CLI) |
 | 2 | abstractcore (needs voice, vision, music, 3d) | flow, observer, continuum, entity, code (web), note (web) | abstracttui-mermaid, abstractgateway-console |
 | 3 | AbstractRuntime (needs core, memory, semantics) | | |
 | 4 | abstractagent, abstractassistant | | |
@@ -35,6 +35,13 @@ Roles worth knowing when you order a wave:
   its `gateway` extra) plus a web app (`@abstractframework/note`). The gateway imports
   `abstractnote` lazily as an optional seam, so it is not a gateway dependency; AbstractNote
   releases after the gateway it needs.
+- **AbstractAvatar** is one repository with two packages that must stay at one version: the
+  crate (procedural avatars, the Wasm artifact) and the Python package over it. The crate releases
+  first (AbstractTUI's `avatar` feature, hence every console crate, resolves it from crates.io);
+  the Python package follows through its `release.yml`.
+- **AbstractAssistant** is one repository with four lanes: the Python package (PyPI), the web app
+  (`web/`, served by the gateway), the iPhone app and the watch app (App Store Connect through the
+  `app-store` environment, operator approval). Only the Python package is a registry release.
 - **abstractframework** (root) pins exact versions of the released matrix and releases last.
 
 Not released with the framework: the local test projects `abstractaudio`, `abstractsound`,
@@ -67,6 +74,7 @@ release needs a tag rule there.
 | Package | Repo | Version source | Trigger | `pypi` env policy | llms generator | Notes |
 |---|---|---|---|---|---|---|
 | abstractvoice | lpalbou/AbstractVoice | `abstractvoice/_version.py` (single source; pyproject reads it) | tag | main, tag `v*.*.*` | none (edit by hand) | PR CI: tests 3.9-3.12, Qwen3-TTS/ASR transformers floor and latest, build, docs (10 checks). release.yml publishes to PyPI with trusted publishing, creates the GitHub release, deploys docs. |
+| abstractavatar (Python) | lpalbou/AbstractAvatar | `pyproject.toml` (= `Cargo.toml` version) | tag `v*` or dispatch `-f version=X.Y.Z -f publish_confirmation=…` (read `release.yml`: created 2026-11-02) | `pypi` env, trusted publisher registered by the operator 2026-11-02 (project `abstractavatar`, workflow `release.yml`, environment `pypi`) | `scripts/docs.py` | Builds the native wheel matrix + sdist; the crate is NOT published by this workflow. |
 | abstractvision | lpalbou/AbstractVision | `src/abstractvision/__init__.py` | tag | no restriction | `scripts/generate_llms_full.py` | |
 | abstractmusic | lpalbou/AbstractMusic | `src/abstractmusic/_version.py` | tag or dispatch (`-f publish=true -f publish_confirmation=publish-abstractmusic-X.Y.Z`) | main, tag `v*.*.*` | none | |
 | abstractcamera | lpalbou/AbstractCamera | `src/abstractcamera/__init__.py` | tag | main, tag `v*` | `scripts/generate_llms_full.py` | Ships a package agent skill (`skills/camera-piloting/`). |
@@ -98,6 +106,7 @@ release needs a tag rule there.
 
 | Crate | Repo / path | Trigger | `crates-io` env policy |
 |---|---|---|---|
+| abstractavatar | lpalbou/AbstractAvatar, `.` | local `cargo publish` from the tagged commit (no crates.io workflow; `~/.cargo/credentials.toml` on the operator's machine); tag `v*` | none | First published 0.1.0 on 2026-11-02; the `avatar` feature of abstracttui resolves it from crates.io, never from a path. |
 | abstracttui | lpalbou/AbstractTUI | tag `v*`, or dispatch `-f publish=true` (without it the run only verifies) | no restriction |
 | abstracttui-graph, abstracttui-mermaid | lpalbou/AbstractTUI, `extensions/graph`, `extensions/mermaid` | with abstracttui: the `publish-family` job publishes graph, then mermaid (mermaid depends on graph) | no restriction |
 | abstractcore-console | lpalbou/AbstractCore, `console-tui/` | with AbstractCore | no restriction |

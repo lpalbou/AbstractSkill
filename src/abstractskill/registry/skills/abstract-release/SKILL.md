@@ -5,8 +5,8 @@ description: Plan and run an AbstractFramework release wave across its packages 
 
 # Abstract Release
 
-AbstractFramework is 34 packages in 22 repositories on 2026-10-27 (Python on PyPI, npm packages
-and apps, Rust crates on crates.io; `./scripts/deps.sh` in the workspace lists them). A release
+AbstractFramework contains Python packages on PyPI, npm packages and apps, and Rust crates on
+crates.io; `./scripts/deps.sh` lists the current workspace inventory. A release
 wave publishes the changed ones from the bottom of the dependency graph upward, so every package
 a parent depends on is already published, green, and visible on its registry before the parent
 raises its floor and publishes.
@@ -15,6 +15,38 @@ This skill orchestrates the wave. Inside each package, use the `release` skill (
 tag, publish), `coredoc` (README, docs, llms files, version source), `backlog` (the work item and
 its evidence) and `adr` (durable rules). This skill adds what only shows up across packages: the
 order, the gates between packages, floor propagation, and the root profile.
+
+## Read-only readiness audits
+
+When asked whether to release, produce evidence and a recommendation without executing a release.
+The checkout synchronization, checkpoint commits, branch integration and final build rules below
+apply when release execution is authorized; an audit does not authorize pulling, merging, staging
+operator edits, dispatching workflows, rerunning CI, or publishing. Read remote refs and CI through
+read-only GitHub APIs when needed and label cached tracking refs explicitly.
+
+Read `references/readiness-audit.md` for the audit evidence contract, registry-only build checks,
+missing-package discovery and the distinction between a release blocker and later roadmap work.
+
+## Non-negotiable rules (operator, 2026-10-28; release execution)
+
+1. **A release ships EVERY pending change of the work in scope.** Before cutting any package: every
+   pending change ON `main` (local unpushed commits, uncommitted edits: an operator's edit is committed
+   as `checkpoint` after a secret scan, never left aside) and every branch THE AGENTS CREATED to complete
+   a task is merged into an up-to-date `main`, tested and released. NOT every branch: the operator's own
+   branches (e.g. a private memory-block branch in AbstractCore) are theirs, are never merged, pushed or
+   touched unless the operator says so; when in doubt about a branch's owner, ask. "Held because the operator has edits" or "held because local main has
+   unpushed commits" is forbidden: fix the build, merge with origin, release. The only reasons to stop
+   are secrets in the tree or a failing test that cannot be fixed without a decision: then ask, with
+   the exact file and failure, and keep every other package moving.
+2. **Always pull before starting any work**, in every repository, every time: `git -C <repo> fetch
+   origin && git -C <repo> pull --ff-only origin main` before cutting a branch or a worktree; cut
+   worktrees from `origin/main`. Pull the local `main` again right after every merge on GitHub.
+3. **A release means every pending change has been merged into an up-to-date `main`.** The wave ends
+   only when `./scripts/status.sh` shows every repository on `main`, clean, 0 ahead, 0 behind, and
+   `./scripts/build.sh` passes from those checkouts. A checkout left on a feature branch, a merged PR
+   not pulled, or a repo "N ahead" is a release defect, reported as such, not as a note.
+4. A worker that cannot run `git merge` or `git rebase` or `git switch` asks the coordinator to do it
+   immediately; it never leaves the branch unmerged and moves on.
 
 ## Before you start
 
@@ -31,6 +63,8 @@ python3 "$SKILL_DIR/scripts/abstract_release_plan.py" "$AF_ROOT" --registry
 python3 "$SKILL_DIR/scripts/abstract_release_plan.py" "$AF_ROOT" --registry --json -o "$AF_ROOT/untracked/release-plan.json"
 ```
 
+  Two packages may share a registry name across registries (AbstractAvatar's crate and Python
+  package): the planner keys the crate as `<name>-crate`; a crate dependent's edge resolves to it.
   Without a path, the planner finds the workspace by walking up from the current directory
   (or reads `ABSTRACTFRAMEWORK_ROOT`). A package is in the wave when it has uncommitted changes,
   commits since its last release tag, a version with no tag, or (with `--registry`) a version not
@@ -47,8 +81,11 @@ python3 "$SKILL_DIR/scripts/abstract_release_plan.py" "$AF_ROOT" --registry --js
 Release by published dependency floors, not by what happens to pass locally:
 
 1. Independent lower packages: `abstractvoice`, `abstractvision`, `abstractmusic` (and the other
-   tier-0 media plugins), `abstractskill`, and the AbstractUIC npm packages (`ui-kit`,
-   `app-server`, `monitor-*`, `panel-chat`).
+   tier-0 media plugins), `abstractskill`, `abstractavatar` (one repository, TWO packages: the
+   crate `abstractavatar` on crates.io and the Python package `abstractavatar` on PyPI; the crate
+   first: `abstracttui`'s `avatar` feature depends on it, and `abstractcore-console`,
+   `abstractgateway-console` and `abstractcode` depend on `abstracttui` with that feature), and
+   the AbstractUIC npm packages (`ui-kit`, `app-server`, `monitor-*`, `panel-chat`).
 2. `abstractsemantics` and `abstractmemory` (AbstractMemory owns the memory graph).
 3. `abstractcore`.
 4. `abstractruntime`.
@@ -56,8 +93,20 @@ Release by published dependency floors, not by what happens to pass locally:
 6. `abstractgateway`.
 7. Apps on the gateway: `abstractassistant`, `abstractcode`, `abstractobserver`, `abstractentity`,
    `abstractflow`, `abstractcontinuum`, `abstractnote` (Python on the gateway and AbstractMemory,
-   plus its web app).
-8. Root `abstractframework`: pins, `RELEASE_VERSIONS`, install manifest, installers, install docs.
+   plus its web app). AbstractAssistant is one repository with FOUR lanes: the Python package
+   (PyPI, the desktop palette and the gateway seam), the web app (`web/`, `@abstractframework/assistant`,
+   served by the gateway; not on npm yet), the iPhone app (`phone/iphone`, App Store / TestFlight
+   through `scripts/release.py` and `scripts/upload-candidate.sh`, `iphone.yml`) and the watch app
+   (`watch/apple`, `watch.yml`, `scripts/testflight.sh`). The registry wave releases the Python
+   package; the Apple lanes release through App Store Connect with the operator's approval
+   (`app-store` environment) and are reported as their own rows, never folded into the PyPI row.
+8. Root `abstractframework`: pins, `RELEASE_VERSIONS`, `NPM_RELEASE_VERSIONS`,
+   `CRATE_RELEASE_VERSIONS` (includes `abstractavatar` and `abstracttui`), install manifest,
+   installers, install docs.
+9. The website, last and gated: once the root profile is on PyPI, run the `abstractframework-website`
+   skill — it updates the site branch locally (versions, install commands, new apps and
+   capabilities, refreshed screenshots and llms mirrors), serves it locally and hands the operator
+   the preview URL. The operator validates and pushes `gh-pages`; a wave never pushes the site.
 
 The planner refines this from the real manifests: it skips packages with nothing to release and
 adds every package downstream of a changed package for a floor review. `scripts/lib/packages.txt`
@@ -207,3 +256,91 @@ to release):
 - `references/package-inventory.md`: the tiers, and per package its version source, release
   trigger, registry environment, llms generator, and package-specific rules.
 - `references/package-discovery.md`: how the planner discovers packages and reads its output.
+
+## Keep every checkout in step with GitHub (repo sync rule)
+
+Observed 2026-10-27: several local `main` checkouts were dozens of commits behind their remotes
+(abstractuic 86, the root 10) because PRs were merged on GitHub while nobody pulled the local
+checkout, and new branches were then cut from the stale main. Rules, every time:
+
+1. Before cutting a branch or a worktree: `git -C <repo> fetch origin && git -C <repo> pull --ff-only origin main`
+   on the main checkout (a dirty checkout is left alone and reported; never stash someone else's work).
+2. After merging a PR on GitHub: pull the local main checkout immediately (the merge watcher does it).
+3. Worktrees are cut from `origin/main`, never from the local `main` ref.
+4. A sweep before any release wave: for each repo, `rev-list --count main..origin/main` must be 0;
+   `scripts/status.sh` at the root prints ahead/behind per repo.
+5. A root `main` that diverged (local release commits made elsewhere) is merged, never rebased: the
+   operator's commits keep their hashes; origin's pins and version win in conflicts, local docs and backlog
+   additions are kept, duplicated release sections are dropped.
+
+## Final gate: the local source build of the whole stack
+
+After the root pins are released, run the operator's own developer path before the final report:
+`./scripts/status.sh` (every repo on `main`, 0 behind, no checkout left on a feature branch by a worker)
+and `./scripts/build.sh` (editable Python installs, every npm package built from local packs, every Rust
+crate compiled tier by tier). A failure there is a release defect even when every registry install passes:
+a crate that does not compile from a clean checkout, a pin that does not resolve locally, a checkout left
+behind. Operator-modified files are reported, never built around: say which file fails and whose edit it is.
+
+## Final report: the summary table, then "show me your work"
+
+The per-package summary table (package | released | new capabilities | remaining work) is the right
+visibility level and stays. It is NOT the report. For every track of the wave add a "show me your work"
+section with exactly three parts, written for the operator who was not watching:
+
+- **(a) What was tested:** the suites and counts per package, the end-to-end runs on real weights or a
+  real gateway (what scenario, which model, which data), the mutation checks (which rule was removed and
+  which test went red), the adversarial review rounds and verdicts, the conformance fixtures (how many,
+  real vs synthetic).
+- **(b) What it enables or fixes:** in the operator's words: the user-visible behaviour before and after,
+  and which apps/clients actually consume it today versus which still have to migrate (name each client
+  and its state: migrated / designed-for / untouched). Never present a served capability as integrated
+  when no client reads it.
+- **(c) Proofs:** numbers a human can read: latency and memory before/after, sizes, counts, run ids,
+  PR links, registry versions, and one concrete example (a ledger, a run, a voice) walked end to end.
+
+A track whose clients are not migrated is reported as "foundation released, integration pending" with the
+migration list and an ETA, never folded into "done".
+
+## Think like an architect before closing anything (operator, 2026-10-28)
+
+Before a package is held, a track is called done, or a wave is closed, the coordinator (or its adversarial
+reviewer) answers these questions in writing:
+
+- What happens if I do not release all the pending changes I have been working on? What breaks for the
+  person who installs or builds from source tomorrow?
+- What happens if I do not release this package just yet? Which consumer is left on a stale floor?
+- Did I fully implement AND reuse the functionality I just created in the consumers of that code?
+  (A shared component in abstractuic or a gateway contract exists only when the apps consume it:
+  AbstractCode, AbstractAssistant, AbstractObserver, AbstractContinuum, AbstractFlow, AbstractNote,
+  the consoles.) List each consumer with migrated / pending.
+- Is the result production-grade for a person, not only green for CI?
+
+The goal is always a finished, production-grade solution that benefits from the change; the secondary goal
+is the supervisor's visibility: a roadmap while work is ongoing, and at the end a report that shows the
+work (what is new or fixed, what it enables now or later, why it is good). Keep it a dialogue: ask early
+when a decision is genuinely the operator's, decide and say so when it is not.
+
+## Backlog discipline for work left pending
+
+When a task cannot be carried on now (time, credits, a blocker, a decision), write the backlog item
+immediately, while the understanding is fresh: `proposed` when the need is likely, `planned` when it is
+certain; it carries the analysis, the chosen route, the evidence so far and the open decision.
+When an item is picked up later, start with an adversarial review of the item itself: is its knowledge
+still current, is it still the best route (new research, superseded component, changed contract)?
+
+## Changelog fragments (gateway, core, runtime; since 2026-10-29)
+
+These repos no longer edit `CHANGELOG.md [Unreleased]` per PR. Each PR adds `changelog.d/<pr-or-slug>.md`; CI fails a PR that touches source without a fragment. At release time, before the version bump commit:
+
+```
+python scripts/changelog.py check            # every fragment well-formed
+python scripts/changelog.py preview          # what the section will say
+python scripts/changelog.py assemble X.Y.Z   # writes the [X.Y.Z] section, deletes the fragments
+```
+
+Commit the assembled section with the version bump. Never hand-edit `[Unreleased]` in these repos.
+
+## A conflicting PR gets no CI run
+
+GitHub creates `pull_request` runs from the merge ref; a PR whose `mergeStateStatus` is DIRTY has none, so pushes to it create no run and no error. Before pushing a fix: merge `origin/main` into the branch, then `gh pr view N --json mergeStateStatus` must say CLEAN/BLOCKED, never DIRTY.
