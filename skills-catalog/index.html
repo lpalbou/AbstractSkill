@@ -1015,7 +1015,7 @@ was read for the vendored entries; an adversarial review additionally
 content-read every top entry and its findings are folded below (one entry
 was pulled for a time-of-use fetch; one carries a content caveat).</p>
 <h2 id="all-skills-at-a-glance">All skills at a glance<a class="headerlink" href="#all-skills-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>The vendored shelf (the 15 skills shipped in the package under
+<p>The vendored shelf (the 16 skills shipped in the package under
 <code>abstractskill/registry/skills/</code>) plus the curated catalog (vendorable on
 demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.</p>
@@ -1034,6 +1034,12 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <td>shelf (first_party)</td>
 <td>Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent.</td>
 <td><a href="../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md">src/abstractskill/registry/skills/abstractframework-gateway</a></td>
+</tr>
+<tr>
+<td><code>abstractframework-website</code></td>
+<td>shelf (first_party, scripts → review)</td>
+<td>Update the abstractframework.ai website after a release wave so it describes what is published (versions, install commands, apps, capabilities, screenshots, llms mirrors), verify every claim against code and registries, serve it locally and hand the operator a preview URL. Gated: it never pushes <code>gh-pages</code>; the operator validates the preview and publishes. Ships a local preview server and a static site checker.</td>
+<td><a href="../src/abstractskill/registry/skills/abstractframework-website/SKILL.md">src/abstractskill/registry/skills/abstractframework-website</a></td>
 </tr>
 <tr>
 <td><code>adversarial-iteration</code></td>
@@ -1074,7 +1080,7 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <tr>
 <td><code>abstract-release</code></td>
 <td>shelf (adopted, scripts → review)</td>
-<td>Plan and run an AbstractFramework release wave in dependency order: per-package mechanics, gates (adversarial review, real end-to-end proof, all-green merge, registry visibility, floor propagation), and the wave report. Ships a read-only planner and a registry visibility gate.</td>
+<td>Plan and run an AbstractFramework release wave in dependency order: per-package mechanics (including AbstractAvatar's crate and Python package, and AbstractAssistant's PyPI, web, iPhone and watch lanes), gates (adversarial review, real end-to-end proof, all-green merge, registry visibility, floor propagation), read-only readiness audits, the wave report, and the gated hand-off to <code>abstractframework-website</code>. Ships a read-only planner and a registry visibility gate.</td>
 <td><a href="../src/abstractskill/registry/skills/abstract-release/SKILL.md">src/abstractskill/registry/skills/abstract-release</a></td>
 </tr>
 <tr>
@@ -1337,11 +1343,16 @@ re-vendored and re-pinned.</p>
   in the loader and are inventoried as a squatting surface.</li>
 <li><strong><code>review</code></strong> and <strong><code>uxreview</code></strong> — kept as two separate skills; see below.</li>
 <li><strong><code>abstract-release</code></strong> — the AbstractFramework release-wave procedure (order,
-  per-package mechanics, gates, floor propagation, final report). It is the
-  only shelf skill that ships scripts: a read-only release planner and a
-  registry visibility gate (standard library; HTTPS reads of pypi.org and
-  registry.npmjs.org). Scripts present ⇒ <code>requires_review</code> at the gate until
-  an operator enables it.</li>
+  per-package mechanics, gates, floor propagation, read-only readiness audits,
+  final report), ending with the gated website step that hands over to the
+  first-party <code>abstractframework-website</code> skill. It ships scripts: a read-only
+  release planner (a crate and a Python package that share a name, such as
+  AbstractAvatar's, are planned as two packages) and a registry visibility
+  gate (standard library; HTTPS reads of pypi.org, registry.npmjs.org and
+  crates.io). Scripts present ⇒ <code>requires_review</code> at the gate until an
+  operator enables it. The first-party <code>abstractframework-website</code> skill
+  carries two read-only helpers (a local preview server and a static site
+  checker) and is gated the same way.</li>
 <li><strong><code>coredoc</code></strong> — also carries the release checklist: the package's version
   source, README badges and install snippets, registry and GitHub package
   metadata, regenerated llms files and docs index, and the backlog/ADR trace.</li>
