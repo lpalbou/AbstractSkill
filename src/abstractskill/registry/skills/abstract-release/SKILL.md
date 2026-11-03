@@ -55,8 +55,10 @@ unpublished sibling, pushed two or three times anyway. Seven were red MAINs, all
 tests. The operator got ten failure e-mails overnight. A CI failure is the exception, never the normal path.
 
 1. **The gate runs before ANY push.** Run root `scripts/ci_local.sh <repo>` (`docs/ci-local.md`). It
-   exits 0 only when every runnable job of the repo's PR and push-to-main workflows passes, and it
-   prints the jobs it could not run (Windows, Linux sandbox) instead of passing them silently. Where
+   merges the commit into a freshly fetched `origin/main`, runs every job of the repo's workflows
+   (as the push to main where a workflow has one, so main's full matrix), each in a fresh environment
+   installed from the registries, and exits 0 only when every runnable job passed. Jobs it cannot run
+   here (Windows, Linux sandbox) are printed as SKIPPED and fail the gate unless `--allow-skipped`. Where
    the gate is absent, run the workflows' job commands yourself: every step of every job (build,
    lint, type-check, test, pack, not only the tests), the main-push Python matrix (main often tests
    more versions than a PR), a fresh venv per version, scratch `HOME`, `pytest --basetemp=<scratch>`.
@@ -66,10 +68,13 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
    `pypi_visibility_gate.py` says that version is visible. No PR is opened and nothing is pushed
    until then. A branch whose last run is red is pushed again only with the fix for that failure
    (`gh run list --branch <b> -L 1` first).
-3. **Release branches use `--fresh-venv`.** Siblings come from the registry at the pinned versions,
-   never from editable checkouts. That is what CI installs.
+3. **Release branches are tested as CI installs them.** The gate builds every job's environment
+   fresh from the registries, so siblings come at their published versions, never from editable
+   checkouts, and a branch that needs an unpublished sibling fails it. In the manual fallback, use a
+   fresh venv the same way.
 4. **Release PRs also run the release workflow's own validate / build / sdist / wheel-test steps
-   locally** before the PR, because those jobs run only on the tag, when it is too late.
+   locally** before the PR (`scripts/ci_local.sh <repo> --release-tag vX.Y.Z`), because those jobs
+   run only on the tag, when it is too late.
 5. **A red main is an incident.** Whoever merged fixes or reverts it within the hour and tells the
    operator at once. Re-running until green is not a fix.
 6. **Flaky tests.** No wall-clock assertion runs by default: timing bounds are opt-in (a
@@ -154,8 +159,8 @@ Repeat for each package in the plan's `release_wave`, lowest order first.
    `Unreleased` into one dated `CHANGELOG.md` section for the version. Run `coredoc`'s release
    checklist: version source, README badges and install snippets, package metadata, llms files
    regenerated with the package's generator and committed, backlog/ADR trace.
-3. **Local proof.** Run the pre-push gate (`scripts/ci_local.sh <repo> --fresh-venv`, see "CI is green
-   before it is pushed"). Then the package tests. For anything that touches an engine, run a real-weights
+3. **Local proof.** Run the pre-push gate (`scripts/ci_local.sh <repo> --release-tag vX.Y.Z`, see "CI
+   is green before it is pushed"). Then the package tests. For anything that touches an engine, run a real-weights
    end-to-end check on the machine, not a mock. For gateway routes, go through a scratch gateway
    over HTTP (recipe in `references/release-process.md`). A local failure can be the stale venv,
    not the code: CI installs from the published pins, so decide per failure whether it is a code
@@ -216,7 +221,7 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
 ```
 
 8. **Floor propagation.** Only after the visibility gate passed (a dependent's branch with the new floor
-   stays local until then, and its gate runs with `--fresh-venv`), raise the floor in each direct
+   stays local until then: its gate installs the new floor from the registry), raise the floor in each direct
    dependent the plan lists under
    `dependency_floor_reviews`. Update the tests that pin floors literally in the same change
    (for example AbstractGateway's `tests/test_gateway_install_profiles.py` and
