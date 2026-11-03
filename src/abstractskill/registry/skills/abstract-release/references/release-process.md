@@ -70,9 +70,9 @@ For each package of the wave, lowest first:
 4. **Docs.** Run `coredoc`'s release checklist: version source, README (version and registry
    badges, install snippet, what's-new pointer), package metadata (pyproject `[project]`,
    package.json), llms files regenerated with the package's generator and committed, docs index.
-5. **Tests.** Run the pre-push gate (section 10) with `--fresh-venv`, then the package's suite and the
-   end-to-end proof (section 4). For a release PR, also run the release workflow's own validate,
-   build, sdist and wheel-test steps locally (section 10).
+5. **Tests.** Run the pre-push gate (section 10) with `--release-tag vX.Y.Z`, which also runs the
+   release workflow's validate, build, sdist and wheel-test jobs. Then run the package's suite and the
+   end-to-end proof (section 4).
 6. **Adversarial review.** Before merge, a reviewer that did not write the change reads the diff
    read-only and looks for what breaks: isolation between users or accounts, double work (weights
    loaded twice), overwritten routes, limits that disagree with the docs, missing skip guards for
@@ -108,7 +108,8 @@ For each package of the wave, lowest first:
     from, not only the project page.
 12. **Floors.** Only after step 11 passed: for each dependent in `dependency_floor_reviews`, raise the
     floor (or confirm the old one is still right and say why), update the tests that pin floors,
-    refresh lockfiles, run the dependent's gate with `--fresh-venv`, rerun the planner, continue.
+    refresh lockfiles, run the dependent's gate (it installs the new floor from the registry, so it
+    passes only after step 11 did), rerun the planner, continue.
     A dependent prepared earlier waits as a local branch, unpushed.
 
 Do not publish a higher package until every lower version it needs is visible on its registry and
@@ -242,11 +243,18 @@ The gate does not catch those timing flakes (all 7 red mains): only the flaky-te
 (no wall-clock bound by default, HTTP readiness, fix or quarantine), once the 8 tests are rewritten: the Core
 GC bound (2), the gateway 0966 race family (5) and the Assistant playhead (root backlog 1116).
 
-**The gate.** `scripts/ci_local.sh <repo> [--job <name>] [--fresh-venv] [--allow-skipped]` at the root
-(`docs/ci-local.md`). It exits 0 only when every runnable job of the PR AND push-to-main workflows
-passed. Jobs it cannot run here (Windows, the Linux sandbox, Docker) are printed as skipped, never
-counted green; `--allow-skipped` accepts them knowingly. Use `--fresh-venv` on every release branch
-and every branch that changes a floor: siblings come from the registry, as in CI.
+**The gate.** `scripts/ci_local.sh <repo> [--job <name>] [--allow-skipped] [--release-tag vX.Y.Z] [--no-merge]`
+at the root (`docs/ci-local.md`).
+- It merges the commit into a freshly fetched `origin/main`, as GitHub merges a pull request.
+  `--no-merge` tests the commit itself.
+- It runs every workflow under the strictest event that workflow has (the push to main where there is
+  one, so main's full matrix).
+- Each job runs in a fresh environment whose packages come from the registries, never from the
+  editable sibling checkouts. A branch that needs an unpublished version therefore fails here, as it
+  would in CI.
+- `--release-tag vX.Y.Z` also runs the jobs that pushing the tag would run (build, verify).
+- Exit codes: 0 only when every runnable job passed. 1 for a failure, a commit that does not merge,
+  or a skipped job (Windows, the Linux sandbox) without `--allow-skipped`. 2 for a usage error.
 
 **Where the gate is absent,** run what the workflows run, by hand, from `.github/workflows/*.yml`:
 - every job and every step (`check:lock`, `npm ci`, `build`, `lint`, `test`, `pack --dry-run`; a type

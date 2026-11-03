@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.6] - 2026-11-04
+
+### Fixed
+
+- The bundled `abstract-release` skill names the local CI gate's real options. The gate has no
+  `--fresh-venv` flag: every job always runs in a fresh environment installed from the registries,
+  after the commit is merged into a freshly fetched `origin/main`. Its options are `--job <name>`,
+  `--allow-skipped`, `--release-tag vX.Y.Z` (also runs the release workflow's build and verify jobs)
+  and `--no-merge`, with exit 2 on a usage error. The six places that told a worker to pass
+  `--fresh-venv` now describe this behaviour, and release PRs use `--release-tag`.
+- Registry 2026.11.04: `abstract-release` re-pinned.
+
 ## [0.3.5] - 2026-11-03
 
 ### Changed
