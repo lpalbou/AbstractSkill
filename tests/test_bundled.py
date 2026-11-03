@@ -39,7 +39,7 @@ LICENSES = (
 # test fails: bump `version:` in src/abstractskill/registry/catalog.yaml, then
 # update BOTH values below (the digest printed in the failure message).
 PINNED_VERSION = "2026.11.07"
-PINNED_DIGEST = "d2cee814370de8d98994749d9f5812847d5821c9c6c7f2dcef5f3d8abb3b8406"
+PINNED_DIGEST = "4198cca65a78523319198f8250751ca68d9fa2a45448061bf5110d93911dabb7"
 
 
 def _bundle_digest(root: Path) -> str:

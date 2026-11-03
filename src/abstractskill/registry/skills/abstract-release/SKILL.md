@@ -84,11 +84,15 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
 7. **Test tiers (AbstractFramework ADR 0051).** The PR body states the tier and why; a reviewer may
    raise it.
    - **L, light:** docs, copy, icons, CSS, one dropdown, a catalog or model entry, a changelog, or a
-     pin bump with its pin tests. Run the changed files' tests, lint and type-check, and the
-     package's build: `scripts/ci_local.sh <repo> --tier light`.
+     pin bump with its pin tests. Today this runs by hand:
+     - the tests of the changed files (`pytest <their test files>`, `vitest run <files>`);
+     - lint and type-check;
+     - the package's build job (`scripts/ci_local.sh <repo> --job <build job>`).
+
+     A `--tier` flag for the gate is planned (root backlog 1116) and does not exist yet: never type it.
    - **F, full:** anything in a code path shared across features, concurrency or lifecycle, schemas
-     and contracts, and every release branch. Run the whole PR + main job set: `--tier full`, the
-     default.
+     and contracts, and every release branch. Run the whole PR + main job set:
+     `scripts/ci_local.sh <repo>`.
 
 ## Before you start
 
@@ -279,7 +283,8 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
 8. **Floor propagation, only where needed (AbstractFramework ADR 0051).** Re-release a dependent only
    when it needs the lower package's new API or behaviour, or when its install profile would
    otherwise be inconsistent. A compatible floor (`>=`) is left as is, and bumped at the dependent's
-   next natural release. Say which applies, per dependent, in the plan. Only after the visibility
+   next natural release. The wave lead decides and records which applies, per dependent, in the
+   plan; the operator may override. Only after the visibility
    gate passed (a dependent's branch with the new floor
    stays local until then: its gate installs the new floor from the registry), raise the floor in each direct
    dependent the plan lists under

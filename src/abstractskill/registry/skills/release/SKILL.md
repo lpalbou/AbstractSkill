@@ -98,7 +98,8 @@ timing tests. A CI failure must be the exception, never the normal path (Abstrac
     build. Not the full matrix.
   - **Full:** anything in a code path shared across features, concurrency or lifecycle, schemas and
     contracts, and every release branch. Run the whole PR + main job set. In AbstractFramework:
-    `scripts/ci_local.sh <repo> --tier light|full` (ADR 0051).
+    `scripts/ci_local.sh <repo>`; light runs by hand for now (a `--tier` flag is planned, root
+    backlog 1116; ADR 0051).
 
 ## Release Workflow
 

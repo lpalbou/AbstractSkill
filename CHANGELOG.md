@@ -21,13 +21,14 @@
   docs, copy, icons, CSS, a dropdown, a catalog or model entry, a changelog, or a pin bump: run the
   changed files' tests, lint and type-check, and the package's build. Tier F (full) covers shared code
   paths, concurrency or lifecycle, schemas and contracts, and every release branch: run the whole PR +
-  main job set. The PR body states the tier and why, and a reviewer may raise it. The local gate takes
-  `--tier light|full`.
+  main job set. The PR body states the tier and why, and a reviewer may raise it. Light runs by hand
+  until the gate's planned `--tier` flag lands (root backlog 1116).
 
 ### Changed
 
 - `abstract-release`: a dependent is re-released only when it needs the lower package's new API or
-  behaviour, or when its install profile would otherwise be inconsistent. A compatible `>=` floor is
+  behaviour, or when its install profile would otherwise be inconsistent (the wave lead decides and
+  records it; the operator may override). A compatible `>=` floor is
   left as is until the dependent's next natural release, and the plan says so per dependent.
 - `abstract-release`: the root `abstractframework` is never published by a wave. The wave ends with a
   candidate for the operator: every package below the root published and visible, the whole stack
