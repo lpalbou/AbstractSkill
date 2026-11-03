@@ -23,6 +23,12 @@ environment) live in `package-inventory.md`.
    progress (leave alone, never stage), generated noise. Ask when unsure.
 5. Decide the target version per package (patch for fixes, minor for new capabilities). Check the
    target is not already published (`pip index versions <name>`, `npm view <name> versions`).
+6. **Scope sweep (mandatory before the first lower-package cut).** Run the planner with `--backlog`.
+   Read every planned item it lists for each package of the wave, the items touching packages
+   outside the wave, and the operator's open asks. Decide on the record, per base package, which are
+   in, so each base package is cut once. A feature that arrives after its base package was cut is
+   put to the operator as an hours trade-off (hold dependents and re-cut once, or defer), never
+   chosen silently. See `SKILL.md`, "Scope sweep", for the worked example (1115 after Core 2.33.0).
 
 Release by published dependency floors, not by local workspace availability. A package that passes
 its tests against an editable sibling can still fail in CI, which installs the published floor.

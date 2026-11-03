@@ -28,10 +28,9 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.7: a shareable `release` skill joins the shelf (one
-repository's release, with CI green before anything is pushed), and
-`abstractframework-website` leaves it; see the
-[changelog](CHANGELOG.md#037---2026-11-05).
+What's new in 0.3.8: `abstract-release` sweeps the planned backlog before a
+wave's first cut, so each base package is cut once (`--backlog` on the
+planner); see the [changelog](CHANGELOG.md#038---2026-11-06).
 
 ## The bundled skill registry
 

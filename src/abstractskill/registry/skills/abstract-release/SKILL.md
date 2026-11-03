@@ -148,6 +148,39 @@ adds every package downstream of a changed package for a floor review. `scripts/
 in the workspace is the inventory the workspace scripts use; the planner reports any package it
 finds on disk that the inventory is missing.
 
+## Scope sweep: each base package is cut once per wave (operator, 2026-11-04)
+
+A release per package costs hours (PR, review, CI, publish, registry visibility, then every dependent's
+floor). Work that touches a base package (AbstractCore, AbstractRuntime, AbstractGateway, the media
+plugins, AbstractMemory, AbstractUIC) is therefore grouped and shipped in one cut, bottom-up. This
+sweep is MANDATORY before the first lower-package cut of a wave:
+
+1. Run `python3 "$SKILL_DIR/scripts/abstract_release_plan.py" "$AF_ROOT" --registry --backlog`. It
+   lists every `planned` backlog item of the root and of each repository in the wave, per package
+   (from each item's `> Package:` line), plus the items that touch packages outside the wave and the
+   root items with no package line. Pull the root and every checkout first: a stale checkout hides
+   items.
+2. Add the operator's open asks (the session's control file, open PRs, the asks not yet in a backlog
+   item).
+3. For each base package, decide ON THE RECORD which items are in this wave and which wait. Write
+   the decision in the wave's plan with a reason for each (ready, sized, needed by a dependent;
+   or not ready, deferred to wave N+1).
+4. Group: every item in scope for a base package lands before that package is cut, so the package is
+   cut once. Its dependents are cut after it, once.
+5. **A feature that arrives mid-wave and touches a base package already cut:** never decide
+   silently. Present the trade-off to the operator in hours:
+   - (a) hold its dependents and re-cut the base package once more now;
+   - (b) defer the feature to the next wave.
+
+   Name the packages each option re-cuts.
+
+Worked example (this wave): AbstractCore 2.33.0 was cut on 2026-11-03. Root backlog 1115 (idle unload
+of loaded models, `> Package: AbstractCore (mechanism), AbstractRuntime (relay), AbstractGateway`)
+was planned for the same layers but scheduled as a second wave. That second wave costs AbstractCore
+2.34 → AbstractRuntime 0.18 → AbstractGateway 0.21 → their floors and the root pins: about a whole
+wave again. Read in the sweep, 1115 was a scope decision BEFORE the Core cut. It would either be in
+(Core cut once with it) or deferred on the record. Instead, its cost was discovered after the cut.
+
 ## The per-package loop
 
 Repeat for each package in the plan's `release_wave`, lowest order first.
@@ -280,10 +313,12 @@ to release):
 
 ## Scripts
 
-- `scripts/abstract_release_plan.py [ROOT] [--registry] [--json] [-o FILE]`: read-only
+- `scripts/abstract_release_plan.py [ROOT] [--registry] [--backlog] [--json] [-o FILE]`: read-only
   inventory, dependency order, release signals per package, release wave, floor reviews, root pin
   drift (pyproject pins and `RELEASE_VERSIONS` / `NPM_RELEASE_VERSIONS` / `CRATE_RELEASE_VERSIONS`),
-  changes outside any package, and packages missing from `scripts/lib/packages.txt`. Needs
+  changes outside any package, and packages missing from `scripts/lib/packages.txt`. `--backlog`
+  adds the scope sweep: planned backlog items per package of the wave (`> Package:` lines), the
+  ones touching packages outside it, and root items with no package line. Needs
   Python 3.11+ (or `tomli` installed).
 - `scripts/pypi_visibility_gate.py SPEC... [--from-plan FILE] [--wait SECONDS]`: checks that each
   `name==version` (PyPI), `npm:@scope/name==version` or `crates:name==version` is installable from

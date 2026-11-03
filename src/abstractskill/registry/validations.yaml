@@ -8,7 +8,7 @@
 validations:
 - name: abstract-release
   source: codex-skills (maintainer)
-  tree_hash: afed61a89b20416d48d22c6615b57df5b632cd30bb131dfe7863d54e4495afd8
+  tree_hash: f6863096cf82469496292aa2c8954cfe241b5b3e8e5b06a5a6d661ace39d20bd
   level: adopted
   method: first-party-adoption
   audience: host
@@ -17,7 +17,7 @@ validations:
   evidence:
     parser_roundtrip: true
     has_scripts: true
-    files: 8
+    files: 9
   notes: "Maintainer-authored skill (AbstractFramework release waves), rewritten 2026-10-27\
     \ from the release wave of that day: dependency order with AbstractNote after\
     \ the gateway, per-package mechanics (tag push vs workflow_dispatch, GitHub publishing-environment\
