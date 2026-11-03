@@ -14,10 +14,18 @@ PLANNER = REPO / "src" / "abstractskill" / "registry" / "skills" / "abstract-rel
 
 @pytest.fixture(scope="module")
 def plan():
-    spec = importlib.util.spec_from_file_location("abstract_release_plan_under_test", PLANNER)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
+    # No bytecode next to the planner: a __pycache__ inside the shelf skill would change its
+    # pinned tree hash (test_shelf / test_bundled check those bytes).
+    previous = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
+    try:
+        spec = importlib.util.spec_from_file_location("abstract_release_plan_under_test", PLANNER)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
+        spec.loader.exec_module(module)
+    finally:
+        sys.dont_write_bytecode = previous
+    assert not (PLANNER.parent / "__pycache__").exists()
     return module
 
 
