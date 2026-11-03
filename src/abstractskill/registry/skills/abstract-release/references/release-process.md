@@ -177,9 +177,14 @@ kill "$GW_PID"
 ## 6. Root `abstractframework` and partial releases
 
 The root is for people installing the framework, so the wave never publishes it (AbstractFramework
-ADR 0051). The wave ends with a **candidate matrix**: exact versions, all visible on their
-registries. Deploy it locally in full for the operator. The operator tests it and says GO. Only then
-is the root released, pinning EXACTLY the tested versions. Root pins are `==`, never floors: the
+ADR 0051). The wave ends with a **candidate** for the operator, in four parts:
+1. every package below the root published and visible, with its exact version;
+2. the whole stack redeployed on the operator's machine at those versions;
+3. the website rebuilt locally and served (never pushed);
+4. a written report of every change in that global release.
+
+The operator tests it personally, and only the operator declares it a release. After that GO the root
+is released, pinning EXACTLY the tested versions. Root pins are `==`, never floors: the
 one-command installer always resolves the last published root, and that root keeps installing its
 own matrix whatever newer lower packages appear (0.12.0 pins gateway 0.19.0 and core 2.32.0).
 

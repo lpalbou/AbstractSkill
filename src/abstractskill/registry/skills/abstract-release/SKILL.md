@@ -142,17 +142,24 @@ Release by published dependency floors, not by what happens to pass locally:
    (`watch/apple`, `watch.yml`, `scripts/testflight.sh`). The registry wave releases the Python
    package; the Apple lanes release through App Store Connect with the operator's approval
    (`app-store` environment) and are reported as their own rows, never folded into the PyPI row.
-8. **Candidate matrix, then the operator (AbstractFramework ADR 0051).** The wave ends with a
-   candidate matrix: the exact version of every package, all visible on their registries. Deploy it
-   locally in full for the operator. The root `abstractframework` is NEVER published by the wave.
-   The operator tests and says GO; only then is the root released.
+8. **The candidate, then the operator (AbstractFramework ADR 0051).** The wave ends with a
+   CANDIDATE for the operator, never with a root release. The candidate has four parts:
+   1. every package below the root published and visible on its registry, with its exact version;
+   2. the whole stack redeployed on the operator's machine at those versions;
+   3. the website rebuilt LOCALLY with the `abstractframework-website` skill and served for the
+      operator to test (never pushed);
+   4. a written report of every change in that global release.
+
+   The operator tests it personally. Only the operator declares it a release (operator, 2026-11-04:
+   "your job is to get us there, to make sure everything below works and redeploy what you think is prepared for release locally, so i can fully test it PERSONALLY, and only *I* can declare if this is something to release or not. this include the redeployment of the GH pages site LOCALLY, so i can test it and a report of the changes for that global release."). After that GO, and only then, the root is released.
    - The root pins EXACTLY the tested versions: pins, `RELEASE_VERSIONS`, `NPM_RELEASE_VERSIONS`,
      `CRATE_RELEASE_VERSIONS` (includes `abstractavatar` and `abstracttui`), install manifest,
      installers, install docs.
    - Root pins are `==`, never floors, so the one-command installer always resolves the last
      published root's matrix. Today 0.12.0 pins gateway 0.19.0 and core 2.32.0 exactly, and it still
      installs them while newer lower packages are published.
-9. The website, last and gated: once the operator-validated root profile is on PyPI, run the `abstractframework-website`
+9. The website: rebuilt locally as part of the candidate (step 8). After the operator's GO and the
+   root release, the operator alone pushes `gh-pages`. The `abstractframework-website`
    skill (a workspace skill, not on the shelf: `untracked/skills/abstractframework-website/` at the
    workspace root) — it updates the site branch locally (versions, install commands, new apps and
    capabilities, refreshed screenshots and llms mirrors), serves it locally and hands the operator

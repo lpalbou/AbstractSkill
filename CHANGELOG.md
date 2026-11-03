@@ -30,8 +30,10 @@
   behaviour, or when its install profile would otherwise be inconsistent. A compatible `>=` floor is
   left as is until the dependent's next natural release, and the plan says so per dependent.
 - `abstract-release`: the root `abstractframework` is never published by a wave. The wave ends with a
-  candidate matrix (exact versions, all on their registries) deployed locally for the operator. After
-  the operator's GO, the root pins exactly the tested versions. Root pins are `==`, never floors, so
+  candidate for the operator: every package below the root published and visible, the whole stack
+  redeployed on the operator's machine, the website rebuilt and served locally (never pushed), and a
+  written report of every change. The operator tests it personally and alone declares it a release;
+  the root then pins exactly the tested versions. Root pins are `==`, never floors, so
   the one-command installer always resolves the last published root's matrix.
 - Registry 2026.11.07: `abstract-release` and `release` re-pinned.
 
