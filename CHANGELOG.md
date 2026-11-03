@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.8] - 2026-11-06
+
+### Added
+
+- `abstract-release`: a mandatory scope sweep before the first lower-package cut of a wave. Read
+  every planned backlog item of the root and of each package in the wave, plus the operator's open
+  asks. Decide on the record which ones are in, and group them so each base package is cut once.
+  A base package with no sweep decision on record is a stop condition: the loop refuses its cut.
+  A feature that arrives after its base package was cut goes to the operator as an hours trade-off
+  (hold the dependents and re-cut once, or defer), never chosen silently. The section includes a
+  worked example from the 2026-11-03 wave: idle unload (root backlog 1115) after AbstractCore
+  2.33.0.
+- The planner's `--backlog` option makes the sweep one command. It lists the planned items per
+  package of the wave from each item's `> Package:` line (free text such as "AbstractCore
+  (mechanism), runtime, flow"; an item without that line belongs to its repository's packages), the
+  items touching packages outside the wave, and the root items with no package line.
+
+### Changed
+
+- Registry 2026.11.06: `abstract-release` re-pinned.
+
 ## [0.3.7] - 2026-11-05
 
 ### Added

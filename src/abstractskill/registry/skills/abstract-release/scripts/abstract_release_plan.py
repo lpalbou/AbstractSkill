@@ -20,6 +20,13 @@ Release signals per package: uncommitted changes, commits touching the package
 since its last local release tag, a version with no local tag, and with
 --registry a version missing from PyPI / npm / crates.io.
 
+With --backlog it also lists the PLANNED backlog items (docs/backlog/planned/,
+recursive) of the workspace root and of every repository of the wave, grouped by
+the package each one touches: the `> Package:` line of the item names the
+packages (free text such as "AbstractCore (mechanism), runtime, gateway"); an
+item without that line belongs to the packages of the repository that holds it.
+This is the scope sweep before the first lower-package cut of a wave.
+
 Runs from any working directory. Needs Python 3.11+ (tomllib) or the tomli
 backport on older interpreters.
 """
@@ -952,12 +959,13 @@ def profile_pin_reviews(root: Path, ordered: List[Package]) -> List[Dict[str, An
 
 
 def to_data(
-    root: Path, packages: List[Package], gaps: List[Dict[str, Any]], source: str, registry_checked: bool = False
+    root: Path, packages: List[Package], gaps: List[Dict[str, Any]], source: str, registry_checked: bool = False,
+    with_backlog: bool = False,
 ) -> Dict[str, Any]:
     ordered = topological_order(packages)
     wave, floor_reviews = release_wave(ordered)
     names = {p.key: p.name for p in ordered}
-    return {
+    data = {
         "workspace": str(root.resolve()),
         "inventory": source,
         "registry_checked": registry_checked,
@@ -995,6 +1003,122 @@ def to_data(
         "profile_pin_reviews": profile_pin_reviews(root.resolve(), ordered),
         "inventory_gaps": gaps,
         "changes_outside_packages": changes_outside_packages(ordered),
+    }
+    if with_backlog:
+        data["backlog_sweep"] = backlog_sweep(root, ordered, [item["key"] for item in wave])
+    return data
+
+
+# --------------------------------------------------------------------------
+# Backlog scope sweep (--backlog)
+# --------------------------------------------------------------------------
+_BACKLOG_SKIP = {"readme.md", "overview.md", "template.md", "index.md"}
+_PACKAGE_LINE = re.compile(r"^\s*>?\s*\**package\**\s*:\s*(.+?)\s*$", re.IGNORECASE)
+
+
+def _package_aliases(packages: List[Package]) -> Dict[str, Set[str]]:
+    """Names a `> Package:` line may use for each package key: the key, the registry
+    name, the inventory id, an npm package's last name segment ("flow", "abstractflow"),
+    all compacted, and each without its `abstract` prefix ("runtime")."""
+    aliases: Dict[str, Set[str]] = {}
+    for pkg in packages:
+        names = {pkg.key.lower(), pkg.name.lower(), compact_name(pkg.key), compact_name(pkg.name)}
+        if pkg.inventory_id:
+            names.add(compact_name(pkg.inventory_id))
+        if pkg.name.startswith("@") and "/" in pkg.name:  # @abstractframework/flow -> flow, abstractflow
+            short = compact_name(pkg.name.rsplit("/", 1)[1])
+            names.update({short, "abstract" + short})
+        for name in list(names):
+            if name.startswith("abstract") and len(name) > len("abstract"):
+                names.add(name[len("abstract"):])
+        aliases[pkg.key] = {n for n in names if n}
+    return aliases
+
+
+def packages_named(line: str, packages: List[Package]) -> List[str]:
+    """Package keys named in a backlog item's `> Package:` text (parentheticals ignored)."""
+    text = re.sub(r"\([^)]*\)", " ", line)
+    tokens = [compact_name(tok) for tok in re.split(r"[,;/+&]|\band\b", text)]
+    aliases = _package_aliases(packages)
+    found: List[str] = []
+    for tok in tokens:
+        if not tok:
+            continue
+        for key, names in aliases.items():
+            if tok in names and key not in found:
+                found.append(key)
+    return found
+
+
+def _planned_files(repo: Path) -> List[Path]:
+    planned = repo / "docs" / "backlog" / "planned"
+    if not planned.is_dir():
+        return []
+    return sorted(
+        f for f in planned.rglob("*.md")
+        if f.name.lower() not in _BACKLOG_SKIP and not f.name.startswith(("_", "."))
+    )
+
+
+def _read_item(path: Path) -> Tuple[str, Optional[str]]:
+    title, package_line = path.stem, None
+    try:
+        head = path.read_text(encoding="utf-8", errors="replace").splitlines()[:60]
+    except OSError:
+        return title, None
+    for line in head:
+        if title == path.stem and line.startswith("# "):
+            title = line[2:].strip()
+        match = _PACKAGE_LINE.match(line)
+        if match and package_line is None:
+            package_line = match.group(1)
+    return title, package_line
+
+
+def backlog_sweep(root: Path, packages: List[Package], wave_keys: List[str]) -> Dict[str, Any]:
+    """Planned backlog items of the root repository and of every repository holding a
+    package of the wave, grouped per package (see the module docstring)."""
+    root = root.resolve()
+    by_repo: Dict[Path, List[str]] = defaultdict(list)
+    for pkg in packages:
+        repo = (pkg.git_root or pkg.path).resolve()
+        by_repo[repo].append(pkg.key)
+    repos: List[Path] = [root]
+    for pkg in packages:
+        if pkg.key in wave_keys:
+            repo = (pkg.git_root or pkg.path).resolve()
+            if repo not in repos:
+                repos.append(repo)
+
+    items: List[Dict[str, Any]] = []
+    for repo in repos:
+        for path in _planned_files(repo):
+            title, package_line = _read_item(path)
+            named = packages_named(package_line, packages) if package_line else []
+            if not named and repo != root:
+                named = list(by_repo.get(repo, []))
+            try:
+                rel = str(path.relative_to(root))
+            except ValueError:
+                rel = str(path)
+            items.append({"path": rel, "title": title, "package_line": package_line, "packages": named})
+
+    names = {p.key: p.name for p in packages}
+    per_package = [
+        {"key": key, "package": names.get(key, key),
+         "items": [i for i in items if key in i["packages"]]}
+        for key in wave_keys
+    ]
+    outside = sorted({k for i in items for k in i["packages"] if k not in wave_keys})
+    return {
+        "repositories": [str(r) for r in repos],
+        "item_count": len(items),
+        "per_package": per_package,
+        "outside_wave": [
+            {"key": key, "package": names.get(key, key), "items": [i for i in items if key in i["packages"]]}
+            for key in outside
+        ],
+        "unassigned": [i for i in items if not i["packages"]],
     }
 
 
@@ -1076,6 +1200,28 @@ def render_markdown(data: Dict[str, Any]) -> str:
         for gap in gaps:
             lines.append(f"- {gap['kind']}: {md_escape(gap['detail'])}")
 
+    sweep = data.get("backlog_sweep")
+    if sweep is not None:
+        lines += ["", "## Backlog Scope Sweep (planned items)", ""]
+        lines.append(f"{sweep['item_count']} planned item(s) in {len(sweep['repositories'])} repositories. Decide on "
+                     "the record which are in this wave, so each base package is cut once.")
+
+        def _items(rows: List[Dict[str, Any]]) -> None:
+            for i in rows:
+                lines.append(f"  - `{md_escape(i['path'])}`: {md_escape(i['title'])}")
+
+        for group in sweep["per_package"]:
+            lines.append(f"- **{md_escape(group['package'])}**: {len(group['items'])} planned")
+            _items(group["items"])
+        if sweep["outside_wave"]:
+            lines += ["", "Planned items that touch packages outside the current wave:"]
+            for group in sweep["outside_wave"]:
+                lines.append(f"- **{md_escape(group['package'])}**: {len(group['items'])} planned")
+                _items(group["items"])
+        if sweep["unassigned"]:
+            lines += ["", "Root items with no `> Package:` line (assign them by hand):"]
+            _items(sweep["unassigned"])
+
     lines += ["", "## Ordered Package Inventory", ""]
     lines += ["| Order | Package | Version | Kind | Dirty | Internal Dependencies |", "|---:|---|---|---|---|---|"]
     for item in data["ordered_packages"]:
@@ -1096,6 +1242,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     )
     parser.add_argument("--registry", action="store_true",
                         help="Also check each local version on PyPI / npm / crates.io (network, read-only)")
+    parser.add_argument("--backlog", action="store_true",
+                        help="Also list the planned backlog items of the root and of each repository in the wave, "
+                             "per package (the scope sweep before the first cut)")
     parser.add_argument("--json", action="store_true", help="Emit JSON instead of Markdown")
     parser.add_argument("--output", "-o", help="Write output to a file instead of stdout")
     args = parser.parse_args(argv)
@@ -1110,7 +1259,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 2
     if args.registry:
         collect_registry_signals(packages)
-    data = to_data(root, packages, gaps, source, registry_checked=args.registry)
+    data = to_data(root, packages, gaps, source, registry_checked=args.registry, with_backlog=args.backlog)
     text = json.dumps(data, indent=2, sort_keys=True) + "\n" if args.json else render_markdown(data)
     if args.output:
         Path(args.output).expanduser().write_text(text, encoding="utf-8")
