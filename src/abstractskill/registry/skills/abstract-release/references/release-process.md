@@ -237,7 +237,10 @@ Stop the wave and report the blocker when:
 
 Why: on 2026-11-03, 22 runs failed in 24 hours. 10 were red by design: Gateway PRs importing a Core or
 Runtime symbol not yet on PyPI, and a Flow release branch whose smokes need `abstractruntime>=0.17.0`,
-each pushed 2 or 3 times. 7 were red MAINs, all flaky timing tests. 9 failures would have shown locally.
+each pushed 2 or 3 times. 7 were red MAINs, all flaky timing tests. 14 failures would have shown locally.
+The gate does not catch those timing flakes (all 7 red mains): only the flaky-test policy below removes them
+(no wall-clock bound by default, HTTP readiness, fix or quarantine), once the 8 tests are rewritten: the Core
+GC bound (2), the gateway 0966 race family (5) and the Assistant playhead (root backlog 1116).
 
 **The gate.** `scripts/ci_local.sh <repo> [--job <name>] [--fresh-venv] [--allow-skipped]` at the root
 (`docs/ci-local.md`). It exits 0 only when every runnable job of the PR AND push-to-main workflows

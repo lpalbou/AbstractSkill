@@ -8,7 +8,7 @@
 validations:
 - name: abstract-release
   source: codex-skills (maintainer)
-  tree_hash: 61ee3f161d1a0993c4d557246124f6dcbe5454077a8cfd36ab7c60094cbca43b
+  tree_hash: bef7ddc3ee3c7617d9f0f9274c5f910b8723e3ca46ad339eefa3cd2d013d90a1
   level: adopted
   method: first-party-adoption
   audience: host

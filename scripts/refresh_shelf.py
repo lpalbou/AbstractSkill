@@ -439,7 +439,7 @@ SHELF_POLICY = {
         ),
     },
     "abstract-release": {
-        "expected_tree_hash": "61ee3f161d1a0993c4d557246124f6dcbe5454077a8cfd36ab7c60094cbca43b",
+        "expected_tree_hash": "bef7ddc3ee3c7617d9f0f9274c5f910b8723e3ca46ad339eefa3cd2d013d90a1",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
