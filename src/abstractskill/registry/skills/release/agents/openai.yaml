@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release"
+  short_description: "Prepare, validate, and publish repository releases"
+  default_prompt: "Use $release to prepare, validate, tag, publish, and verify a repository release."

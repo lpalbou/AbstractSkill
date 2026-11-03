@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.7] - 2026-11-05
+
+### Added
+
+- The shelf ships a shareable `release` skill: one repository's release (version and changelog, docs
+  through `coredoc`, test and build gates, CI/CD readiness through `cicd`, tag or workflow dispatch,
+  publish, post-release verification), with a read-only pending-change gate. It carries the
+  CI-is-green-before-push rules: run a local CI gate (or every step of the PR and push-to-main
+  jobs) before any push; never open a PR that is red by design; release branches resolve from the
+  registry; a red main is an incident; no default wall-clock assertions. `abstract-release` stays
+  the multi-package orchestrator and uses `release` per package.
+
+### Removed
+
+- `abstractframework-website` left the shelf: it is specific to one maintainer's site and now lives
+  in that workspace (`untracked/skills/abstractframework-website/`). `abstract-release` points
+  there for its gated website step.
+
+### Changed
+
+- Registry 2026.11.05 (16 skills): `release` pinned, `abstract-release` re-pinned.
+
 ## [0.3.6] - 2026-11-04
 
 ### Fixed

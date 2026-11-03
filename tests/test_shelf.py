@@ -26,7 +26,6 @@ GUIDANCE = REPO / "src" / "abstractskill" / "registry" / "guidance.yaml"
 EXPECTED_SHELF = {
     "abstract-release",
     "abstractframework-gateway",
-    "abstractframework-website",
     "adversarial-iteration",
     "adr",
     "agora-collaboration",
@@ -37,6 +36,7 @@ EXPECTED_SHELF = {
     "entity-observation",
     "entity-self-knowledge",
     "meshvault-live-editing",
+    "release",
     "review",
     "uxreview",
     "verification-before-completion",
@@ -50,7 +50,6 @@ EXPECTED_SHELF = {
 EXPECTED_LEVELS = {
     "abstract-release": TrustLevel.ADOPTED,
     "abstractframework-gateway": TrustLevel.FIRST_PARTY,
-    "abstractframework-website": TrustLevel.FIRST_PARTY,
     "adversarial-iteration": TrustLevel.FIRST_PARTY,
     "agora-collaboration": TrustLevel.FIRST_PARTY,
     "adr": TrustLevel.ADOPTED,
@@ -61,6 +60,7 @@ EXPECTED_LEVELS = {
     "entity-observation": TrustLevel.FIRST_PARTY,
     "entity-self-knowledge": TrustLevel.FIRST_PARTY,
     "meshvault-live-editing": TrustLevel.ADOPTED,
+    "release": TrustLevel.ADOPTED,
     "review": TrustLevel.ADOPTED,
     "uxreview": TrustLevel.ADOPTED,
     "verification-before-completion": TrustLevel.ADOPTED,
@@ -68,7 +68,6 @@ EXPECTED_LEVELS = {
 EXPECTED_SOURCES = {
     "abstract-release": "codex-skills (maintainer)",
     "abstractframework-gateway": "first-party",
-    "abstractframework-website": "first-party",
     "adversarial-iteration": "first-party",
     "agora-collaboration": "first-party",
     "adr": "codex-skills (maintainer)",
@@ -79,6 +78,7 @@ EXPECTED_SOURCES = {
     "entity-observation": "first-party",
     "entity-self-knowledge": "first-party",
     "meshvault-live-editing": "lpalbou/meshvault",
+    "release": "codex-skills (maintainer)",
     "review": "codex-skills (maintainer)",
     "uxreview": "codex-skills (maintainer)",
     "verification-before-completion": "obra/superpowers",
@@ -88,9 +88,9 @@ EXPECTED_SOURCES = {
 # name HERE — the admission review's explicit signature, never a silent pass.
 # abstract-release (2026-10-27): a read-only release planner and a registry
 # visibility gate (stdlib, HTTPS GETs to pypi.org / registry.npmjs.org only).
-# abstractframework-website (2026-11-02): two read-only helpers under
-# references/ (a local Range-capable preview server, a static site checker).
-EXPECTED_SCRIPTS_BEARING: set[str] = {"abstract-release", "abstractframework-website"}
+# release (2026-11-03): a read-only pending-change gate (`git status --porcelain`).
+# abstractframework-website left the shelf on 2026-11-03 (a workspace skill).
+EXPECTED_SCRIPTS_BEARING: set[str] = {"abstract-release", "release"}
 
 
 def test_shelf_discovers_exactly_the_expected_skills() -> None:

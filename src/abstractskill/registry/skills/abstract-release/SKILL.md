@@ -138,7 +138,8 @@ Release by published dependency floors, not by what happens to pass locally:
    `CRATE_RELEASE_VERSIONS` (includes `abstractavatar` and `abstracttui`), install manifest,
    installers, install docs.
 9. The website, last and gated: once the root profile is on PyPI, run the `abstractframework-website`
-   skill — it updates the site branch locally (versions, install commands, new apps and
+   skill (a workspace skill, not on the shelf: `untracked/skills/abstractframework-website/` at the
+   workspace root) — it updates the site branch locally (versions, install commands, new apps and
    capabilities, refreshed screenshots and llms mirrors), serves it locally and hands the operator
    the preview URL. The operator validates and pushes `gh-pages`; a wave never pushes the site.
 
