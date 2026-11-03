@@ -48,6 +48,35 @@ missing-package discovery and the distinction between a release blocker and late
 4. A worker that cannot run `git merge` or `git rebase` or `git switch` asks the coordinator to do it
    immediately; it never leaves the branch unmerged and moves on.
 
+## CI is green before it is pushed (AbstractFramework ADR 0050)
+
+Why: on 2026-11-03, 22 CI runs failed in 24 hours. Ten were red by design: a branch that needed an
+unpublished sibling, pushed two or three times anyway. Seven were red MAINs, all of them flaky timing
+tests. The operator got ten failure e-mails overnight. A CI failure is the exception, never the normal path.
+
+1. **The gate runs before ANY push.** Run root `scripts/ci_local.sh <repo>` (`docs/ci-local.md`). It
+   exits 0 only when every runnable job of the repo's PR and push-to-main workflows passes, and it
+   prints the jobs it could not run (Windows, Linux sandbox) instead of passing them silently. Where
+   the gate is absent, run the workflows' job commands yourself: every step of every job (build,
+   lint, type-check, test, pack, not only the tests), the main-push Python matrix (main often tests
+   more versions than a PR), a fresh venv per version, scratch `HOME`, `pytest --basetemp=<scratch>`.
+   Push only on green. Put the commands and their results in the PR body.
+2. **A PR is never red by design.** A branch whose CI needs a version not yet on its registry (a
+   sibling symbol, a raised floor, `pip install "x>=N"`) stays LOCAL until
+   `pypi_visibility_gate.py` says that version is visible. No PR is opened and nothing is pushed
+   until then. A branch whose last run is red is pushed again only with the fix for that failure
+   (`gh run list --branch <b> -L 1` first).
+3. **Release branches use `--fresh-venv`.** Siblings come from the registry at the pinned versions,
+   never from editable checkouts. That is what CI installs.
+4. **Release PRs also run the release workflow's own validate / build / sdist / wheel-test steps
+   locally** before the PR, because those jobs run only on the tag, when it is too late.
+5. **A red main is an incident.** Whoever merged fixes or reverts it within the hour and tells the
+   operator at once. Re-running until green is not a fix.
+6. **Flaky tests.** No wall-clock assertion runs by default: timing bounds are opt-in (a
+   `*_TIMING_STRICT=1` switch). A test of a real server waits until the server answers HTTP, never
+   for a log line. A test that flaked once is fixed or quarantined, with a backlog item, before the
+   next merge.
+
 ## Before you start
 
 - Default to a read-only plan. Commits, pushes, tags, workflow dispatches, publishes, CI reruns and
@@ -125,14 +154,17 @@ Repeat for each package in the plan's `release_wave`, lowest order first.
    `Unreleased` into one dated `CHANGELOG.md` section for the version. Run `coredoc`'s release
    checklist: version source, README badges and install snippets, package metadata, llms files
    regenerated with the package's generator and committed, backlog/ADR trace.
-3. **Local proof.** Run the package tests. For anything that touches an engine, run a real-weights
+3. **Local proof.** Run the pre-push gate (`scripts/ci_local.sh <repo> --fresh-venv`, see "CI is green
+   before it is pushed"). Then the package tests. For anything that touches an engine, run a real-weights
    end-to-end check on the machine, not a mock. For gateway routes, go through a scratch gateway
    over HTTP (recipe in `references/release-process.md`). A local failure can be the stale venv,
    not the code: CI installs from the published pins, so decide per failure whether it is a code
    bug or the environment (keys in the shell, CLIs on PATH, missing extras, older siblings).
 4. **Adversarial review before merge.** A read-only reviewer that did not write the diff reviews
    it. Fix the confirmed findings, re-verify, and record what was found.
-5. **Pull request, merge only on all-green.**
+5. **Pull request, merge only on all-green.** Open it only after the gate passed, and only when every
+   version its CI installs is already on its registry: otherwise the branch stays local. The PR body
+   lists the gate's commands and results.
 
 ```bash
 gh pr create --base main --head <branch> --title "<package> X.Y.Z: <summary>" --body-file <notes.md>
@@ -183,7 +215,9 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 npm:@abstractfra
 python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractgateway-console==X.Y.Z
 ```
 
-8. **Floor propagation.** Raise the floor in each direct dependent the plan lists under
+8. **Floor propagation.** Only after the visibility gate passed (a dependent's branch with the new floor
+   stays local until then, and its gate runs with `--fresh-venv`), raise the floor in each direct
+   dependent the plan lists under
    `dependency_floor_reviews`. Update the tests that pin floors literally in the same change
    (for example AbstractGateway's `tests/test_gateway_install_profiles.py` and
    `live_deltas.ABSTRACTRUNTIME_FLOOR`), respect the cross-package floor rules in
@@ -192,6 +226,8 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
 
 ## Gates (never skipped without the operator's approval)
 
+0. The pre-push gate is green before every push; no PR is red by design; a red main is fixed or
+   reverted within the hour (AbstractFramework ADR 0050).
 1. Adversarial review of every diff before merge.
 2. Real-weights (engines) or real-gateway (routes) end-to-end proof on the machine.
 3. Merge only when every check is `pass`; check the PR state after merging.
@@ -207,7 +243,7 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
    `pip install abstractframework[...]` still resolves the older matrix.
 
 Stop and report on: an ambiguous version source, a duplicate target version, an unclear publish
-destination, a red or unknown check, a version not visible on its registry, or a floor that still
+destination, a red pre-push gate, a red main, a red or unknown check, a version not visible on its registry, or a floor that still
 points below a just-released version.
 
 ## Final report

@@ -70,14 +70,18 @@ For each package of the wave, lowest first:
 4. **Docs.** Run `coredoc`'s release checklist: version source, README (version and registry
    badges, install snippet, what's-new pointer), package metadata (pyproject `[project]`,
    package.json), llms files regenerated with the package's generator and committed, docs index.
-5. **Tests.** Run the package's suite. Then the end-to-end proof (section 4).
+5. **Tests.** Run the pre-push gate (section 10) with `--fresh-venv`, then the package's suite and the
+   end-to-end proof (section 4). For a release PR, also run the release workflow's own validate,
+   build, sdist and wheel-test steps locally (section 10).
 6. **Adversarial review.** Before merge, a reviewer that did not write the change reads the diff
    read-only and looks for what breaks: isolation between users or accounts, double work (weights
    loaded twice), overwritten routes, limits that disagree with the docs, missing skip guards for
    CI. Fix confirmed findings, re-run the proofs, note the findings in the PR. Findings this caught
    in practice: one account seeing another account's voices, weights loaded twice, a route
    overwritten by a later registration, a 10 MB cap in code against 25 MB in the docs.
-7. **PR and CI.** Open the PR; wait for checks; merge only when the guard prints exactly `pass`:
+7. **PR and CI.** Open the PR only when the gate is green and every version its CI installs is on its
+   registry (a branch that needs an unpublished version stays local); put the gate's commands and
+   results in the body. Wait for checks; merge only when the guard prints exactly `pass`:
    `gh pr checks <N> | awk -F'\t' '{print $2}' | sort -u`. A `skipping` line needs a reason
    (a path filter, a platform job); `fail` or `pending` means stop.
 8. **Merge.** Run `gh pr merge <N> --merge` as its own command. Never chain it after or before
@@ -102,9 +106,10 @@ For each package of the wave, lowest first:
 11. **Visibility.** `pypi_visibility_gate.py --wait 900 <name>==X.Y.Z` (PyPI) or
     `npm:@abstractframework/<pkg>==X.Y.Z` (npm). The gate checks the index pip and npm resolve
     from, not only the project page.
-12. **Floors.** For each dependent in `dependency_floor_reviews`, raise the floor (or confirm the
-    old one is still right and say why), update the tests that pin floors, refresh lockfiles,
-    rerun the planner, continue.
+12. **Floors.** Only after step 11 passed: for each dependent in `dependency_floor_reviews`, raise the
+    floor (or confirm the old one is still right and say why), update the tests that pin floors,
+    refresh lockfiles, run the dependent's gate with `--fresh-venv`, rerun the planner, continue.
+    A dependent prepared earlier waits as a local branch, unpushed.
 
 Do not publish a higher package until every lower version it needs is visible on its registry and
 the lower package's release run is green for the released commit.
@@ -194,7 +199,9 @@ Stop the wave and report the blocker when:
   and the report would claim users get the change;
 - package metadata, changelog, docs or release notes disagree;
 - the release workflow, its environment policy, or the publish destination is unclear;
-- the version source is unclear or the target version already exists.
+- the version source is unclear or the target version already exists;
+- the pre-push gate is red, or a branch needs a version that is not on its registry yet (keep it local);
+- a main is red (section 10: fix or revert within the hour, tell the operator).
 
 ## 9. Pitfalls seen in practice
 
@@ -225,3 +232,47 @@ Stop the wave and report the blocker when:
   merge fails (a tag, a push, a dispatch). Run it alone and check the PR state afterwards.
 - **Someone else's work.** Operator checkouts hold uncommitted work; never stage it. Use a
   scratch worktree when you need a clean tree.
+
+## 10. The pre-push gate and CI hygiene (AbstractFramework ADR 0050)
+
+Why: on 2026-11-03, 22 runs failed in 24 hours. 10 were red by design: Gateway PRs importing a Core or
+Runtime symbol not yet on PyPI, and a Flow release branch whose smokes need `abstractruntime>=0.17.0`,
+each pushed 2 or 3 times. 7 were red MAINs, all flaky timing tests. 14 failures would have shown locally.
+The gate does not catch those timing flakes (all 7 red mains): only the flaky-test policy below removes them
+(no wall-clock bound by default, HTTP readiness, fix or quarantine), once the 8 tests are rewritten: the Core
+GC bound (2), the gateway 0966 race family (5) and the Assistant playhead (root backlog 1116).
+
+**The gate.** `scripts/ci_local.sh <repo> [--job <name>] [--fresh-venv] [--allow-skipped]` at the root
+(`docs/ci-local.md`). It exits 0 only when every runnable job of the PR AND push-to-main workflows
+passed. Jobs it cannot run here (Windows, the Linux sandbox, Docker) are printed as skipped, never
+counted green; `--allow-skipped` accepts them knowingly. Use `--fresh-venv` on every release branch
+and every branch that changes a floor: siblings come from the registry, as in CI.
+
+**Where the gate is absent,** run what the workflows run, by hand, from `.github/workflows/*.yml`:
+- every job and every step (`check:lock`, `npm ci`, `build`, `lint`, `test`, `pack --dry-run`; a type
+  error shows only in `build`, not in `npm test`);
+- the push-to-main matrix, not the PR matrix (AbstractGateway PRs test 3.12; main tests 3.10-3.13);
+- a fresh venv per Python version, installed with the job's own `pip install` line, no editable
+  sibling; scratch `HOME`, `TMPDIR`, `HF_HOME`; `pytest --basetemp=<scratch>`; no admin token, no
+  `:8080` in the environment;
+- for a release PR, the release workflow's validate / build / sdist / test-the-wheel steps (the
+  Avatar sdist test missed `catalog.json` and failed only on the tag).
+Put the commands and their results in the PR body.
+
+**Never red by design.** Before opening a PR, read the versions its CI installs. If one is not on its
+registry, the branch stays local; check with `pypi_visibility_gate.py` and push once it passes. Before
+pushing to a branch whose last run is red (`gh run list --branch <b> -L 1`), the push must carry the
+fix for that failure.
+
+**Red main is an incident.** The merger fixes or reverts within the hour and tells the operator. A
+re-run that happens to pass is not a fix. On a main whose matrix is wider than the PR's, a flake
+that hits 1 shard in N on a PR hits about 4 in N on main.
+
+**Flaky tests.**
+- No wall-clock assertion by default: timing bounds run only under an opt-in switch
+  (`ABSTRACTGATEWAY_TIMING_STRICT=1` is the model).
+- Prefer an ordering or event check to elapsed seconds.
+- A real-server test waits until the server answers HTTP (`/api/health`), never for a log line
+  written before the port is bound.
+- A test that flakes once is fixed, or quarantined with a backlog item, before the next merge.
+
