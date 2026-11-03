@@ -28,9 +28,9 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.4: the `abstractframework-website` skill joins the shelf and
-`abstract-release` covers AbstractAvatar and the AbstractAssistant lanes; see
-the [changelog](CHANGELOG.md#034---2026-11-02).
+What's new in 0.3.5: `abstract-release` makes CI green before anything is
+pushed (a pre-push gate, no PR red by design, red main as an incident, a
+flaky-test policy); see the [changelog](CHANGELOG.md#035---2026-11-03).
 
 ## The bundled skill registry
 

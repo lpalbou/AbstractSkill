@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.5] - 2026-11-03
+
+### Changed
+
+- The bundled `abstract-release` skill makes CI green before anything is pushed
+  (AbstractFramework ADR 0050). Before any push, run the pre-push gate (root
+  `scripts/ci_local.sh <repo>`), or, where it is absent, every step of the
+  repository's PR and push-to-main workflow jobs: the main Python matrix, a fresh
+  venv, scratch `HOME`, `--basetemp`. Push only on green, with the commands and
+  results in the PR body. A PR is never red by design: a branch whose CI needs a
+  version not yet on its registry stays local until that version is visible,
+  including a dependent's floor raise. Release branches run the gate with
+  `--fresh-venv`, and release PRs also run the release workflow's validate,
+  build and sdist steps locally. A red main is an incident, fixed or reverted
+  within the hour and reported to the operator. Flaky tests: no default
+  wall-clock assertions, a real server is ready when it answers HTTP, and a
+  flake is fixed or quarantined before the next merge. New
+  `references/release-process.md` section 10 holds the details and the
+  2026-11-03 numbers that motivated the rule (22 failed runs in 24 hours, 10 red
+  by design, 7 red mains, all flaky timing tests).
+- Registry 2026.11.03: `abstract-release` re-pinned.
+
 ## [0.3.4] - 2026-11-02
 
 ### Added
