@@ -7,6 +7,7 @@
 - `abstract-release`: a mandatory scope sweep before the first lower-package cut of a wave. Read
   every planned backlog item of the root and of each package in the wave, plus the operator's open
   asks. Decide on the record which ones are in, and group them so each base package is cut once.
+  A base package with no sweep decision on record is a stop condition: the loop refuses its cut.
   A feature that arrives after its base package was cut goes to the operator as an hours trade-off
   (hold the dependents and re-cut once, or defer), never chosen silently. The section includes a
   worked example from the 2026-11-03 wave: idle unload (root backlog 1115) after AbstractCore

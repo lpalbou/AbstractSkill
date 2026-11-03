@@ -198,6 +198,8 @@ state changes afterwards, regenerate the plan before acting.
 
 Stop the wave and report the blocker when:
 
+- a base package is about to be cut with no scope-sweep decision on record for it (§1 step 6):
+  the planned items touching it were not read and decided in or out;
 - a lower package version is not visible on its registry, or its release run is red or unknown;
 - a target package has uncommitted release-scope changes;
 - a floor or exact pin still points below a just-released lower version;

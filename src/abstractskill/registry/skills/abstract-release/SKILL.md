@@ -281,8 +281,9 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
    release the root profile in the same approved wave or file a backlog item and say plainly that
    `pip install abstractframework[...]` still resolves the older matrix.
 
-Stop and report on: an ambiguous version source, a duplicate target version, an unclear publish
-destination, a red pre-push gate, a red main, a red or unknown check, a version not visible on its registry, or a floor that still
+Stop and report on: no scope-sweep decision on record for a base package about to be cut, an
+ambiguous version source, a duplicate target version, an unclear publish destination, a red
+pre-push gate, a red main, a red or unknown check, a version not visible on its registry, or a floor that still
 points below a just-released version.
 
 ## Final report
