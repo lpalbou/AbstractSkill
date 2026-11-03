@@ -439,7 +439,7 @@ SHELF_POLICY = {
         ),
     },
     "abstract-release": {
-        "expected_tree_hash": "ee486f985a7874c6e409257fe37e0db2d3b1299ac92ba15274c3ea9b2f2c46d4",
+        "expected_tree_hash": "afed61a89b20416d48d22c6615b57df5b632cd30bb131dfe7863d54e4495afd8",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -478,27 +478,6 @@ SHELF_POLICY = {
             "Behavioral audit (backlog 0003) pending — upgrades to audited then."
         ),
     },
-    "abstractframework-website": {
-        "expected_tree_hash": "b91fe3fb6d167fee6f535c5d9004669233b978c822b6ccd8054b2382eae5d0d5",
-        "method": "first-party",
-        "source": "first-party",
-        "level": "first_party",
-        # First-party: the frontmatter description IS the activation text.
-        "activation_description": None,
-        "notes": (
-            "First-party skill (2026-11-02): update the abstractframework.ai site (the "
-            "gh-pages branch of lpalbou/AbstractFramework) after a release wave — inventory "
-            "what is published, diff the site against reality, a claims ledger before any "
-            "copy change, apply on a site-<root version> branch, check, adversarial pass, "
-            "serve locally and hand the operator a preview URL. GATED: the skill never "
-            "pushes, force-pushes, rebases or merges gh-pages; the operator validates the "
-            "preview and publishes. SCRIPTS-BEARING (two read-only stdlib helpers under "
-            "references/): preview_server.py (static server with HTTP Range support, binds "
-            "127.0.0.1 by default, no writes) and check_site.py (static link/asset/title/"
-            "marker/version-floor checker, no writes, no network), so requires_review at the "
-            "gate until the operator enables them. Paths name the maintainer's workspace."
-        ),
-    },
     "architect": {
         "expected_tree_hash": "6af31c94223f390e16059c67ed2e40b9b1632bcc79a46e64c11083a5b3e93c0b",
         "method": "first-party-adoption",
@@ -532,6 +511,26 @@ SHELF_POLICY = {
             "Create, audit, update, and enforce ADRs as durable cross-task engineering "
             "policy (Context/Decision first; Enforcement + Validation mandatory). Use "
             "when a decision must constrain future work beyond the current task."
+        ),
+    },
+    "release": {
+        "expected_tree_hash": "6cc05e3a2af2d615ea9c6d92cdf9c0bfd247663b7c3789fe2428a392a10fc3ea",
+        "method": "first-party-adoption",
+        "source": "codex-skills (maintainer)",
+        "level": "adopted",
+        # The frontmatter description is agent-neutral; no override needed.
+        "activation_description": None,
+        "notes": (
+            "Maintainer-authored single-repository release skill, adopted 2026-11-03 from the "
+            "maintainer copy (operator: shareable skills live in abstractskill): version and "
+            "changelog, docs via coredoc, test/build gates, CI/CD readiness via cicd, tag or "
+            "workflow dispatch, publish, post-release verification. Adds the CI-is-green-before-push "
+            "rules (AbstractFramework ADR 0050: a local gate before any push, no PR red by design, "
+            "release branches from the registry, red main as an incident, flaky-test policy). "
+            "abstract-release stays the multi-package orchestrator and uses this per package. "
+            "SCRIPTS-BEARING: scripts/release_pending_gate.py (read-only: runs `git status "
+            "--porcelain`, prints, exits non-zero on release-relevant pending changes; stdlib, "
+            "no writes, no network), so requires_review at the gate until the operator enables it."
         ),
     },
     "cicd": {

@@ -8,7 +8,7 @@
 validations:
 - name: abstract-release
   source: codex-skills (maintainer)
-  tree_hash: ee486f985a7874c6e409257fe37e0db2d3b1299ac92ba15274c3ea9b2f2c46d4
+  tree_hash: afed61a89b20416d48d22c6615b57df5b632cd30bb131dfe7863d54e4495afd8
   level: adopted
   method: first-party-adoption
   audience: host
@@ -69,29 +69,6 @@ validations:
     \ text) and close was taught as loop-release \u2014 re-taught to auto-wake-on-open\
     \ + restore-previous-on-close, refusal reasons verified against entity_visits.py\
     \ (paused/one-visit/consent-rite; sleep wakes)."
-- name: abstractframework-website
-  source: first-party
-  tree_hash: b91fe3fb6d167fee6f535c5d9004669233b978c822b6ccd8054b2382eae5d0d5
-  level: first_party
-  method: first-party
-  audience: host
-  validated_by: skill
-  validated_at: '2026-11-02'
-  evidence:
-    parser_roundtrip: true
-    has_scripts: true
-    files: 3
-  notes: "First-party skill (2026-11-02): update the abstractframework.ai site (the\
-    \ gh-pages branch of lpalbou/AbstractFramework) after a release wave \u2014 inventory\
-    \ what is published, diff the site against reality, a claims ledger before any\
-    \ copy change, apply on a site-<root version> branch, check, adversarial pass,\
-    \ serve locally and hand the operator a preview URL. GATED: the skill never pushes,\
-    \ force-pushes, rebases or merges gh-pages; the operator validates the preview\
-    \ and publishes. SCRIPTS-BEARING (two read-only stdlib helpers under references/):\
-    \ preview_server.py (static server with HTTP Range support, binds 127.0.0.1 by\
-    \ default, no writes) and check_site.py (static link/asset/title/marker/version-floor\
-    \ checker, no writes, no network), so requires_review at the gate until the operator\
-    \ enables them. Paths name the maintainer's workspace."
 - name: adr
   source: codex-skills (maintainer)
   tree_hash: a4cb55fcea54e969a9c342e314b4dda3556ce5e6fb0e210821350688c62c934b
@@ -485,6 +462,29 @@ validations:
     Use when an agent must edit meshes through the meshvault-mcp tools: sculpting
     brushes, texture painting/healing, refine/regularize/simplify regions, raycast-probe
     targeting, or staging a watchable live editing session.'
+- name: release
+  source: codex-skills (maintainer)
+  tree_hash: 6cc05e3a2af2d615ea9c6d92cdf9c0bfd247663b7c3789fe2428a392a10fc3ea
+  level: adopted
+  method: first-party-adoption
+  audience: host
+  validated_by: skill
+  validated_at: '2026-11-03'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: true
+    files: 5
+  notes: 'Maintainer-authored single-repository release skill, adopted 2026-11-03
+    from the maintainer copy (operator: shareable skills live in abstractskill): version
+    and changelog, docs via coredoc, test/build gates, CI/CD readiness via cicd, tag
+    or workflow dispatch, publish, post-release verification. Adds the CI-is-green-before-push
+    rules (AbstractFramework ADR 0050: a local gate before any push, no PR red by
+    design, release branches from the registry, red main as an incident, flaky-test
+    policy). abstract-release stays the multi-package orchestrator and uses this per
+    package. SCRIPTS-BEARING: scripts/release_pending_gate.py (read-only: runs `git
+    status --porcelain`, prints, exits non-zero on release-relevant pending changes;
+    stdlib, no writes, no network), so requires_review at the gate until the operator
+    enables it.'
 - name: review
   source: codex-skills (maintainer)
   tree_hash: 7960ef044f9f30a07d1a6511ec40d21c111dcf25c518c13bda0c868bb237439d

@@ -23,7 +23,6 @@ framework-facing activation lines; links point at the exact pinned source.
 | Skill | Status | Description | Link |
 |---|---|---|---|
 | `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [src/abstractskill/registry/skills/abstractframework-gateway](../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md) |
-| `abstractframework-website` | shelf (first_party, scripts → review) | Update the abstractframework.ai website after a release wave so it describes what is published (versions, install commands, apps, capabilities, screenshots, llms mirrors), verify every claim against code and registries, serve it locally and hand the operator a preview URL. Gated: it never pushes `gh-pages`; the operator validates the preview and publishes. Ships a local preview server and a static site checker. | [src/abstractskill/registry/skills/abstractframework-website](../src/abstractskill/registry/skills/abstractframework-website/SKILL.md) |
 | `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [src/abstractskill/registry/skills/adversarial-iteration](../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md) |
 | `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [src/abstractskill/registry/skills/agora-collaboration](../src/abstractskill/registry/skills/agora-collaboration/SKILL.md) |
 | `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules. | [src/abstractskill/registry/skills/entity-self-knowledge](../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md) |
@@ -31,6 +30,7 @@ framework-facing activation lines; links point at the exact pinned source.
 | `meshvault-live-editing` | shelf (adopted) | Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects, optionally performing live for human observers. Declares `requires_mcp: [meshvault-mcp]`. | [lpalbou/meshvault @ 4deb86c](https://github.com/lpalbou/meshvault/tree/4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4/.cursor/skills/meshvault-live-editing) |
 | `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (`skills/<name>/`) when the package is something an agent can operate, and a release checklist (version source, README badges, package metadata, llms files, backlog/ADR trace). | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |
 | `abstract-release` | shelf (adopted, scripts → review) | Plan and run an AbstractFramework release wave in dependency order: per-package mechanics (including AbstractAvatar's crate and Python package, and AbstractAssistant's PyPI, web, iPhone and watch lanes), gates (the pre-push CI gate, no PR red by design, adversarial review, real end-to-end proof, all-green merge, red main as an incident, registry visibility, floor propagation), read-only readiness audits, the wave report, and the gated hand-off to `abstractframework-website`. Ships a read-only planner and a registry visibility gate. | [src/abstractskill/registry/skills/abstract-release](../src/abstractskill/registry/skills/abstract-release/SKILL.md) |
+| `release` | shelf (adopted, scripts → review) | Prepare, validate and publish one repository's release: version and changelog, docs, test/build gates, the CI-is-green-before-push rules (a local gate before any push, no PR red by design, red main as an incident, flaky-test policy), tag or workflow dispatch, publish and post-release verification. Ships a read-only pending-change gate. `abstract-release` uses it per package. | [src/abstractskill/registry/skills/release](../src/abstractskill/registry/skills/release/SKILL.md) |
 | `backlog` | shelf (adopted) | Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene. | [src/abstractskill/registry/skills/backlog](../src/abstractskill/registry/skills/backlog/SKILL.md) |
 | `architect` | shelf (adopted) | Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix, premise verification, and an engraving gate for names that reach append-only state. | [src/abstractskill/registry/skills/architect](../src/abstractskill/registry/skills/architect/SKILL.md) |
 | `adr` | shelf (adopted) | Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with `backlog`. | [src/abstractskill/registry/skills/adr](../src/abstractskill/registry/skills/adr/SKILL.md) |
@@ -147,15 +147,16 @@ re-vendored and re-pinned.
 - **`review`** and **`uxreview`** — kept as two separate skills; see below.
 - **`abstract-release`** — the AbstractFramework release-wave procedure (order,
   per-package mechanics, gates, floor propagation, read-only readiness audits,
-  final report), ending with the gated website step that hands over to the
-  first-party `abstractframework-website` skill. It ships scripts: a read-only
+  final report), ending with the gated website step (the `abstractframework-website`
+  skill is a workspace skill, not on the shelf). It uses `release` per package. It ships scripts: a read-only
   release planner (a crate and a Python package that share a name, such as
   AbstractAvatar's, are planned as two packages) and a registry visibility
   gate (standard library; HTTPS reads of pypi.org, registry.npmjs.org and
   crates.io). Scripts present ⇒ `requires_review` at the gate until an
-  operator enables it. The first-party `abstractframework-website` skill
-  carries two read-only helpers (a local preview server and a static site
-  checker) and is gated the same way.
+  operator enables it.
+- **`release`** — one repository's release, with the rule that CI is green
+  before anything is pushed. It ships a read-only pending-change gate
+  (`git status --porcelain`) and is gated the same way.
 - **`coredoc`** — also carries the release checklist: the package's version
   source, README badges and install snippets, registry and GitHub package
   metadata, regenerated llms files and docs index, and the backlog/ADR trace.
