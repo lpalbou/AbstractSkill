@@ -1036,12 +1036,6 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <td><a href="../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md">src/abstractskill/registry/skills/abstractframework-gateway</a></td>
 </tr>
 <tr>
-<td><code>abstractframework-website</code></td>
-<td>shelf (first_party, scripts → review)</td>
-<td>Update the abstractframework.ai website after a release wave so it describes what is published (versions, install commands, apps, capabilities, screenshots, llms mirrors), verify every claim against code and registries, serve it locally and hand the operator a preview URL. Gated: it never pushes <code>gh-pages</code>; the operator validates the preview and publishes. Ships a local preview server and a static site checker.</td>
-<td><a href="../src/abstractskill/registry/skills/abstractframework-website/SKILL.md">src/abstractskill/registry/skills/abstractframework-website</a></td>
-</tr>
-<tr>
 <td><code>adversarial-iteration</code></td>
 <td>shelf (first_party)</td>
 <td>Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record.</td>
@@ -1082,6 +1076,12 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <td>shelf (adopted, scripts → review)</td>
 <td>Plan and run an AbstractFramework release wave in dependency order: per-package mechanics (including AbstractAvatar's crate and Python package, and AbstractAssistant's PyPI, web, iPhone and watch lanes), gates (the pre-push CI gate, no PR red by design, adversarial review, real end-to-end proof, all-green merge, red main as an incident, registry visibility, floor propagation), read-only readiness audits, the wave report, and the gated hand-off to <code>abstractframework-website</code>. Ships a read-only planner and a registry visibility gate.</td>
 <td><a href="../src/abstractskill/registry/skills/abstract-release/SKILL.md">src/abstractskill/registry/skills/abstract-release</a></td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>shelf (adopted, scripts → review)</td>
+<td>Prepare, validate and publish one repository's release: version and changelog, docs, test/build gates, the CI-is-green-before-push rules (a local gate before any push, no PR red by design, red main as an incident, flaky-test policy), tag or workflow dispatch, publish and post-release verification. Ships a read-only pending-change gate. <code>abstract-release</code> uses it per package.</td>
+<td><a href="../src/abstractskill/registry/skills/release/SKILL.md">src/abstractskill/registry/skills/release</a></td>
 </tr>
 <tr>
 <td><code>backlog</code></td>
@@ -1344,15 +1344,16 @@ re-vendored and re-pinned.</p>
 <li><strong><code>review</code></strong> and <strong><code>uxreview</code></strong> — kept as two separate skills; see below.</li>
 <li><strong><code>abstract-release</code></strong> — the AbstractFramework release-wave procedure (order,
   per-package mechanics, gates, floor propagation, read-only readiness audits,
-  final report), ending with the gated website step that hands over to the
-  first-party <code>abstractframework-website</code> skill. It ships scripts: a read-only
+  final report), ending with the gated website step (the <code>abstractframework-website</code>
+  skill is a workspace skill, not on the shelf). It uses <code>release</code> per package. It ships scripts: a read-only
   release planner (a crate and a Python package that share a name, such as
   AbstractAvatar's, are planned as two packages) and a registry visibility
   gate (standard library; HTTPS reads of pypi.org, registry.npmjs.org and
   crates.io). Scripts present ⇒ <code>requires_review</code> at the gate until an
-  operator enables it. The first-party <code>abstractframework-website</code> skill
-  carries two read-only helpers (a local preview server and a static site
-  checker) and is gated the same way.</li>
+  operator enables it.</li>
+<li><strong><code>release</code></strong> — one repository's release, with the rule that CI is green
+  before anything is pushed. It ships a read-only pending-change gate
+  (<code>git status --porcelain</code>) and is gated the same way.</li>
 <li><strong><code>coredoc</code></strong> — also carries the release checklist: the package's version
   source, README badges and install snippets, registry and GitHub package
   metadata, regenerated llms files and docs index, and the backlog/ADR trace.</li>
