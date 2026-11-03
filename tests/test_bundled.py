@@ -38,8 +38,8 @@ LICENSES = (
 # The bundle version must move whenever the bundled content moves. When this
 # test fails: bump `version:` in src/abstractskill/registry/catalog.yaml, then
 # update BOTH values below (the digest printed in the failure message).
-PINNED_VERSION = "2026.11.06"
-PINNED_DIGEST = "f0b3434cbcc16d340ef208ac4f9a2ea8898e054bd8a2d1a78c15237d930318c9"
+PINNED_VERSION = "2026.11.07"
+PINNED_DIGEST = "aaeb2fa28de1cc6b21a276cd546328c120348d48f1c15100443eba592aae2f4d"
 
 
 def _bundle_digest(root: Path) -> str:

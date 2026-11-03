@@ -439,7 +439,7 @@ SHELF_POLICY = {
         ),
     },
     "abstract-release": {
-        "expected_tree_hash": "6646005be8321ca0e302716c4bbfd9808b06bf88a7277240e7742d09b13a20ea",
+        "expected_tree_hash": "72792170d9886017a505a315fc73f2f062a15bafdc05c2d090643517d69142ee",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -514,7 +514,7 @@ SHELF_POLICY = {
         ),
     },
     "release": {
-        "expected_tree_hash": "6cc05e3a2af2d615ea9c6d92cdf9c0bfd247663b7c3789fe2428a392a10fc3ea",
+        "expected_tree_hash": "2a40d2c37e58e128ec426e1c5b7912eaea5cedcd3bd9e9035bc9e31d5d45f587",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",

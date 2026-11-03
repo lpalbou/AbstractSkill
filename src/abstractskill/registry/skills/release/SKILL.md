@@ -92,6 +92,13 @@ timing tests. A CI failure must be the exception, never the normal path (Abstrac
   - No wall-clock assertion by default: timing bounds run only behind an explicit opt-in.
   - A real-server test waits until the server answers HTTP.
   - A test that flakes once is fixed or quarantined before the next merge.
+- **Test tiers.** The PR body states the tier and why; a reviewer may raise it.
+  - **Light:** docs, copy, icons, CSS, one dropdown, a catalog or model entry, a changelog, or a pin
+    bump with its pin tests. Run the changed files' tests, lint and type-check, and the package's
+    build. Not the full matrix.
+  - **Full:** anything in a code path shared across features, concurrency or lifecycle, schemas and
+    contracts, and every release branch. Run the whole PR + main job set. In AbstractFramework:
+    `scripts/ci_local.sh <repo> --tier light|full` (ADR 0051).
 
 ## Release Workflow
 
