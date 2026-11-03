@@ -17,9 +17,27 @@
   (mechanism), runtime, flow"; an item without that line belongs to its repository's packages), the
   items touching packages outside the wave, and the root items with no package line.
 
+- Test tiers (AbstractFramework ADR 0051), in `abstract-release` and `release`. Tier L (light) covers
+  docs, copy, icons, CSS, a dropdown, a catalog or model entry, a changelog, or a pin bump: run the
+  changed files' tests, lint and type-check, and the package's build. Tier F (full) covers shared code
+  paths, concurrency or lifecycle, schemas and contracts, and every release branch: run the whole PR +
+  main job set. The PR body states the tier and why, and a reviewer may raise it. The local gate takes
+  `--tier light|full` (root backlog 1116 delivers it with the gate). Where a repository has no test
+  mapping yet, light runs by hand.
+
 ### Changed
 
-- Registry 2026.11.06: `abstract-release` re-pinned.
+- `abstract-release`: a dependent is re-released only when it needs the lower package's new API or
+  behaviour, or when its install profile would otherwise be inconsistent (the wave lead decides and
+  records it; the operator may override). A compatible `>=` floor is
+  left as is until the dependent's next natural release, and the plan says so per dependent.
+- `abstract-release`: the root `abstractframework` is never published by a wave. The wave ends with a
+  candidate for the operator: every package below the root published and visible, the whole stack
+  redeployed on the operator's machine, the website rebuilt and served locally (never pushed), and a
+  written report of every change. The operator tests it personally and alone declares it a release;
+  the root then pins exactly the tested versions. Root pins are `==`, never floors, so
+  the one-command installer always resolves the last published root's matrix.
+- Registry 2026.11.07: `abstract-release` and `release` re-pinned.
 
 ## [0.3.7] - 2026-11-05
 

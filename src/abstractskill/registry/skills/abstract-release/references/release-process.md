@@ -112,8 +112,14 @@ For each package of the wave, lowest first:
 11. **Visibility.** `pypi_visibility_gate.py --wait 900 <name>==X.Y.Z` (PyPI) or
     `npm:@abstractframework/<pkg>==X.Y.Z` (npm). The gate checks the index pip and npm resolve
     from, not only the project page.
-12. **Floors.** Only after step 11 passed: for each dependent in `dependency_floor_reviews`, raise the
-    floor (or confirm the old one is still right and say why), update the tests that pin floors,
+12. **Floors.** Only after step 11 passed: for each dependent in `dependency_floor_reviews`, the wave
+    lead decides and records per ADR 0051 (the operator may override):
+    - Re-release it only when it needs the new API or behaviour, or when its install profile would
+      otherwise be inconsistent.
+    - Otherwise leave its compatible `>=` floor until its next natural release, and say so in the
+      plan.
+
+    When it is re-released, raise the floor (or confirm the old one is still right and say why), update the tests that pin floors,
     refresh lockfiles, run the dependent's gate (it installs the new floor from the registry, so it
     passes only after step 11 did), rerun the planner, continue.
     A dependent prepared earlier waits as a local branch, unpushed.
@@ -170,7 +176,19 @@ kill "$GW_PID"
 
 ## 6. Root `abstractframework` and partial releases
 
-Release the root last. Before it:
+The root is for people installing the framework, so the wave never publishes it (AbstractFramework
+ADR 0051). The wave ends with a **candidate** for the operator, in four parts:
+1. every package below the root published and visible, with its exact version;
+2. the whole stack redeployed on the operator's machine at those versions;
+3. the website rebuilt locally and served (never pushed);
+4. a written report of every change in that global release.
+
+The operator tests it personally, and only the operator declares it a release. After that GO the root
+is released, pinning EXACTLY the tested versions. Root pins are `==`, never floors: the
+one-command installer always resolves the last published root, and that root keeps installing its
+own matrix whatever newer lower packages appear (0.12.0 pins gateway 0.19.0 and core 2.32.0).
+
+After the GO, before the root release:
 
 - root `pyproject.toml` exact pins match the released versions;
 - `abstractframework.RELEASE_VERSIONS`, `NPM_RELEASE_VERSIONS` and `CRATE_RELEASE_VERSIONS` match;
@@ -179,8 +197,7 @@ Release the root last. Before it:
   (`scripts/tests/test_inventory.sh` checks this);
 - install docs and app-facing auth and default examples describe the released matrix.
 
-If the approved wave stops before the root, do the drift check anyway and either release the root
-in the same wave or file a backlog item. Never report that `pip install abstractframework[...]`
+Without the operator's GO the wave stops at the candidate matrix: do the drift check and report it. Never report that `pip install abstractframework[...]`
 delivers a lower-package change while the root pins still point at the old matrix.
 
 The root repository's `main` can be diverged from `origin` (local release commits not yet pushed)
@@ -251,8 +268,16 @@ The gate does not catch those timing flakes (all 7 red mains): only the flaky-te
 (no wall-clock bound by default, HTTP readiness, fix or quarantine), once the 8 tests are rewritten: the Core
 GC bound (2), the gateway 0966 race family (5) and the Assistant playhead (root backlog 1116).
 
-**The gate.** `scripts/ci_local.sh <repo> [--job <name>] [--allow-skipped] [--release-tag vX.Y.Z] [--no-merge]`
-at the root (`docs/ci-local.md`).
+**The gate.** `scripts/ci_local.sh <repo> [--tier light|full] [--job <name>] [--allow-skipped] [--release-tag vX.Y.Z] [--no-merge]`
+at the root (`docs/ci-local.md`). The root `scripts/ci_local.sh` implements `--tier` (root backlog
+1116 delivers it with the gate).
+- ADR 0051's test tiers decide what a push must pass. The PR body states the tier and why, and a
+  reviewer may raise it.
+  - `--tier light` runs the tests mapped from the changed files, lint and type-check, and the
+    package's build. It fails loudly when a changed source maps to no test. Where a repository has no
+    mapping yet, run the same by hand (`--job <build job>` for the build).
+  - `--tier full` is the default, and always the tier for a release branch. It runs the whole gate
+    below.
 - It merges the commit into a freshly fetched `origin/main`, as GitHub merges a pull request.
   `--no-merge` tests the commit itself.
 - It runs every workflow under the strictest event that workflow has (the push to main where there is

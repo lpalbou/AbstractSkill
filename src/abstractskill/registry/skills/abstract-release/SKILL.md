@@ -81,6 +81,21 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
    `*_TIMING_STRICT=1` switch). A test of a real server waits until the server answers HTTP, never
    for a log line. A test that flaked once is fixed or quarantined, with a backlog item, before the
    next merge.
+7. **Test tiers (AbstractFramework ADR 0051).** The PR body states the tier and why; a reviewer may
+   raise it.
+   - **L, light:** docs, copy, icons, CSS, one dropdown, a catalog or model entry, a changelog, or a
+     pin bump with its pin tests. `scripts/ci_local.sh <repo> --tier light` runs the tests mapped
+     from the changed files, lint and type-check, and the package's build. It fails loudly when a
+     changed source maps to no test.
+
+     Where a repository has no mapping yet, run the same by hand: the changed files' tests, lint and
+     type-check, and `--job <build job>`.
+   - **F, full:** anything in a code path shared across features, concurrency or lifecycle, schemas
+     and contracts, and every release branch. Run the whole PR + main job set with `--tier full`, the
+     default.
+
+   The root `scripts/ci_local.sh` implements `--tier light|full` (root backlog 1116 delivers it with
+   the gate).
 
 ## Before you start
 
@@ -134,10 +149,24 @@ Release by published dependency floors, not by what happens to pass locally:
    (`watch/apple`, `watch.yml`, `scripts/testflight.sh`). The registry wave releases the Python
    package; the Apple lanes release through App Store Connect with the operator's approval
    (`app-store` environment) and are reported as their own rows, never folded into the PyPI row.
-8. Root `abstractframework`: pins, `RELEASE_VERSIONS`, `NPM_RELEASE_VERSIONS`,
-   `CRATE_RELEASE_VERSIONS` (includes `abstractavatar` and `abstracttui`), install manifest,
-   installers, install docs.
-9. The website, last and gated: once the root profile is on PyPI, run the `abstractframework-website`
+8. **The candidate, then the operator (AbstractFramework ADR 0051).** The wave ends with a
+   CANDIDATE for the operator, never with a root release. The candidate has four parts:
+   1. every package below the root published and visible on its registry, with its exact version;
+   2. the whole stack redeployed on the operator's machine at those versions;
+   3. the website rebuilt LOCALLY with the `abstractframework-website` skill and served for the
+      operator to test (never pushed);
+   4. a written report of every change in that global release.
+
+   The operator tests it personally. Only the operator declares it a release (operator, 2026-11-04:
+   "your job is to get us there, to make sure everything below works and redeploy what you think is prepared for release locally, so i can fully test it PERSONALLY, and only *I* can declare if this is something to release or not. this include the redeployment of the GH pages site LOCALLY, so i can test it and a report of the changes for that global release."). After that GO, and only then, the root is released.
+   - The root pins EXACTLY the tested versions: pins, `RELEASE_VERSIONS`, `NPM_RELEASE_VERSIONS`,
+     `CRATE_RELEASE_VERSIONS` (includes `abstractavatar` and `abstracttui`), install manifest,
+     installers, install docs.
+   - Root pins are `==`, never floors, so the one-command installer always resolves the last
+     published root's matrix. Today 0.12.0 pins gateway 0.19.0 and core 2.32.0 exactly, and it still
+     installs them while newer lower packages are published.
+9. The website: rebuilt locally as part of the candidate (step 8). After the operator's GO and the
+   root release, the operator alone pushes `gh-pages`. The `abstractframework-website`
    skill (a workspace skill, not on the shelf: `untracked/skills/abstractframework-website/` at the
    workspace root) — it updates the site branch locally (versions, install commands, new apps and
    capabilities, refreshed screenshots and llms mirrors), serves it locally and hands the operator
@@ -254,7 +283,12 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 npm:@abstractfra
 python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractgateway-console==X.Y.Z
 ```
 
-8. **Floor propagation.** Only after the visibility gate passed (a dependent's branch with the new floor
+8. **Floor propagation, only where needed (AbstractFramework ADR 0051).** Re-release a dependent only
+   when it needs the lower package's new API or behaviour, or when its install profile would
+   otherwise be inconsistent. A compatible floor (`>=`) is left as is, and bumped at the dependent's
+   next natural release. The wave lead decides and records which applies, per dependent, in the
+   plan; the operator may override. Only after the visibility
+   gate passed (a dependent's branch with the new floor
    stays local until then: its gate installs the new floor from the registry), raise the floor in each direct
    dependent the plan lists under
    `dependency_floor_reviews`. Update the tests that pin floors literally in the same change
@@ -276,10 +310,10 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
 6. One dated changelog section per released version; llms files regenerated; backlog item closed
    with evidence; durable rules recorded as ADRs.
 7. No publish from a checkout with uncommitted release-scope changes.
-8. Root `abstractframework` last, and only when its pins, `RELEASE_VERSIONS`, install manifest,
-   installers and install docs match the released matrix. If the wave stops earlier, either
-   release the root profile in the same approved wave or file a backlog item and say plainly that
-   `pip install abstractframework[...]` still resolves the older matrix.
+8. Root `abstractframework` only after the operator tested the candidate matrix and said GO
+   (ADR 0051), pinning exactly the tested versions. Its pins, `RELEASE_VERSIONS`, install
+   manifest, installers and install docs must match that matrix. Until the GO, say plainly that
+   `pip install abstractframework[...]` and the installer still resolve the previous root's matrix.
 
 Stop and report on: no scope-sweep decision on record for a base package about to be cut, an
 ambiguous version source, a duplicate target version, an unclear publish destination, a red
