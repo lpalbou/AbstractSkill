@@ -268,14 +268,16 @@ The gate does not catch those timing flakes (all 7 red mains): only the flaky-te
 (no wall-clock bound by default, HTTP readiness, fix or quarantine), once the 8 tests are rewritten: the Core
 GC bound (2), the gateway 0966 race family (5) and the Assistant playhead (root backlog 1116).
 
-**The gate.** `scripts/ci_local.sh <repo> [--job <name>] [--allow-skipped] [--release-tag vX.Y.Z] [--no-merge]`
-at the root (`docs/ci-local.md`).
-- ADR 0051's test tiers decide what a push must pass, and the PR body states the tier and why (a
-  reviewer may raise it):
-  - Tier F (full, and every release branch) is the whole gate below.
-  - Tier L (light) runs by hand today: the changed files' tests, lint and type-check, and the package's
-    build job (`--job <build job>`). A `--tier` flag is planned (root backlog 1116) and does not exist
-    yet.
+**The gate.** `scripts/ci_local.sh <repo> [--tier light|full] [--job <name>] [--allow-skipped] [--release-tag vX.Y.Z] [--no-merge]`
+at the root (`docs/ci-local.md`). The root `scripts/ci_local.sh` implements `--tier` (root backlog
+1116 delivers it with the gate).
+- ADR 0051's test tiers decide what a push must pass. The PR body states the tier and why, and a
+  reviewer may raise it.
+  - `--tier light` runs the tests mapped from the changed files, lint and type-check, and the
+    package's build. It fails loudly when a changed source maps to no test. Where a repository has no
+    mapping yet, run the same by hand (`--job <build job>` for the build).
+  - `--tier full` is the default, and always the tier for a release branch. It runs the whole gate
+    below.
 - It merges the commit into a freshly fetched `origin/main`, as GitHub merges a pull request.
   `--no-merge` tests the commit itself.
 - It runs every workflow under the strictest event that workflow has (the push to main where there is

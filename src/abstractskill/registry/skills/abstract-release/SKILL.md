@@ -84,15 +84,18 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
 7. **Test tiers (AbstractFramework ADR 0051).** The PR body states the tier and why; a reviewer may
    raise it.
    - **L, light:** docs, copy, icons, CSS, one dropdown, a catalog or model entry, a changelog, or a
-     pin bump with its pin tests. Today this runs by hand:
-     - the tests of the changed files (`pytest <their test files>`, `vitest run <files>`);
-     - lint and type-check;
-     - the package's build job (`scripts/ci_local.sh <repo> --job <build job>`).
+     pin bump with its pin tests. `scripts/ci_local.sh <repo> --tier light` runs the tests mapped
+     from the changed files, lint and type-check, and the package's build. It fails loudly when a
+     changed source maps to no test.
 
-     A `--tier` flag for the gate is planned (root backlog 1116) and does not exist yet: never type it.
+     Where a repository has no mapping yet, run the same by hand: the changed files' tests, lint and
+     type-check, and `--job <build job>`.
    - **F, full:** anything in a code path shared across features, concurrency or lifecycle, schemas
-     and contracts, and every release branch. Run the whole PR + main job set:
-     `scripts/ci_local.sh <repo>`.
+     and contracts, and every release branch. Run the whole PR + main job set with `--tier full`, the
+     default.
+
+   The root `scripts/ci_local.sh` implements `--tier light|full` (root backlog 1116 delivers it with
+   the gate).
 
 ## Before you start
 

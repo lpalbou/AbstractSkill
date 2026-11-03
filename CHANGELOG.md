@@ -21,8 +21,9 @@
   docs, copy, icons, CSS, a dropdown, a catalog or model entry, a changelog, or a pin bump: run the
   changed files' tests, lint and type-check, and the package's build. Tier F (full) covers shared code
   paths, concurrency or lifecycle, schemas and contracts, and every release branch: run the whole PR +
-  main job set. The PR body states the tier and why, and a reviewer may raise it. Light runs by hand
-  until the gate's planned `--tier` flag lands (root backlog 1116).
+  main job set. The PR body states the tier and why, and a reviewer may raise it. The local gate takes
+  `--tier light|full` (root backlog 1116 delivers it with the gate). Where a repository has no test
+  mapping yet, light runs by hand.
 
 ### Changed
 
