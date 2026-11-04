@@ -85,13 +85,19 @@ timing tests. A CI failure must be the exception, never the normal path (Abstrac
   only with the fix for that failure.
 - **Release branches resolve dependencies from the registry**, not from editable sibling checkouts.
   Before a release PR, also run the release workflow's own validate / build / sdist / test-the-wheel
-  steps locally: they otherwise run only on the tag.
+  steps locally: they otherwise run only on the tag. Run them once and only them: the PR and main
+  jobs already green on the same head are not repeated (in AbstractFramework:
+  `scripts/ci_local.sh <repo> --release-tag vX.Y.Z --job release:<job> ...`, until the gate skips
+  them by itself).
+- **One gate at a time per machine.** Never run a gate beside another gate, an Xcode build or a job
+  that loads models: shared ports, disk and CPU turn good runs into flakes and cost hours of re-runs.
 - **A red main is an incident.** Whoever merged fixes or reverts it within the hour and tells the
   maintainer. A re-run that passes is not a fix.
 - **Flaky tests.**
   - No wall-clock assertion by default: timing bounds run only behind an explicit opt-in.
   - A real-server test waits until the server answers HTTP.
   - A test that flakes once is fixed or quarantined before the next merge.
+  - A known-flaky test is fixed before the release is cut; re-running to green is never the fix.
 - **Test tiers.** The PR body states the tier and why; a reviewer may raise it.
   - **Light:** docs, copy, icons, CSS, one dropdown, a catalog or model entry, a changelog, or a pin
     bump with its pin tests. Run the changed files' tests, lint and type-check, and the package's

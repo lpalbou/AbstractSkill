@@ -73,14 +73,20 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
    checkouts, and a branch that needs an unpublished sibling fails it. In the manual fallback, use a
    fresh venv the same way.
 4. **Release PRs also run the release workflow's own validate / build / sdist / wheel-test steps
-   locally** before the PR (`scripts/ci_local.sh <repo> --release-tag vX.Y.Z`), because those jobs
-   run only on the tag, when it is too late.
+   locally** before the PR, because those jobs run only on the tag, when it is too late. Never run a
+   job twice on the same head: the `ci` jobs that are already green on that head are not re-run by
+   the release-tag pass. Until the gate does this by itself (root backlog), run the PR and main job
+   set once, then the release workflow's jobs only:
+   `scripts/ci_local.sh <repo> --release-tag vX.Y.Z --job release:<job> [--job release:<job> ...]`
+   (`--list` names them). A full release-tag run repeats every `ci` job: on 2026-11-03 it cost about
+   30 minutes per Core head and failed on the duplicates' flakes, not on the release jobs.
 5. **A red main is an incident.** Whoever merged fixes or reverts it within the hour and tells the
    operator at once. Re-running until green is not a fix.
 6. **Flaky tests.** No wall-clock assertion runs by default: timing bounds are opt-in (a
    `*_TIMING_STRICT=1` switch). A test of a real server waits until the server answers HTTP, never
    for a log line. A test that flaked once is fixed or quarantined, with a backlog item, before the
-   next merge.
+   next merge. A known-flaky test in a package about to be cut is fixed BEFORE the cut: re-running a
+   job until it is green is never the answer, on a release branch least of all.
 7. **Test tiers (AbstractFramework ADR 0051).** The PR body states the tier and why; a reviewer may
    raise it.
    - **L, light:** docs, copy, icons, CSS, one dropdown, a catalog or model entry, a changelog, or a
@@ -96,6 +102,11 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
 
    The root `scripts/ci_local.sh` implements `--tier light|full` (root backlog 1116 delivers it with
    the gate).
+8. **ONE gate at a time per Mac.** Never start a gate while another gate, an Xcode build or test run,
+   or a job that loads models runs on the same machine, whoever started it. Concurrent runs collide on
+   fixed ports (the root bootstrap smoke's 18080), fill the disk, and turn timing-sensitive tests into
+   flakes; each collision costs a re-run of tens of minutes. Check first (`pgrep -fl ci_local`, Xcode,
+   `untracked/gpu.lock`), and wait or queue rather than overlap.
 
 ## Before you start
 
@@ -202,6 +213,14 @@ sweep is MANDATORY before the first lower-package cut of a wave:
    - (b) defer the feature to the next wave.
 
    Name the packages each option re-cuts.
+6. **Cut a base package only after its dependents are drafted.** Before the base package's release
+   PR, every dependent PR of the wave that uses the new base API is written and passing against the
+   base branch (its gate run with the base installed from the branch, not the registry), and every
+   seam ask between them (a missing export, a renamed field, a facade function) is answered and
+   closed. A dependent written after the cut finds those seams too late and forces a re-cut: in the
+   2026-11-03/04 wave AbstractRuntime 0.18.0 was cut before the gateway's idle-unload and identity
+   slices were drafted, and the seams they found made a 0.18.1 re-cut necessary, a second review,
+   CI, publish and visibility cycle for every package above it.
 
 Worked example (this wave): AbstractCore 2.33.0 was cut on 2026-11-03. Root backlog 1115 (idle unload
 of loaded models, `> Package: AbstractCore (mechanism), AbstractRuntime (relay), AbstractGateway`)
@@ -221,7 +240,10 @@ Repeat for each package in the plan's `release_wave`, lowest order first.
    `references/package-inventory.md`; some packages keep it in two places that must agree). Fold
    `Unreleased` into one dated `CHANGELOG.md` section for the version. Run `coredoc`'s release
    checklist: version source, README badges and install snippets, package metadata, llms files
-   regenerated with the package's generator and committed, backlog/ADR trace.
+   regenerated with the package's generator and committed, backlog/ADR trace. The llms files and the
+   coredoc set are user-facing only (operator, 2026-11-04): they are for people and agents who use the
+   package. Internal build, test, gate and release pages (how CI is gated, how run folders are pruned,
+   the maintainers' test environment) stay out of `llms*.txt` and the core doc set.
 3. **Local proof.** Run the pre-push gate (`scripts/ci_local.sh <repo> --release-tag vX.Y.Z`, see "CI
    is green before it is pushed"). Then the package tests. For anything that touches an engine, run a real-weights
    end-to-end check on the machine, not a mock. For gateway routes, go through a scratch gateway
@@ -310,12 +332,17 @@ python3 "$SKILL_DIR/scripts/pypi_visibility_gate.py" --wait 900 crates:abstractg
 6. One dated changelog section per released version; llms files regenerated; backlog item closed
    with evidence; durable rules recorded as ADRs.
 7. No publish from a checkout with uncommitted release-scope changes.
-8. Root `abstractframework` only after the operator tested the candidate matrix and said GO
+8. Ask the operator ONCE, at the end of the wave: approvals, device tests, TestFlight uploads and the
+   root GO are gathered and asked together when every package below root is published and the stack
+   is redeployed locally (operator, 2026-11-04). No mid-wave unlock requests.
+9. Root `abstractframework` only after the operator tested the candidate matrix and said GO
    (ADR 0051), pinning exactly the tested versions. Its pins, `RELEASE_VERSIONS`, install
    manifest, installers and install docs must match that matrix. Until the GO, say plainly that
    `pip install abstractframework[...]` and the installer still resolve the previous root's matrix.
 
-Stop and report on: no scope-sweep decision on record for a base package about to be cut, an
+Stop and report on: no scope-sweep decision on record for a base package about to be cut, a base
+package whose dependents of the wave are not yet drafted and passing against its branch, a known-flaky
+test in the package being cut, another gate or model/Xcode job running on the machine, an
 ambiguous version source, a duplicate target version, an unclear publish destination, a red
 pre-push gate, a red main, a red or unknown check, a version not visible on its registry, or a floor that still
 points below a just-released version.
