@@ -1,6 +1,26 @@
 # Changelog
 
-## [0.3.8] - 2026-11-06
+## [0.3.9] - 2026-11-05
+
+### Changed
+
+- `abstract-release`: a base package is cut only after every dependent PR of the wave that uses its
+  new API is drafted and passing against the base branch, and every seam ask between them is closed
+  (the AbstractRuntime 0.18.1 re-cut of the 2026-11-03/04 wave). Missing it is a stop condition.
+- `abstract-release` and `release`: the release-tag pass runs only the release workflow's own jobs;
+  the PR and main jobs already green on the same head are not repeated (until the AbstractFramework
+  gate skips them by itself: `scripts/ci_local.sh <repo> --release-tag vX.Y.Z --job release:<job>`).
+- `abstract-release` and `release`: one gate at a time per machine, never beside another gate, an
+  Xcode build or a model-loading job.
+- `abstract-release` and `release`: a known-flaky test is fixed before the cut; re-running a job to
+  green is never the fix.
+- `abstract-release`: approvals, device tests, TestFlight uploads and the root GO are asked of the
+  operator once, at the end of the wave.
+- `abstract-release`: llms files and the coredoc set are user-facing only; internal build, test, gate
+  and release pages stay out of them.
+- Bundled registry 2026.11.08 (the two skills re-pinned).
+
+## [0.3.8] - 2026-11-03
 
 ### Added
 
