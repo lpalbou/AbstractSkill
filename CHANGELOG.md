@@ -20,7 +20,7 @@
   and release pages stay out of them.
 - Bundled registry 2026.11.08 (the two skills re-pinned).
 
-## [0.3.8] - 2026-11-06
+## [0.3.8] - 2026-11-03
 
 ### Added
 

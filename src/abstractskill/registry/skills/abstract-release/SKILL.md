@@ -78,8 +78,12 @@ tests. The operator got ten failure e-mails overnight. A CI failure is the excep
    the release-tag pass. Until the gate does this by itself (root backlog), run the PR and main job
    set once, then the release workflow's jobs only:
    `scripts/ci_local.sh <repo> --release-tag vX.Y.Z --job release:<job> [--job release:<job> ...]`
-   (`--list` names them). A full release-tag run repeats every `ci` job: on 2026-11-03 it cost about
-   30 minutes per Core head and failed on the duplicates' flakes, not on the release jobs.
+   (`--list` names them). This removes the repeated `ci.yml` jobs only. Some release workflows run a
+   test matrix of their own: AbstractCore's `release.yml` re-runs its whole suite as release jobs, so
+   `--job release:<job>` still runs those. On 2026-11-03 the Core 2.34.0 release-tag run took about
+   32 minutes, and its two failures were `release.yml`'s own jobs (Test console-tui crate, Local-model
+   tests) while their `ci.yml` twins passed on the same head. Making such a workflow rely on the green
+   `ci` run is a per-package follow-up (root backlog 1127 names AbstractCore's).
 5. **A red main is an incident.** Whoever merged fixes or reverts it within the hour and tells the
    operator at once. Re-running until green is not a fix.
 6. **Flaky tests.** No wall-clock assertion runs by default: timing bounds are opt-in (a
