@@ -14,6 +14,10 @@ of trust for skills, with automated periodic reviews.
 - Deprecated: 0
 - Recurrent: 1 (advisory/validation registry review)
 
+## Framework-owned cross-package work
+
+[Framework 1131](https://github.com/lpalbou/AbstractFramework/blob/main/docs/backlog/completed/1131_pull_before_edits_branches_and_prs.md) owns proactive pull preparation before edits, branches and PRs, and the bundled/installed `abstract-release` and `release` procedures. Bundle revision 2026.11.09 carries that procedure with a refreshed adopted tree hash and content pin. It is included in the 0.3.10 patch release.
+
 ## Priority / next recommended work
 
 1. 0003 simulated-execution audit harness — DESIGN done; implementation awaits runtime/agency lanes (upgrades the adopted shelf skills to audited, mints the first specific advisories).

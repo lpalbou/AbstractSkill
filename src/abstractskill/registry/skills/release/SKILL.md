@@ -26,6 +26,26 @@ tag or workflow run is auditable.
 - For an existing healthy release pipeline, prefer operating it over redesigning it. Keep local
   preflight proportional and let the remote workflow enforce its release gates.
 
+## Pull before edits, branches and PRs
+
+For authorized implementation/release work, the agent performs synchronization itself:
+
+- Before editing code or release metadata, fetch and pull the affected main checkout
+  (`git fetch origin`, then `git pull --ff-only origin main` while on main).
+- Repeat that preparation immediately before creating a branch/worktree; base it on
+  freshly fetched `origin/main`.
+- Before submitting/updating a PR, pull normal main again, fetch the feature branch's
+  upstream, and merge remote feature commits and `origin/main` that the branch lacks.
+  Resolve conflicts and validate the integrated tree before pushing the PR.
+- After merging on GitHub, immediately pull the corresponding normal main checkout.
+
+Existing feature worktrees need their own upstream/main integration before edits; pulling
+normal main does not update them. Preserve published hashes with ordinary merges. Do not
+reset, force-push or automatically stash others' edits. Perform routine preparation without
+asking the operator; escalate only actual conflicts/ownership decisions or remote failures.
+Read-only audits do not authorize pulls. In AbstractFramework cross-package work, begin
+with `bash scripts/pull.sh`; final status checks confirm synchronization, never replace it.
+
 ## Apply The Operating Rules
 
 - Never make a silent release. State the target version, release type, target commit/ref, publish

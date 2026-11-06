@@ -400,30 +400,52 @@ to release):
   trigger, registry environment, llms generator, and package-specific rules.
 - `references/package-discovery.md`: how the planner discovers packages and reads its output.
 
-## Keep every checkout in step with GitHub (repo sync rule)
+## Pull first: before edits, branches and PRs (ADR 0051; backlog 1131)
 
-Observed 2026-10-27: several local `main` checkouts were dozens of commits behind their remotes
-(abstractuic 86, the root 10) because PRs were merged on GitHub while nobody pulled the local
-checkout, and new branches were then cut from the stale main. Rules, every time:
+Synchronization is an action the agent performs, not a check it hands back to the operator.
+For authorized implementation/release work, use these preparation points every time:
 
-1. Before cutting a branch or a worktree: `git -C <repo> fetch origin && git -C <repo> pull --ff-only origin main`
-   on the main checkout (a dirty checkout is left alone and reported; never stash someone else's work).
-2. After merging a PR on GitHub: pull the local main checkout immediately (the merge watcher does it).
-3. Worktrees are cut from `origin/main`, never from the local `main` ref.
-4. A sweep before any release wave: for each repo, `rev-list --count main..origin/main` must be 0;
-   `scripts/status.sh` at the root prints ahead/behind per repo.
-5. A root `main` that diverged (local release commits made elsewhere) is merged, never rebased: the
-   operator's commits keep their hashes; origin's pins and version win in conflicts, local docs and backlog
-   additions are kept, duplicated release sections are dropped.
+1. **Before changing code or release metadata:** fetch and pull the affected normal main
+   checkout before the first edit. On main, run `git fetch origin` followed by
+   `git pull --ff-only origin main`. For cross-package work, run the workspace's
+   `bash scripts/pull.sh` first; it actually fast-forwards all inventoried main checkouts,
+   including browser apps and Rust. Then prepare each active feature checkout as below.
+2. **Before creating a branch or worktree:** repeat the fetch/pull of its normal main
+   checkout, then create the branch/worktree from freshly fetched `origin/main`.
+   Do not assume the synchronization from an earlier task is still current.
+3. **Before submitting or updating a PR:** refresh the normal main checkout again and
+   fetch the active feature branch's configured upstream. Merge upstream commits it lacks,
+   then merge the latest `origin/main` into that feature branch when needed. Use ordinary
+   merges (`git merge --no-edit <ref>`) to preserve published commit hashes. Resolve
+   conflicts, run the relevant checks on the integrated tree, then push and create/update
+   the PR. Refresh again if new upstream commits arrive during validation.
+4. **Immediately after a GitHub merge:** pull the corresponding normal main checkout.
+   The coordinator owns this step, including merges performed by workers; a worker's
+   handoff includes the repository and merge SHA.
+5. **Before final handoff:** run the actual all-repository pull sweep again, then inspect
+   `scripts/status.sh`. `scripts/status.sh --check` is an additional fresh-remote
+   confirmation, not a replacement for pulling. If the sweep changed sources, refresh
+   the affected build/tests/deployment before saying the candidate is ready.
 
-## Final gate: the local source build of the whole stack
+On an existing feature branch, prepare that checkout before editing too: fetch its
+upstream, integrate remote feature commits and current `origin/main` if they are missing.
+Updating the normal main checkout alone does not update a feature worktree. Never run
+`git pull origin main` blindly in whichever directory happens to be current.
 
-After the root pins are released, run the operator's own developer path before the final report:
-`./scripts/status.sh` (every repo on `main`, 0 behind, no checkout left on a feature branch by a worker)
-and `./scripts/build.sh` (editable Python installs, every npm package built from local packs, every Rust
-crate compiled tier by tier). A failure there is a release defect even when every registry install passes:
-a crate that does not compile from a clean checkout, a pin that does not resolve locally, a checkout left
-behind. Operator-modified files are reported, never built around: say which file fails and whose edit it is.
+The agent does this without asking the operator to run commands or approve routine pulls.
+Preserve local edits and commit identities; do not reset, force-push or automatically stash
+someone else's work. Resolve routine integration issues within the task. Escalate only a
+real conflict/ownership decision or unavailable remote, with the exact reason. Read-only
+audits remain read-only unless synchronization has also been authorized.
+
+## Candidate handoff
+
+Pulling and integrating happen BEFORE building and testing the candidate, not after root
+publication. Check published versions and installed artifacts separately from local source.
+Keep root/site candidates held for the operator's test and explicit release decision.
+The optional `check_workspace.py` command and its source receipts can confirm the final
+state or compare it with a prior build; they do not replace any of the pull steps above.
+Normal build/start commands do not require a new freshness gate or receipt workflow.
 
 ## Final report: the summary table, then "show me your work"
 
