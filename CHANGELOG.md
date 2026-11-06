@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.10] - 2026-11-06
+
+### Changed
+
+- Bundled `abstract-release` and `release` procedures synchronize normal main checkouts before edits, branches, and pull requests, integrate published branch updates without rewriting history, and verify workspace freshness before handoff.
+- Bundled registry revision 2026.11.09 with refreshed skill-tree validation hashes and content pins.
+
 ## [0.3.9] - 2026-11-05
 
 ### Changed

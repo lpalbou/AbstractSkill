@@ -28,10 +28,9 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.9: `abstract-release` cuts a base package only after its
-dependents are drafted, runs one gate at a time per machine without repeating
-jobs already green, and fixes a known-flaky test before the cut; see the
-[changelog](CHANGELOG.md#039---2026-11-05).
+What's new in 0.3.10: the bundled release procedures synchronize checkouts
+before edits, branches, and pull requests, and verify workspace freshness before
+handoff. See the [changelog](CHANGELOG.md#0310---2026-11-06).
 
 ## The bundled skill registry
 
