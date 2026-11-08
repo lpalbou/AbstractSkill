@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import html
+
 import pytest
 
 from abstractskill import (
@@ -145,3 +147,29 @@ def test_format_available_skills_xml_is_deterministic() -> None:
     assert rendered.index("alpha") < rendered.index("beta")
     assert "<available_skills>" in rendered
     assert "<name>alpha</name>" in rendered
+    # Metadata-only skills know no location: no <path>, no hint (unchanged shape).
+    assert "<path>" not in rendered and "read_file" not in rendered
+
+
+def test_format_available_skills_xml_names_each_skill_path(tmp_path) -> None:
+    """The block tells the model WHERE a skill is (operator 2026-11-08: an agent
+    searched the workspace and read a stale copy; the host serves files under
+    the listed path even where its workspace policies would refuse them)."""
+    from pathlib import Path
+
+    from abstractskill.models import SkillMetadata
+    from abstractskill.prompt import SKILL_PATH_HINT
+
+    located = tmp_path / "shelf" / "skills" / "alpha" / "SKILL.md"
+    skills = [
+        SkillMetadata(name="alpha", description="First", source_path=located),
+        SkillMetadata(name="beta", description="Second & more"),
+    ]
+    rendered = format_available_skills_xml(skills, paths={"beta": Path("/elsewhere/beta/SKILL.md")})
+    assert f"<path>{html.escape(str(located))}</path>" in rendered
+    assert "<path>/elsewhere/beta/SKILL.md</path>" in rendered, "an explicit path override wins"
+    assert rendered.rstrip().endswith(SKILL_PATH_HINT)
+    assert "read the SKILL.md at its <path> with read_file" in rendered
+    assert rendered.index("</available_skills>") < rendered.index(SKILL_PATH_HINT)
+    # Determinism: the same input renders the same bytes.
+    assert rendered == format_available_skills_xml(skills, paths={"beta": Path("/elsewhere/beta/SKILL.md")})

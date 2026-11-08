@@ -44,6 +44,28 @@ validations:
     \ pins map to it (verified on the live workspace: 36 packages, abstractavatar-crate\
     \ ordered before abstracttui; the previous planner aborts). Still read-only, stdlib\
     \ only. Behavioral audit (backlog 0003) pending \u2014 upgrades to audited then."
+- name: abstractcore
+  source: first-party
+  tree_hash: 5b4df2c5729ff724f78b5c37d00c6b1104116b445f6f3532772ef95a1f49e9d6
+  level: first_party
+  method: first-party
+  audience: host
+  validated_by: skill
+  validated_at: '2026-11-08'
+  evidence:
+    parser_roundtrip: true
+    has_scripts: false
+    files: 3
+    source_path: AbstractCore repository, skills/abstractcore (SKILL.md + references/)
+    source_commit: cac85276368c1b7f3894494baafbda624719fa43
+  notes: 'Authored first-party in the AbstractCore repository (skills/abstractcore:
+    SKILL.md + references/integrations.md + references/operations.md; package-version
+    2.34.0) and copied byte-verbatim into the bundled registry on 2026-11-08 from
+    AbstractCore main at cac85276368c1b7f3894494baafbda624719fa43, so a fresh install
+    seeds the abstractcore skill beside abstractframework-gateway (operator ruling
+    2026-11-08: the two framework skills are registered in every gateway by default).
+    Re-copy from AbstractCore and re-pin on every AbstractCore release that changes
+    the skill.'
 - name: abstractframework-gateway
   source: first-party
   tree_hash: bf438ba23526abf39e591865358c55ae8efa4da61437c4fc5527bafc68c6882d

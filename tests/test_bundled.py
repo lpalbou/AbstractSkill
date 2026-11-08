@@ -38,8 +38,8 @@ LICENSES = (
 # The bundle version must move whenever the bundled content moves. When this
 # test fails: bump `version:` in src/abstractskill/registry/catalog.yaml, then
 # update BOTH values below (the digest printed in the failure message).
-PINNED_VERSION = "2026.11.09"
-PINNED_DIGEST = "055da725b64b4bc2b9171eb922b1b5252e0484b2866054dd6a482a0273bf1e26"
+PINNED_VERSION = "2026.11.10"
+PINNED_DIGEST = "7eb12ce796c6e658fb8e181fa2d6a2114218eb7ef31f9ff7b7f193e5b4cefa4b"
 
 
 def _bundle_digest(root: Path) -> str:
@@ -70,11 +70,14 @@ def _all_items() -> set[str]:
     return skills | set(TRUST_FILES) | set(LICENSES)
 
 
-def test_bundled_dir_is_the_package_registry_with_16_skills() -> None:
+def test_bundled_dir_is_the_package_registry_with_17_skills() -> None:
     root = bundled_registry_dir()
     assert root == REPO / "src" / "abstractskill" / "registry"
     skills = sorted(p.name for p in (root / "skills").iterdir() if p.is_dir())
-    assert len(skills) == 16
+    assert len(skills) == 17
+    assert {"abstractcore", "abstractframework-gateway"} <= set(skills), (
+        "the two framework skills are bundled so every fresh install seeds them (operator 2026-11-08)"
+    )
     assert all((root / "skills" / name / "SKILL.md").is_file() for name in skills)
     for name in TRUST_FILES:
         assert (root / name).is_file()
@@ -404,3 +407,29 @@ def test_concurrent_seeds_from_four_processes(tmp_path: Path) -> None:
     follow_up = seed_registry(dest)
     assert (len(follow_up.added), len(follow_up.unchanged), follow_up.kept) == (0, len(expected), {})
     assert not list(dest.glob(".seed-staging*")) and not list(dest.glob(".seeded.json.*"))
+
+
+def test_seeding_a_shelf_that_has_the_gateway_skill_adds_abstractcore_and_overwrites_nothing(tmp_path: Path) -> None:
+    """Operator 2026-11-08: the abstractcore and abstractgateway skills are registered in
+    every gateway by default. An existing shelf (seeded before 0.3.11, with its own edits)
+    gains `abstractcore`; nothing it already had changes."""
+    dest = tmp_path / "shelf"
+    shutil.copytree(bundled_registry_dir() / "skills" / "abstractframework-gateway", dest / "skills" / "abstractframework-gateway")
+    gateway_skill = dest / "skills" / "abstractframework-gateway" / "SKILL.md"
+    gateway_skill.write_text(gateway_skill.read_text(encoding="utf-8") + "\n<!-- operator note -->\n", encoding="utf-8")
+    edited_hash = hash_skill_tree(dest / "skills" / "abstractframework-gateway")
+    assert not (dest / "skills" / "abstractcore").exists()
+
+    report = seed_registry(dest)
+
+    assert "skills/abstractcore" in report.added
+    assert hash_skill_tree(dest / "skills" / "abstractcore") == hash_skill_tree(bundled_registry_dir() / "skills" / "abstractcore")
+    assert (dest / "skills" / "abstractcore" / "references" / "operations.md").is_file()
+    assert "skills/abstractframework-gateway" in report.kept_unknown_provenance
+    assert hash_skill_tree(dest / "skills" / "abstractframework-gateway") == edited_hash, "an operator's edit is never overwritten"
+    # The bundled registry itself lists both framework skills, as first-party records.
+    registry = TrustRegistry.load(validations_path=bundled_registry_dir() / "validations.yaml")
+    by_name = {record.name: record for record in registry.validations}
+    assert by_name["abstractcore"].level == TrustLevel.FIRST_PARTY
+    assert by_name["abstractframework-gateway"].level == TrustLevel.FIRST_PARTY
+    assert by_name["abstractcore"].tree_hash == hash_skill_tree(bundled_registry_dir() / "skills" / "abstractcore")

@@ -53,12 +53,17 @@ Everything below is exported from the top-level `abstractskill` package.
 
 ## Prompt
 
-- `format_available_skills_xml(skills, *, descriptions=None) -> str` —
+- `format_available_skills_xml(skills, *, descriptions=None, paths=None) -> str` —
   deterministic, html-escaped `<available_skills>` block. Pass
   `descriptions=SkillSelection.activation_descriptions` (or
   `TrustRegistry.activation_descriptions()`): without it the UPSTREAM
   description renders verbatim, which leaks wrong-audience text (e.g. a
-  vendored skill's "Use when Codex needs to…") into the prompt.
+  vendored skill's "Use when Codex needs to…") into the prompt. A skill
+  whose location is known (`paths[name]`, else the SKILL.md the loader read,
+  `SkillMetadata.source_path`) also renders a `<path>` element, and the block
+  then ends with `SKILL_PATH_HINT` (read the SKILL.md at its path with
+  `read_file`; do not search the workspace for another copy). Metadata-only
+  skills render as before.
 
 ## Trust
 

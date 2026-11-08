@@ -140,4 +140,4 @@ __all__ = [
     "validate_skill_name",
 ]
 
-__version__ = "0.3.10"
+__version__ = "0.3.11"

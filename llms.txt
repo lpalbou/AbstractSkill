@@ -4,7 +4,7 @@
 > and validate skills, discover them on disk with progressive disclosure, hash
 > them for evolution and tamper detection, compose their tool declarations with
 > an operator grant, and classify their trust. The wheel also ships the curated
-> skill registry (16 skills and their trust files), which hosts copy into a
+> skill registry (17 skills and their trust files), which hosts copy into a
 > directory they own with `seed_registry`. Dependency-light (PyYAML only);
 > executes nothing, uses no network, and imposes no runtime limits — hosts
 > consume its contracts.

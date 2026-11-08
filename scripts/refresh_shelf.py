@@ -74,6 +74,33 @@ SHELF_POLICY = {
             "fold hardening)."
         ),
     },
+    "abstractcore": {
+        "expected_tree_hash": "5b4df2c5729ff724f78b5c37d00c6b1104116b445f6f3532772ef95a1f49e9d6",
+        "method": "first-party",
+        "source": "first-party",
+        "level": "first_party",
+        # First-party: the frontmatter description IS the activation text.
+        "activation_description": None,
+        # Provenance the next refresh must keep: the AbstractCore checkout
+        # and commit the tree was copied from (operator ruling 2026-11-08:
+        # the abstractcore and abstractgateway skills are registered in
+        # every gateway by default, so fresh installs seed both).
+        "evidence": {
+            "source_path": "AbstractCore repository, skills/abstractcore (SKILL.md + references/)",
+            "source_commit": "cac85276368c1b7f3894494baafbda624719fa43",
+        },
+        "notes": (
+            "Authored first-party in the AbstractCore repository (skills/abstractcore: "
+            "SKILL.md + references/integrations.md + references/operations.md; "
+            "package-version 2.34.0) and copied byte-verbatim into the bundled "
+            "registry on 2026-11-08 from AbstractCore main at "
+            "cac85276368c1b7f3894494baafbda624719fa43, so a fresh install seeds the "
+            "abstractcore skill beside abstractframework-gateway (operator ruling "
+            "2026-11-08: the two framework skills are registered in every gateway by "
+            "default). Re-copy from AbstractCore and re-pin on every AbstractCore "
+            "release that changes the skill."
+        ),
+    },
     "abstractframework-gateway": {
         "expected_tree_hash": "bf438ba23526abf39e591865358c55ae8efa4da61437c4fc5527bafc68c6882d",
         "method": "first-party",
@@ -439,7 +466,10 @@ SHELF_POLICY = {
         ),
     },
     "abstract-release": {
-        "expected_tree_hash": "8222d49ea55d9a1e44ec3fa633d6b5164b6dbd5a05dfbeef8876f20d45048d4d",
+        # Re-pinned 2026-11-05 by the framework seat (0.3.9/0.3.10 waves);
+        # the record keeps that attestation.
+        "expected_tree_hash": "c6d82f49baa263a405124b15a367ce04297a63dad6e53a4406a95eb56d0c51e7",
+        "validated_by": "framework",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -514,7 +544,10 @@ SHELF_POLICY = {
         ),
     },
     "release": {
-        "expected_tree_hash": "d5152d697b5f5fab6b1603210c95ecc61d552d4e7a5d646fcb12f096b26cb5e6",
+        # Re-pinned 2026-11-05 by the framework seat (0.3.9/0.3.10 waves);
+        # the record keeps that attestation.
+        "expected_tree_hash": "34a2a0e6f53f7eade0d7704888ba817b4ff8ac5975118f014cc3a1e31dea7270",
+        "validated_by": "framework",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
         "level": "adopted",
@@ -693,7 +726,9 @@ def build_records() -> list[dict]:
             # prompt. Per-skill overrides live in SHELF_POLICY; audience
             # changes are deliberate curation acts, never inferred.
             "audience": policy.get("audience", "host"),
-            "validated_by": "skill",
+            # The seat that attested the bytes (the skill seat unless the
+            # policy names another, e.g. a framework-seat re-pin).
+            "validated_by": policy.get("validated_by", "skill"),
         }
         if policy.get("delivered_via_map"):
             record["delivered_via_map"] = True
@@ -713,6 +748,11 @@ def build_records() -> list[dict]:
                 "audited then."
             ),
         }
+        # Per-skill provenance evidence (where the bytes were copied from)
+        # rides beside the structural facts; a refresh keeps it.
+        extra_evidence = policy.get("evidence")
+        if isinstance(extra_evidence, dict):
+            record["evidence"] |= {str(k): v for k, v in extra_evidence.items()}
         if policy.get("activation_description"):
             record["activation_description"] = policy["activation_description"]
         records.append(record)

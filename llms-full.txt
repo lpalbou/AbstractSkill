@@ -61,16 +61,18 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.10: the bundled release procedures synchronize checkouts
-before edits, branches, and pull requests, and verify workspace freshness before
-handoff. See the [changelog](CHANGELOG.md#0310---2026-11-06).
+What's new in 0.3.11: the bundled registry carries the `abstractcore` skill
+beside `abstractframework-gateway`, so a fresh install seeds both framework
+skills, and the available-skills block names each skill's SKILL.md path so the
+model reads the skill where it is. See the
+[changelog](CHANGELOG.md#0311---2026-11-08).
 
 ## The bundled skill registry
 
 `pip install abstractskill` installs the reviewed shelf as package data:
 
 ```
-abstractskill/registry/skills/            # 16 curated skills (one folder per SKILL.md)
+abstractskill/registry/skills/            # 17 curated skills (one folder per SKILL.md)
 abstractskill/registry/licenses/          # upstream licenses of catalog-vendored skills
 abstractskill/registry/validations.yaml   # trust records: byte pins per skill tree
 abstractskill/registry/advisories.yaml    # do-not-use advisories (empty at v1, by design)
@@ -475,7 +477,7 @@ graph TD
         demand[demand.py<br/>derive_demand]
         catalog[catalog.py<br/>load_catalog]
         bundled[bundled.py<br/>bundled_registry_dir / seed_registry]
-        registry[(registry/<br/>16 skills, licenses,<br/>4 yaml files)]
+        registry[(registry/<br/>17 skills, licenses,<br/>4 yaml files)]
     end
 
     parser --> validation
@@ -682,12 +684,17 @@ Everything below is exported from the top-level `abstractskill` package.
 
 ## Prompt
 
-- `format_available_skills_xml(skills, *, descriptions=None) -> str` —
+- `format_available_skills_xml(skills, *, descriptions=None, paths=None) -> str` —
   deterministic, html-escaped `<available_skills>` block. Pass
   `descriptions=SkillSelection.activation_descriptions` (or
   `TrustRegistry.activation_descriptions()`): without it the UPSTREAM
   description renders verbatim, which leaks wrong-audience text (e.g. a
-  vendored skill's "Use when Codex needs to…") into the prompt.
+  vendored skill's "Use when Codex needs to…") into the prompt. A skill
+  whose location is known (`paths[name]`, else the SKILL.md the loader read,
+  `SkillMetadata.source_path`) also renders a `<path>` element, and the block
+  then ends with `SKILL_PATH_HINT` (read the SKILL.md at its path with
+  `read_file`; do not search the workspace for another copy). Metadata-only
+  skills render as before.
 
 ## Trust
 
@@ -902,7 +909,7 @@ least three improvement cycles" method.
 
 ## Which skills ship with the package, and how does a host use them?
 
-The wheel carries the curated registry: 16 skills, the upstream licenses of
+The wheel carries the curated registry: 17 skills, the upstream licenses of
 vendored third-party skills, and four yaml files (`catalog.yaml`,
 `validations.yaml`, `advisories.yaml`, `guidance.yaml`). A host copies it
 into a directory it owns with `seed_registry` and serves that copy; the
@@ -1241,13 +1248,14 @@ was pulled for a time-of-use fetch; one carries a content caveat).
 
 ## All skills at a glance
 
-The vendored shelf (the 16 skills shipped in the package under
+The vendored shelf (the 17 skills shipped in the package under
 `abstractskill/registry/skills/`) plus the curated catalog (vendorable on
 demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.
 
 | Skill | Status | Description | Link |
 |---|---|---|---|
+| `abstractcore` | shelf (first_party) | Write Python integrations and operate AbstractCore through create_llm, generate/agenerate, sessions, host-controlled tool loops, structured output, media, embeddings, the abstractcore CLI, and OpenAI-compatible HTTP serving. Use when choosing providers and exact model artifacts, configuring endpoints, downloading local models, diagnosing generation failures, or piloting an AbstractCore installation. Copied byte-verbatim from the AbstractCore repository (`skills/abstractcore`, 2.34.0); bundled since 0.3.11 so a fresh install seeds it beside `abstractframework-gateway`. | [src/abstractskill/registry/skills/abstractcore](../src/abstractskill/registry/skills/abstractcore/SKILL.md) |
 | `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [src/abstractskill/registry/skills/abstractframework-gateway](../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md) |
 | `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [src/abstractskill/registry/skills/adversarial-iteration](../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md) |
 | `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [src/abstractskill/registry/skills/agora-collaboration](../src/abstractskill/registry/skills/agora-collaboration/SKILL.md) |
@@ -1946,7 +1954,7 @@ trust.
 
 - [Trust model](trust.md) — validated skills, the do-not-use advisory registry,
   guidance, and the fail-closed verdict.
-- [Curated skills catalog](skills-catalog.md) — the 16 skills shipped in the
+- [Curated skills catalog](skills-catalog.md) — the 17 skills shipped in the
   package, the reviewed, pinned list of third-party skills worth vendoring,
   the tiers (top/watch/excluded with reasons), and the curated-only install
   path.

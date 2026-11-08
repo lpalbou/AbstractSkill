@@ -25,6 +25,7 @@ GUIDANCE = REPO / "src" / "abstractskill" / "registry" / "guidance.yaml"
 
 EXPECTED_SHELF = {
     "abstract-release",
+    "abstractcore",
     "abstractframework-gateway",
     "adversarial-iteration",
     "adr",
@@ -49,6 +50,7 @@ EXPECTED_SHELF = {
 # manual-review → adopted, pinned in src/abstractskill/registry/catalog.yaml).
 EXPECTED_LEVELS = {
     "abstract-release": TrustLevel.ADOPTED,
+    "abstractcore": TrustLevel.FIRST_PARTY,
     "abstractframework-gateway": TrustLevel.FIRST_PARTY,
     "adversarial-iteration": TrustLevel.FIRST_PARTY,
     "agora-collaboration": TrustLevel.FIRST_PARTY,
@@ -67,6 +69,7 @@ EXPECTED_LEVELS = {
 }
 EXPECTED_SOURCES = {
     "abstract-release": "codex-skills (maintainer)",
+    "abstractcore": "first-party",
     "abstractframework-gateway": "first-party",
     "adversarial-iteration": "first-party",
     "agora-collaboration": "first-party",

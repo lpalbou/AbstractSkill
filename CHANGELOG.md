@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.11] - 2026-11-08
+
+### Added
+
+- The bundled registry carries the `abstractcore` skill (SKILL.md + references/, copied byte-verbatim from the
+  AbstractCore repository, `skills/abstractcore` at 2.34.0, main cac85276) as a first-party record beside
+  `abstractframework-gateway`: fresh installs seed the abstractcore skill beside abstractframework-gateway, so every
+  gateway registers the two framework skills by default (operator 2026-11-08). Seeding never overwrites: an
+  operator who imported a copy named `abstractcore` keeps it beside the curated one. Bundled registry revision
+  2026.11.10 (17 skills).
+
+### Changed
+
+- `format_available_skills_xml` renders each skill's `<path>` (the SKILL.md the loader read,
+  `SkillMetadata.source_path`, or a `paths` override keyed by name) and, when at least one path is known, ends the
+  block with `SKILL_PATH_HINT`: read the SKILL.md at its path with `read_file`, do not search the workspace for
+  another copy. A host that builds the block from loaded skills gets the paths with no change of its own;
+  AbstractRuntime serves files under those paths itself, even where the workspace `.abstractignore` would refuse
+  them. Metadata-only skills render exactly as before.
+- `scripts/refresh_shelf.py`: a `SHELF_POLICY` entry may carry `evidence` (provenance such as the source path and
+  commit a tree was copied from), kept across refreshes.
+
 ## [0.3.10] - 2026-11-06
 
 ### Changed

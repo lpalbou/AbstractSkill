@@ -15,13 +15,14 @@ was pulled for a time-of-use fetch; one carries a content caveat).
 
 ## All skills at a glance
 
-The vendored shelf (the 16 skills shipped in the package under
+The vendored shelf (the 17 skills shipped in the package under
 `abstractskill/registry/skills/`) plus the curated catalog (vendorable on
 demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.
 
 | Skill | Status | Description | Link |
 |---|---|---|---|
+| `abstractcore` | shelf (first_party) | Write Python integrations and operate AbstractCore through create_llm, generate/agenerate, sessions, host-controlled tool loops, structured output, media, embeddings, the abstractcore CLI, and OpenAI-compatible HTTP serving. Use when choosing providers and exact model artifacts, configuring endpoints, downloading local models, diagnosing generation failures, or piloting an AbstractCore installation. Copied byte-verbatim from the AbstractCore repository (`skills/abstractcore`, 2.34.0); bundled since 0.3.11 so a fresh install seeds it beside `abstractframework-gateway`. | [src/abstractskill/registry/skills/abstractcore](../src/abstractskill/registry/skills/abstractcore/SKILL.md) |
 | `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [src/abstractskill/registry/skills/abstractframework-gateway](../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md) |
 | `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [src/abstractskill/registry/skills/adversarial-iteration](../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md) |
 | `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [src/abstractskill/registry/skills/agora-collaboration](../src/abstractskill/registry/skills/agora-collaboration/SKILL.md) |
