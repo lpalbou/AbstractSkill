@@ -331,12 +331,13 @@ def test_phase_teaching_verified_equivalent_to_the_canonical_artifact() -> None:
     assert "active phase" not in esk.lower()
 
     # Gateway entrance skill: auto-wake matches the artifact's sleep->visit
-    # transition ("it never refuses").
+    # transition ("A visit INTERRUPTS any sleep — never refused (except while
+    # stopped, ...)": the canonical wording since spec v22, entity a03d7e2).
     sleep_to_visit = next(
         t for t in artifact["transitions"]
         if t["from"] == "sleep" and t["to"] == "visit"
     )
-    assert "never refuses" in sleep_to_visit["semantics"]
+    assert "never refused" in sleep_to_visit["semantics"]
     gw = " ".join(
         (SHELF / "abstractframework-gateway" / "SKILL.md").read_text(encoding="utf-8").split()
     )
