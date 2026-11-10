@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -1015,7 +1015,7 @@ was read for the vendored entries; an adversarial review additionally
 content-read every top entry and its findings are folded below (one entry
 was pulled for a time-of-use fetch; one carries a content caveat).</p>
 <h2 id="all-skills-at-a-glance">All skills at a glance<a class="headerlink" href="#all-skills-at-a-glance" title="Permanent link">&para;</a></h2>
-<p>The vendored shelf (the 16 skills shipped in the package under
+<p>The vendored shelf (the 17 skills shipped in the package under
 <code>abstractskill/registry/skills/</code>) plus the curated catalog (vendorable on
 demand). Descriptions are the
 framework-facing activation lines; links point at the exact pinned source.</p>
@@ -1029,6 +1029,12 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>abstractcore</code></td>
+<td>shelf (first_party)</td>
+<td>Write Python integrations and operate AbstractCore through create_llm, generate/agenerate, sessions, host-controlled tool loops, structured output, media, embeddings, the abstractcore CLI, and OpenAI-compatible HTTP serving. Use when choosing providers and exact model artifacts, configuring endpoints, downloading local models, diagnosing generation failures, or piloting an AbstractCore installation. Copied byte-verbatim from the AbstractCore repository (<code>skills/abstractcore</code>, 2.34.0); bundled since 0.3.11 so a fresh install seeds it beside <code>abstractframework-gateway</code>.</td>
+<td><a href="../src/abstractskill/registry/skills/abstractcore/SKILL.md">src/abstractskill/registry/skills/abstractcore</a></td>
+</tr>
 <tr>
 <td><code>abstractframework-gateway</code></td>
 <td>shelf (first_party)</td>
@@ -1050,7 +1056,7 @@ framework-facing activation lines; links point at the exact pinned source.</p>
 <tr>
 <td><code>entity-self-knowledge</code></td>
 <td>shelf (first_party)</td>
-<td>A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules.</td>
+<td>A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, the five-state life cycle (visit, idle, work, personal, sleep), tool grants, and host-side teaching rules.</td>
 <td><a href="../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md">src/abstractskill/registry/skills/entity-self-knowledge</a></td>
 </tr>
 <tr>
@@ -1533,7 +1539,7 @@ same seat's single review (<code>validated_by: skill</code>) — the method cap 
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
