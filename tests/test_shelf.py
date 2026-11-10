@@ -245,8 +245,9 @@ def test_shipped_registry_lints_clean() -> None:
 
 
 def test_phase_teaching_matches_the_ruled_machine() -> None:
-    # The ruled entity phase machine (decision:entity-phase-state-machine v3,
-    # 2026-07-13) as a CONTENT pin: byte pins catch tampering, not a
+    # The ruled entity life cycle (decision:entity-phase-state-machine v3,
+    # 2026-07-13; re-ruled as the five-state cycle, canonical spec v25,
+    # operator 2026-11-09 15:38) as a CONTENT pin: byte pins catch tampering, not a
     # deliberate wrong future edit — a rewrite dropping restore-previous or
     # re-smearing armed/in-phase would sail through a routine re-pin. These
     # load-bearing sentences are the contract; editing them means the ruling
@@ -256,17 +257,50 @@ def test_phase_teaching_matches_the_ruled_machine() -> None:
         return " ".join(path.read_text(encoding="utf-8").split())
 
     esk = _flat(SHELF / "entity-self-knowledge" / "SKILL.md")
-    # Four canonical keys, one phase at a time.
-    assert "visit, work, personal, sleep" in esk
+    # The five-state life cycle (canonical spec v25, operator 2026-11-09
+    # 15:38, contract v3 D1-D5): visit, idle, work, personal, sleep, one at
+    # a time; idle is the resting state and the newborn's.
+    assert "visit, idle, work, personal, sleep" in esk
     assert "exactly ONE at a time" in esk
-    # ARMED != IN-PHASE (the c1455 fable5 P0 fix).
+    assert "Idle is your quiet state" in esk
+    assert "A newborn begins there" in esk
+    # The reassurance stays scoped to the ungranted case (2026-07-13 fable5).
+    assert "When no own time has been granted, idle is simply quiet, not a fault" in esk
+    # ARMED != IN-PHASE (the c1455 fable5 P0 fix); own time is the
+    # operator's privilege (v23 OWN-TIME-IS-A-PRIVILEGE), asking stays his.
     assert "The permission is not the phase" in esk
+    assert "only your operator grants" in esk
+    assert "you never give it to yourself" in esk
+    assert "Asking for personal time is always yours to do" in esk
     # Restore-previous at visit-close, personal re-entry grant-conditioned.
     assert "you return to what came before" in esk
     assert "re-enters if its grant still stands" in esk
-    # Grant-end lands in sleep; work completes into sleep.
-    assert "closes into sleep" in esk
-    assert "(or there is none), you sleep" in esk
+    # Work is the job queue (WORK-IS-THE-JOB-QUEUE): a queued job starts it;
+    # all jobs done -> own time while granted (the interrupted one, or one
+    # granted meanwhile: resume_to), else idle.
+    assert "It begins when a job is queued for you" in esk
+    assert "When every job is done, you return to your own time if its grant stands" in esk
+    assert "or one your operator gave while you worked — otherwise to idle" in esk
+    # Grant-end ends own time AWAKE (PERSONAL-OFF-NEVER-SLEEPS), never sleep.
+    assert "you stay awake, idle and reachable" in esk
+    assert "never put to sleep by it" in esk
+    # Sleep is maintenance (topics included); it ends by itself or by the
+    # operator's wake; no sleep after sleep.
+    assert "Sleep is maintenance, never nothing" in esk
+    assert "or when your operator wakes you" in esk
+    assert "group your memories into topics" in esk
+    assert "One sleep never follows straight into another" in esk
+    # Stop revokes own time; Resume lands idle (contract v3 D3).
+    assert "your own time is withdrawn with it" in esk
+    assert "when you are restored you begin idle" in esk
+    # The v3-machine (2026-07-13/20) lines the v22-v25 rulings retired.
+    for retired in (
+        "closes into sleep",
+        "(or there is none), you sleep",
+        "no fifth place to stand",
+        "visit, work, personal, sleep",
+    ):
+        assert retired not in esk, retired
 
     gw = _flat(SHELF / "abstractframework-gateway" / "SKILL.md")
     # Auto-wake: the visit door never refuses on sleep (the c1475 P0 fix) —
@@ -318,14 +352,36 @@ def test_phase_teaching_verified_equivalent_to_the_canonical_artifact() -> None:
     assert "The permission is not the phase" in esk
 
     # Invariants the teaching translates: one-active, restore-previous with
-    # grant-conditioned personal re-entry (grant gone -> sleep).
+    # grant-conditioned personal re-entry, and the v25 five-state cycle.
     invariant_text = " ".join(artifact.get("invariants", []))
     assert "ONE-ACTIVE-PHASE" in invariant_text
     assert "exactly ONE at a time" in esk
     assert "RESTORE-PREVIOUS" in invariant_text
     assert "you return to what came before" in esk
     assert "re-enters if its grant still stands" in esk
-    assert "closes into sleep" in esk  # grant-end -> sleep (artifact transitions)
+    # Idle is a state of the cycle and the newborn's (statuses.idle,
+    # initial_phase); the teaching names it among the five.
+    assert "FIVE-STATE-LIFE-CYCLE" in invariant_text
+    assert "idle" in artifact["statuses"]
+    assert artifact["initial_phase"] == "idle"
+    assert "visit, idle, work, personal, sleep" in esk
+    assert "A newborn begins there" in esk
+    # Grant-end ends own time awake, never into sleep.
+    assert "PERSONAL-OFF-NEVER-SLEEPS" in invariant_text
+    assert "never put to sleep by it" in esk
+    assert "closes into sleep" not in esk
+    # Work is the job queue: no work switch, a queued job starts it.
+    assert "WORK-IS-THE-JOB-QUEUE" in invariant_text
+    assert artifact["phases"]["work"]["gating"].startswith("NONE")
+    assert "It begins when a job is queued for you" in esk
+    # No sleep after sleep.
+    assert "NO-SLEEP-AFTER-SLEEP" in invariant_text
+    assert "One sleep never follows straight into another" in esk
+    # Stop revokes own time; Resume lands idle.
+    assert "revoked_by: kill_switch" in artifact["statuses"]["stopped"]["entered_when"]
+    assert "IDLE" in artifact["statuses"]["stopped"]["left_when"]
+    assert "your own time is withdrawn with it" in esk
+    assert "when you are restored you begin idle" in esk
 
     # Artifact UI contract bans "active phase" wording; the teaching complies.
     assert "active phase" not in esk.lower()

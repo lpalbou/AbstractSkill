@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.11] - 2026-11-08
+## [0.3.11] - 2026-11-10
 
 ### Added
 
@@ -9,10 +9,18 @@
   `abstractframework-gateway`: fresh installs seed the abstractcore skill beside abstractframework-gateway, so every
   gateway registers the two framework skills by default (operator 2026-11-08). Seeding never overwrites: an
   operator who imported a copy named `abstractcore` keeps it beside the curated one. Bundled registry revision
-  2026.11.10 (17 skills).
+  2026.11.11 (17 skills).
 
 ### Changed
 
+- The bundled `entity-self-knowledge` skill teaches the entity's five-state life cycle: visit, idle, work, personal
+  and sleep, one at a time. Idle is the resting state and a newborn's; work starts when a job is queued (there is no
+  work switch) and returns to interrupted own time while it is still granted, otherwise to idle; own time is granted
+  only by the operator, and ending it leaves the entity awake; sleep is maintenance (repair, consolidation, topics,
+  dreams) and never follows another sleep; Stop withdraws own time and Resume starts idle. Its capability map
+  (`references/capability_map.md`, installed in new entity homes) says that sleep groups memories into topics that
+  the `topics` tool shows. Hosts that seeded an earlier bundle receive the update on their next seed, unless the
+  operator edited the skill.
 - `format_available_skills_xml` renders each skill's `<path>` (the SKILL.md the loader read,
   `SkillMetadata.source_path`, or a `paths` override keyed by name) and, when at least one path is known, ends the
   block with `SKILL_PATH_HINT`: read the SKILL.md at its path with `read_file`, do not search the workspace for

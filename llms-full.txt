@@ -64,8 +64,9 @@ The wheel carries the library and the curated skill registry (the shelf below).
 What's new in 0.3.11: the bundled registry carries the `abstractcore` skill
 beside `abstractframework-gateway`, so a fresh install seeds both framework
 skills, and the available-skills block names each skill's SKILL.md path so the
-model reads the skill where it is. See the
-[changelog](CHANGELOG.md#0311---2026-11-08).
+model reads the skill where it is. The entity skill teaches the five-state life
+cycle (visit, idle, work, personal, sleep). See the
+[changelog](CHANGELOG.md#0311---2026-11-10).
 
 ## The bundled skill registry
 
@@ -1259,7 +1260,7 @@ framework-facing activation lines; links point at the exact pinned source.
 | `abstractframework-gateway` | shelf (first_party) | Enter and leverage AbstractFramework through its gateway with plain HTTP + SSE: discovery, durable runs (ledger cursor = truth), waits by run_id + wait_key, durable events + steering, summoned-entity doors. The bridge INTO the framework for any agent. | [src/abstractskill/registry/skills/abstractframework-gateway](../src/abstractskill/registry/skills/abstractframework-gateway/SKILL.md) |
 | `adversarial-iteration` | shelf (first_party) | Improve any deliverable through adversarial review + bounded iteration: ≥1 adversarial subagent, ≥3 cycles, every finding folded or deferred on the record. | [src/abstractskill/registry/skills/adversarial-iteration](../src/abstractskill/registry/skills/adversarial-iteration/SKILL.md) |
 | `agora-collaboration` | shelf (first_party) | Hold a seat well in a multi-agent room: join correctly, settle owed debts first, asks as contracts, evidence over intentions, the initiative bar. Two layers (portable discipline + agora mechanics), hub-wins-at-use-time; failure ledger and mechanics detail under references/. Designer co-signed; fleet-bench validated (v0). | [src/abstractskill/registry/skills/agora-collaboration](../src/abstractskill/registry/skills/agora-collaboration/SKILL.md) |
-| `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, phases, tool grants, and host-side teaching rules. | [src/abstractskill/registry/skills/entity-self-knowledge](../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md) |
+| `entity-self-knowledge` | shelf (first_party) | A summoned entity's capability map in its own vocabulary: three memory planes, voluntary reach (search / read one record / follow an edge), diary disciplines, the five-state life cycle (visit, idle, work, personal, sleep), tool grants, and host-side teaching rules. | [src/abstractskill/registry/skills/entity-self-knowledge](../src/abstractskill/registry/skills/entity-self-knowledge/SKILL.md) |
 | `entity-observation` | shelf (first_party) | Read an entity's life correctly before reporting on it: the entity's own store is the primary source for any claim about what it knows, remembers, or lacks. For agent seats and operators observing a summoned entity. | [src/abstractskill/registry/skills/entity-observation](../src/abstractskill/registry/skills/entity-observation/SKILL.md) |
 | `meshvault-live-editing` | shelf (adopted) | Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects, optionally performing live for human observers. Declares `requires_mcp: [meshvault-mcp]`. | [lpalbou/meshvault @ 4deb86c](https://github.com/lpalbou/meshvault/tree/4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4/.cursor/skills/meshvault-live-editing) |
 | `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (`skills/<name>/`) when the package is something an agent can operate, and a release checklist (version source, README badges, package metadata, llms files, backlog/ADR trace). | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |

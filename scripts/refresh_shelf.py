@@ -130,7 +130,7 @@ SHELF_POLICY = {
         ),
     },
     "entity-self-knowledge": {
-        "expected_tree_hash": "7e6fc34a73c7f94ec2d93c4d88f88d541d61aa4e4735a2fb27ba5b380e6cc45e",
+        "expected_tree_hash": "4a1faa3f35fea7507f661f45f3c1013ce60fa9288db03cac3007f6ca634e87f6",
         "method": "first-party",
         "source": "first-party",
         "level": "first_party",
@@ -140,6 +140,8 @@ SHELF_POLICY = {
         # home (laurent's ruling, cognition room seq 156, 2026-07-19).
         "audience": "entity",
         "delivered_via_map": True,
+        # Re-pinned by the framework seat (the 2026-11-10 five-state fold).
+        "validated_by": "framework",
         # First-party: frontmatter is the one activation source (see above).
         "activation_description": None,
         "notes": (
@@ -303,6 +305,28 @@ SHELF_POLICY = {
             "fable5 (glamour-verdict adversary) caught the stale count while "
             "auditing the map for glamour-line copies (none found - the map's "
             "interest teaching prices progress on EXPLORING, verified clean)."
+            " Five-state fold (2026-11-10, release 0.3.11; canonical spec "
+            "abstractentity/spec/entity_phases.json v25, contract v3 D1-D5, "
+            "operator rulings 2026-11-09 15:38 and 2026-11-10 00:05): the "
+            "phases section re-taught as five states (visit, idle, work, "
+            "personal, sleep), idle the quiet state and the newborn's (the "
+            "c203 'no fifth place to stand' line retired by the v22/v25 "
+            "IDLE-IS-A-STATE ruling); work = the job queue, all jobs done -> "
+            "own time while granted (resume_to) else idle, never sleep; own "
+            "time the operator's privilege, never self-given, revocation ends "
+            "it awake (PERSONAL-OFF-NEVER-SLEEPS); sleep = maintenance "
+            "(repair, consolidation, topics, dreams) entered by his own "
+            "decision, the operator's request or the idle thresholds, ended "
+            "by maintenance done or the operator's wake, never sleep after "
+            "sleep; Stop withdraws own time, Resume lands idle ('a stop takes "
+            "nothing you have lived'). Reassurance stays scoped to the "
+            "ungranted case; asking stays his. Map: the sleep bullet names "
+            "the topics stage and the topics tool, coupled to the runtime's "
+            "tools contract (coupled-spellings note widened). Adversarial "
+            "review (Fable, 2026-11-10): 0 P0, 2 P1 folded (resume_to covers "
+            "a grant given during work; the operator's wake ends a sleep), "
+            "P2s folded ('quiet' not 'resting' - the runtime's rest block is "
+            "the sleep election; the work-switch clause dropped)."
         ),
     },
     "entity-observation": {
