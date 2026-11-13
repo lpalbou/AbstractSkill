@@ -61,12 +61,17 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.11: the bundled registry carries the `abstractcore` skill
-beside `abstractframework-gateway`, so a fresh install seeds both framework
-skills, and the available-skills block names each skill's SKILL.md path so the
-model reads the skill where it is. The entity skill teaches the five-state life
-cycle (visit, idle, work, personal, sleep). See the
-[changelog](CHANGELOG.md#0311---2026-11-10).
+What's new in 0.3.12: the bundled release skills account for local commits,
+branch/worktree changes and required consumers before publication. The release
+pending gate checks the live integrated branch as well as pending files.
+See the [changelog](CHANGELOG.md#0312---2026-11-13).
+
+## For AI agents
+
+Register and use the [AbstractSkill agent skill](https://github.com/lpalbou/AbstractSkill/tree/main/skills/abstractskill)
+to parse and inspect skills, seed a host-owned shelf and activate through the trust gate. Install
+it by copying `skills/abstractskill/` from the repository version you use into your agent's skills
+directory. The [getting-started guide](docs/getting-started.md) is the canonical API workflow.
 
 ## The bundled skill registry
 
@@ -1264,8 +1269,8 @@ framework-facing activation lines; links point at the exact pinned source.
 | `entity-observation` | shelf (first_party) | Read an entity's life correctly before reporting on it: the entity's own store is the primary source for any claim about what it knows, remembers, or lacks. For agent seats and operators observing a summoned entity. | [src/abstractskill/registry/skills/entity-observation](../src/abstractskill/registry/skills/entity-observation/SKILL.md) |
 | `meshvault-live-editing` | shelf (adopted) | Drive MeshVault over MCP to sculpt, paint, repair and reshape 3D objects, optionally performing live for human observers. Declares `requires_mcp: [meshvault-mcp]`. | [lpalbou/meshvault @ 4deb86c](https://github.com/lpalbou/meshvault/tree/4deb86c32caa85b2bb6d2a9625f3a44d660ac3e4/.cursor/skills/meshvault-live-editing) |
 | `coredoc` | shelf (adopted) | Create, audit, and maintain a professional external-facing documentation set (README, docs/*, architecture diagrams, llms.txt/llms-full.txt) kept faithful to the code, plus a package agent skill (`skills/<name>/`) when the package is something an agent can operate, and a release checklist (version source, README badges, package metadata, llms files, backlog/ADR trace). | [src/abstractskill/registry/skills/coredoc](../src/abstractskill/registry/skills/coredoc/SKILL.md) |
-| `abstract-release` | shelf (adopted, scripts → review) | Plan and run an AbstractFramework release wave in dependency order: per-package mechanics (including AbstractAvatar's crate and Python package, and AbstractAssistant's PyPI, web, iPhone and watch lanes), the scope sweep that cuts each base package once per wave (`--backlog`), gates (the pre-push CI gate, no PR red by design, adversarial review, real end-to-end proof, all-green merge, red main as an incident, registry visibility, floor propagation), read-only readiness audits, the wave report, and the gated hand-off to `abstractframework-website`. Ships a read-only planner and a registry visibility gate. | [src/abstractskill/registry/skills/abstract-release](../src/abstractskill/registry/skills/abstract-release/SKILL.md) |
-| `release` | shelf (adopted, scripts → review) | Prepare, validate and publish one repository's release: version and changelog, docs, test/build gates, the CI-is-green-before-push rules (a local gate before any push, no PR red by design, red main as an incident, flaky-test policy), tag or workflow dispatch, publish and post-release verification. Ships a read-only pending-change gate. `abstract-release` uses it per package. | [src/abstractskill/registry/skills/release](../src/abstractskill/registry/skills/release/SKILL.md) |
+| `abstract-release` | shelf (adopted, scripts → review) | Plan and run an AbstractFramework release wave in dependency order: per-package mechanics (including AbstractAvatar's crate and Python package, and AbstractAssistant's PyPI, web, iPhone and watch lanes), the scope sweep that cuts each base package once per wave (`--backlog`), gates (the pre-push CI gate, no PR red by design, adversarial review, real end-to-end proof, all-green merge, red main as an incident, registry visibility, floor propagation), read-only readiness audits, code/branch/worktree dispositions and complete consumer integration, the wave report, and the gated hand-off to `abstractframework-website`. Ships a read-only planner and a registry visibility gate. | [src/abstractskill/registry/skills/abstract-release](../src/abstractskill/registry/skills/abstract-release/SKILL.md) |
+| `release` | shelf (adopted, scripts → review) | Prepare, validate and publish one repository's release: version and changelog, docs, test/build gates, the CI-is-green-before-push rules (a local gate before any push, no PR red by design, red main as an incident, flaky-test policy), tag or workflow dispatch, publish and post-release verification. Ships a read-only pending-change and live-release-branch gate (`origin/main` by default; configurable remote/branch). `abstract-release` uses it per package. | [src/abstractskill/registry/skills/release](../src/abstractskill/registry/skills/release/SKILL.md) |
 | `backlog` | shelf (adopted) | Create, audit, and maintain a file-backed engineering backlog (planned/proposed/completed/deprecated/recurrent) with lifecycle states and hygiene. | [src/abstractskill/registry/skills/backlog](../src/abstractskill/registry/skills/backlog/SKILL.md) |
 | `architect` | shelf (adopted) | Force rigorous architecture exploration before settling: independent charters, steelmanned alternatives, comparison matrix, premise verification, and an engraving gate for names that reach append-only state. | [src/abstractskill/registry/skills/architect](../src/abstractskill/registry/skills/architect/SKILL.md) |
 | `adr` | shelf (adopted) | Create, audit, and enforce ADRs as durable cross-task policy (Context/Decision first; Enforcement + Validation mandatory); pairs with `backlog`. | [src/abstractskill/registry/skills/adr](../src/abstractskill/registry/skills/adr/SKILL.md) |
@@ -1940,6 +1945,8 @@ trust.
 
 ## Start here
 
+- [Agent skill](../skills/abstractskill/SKILL.md) — operate the Python API through parsing,
+  inspection, seeding and trust-gated activation.
 - [Getting started](getting-started.md) — install, parse a skill, discover a
   directory, compose tools, evaluate trust, seed the bundled shelf into a host
   directory, and activate skills through the trust gate.

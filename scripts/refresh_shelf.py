@@ -492,7 +492,7 @@ SHELF_POLICY = {
     "abstract-release": {
         # Re-pinned 2026-11-05 by the framework seat (0.3.9/0.3.10 waves);
         # the record keeps that attestation.
-        "expected_tree_hash": "c6d82f49baa263a405124b15a367ce04297a63dad6e53a4406a95eb56d0c51e7",
+        "expected_tree_hash": "5edf2c29568858ff889408810e4682072d8e67ae284ffcf37fbaaeec57ecbcce",
         "validated_by": "framework",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
@@ -570,7 +570,7 @@ SHELF_POLICY = {
     "release": {
         # Re-pinned 2026-11-05 by the framework seat (0.3.9/0.3.10 waves);
         # the record keeps that attestation.
-        "expected_tree_hash": "34a2a0e6f53f7eade0d7704888ba817b4ff8ac5975118f014cc3a1e31dea7270",
+        "expected_tree_hash": "2ab79ec1168e60ef9bf201e4749b33fdac2befffc15b461a5b2592a3e5b667ea",
         "validated_by": "framework",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
@@ -586,8 +586,9 @@ SHELF_POLICY = {
             "release branches from the registry, red main as an incident, flaky-test policy). "
             "abstract-release stays the multi-package orchestrator and uses this per package. "
             "SCRIPTS-BEARING: scripts/release_pending_gate.py (read-only: runs `git status "
-            "--porcelain`, prints, exits non-zero on release-relevant pending changes; stdlib, "
-            "no writes, no network), so requires_review at the gate until the operator enables it."
+            "--porcelain -z --untracked-files=all` and live `git ls-remote`, rejects pending "
+            "release files or HEAD different from the integrated release branch; stdlib, "
+            "read-only Git with network access), so requires_review until enabled."
         ),
     },
     "cicd": {

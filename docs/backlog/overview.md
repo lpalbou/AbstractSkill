@@ -8,7 +8,7 @@ of trust for skills, with automated periodic reviews.
 
 ## Counts
 
-- Planned: 5 (0001-0005)
+- Planned: 6 (0001-0005, 0009)
 - Proposed: 2 (0006-0007)
 - Completed: 0
 - Deprecated: 0
@@ -19,6 +19,8 @@ of trust for skills, with automated periodic reviews.
 [Framework 1131](https://github.com/lpalbou/AbstractFramework/blob/main/docs/backlog/completed/1131_pull_before_edits_branches_and_prs.md) owns proactive pull preparation before edits, branches and PRs, and the bundled/installed `abstract-release` and `release` procedures. Bundle revision 2026.11.09 carries that procedure with a refreshed adopted tree hash and content pin. It is included in the 0.3.10 patch release.
 
 ## Priority / next recommended work
+
+Release recovery: [0009](planned/0009_release_scope_and_live_main_completion.md) strengthens the release scope and live-main completion checks; framework item 1209 owns the wave.
 
 1. 0003 simulated-execution audit harness — DESIGN done; implementation awaits runtime/agency lanes (upgrades the adopted shelf skills to audited, mints the first specific advisories).
 2. 0004 trust-network LEVERAGE step (backlog 0006) — consume external findings as advisory inputs with provenance.

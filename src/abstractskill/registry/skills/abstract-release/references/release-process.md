@@ -280,6 +280,8 @@ at the root (`docs/ci-local.md`). The root `scripts/ci_local.sh` implements `--t
     below.
 - It merges the commit into a freshly fetched `origin/main`, as GitHub merges a pull request.
   `--no-merge` tests the commit itself.
+- `--jobs N` controls parallel jobs inside one gate; model-loading and load-test jobs run alone.
+  Never overlap independent gate runs on the same machine.
 - It runs every workflow under the strictest event that workflow has (the push to main where there is
   one, so main's full matrix).
 - Each job runs in a fresh environment whose packages come from the registries, never from the

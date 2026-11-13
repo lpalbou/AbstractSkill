@@ -22,6 +22,13 @@ Use this reference before changing version metadata, changelog, docs, or validat
 Before any real publish, create a release-scope inventory from `git status --short`. The release
 cannot proceed while relevant work is only in the local checkout.
 
+Inventory local-only commits as well as files. Query live remote refs, compare local HEAD and the
+proposed release commit with remote main, and inspect existing branches/worktrees for code that
+belongs to the requested work. Use patch and source equivalence to distinguish already-shipped
+work from omitted changes. Ask about ambiguous ownership or conflicting scope before merging;
+record each disposition and preserve its source. A published version number alone does not prove
+that newer source or required consumer integrations shipped.
+
 Block publishing if any modified, staged, deleted, renamed, or untracked file is release-scope:
 
 - package metadata, lockfiles, generated manifests, schemas, or version files;

@@ -70,6 +70,15 @@ with `bash scripts/pull.sh`; final status checks confirm synchronization, never 
 - Never publish a half release. Before tagging, pushing, or dispatching a real publish, classify
   every modified, deleted, staged, and untracked file. Any release-scope file must be committed and
   pushed, or explicitly removed from release scope, before publishing.
+- Include committed work in that classification: inspect local-only main commits and existing
+  branches/worktrees, including uncommitted source under ignored worktree directories. A clean
+  `git status` says nothing about whether a commit reached remote main or a registry artifact.
+  Compare actual source and patch equivalence; preserve operator branches and ask early about
+  ownership, paused work or conflicting product decisions. Record shipped/superseded/deferred
+  dispositions instead of silently omitting code or merging obsolete branches wholesale.
+- Finish the required consumers in the same release scope. Verify writers, replay/read paths,
+  shared-component adoption, vendored snapshots and registry lockfiles end to end. Publishing a
+  foundation while its required integration remains local is an incomplete feature.
 - Do not treat unrelated pending local changes as a blocker for triggering a release from an
   existing remote ref only after classification proves they are unrelated. Pending local changes
   matter when the release must include them, when they touch code, tests, docs, package metadata,
@@ -155,6 +164,13 @@ timing tests. A CI failure must be the exception, never the normal path (Abstrac
 7. Verify after publish.
    Check GitHub Release, package registries, docs site, container tags, install commands, and any
    project-specific smoke tests. Record failed optional jobs as follow-up work.
+8. Reconcile completion.
+   Confirm every in-scope commit is reachable on the live remote main (or the documented release
+   branch), with exact-commit CI and the matching published artifact. Recheck pending files and
+   worktree/branch dispositions; refresh release status, changelog and llms files after the last
+   edit. For AbstractFramework, pull all normal main checkouts and pass the full workspace build
+   before handoff. Backlog-only follow-ups do not require a new artifact; unfinished product code
+   must be reported as incomplete. Do not confuse a successful publish job with this final gate.
 
 ## Use References Selectively
 
@@ -163,4 +179,7 @@ timing tests. A CI failure must be the exception, never the normal path (Abstrac
 - Read `references/execution-playbook.md` before pushing tags, dispatching workflows, publishing,
   or doing post-release verification.
 - Run `scripts/release_pending_gate.py` or an equivalent manual `git status --short`
-  classification before any real tag push or publish dispatch from a checkout with pending changes.
+  classification plus live-ref comparison before any real tag push or publish dispatch. The
+  script checks files and requires HEAD to equal live `origin/main`; use `--remote` / `--branch`
+  for a documented release branch. It never fetches, pulls or pushes. An allowed unrelated file
+  does not waive the commit check; branch/worktree scope still requires the inventory above.
