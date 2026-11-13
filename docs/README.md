@@ -8,6 +8,8 @@ trust.
 
 ## Start here
 
+- [Agent skill](../skills/abstractskill/SKILL.md) — operate the Python API through parsing,
+  inspection, seeding and trust-gated activation.
 - [Getting started](getting-started.md) — install, parse a skill, discover a
   directory, compose tools, evaluate trust, seed the bundled shelf into a host
   directory, and activate skills through the trust gate.

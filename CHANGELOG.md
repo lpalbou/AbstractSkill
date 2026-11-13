@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.3.12] - 2026-11-13
+
+### Changed
+
+- The bundled `abstract-release` and `release` skills account for local-only commits, existing
+  branches and worktree edits, patch-equivalent history, and required consumer integration before
+  publishing. Uncertain ownership and product scope are resolved before a release cut.
+- The release pending gate verifies that HEAD equals the live integrated release branch, in
+  addition to checking pending files. Its `--remote` and `--branch` options support documented
+  release branches; it fails closed when the remote cannot be verified or the checkout changes
+  during verification. Nested untracked files and both sides of renames are classified.
+- Bundled registry revision 2026.11.13 refreshes the two release skill validation hashes.
+
+### Added
+
+- A package agent skill at `skills/abstractskill/` teaches parsing, inspection, trust-gated
+  activation and host-owned registry seeding.
+
 ## [0.3.11] - 2026-11-10
 
 ### Added

@@ -40,8 +40,9 @@ When the release must include local changes:
 3. Run the required local gates or explain which gates are delegated to CI.
 4. Re-run `git status --short`; stop if release-scope changes are still pending or untracked.
 5. Commit the release changes with a message that names the version.
-6. Push the commit to the intended branch.
-7. Create the tag on that exact commit.
+6. Push the commit and complete the documented main/release-branch integration. Query the live
+   remote ref to verify the validated commit reached it; an unpushed local main is incomplete.
+7. Create the tag on that exact integrated commit.
 8. Push the tag or dispatch the release workflow.
 
 Prefer annotated tags for public releases unless the repo uses lightweight tags consistently.

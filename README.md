@@ -28,12 +28,17 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.11: the bundled registry carries the `abstractcore` skill
-beside `abstractframework-gateway`, so a fresh install seeds both framework
-skills, and the available-skills block names each skill's SKILL.md path so the
-model reads the skill where it is. The entity skill teaches the five-state life
-cycle (visit, idle, work, personal, sleep). See the
-[changelog](CHANGELOG.md#0311---2026-11-10).
+What's new in 0.3.12: the bundled release skills account for local commits,
+branch/worktree changes and required consumers before publication. The release
+pending gate checks the live integrated branch as well as pending files.
+See the [changelog](CHANGELOG.md#0312---2026-11-13).
+
+## For AI agents
+
+Register and use the [AbstractSkill agent skill](https://github.com/lpalbou/AbstractSkill/tree/main/skills/abstractskill)
+to parse and inspect skills, seed a host-owned shelf and activate through the trust gate. Install
+it by copying `skills/abstractskill/` from the repository version you use into your agent's skills
+directory. The [getting-started guide](docs/getting-started.md) is the canonical API workflow.
 
 ## The bundled skill registry
 

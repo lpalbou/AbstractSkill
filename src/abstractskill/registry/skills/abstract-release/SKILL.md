@@ -48,6 +48,37 @@ missing-package discovery and the distinction between a release blocker and late
 4. A worker that cannot run `git merge` or `git rebase` or `git switch` asks the coordinator to do it
    immediately; it never leaves the branch unmerged and moves on.
 
+## Account for code before the first cut
+
+Maintain one scope table for the wave: repository, commit or worktree/path, user-visible value,
+disposition, evidence, target version and required consumers. Inspect local and remote branches,
+local-only main commits, and the status of existing worktrees, including worktrees under ignored
+directories. A clean normal checkout does not prove that the work has reached main.
+
+- Compare source trees and patch equivalence before resurrecting an old branch. Record changes
+  already shipped, superseded or explicitly deferred; never merge an obsolete tree wholesale.
+- Bring uncertain ownership, paused work and conflicting product directions to the operator early,
+  with the actual changes, recommendation, integration cost and affected packages. Preserve the
+  original branches and worktrees until their disposition is settled.
+- Code, tests, integrations, workflows, package metadata and their user-facing documentation are
+  release scope. Backlog-only receipts need no new package artifact; they cannot be used to excuse
+  unshipped code. Preserve unrelated generated/private files outside the source checkout rather
+  than staging them merely to obtain a clean status.
+- Before cutting a shared package, prepare every required consumer change and verify the seam
+  against the candidate. Publish the shared package first; then validate consumers from the
+  registry. A notice type with no writer, a writer whose replay drops the fields, or a shared UI
+  snapshot not regenerated in its consumers is unfinished integration.
+- Compare published artifacts with the source being shipped. A locally packed package with an
+  unpublished version, or changed bytes under a published version, is not a registry proof. Check
+  vendored snapshot provenance and lockfiles against the exact published dependency.
+
+Before candidate handoff, reconcile this table again: every in-scope code row must have a main
+commit reachable on the live remote, a green exact-commit validation, and a published artifact
+where applicable. Refresh changelogs, release status and generated llms files after the final
+change. Run the actual pull sweep and full workspace build from those checkouts; never call a
+wave complete while product code remains local-only. Root and website publication still require
+the operator's separate decision.
+
 ## CI is green before it is pushed (AbstractFramework ADR 0050)
 
 Why: on 2026-11-03, 22 CI runs failed in 24 hours. Ten were red by design: a branch that needed an
@@ -191,6 +222,13 @@ The planner refines this from the real manifests: it skips packages with nothing
 adds every package downstream of a changed package for a floor review. `scripts/lib/packages.txt`
 in the workspace is the inventory the workspace scripts use; the planner reports any package it
 finds on disk that the inventory is missing.
+
+## Expensive package cuts
+
+Before a Core or Gateway cut, sweep that package's backlog and the cheaper packages below it
+for ready work worth grouping. Present the proposed scope, user benefit, risk and hours to the
+operator before the first cut. Do not introduce unrelated base-package changes mid-wave. Fixing
+a red CI test does not by itself require republishing unchanged runtime artifacts.
 
 ## Scope sweep: each base package is cut once per wave (operator, 2026-11-04)
 
