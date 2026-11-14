@@ -28,10 +28,11 @@ pip install abstractskill
 
 The wheel carries the library and the curated skill registry (the shelf below).
 
-What's new in 0.3.12: the bundled release skills account for local commits,
-branch/worktree changes and required consumers before publication. The release
-pending gate checks the live integrated branch as well as pending files.
-See the [changelog](CHANGELOG.md#0312---2026-11-13).
+What's new in 0.3.13: the bundled release skills track each independently versioned
+artifact, including AbstractAssistant's Python and npm packages. Registry releases
+and separately authorized native distribution have distinct completion receipts.
+The live-main, pending-source and required-consumer checks from 0.3.12 remain in place.
+See the [changelog](CHANGELOG.md#0313---2026-11-14).
 
 ## For AI agents
 

@@ -190,11 +190,12 @@ Release by published dependency floors, not by what happens to pass locally:
    `abstractflow`, `abstractcontinuum`, `abstractnote` (Python on the gateway and AbstractMemory,
    plus its web app). AbstractAssistant is one repository with FOUR lanes: the Python package
    (PyPI, the desktop palette and the gateway seam), the web app (`web/`, `@abstractframework/assistant`,
-   served by the gateway; not on npm yet), the iPhone app (`phone/iphone`, App Store / TestFlight
-   through `scripts/release.py` and `scripts/upload-candidate.sh`, `iphone.yml`) and the watch app
-   (`watch/apple`, `watch.yml`, `scripts/testflight.sh`). The registry wave releases the Python
-   package; the Apple lanes release through App Store Connect with the operator's approval
-   (`app-store` environment) and are reported as their own rows, never folded into the PyPI row.
+   published on npm through `release-web.yml` and its own `web-vX.Y.Z` tags), the iPhone app
+   (`phone/iphone`) and the watch app (`watch/apple`). The registry wave accounts for the Python
+   and npm artifacts separately, each at its own version and publishing workflow. Native source
+   checks run through `iphone.yml` and `watch.yml`; the combined iPhone + Watch App Store candidate
+   is signed/exported/uploaded only by a separately authorized `iphone.yml` dispatch. Native
+   distribution stays operator-held and is reported separately from both registry artifacts.
 8. **The candidate, then the operator (AbstractFramework ADR 0051).** The wave ends with a
    CANDIDATE for the operator, never with a root release. The candidate has four parts:
    1. every package below the root published and visible on its registry, with its exact version;

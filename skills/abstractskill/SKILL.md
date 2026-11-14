@@ -3,7 +3,7 @@ name: abstractskill
 description: Parse, inspect, discover and activate Agent Skills with the abstractskill Python API. Use when seeding a host-owned curated shelf, checking skill-tree hashes, evaluating trust or composing allowed tools for an agent context.
 license: MIT
 metadata:
-  package-version: "0.3.12"
+  package-version: "0.3.13"
 ---
 
 # AbstractSkill

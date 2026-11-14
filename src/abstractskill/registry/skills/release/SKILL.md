@@ -57,6 +57,10 @@ with `bash scripts/pull.sh`; final status checks confirm synchronization, never 
   repo's release model explicitly allows rebuild-only artifact releases.
 - Keep version sources consistent: package metadata, lockfiles, docs, changelog, generated
   package manifests, release notes, and tags must agree.
+- Inventory each independently versioned artifact in the repository: its manifest, version,
+  publishing workflow, registry and completion status. A Python release does not complete a
+  separate npm or crate release. Verify every in-scope registry row after publishing; record
+  separately held native distribution explicitly, without treating source checks as an upload.
 - Keep `CHANGELOG.md` user-facing. It should describe what changed, who is affected, and migration
   or compatibility notes. Do not put root-cause narratives or internal repair history there.
 - Update core docs before release when behavior, install commands, API/CLI surface, configuration,
