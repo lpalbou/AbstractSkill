@@ -8,12 +8,12 @@
 validations:
 - name: abstract-release
   source: codex-skills (maintainer)
-  tree_hash: 5edf2c29568858ff889408810e4682072d8e67ae284ffcf37fbaaeec57ecbcce
+  tree_hash: 943914de39f29147ade662e9eb56ee492dfc78ebd3c43f2ef4a5c1ecc90f5889
   level: adopted
   method: first-party-adoption
   audience: host
   validated_by: framework
-  validated_at: '2026-11-13'
+  validated_at: '2026-11-14'
   evidence:
     parser_roundtrip: true
     has_scripts: true
@@ -503,12 +503,12 @@ validations:
     targeting, or staging a watchable live editing session.'
 - name: release
   source: codex-skills (maintainer)
-  tree_hash: 2ab79ec1168e60ef9bf201e4749b33fdac2befffc15b461a5b2592a3e5b667ea
+  tree_hash: bbf1419f8aaf2467eea663a8848e4f5f4dc77375f4fe47fc2b9e12638561354f
   level: adopted
   method: first-party-adoption
   audience: host
   validated_by: framework
-  validated_at: '2026-11-13'
+  validated_at: '2026-11-14'
   evidence:
     parser_roundtrip: true
     has_scripts: true

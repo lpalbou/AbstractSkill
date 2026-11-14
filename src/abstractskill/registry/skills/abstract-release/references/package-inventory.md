@@ -16,7 +16,7 @@ depends on is published and visible.
 |---|---|---|---|
 | 0 | abstractskill, abstractsemantics, AbstractMemory, abstractvision, abstractvoice, abstractmusic, abstractcamera, abstractavatar (Python) | ui-kit, app-server, monitor-flow, monitor-gpu, monitor-memory, monitor-active-memory | abstractavatar (crate) |
 | 1 | abstract3d (needs abstractvision) | panel-chat (peer of ui-kit) | abstracttui (its `avatar` feature needs the abstractavatar crate), abstracttui-graph, abstractcore-console, abstractcode (CLI) |
-| 2 | abstractcore (needs voice, vision, music, 3d) | flow, observer, continuum, entity, code (web), note (web) | abstracttui-mermaid, abstractgateway-console |
+| 2 | abstractcore (needs voice, vision, music, 3d) | flow, observer, continuum, entity, code (web), note (web), assistant (web) | abstracttui-mermaid, abstractgateway-console |
 | 3 | AbstractRuntime (needs core, memory, semantics) | | |
 | 4 | abstractagent, abstractassistant | | |
 | 5 | abstractgateway | | |
@@ -40,8 +40,11 @@ Roles worth knowing when you order a wave:
   first (AbstractTUI's `avatar` feature, hence every console crate, resolves it from crates.io);
   the Python package follows through its `release.yml`.
 - **AbstractAssistant** is one repository with four lanes: the Python package (PyPI), the web app
-  (`web/`, served by the gateway), the iPhone app and the watch app (App Store Connect through the
-  `app-store` environment, operator approval). Only the Python package is a registry release.
+  (`web/`, `@abstractframework/assistant` on npm), the iPhone app and the watch app. Python and
+  npm are independent registry releases: `release.yml` publishes Python, while `release-web.yml`
+  publishes the web app from `web-vX.Y.Z`. The combined iPhone + Watch App Store candidate uses
+  the separately authorized native distribution lane (`app-store` environment); a registry release
+  does not authorize signing, export or upload.
 - **abstractframework** (root) pins exact versions of the released matrix and releases last.
 
 Not released with the framework: the local test projects `abstractaudio`, `abstractsound`,
@@ -100,6 +103,7 @@ release needs a tag rule there.
 | @abstractframework/entity | lpalbou/AbstractEntity | `package.json` | tag | no restriction | same lockfile rule |
 | @abstractframework/continuum | lpalbou/AbstractContinuum | `package.json` | tag | no restriction | same lockfile rule |
 | @abstractframework/code | lpalbou/AbstractCode, `web/` (`npm --prefix web`) | `web/package.json` (versioned independently of the crate) | tag `web-vX.Y.Z` (a `vX.Y.Z` tag publishes only the crate), or dispatch `-f target=web` | main, tag `v*`, tag `web-v*` | same lockfile rule; the repository also holds the `abstractcode` crate |
+| @abstractframework/assistant | lpalbou/AbstractAssistant, `web/` | `web/package.json` and its lockfile, independent of Python | tag `web-vX.Y.Z`, `release-web.yml` (no dispatch) | tag `web-v*` | Trusted npm publishing with provenance; validate/build/pack the web app separately from the Python release. |
 | @abstractframework/note | lpalbou/AbstractNote, `web/` | `web/package.json` (equal to the Python version) | with abstractnote | main, tag `v*` | |
 
 ### Rust

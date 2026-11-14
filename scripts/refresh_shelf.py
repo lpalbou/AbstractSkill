@@ -492,7 +492,7 @@ SHELF_POLICY = {
     "abstract-release": {
         # Re-pinned 2026-11-05 by the framework seat (0.3.9/0.3.10 waves);
         # the record keeps that attestation.
-        "expected_tree_hash": "5edf2c29568858ff889408810e4682072d8e67ae284ffcf37fbaaeec57ecbcce",
+        "expected_tree_hash": "943914de39f29147ade662e9eb56ee492dfc78ebd3c43f2ef4a5c1ecc90f5889",
         "validated_by": "framework",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",
@@ -570,7 +570,7 @@ SHELF_POLICY = {
     "release": {
         # Re-pinned 2026-11-05 by the framework seat (0.3.9/0.3.10 waves);
         # the record keeps that attestation.
-        "expected_tree_hash": "2ab79ec1168e60ef9bf201e4749b33fdac2befffc15b461a5b2592a3e5b667ea",
+        "expected_tree_hash": "bbf1419f8aaf2467eea663a8848e4f5f4dc77375f4fe47fc2b9e12638561354f",
         "validated_by": "framework",
         "method": "first-party-adoption",
         "source": "codex-skills (maintainer)",

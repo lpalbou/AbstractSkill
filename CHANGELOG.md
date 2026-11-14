@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.13] - 2026-11-14
+
+### Fixed
+
+- Bundled release procedures track independently versioned artifacts separately. AbstractAssistant's
+  Python and npm releases have distinct versions, workflows and registry checks; native app
+  distribution remains a separately authorized operation.
+- Registry revision 2026.11.14 updates the two release procedure bundles and their validation hashes.
+
 ## [0.3.12] - 2026-11-13
 
 ### Changed
