@@ -8,9 +8,9 @@ of trust for skills, with automated periodic reviews.
 
 ## Counts
 
-- Planned: 6 (0001-0005, 0009)
+- Planned: 5 (0001-0005)
 - Proposed: 2 (0006-0007)
-- Completed: 0
+- Completed: 2 (0008-0009)
 - Deprecated: 0
 - Recurrent: 1 (advisory/validation registry review)
 
@@ -20,7 +20,7 @@ of trust for skills, with automated periodic reviews.
 
 ## Priority / next recommended work
 
-Release recovery: [0009](planned/0009_release_scope_and_live_main_completion.md) strengthens the release scope and live-main completion checks; framework item 1209 owns the wave.
+Release procedure recovery [0009](completed/0009_release_scope_and_live_main_completion.md) shipped in 0.3.12 with live-main and pending-source guards. Framework item 1209 still owns completion of the cross-package wave.
 
 1. 0003 simulated-execution audit harness — DESIGN done; implementation awaits runtime/agency lanes (upgrades the adopted shelf skills to audited, mints the first specific advisories).
 2. 0004 trust-network LEVERAGE step (backlog 0006) — consume external findings as advisory inputs with provenance.
@@ -51,7 +51,10 @@ directive 2026-07-11).
 
 ## Completed ledger
 
-(empty — first entries land when 0001/0002/0005 close with evidence)
+| ID | Original path | Final path | Created | Completed | Outcome / validation |
+| --- | --- | --- | --- | --- | --- |
+| 0008 | `planned/0008_skill_tool_dependency_declaration.md` | [0008](completed/0008_skill_tool_dependency_declaration.md) | 2026-07-19 | 2026-07-21 | Tool-dependency declaration; existing completion report retained. |
+| 0009 | `planned/0009_release_scope_and_live_main_completion.md` | [0009](completed/0009_release_scope_and_live_main_completion.md) | 2026-11-13 | 2026-11-14 | Live-main/pending-source guards; nine regressions, 11-job gate, PR9/main/release green, PyPI0.3.12 visible. |
 
 ## Deprecated
 
